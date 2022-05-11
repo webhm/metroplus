@@ -1,10 +1,10 @@
 const Loader = {
     view: () => {
         return [
-            m("div.preloader",
-                m("div.preloader-inner",
-                    m("div.loader-content",
-                        m("span.icon-section-wave.d-inline-block.text-active.mt-3.")
+            m("div.text-center.mg-t-300",
+                m(".spinner-grow.text-[color][role='status']",
+                    m("span.sr-only",
+                        "Cargando..."
                     )
                 )
             )

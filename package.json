@@ -1,7 +1,7 @@
 {
-    "name": "mithril-starter-kit",
+    "name": "metroq.hm.med.ec",
     "version": "0.1.0",
-    "description": "A boilerplate Mithril application With Webpack",
+    "description": "MetroQ webapp para administración de servicios digitales.",
     "main": "index.js",
     "scripts": {
         "build": "webpack --config webpack.pro.js --progress",
@@ -9,19 +9,19 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/mojowork/mithril-starter-kit.git"
+        "url": "git+https://github.com/martinxapps/metroq.hm.med.ec"
     },
     "keywords": [
         "mithril",
         "Webpack",
         "boilerplate"
     ],
-    "author": "chaos",
-    "license": "ISC",
+    "author": "@martinxapps",
+    "license": "MIT",
     "bugs": {
-        "url": "https://github.com/mojowork/mithril-starter-kit/issues"
+        "url": "https://github.com/martinxapps/metroq.hm.med.ec/issues"
     },
-    "homepage": "https://github.com/mojowork/mithril-starter-kit#readme",
+    "homepage": "https://github.com/martinxapps/metroq.hm.med.ec#readme",
     "dependencies": {
         "mithril": "^1.1.6"
     },

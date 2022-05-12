@@ -24,7 +24,7 @@ const Login = {
 };
 
 function submitLogin() {
-    document.onkeypress = function(e) {
+    document.onkeypress = function (e) {
         if (!e) e = window.event;
         var keyCode = e.keyCode || e.which;
         if (keyCode == "13") {

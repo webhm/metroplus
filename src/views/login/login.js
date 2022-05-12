@@ -7,7 +7,7 @@ import App from '../app';
 const Login = {
     oninit: () => {
         if (Auth.isLogin()) {
-            return m.route.set('/inicio');
+            return m.route.set('/laboratorio');
         }
     },
     oncreate: () => {
@@ -18,13 +18,12 @@ const Login = {
         return [
             m(HeaderPublic),
             m(FormLogin),
-            m(FooterPublic)
         ];
     },
 };
 
 function submitLogin() {
-    document.onkeypress = function (e) {
+    document.onkeypress = function(e) {
         if (!e) e = window.event;
         var keyCode = e.keyCode || e.which;
         if (keyCode == "13") {

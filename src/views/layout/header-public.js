@@ -7,7 +7,7 @@ const HeadPublic = {
                     m("a.df-logo", { href: "/" }, [
                         "Metro",
                         m("span",
-                            "Q"
+                            "Virtual"
                         )
                     ])
                 ),

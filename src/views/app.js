@@ -3,7 +3,7 @@ import Loader from './loader';
 
 
 const App = {
-    title: "Metrovirtual Mobile - Metrovirtual HM v3.0",
+    title: "Metrovirtual HM v3.0",
     oninit: () => {
         document.title = "Cargando...";
     },
@@ -12,7 +12,7 @@ const App = {
     },
     isAuth: () => {
         if (Auth.isLogin()) {
-            return m.route.set('/inicio');
+            return m.route.set('/laboratorio');
         } else {
             return m.route.set('/auth');
         }

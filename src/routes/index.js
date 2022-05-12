@@ -2,7 +2,8 @@
 import App from '../views/app'
 import Salir from '../views/salir'
 import Login from '../views/login/login'
-import Inicio from '../views/inicio/inicio'
+import Laboratorio from '../views/laboratorio/laboratorio'
+import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import Pacientes from '../views/pacientes/pacientes';
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404'
@@ -14,7 +15,8 @@ import _404 from '../views/404'
 // Routes here
 const Routes = {
     '/': App,
-    '/inicio': Inicio, //Inicio
+    '/laboratorio': Laboratorio, //Laboratorio
+    '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/auth': Login, // Login
     '/pacientes': Pacientes, // Pacientes
     '/mi-perfil': MiPerfil, // MiPerfil

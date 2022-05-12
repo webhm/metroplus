@@ -1,5 +1,68 @@
-$(function() {
-    'use strict'
+import Auth from '../../models/auth';
+import HeaderPrivate from '../layout/header-private';
+import Sidebarlab from './sidebarLab';
+import App from '../app';
+
+const Laboratorio = {
+    oninit: () => {
+        if (!Auth.isLogin()) {
+            return m.route.set('/auth');
+        }
+    },
+    oncreate: () => {
+        document.title = "Laboratorio | " + App.title;
+        Sidebarlab.page = "";
+        loadCustomPage();
+    },
+    view: () => {
+        return [
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+            m(Sidebarlab),
+            m("div.content.content-components",
+                m("div.container", [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m("a[href='#']",
+                                "Metrovirtual"
+                            )
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Laboratorio"
+                        )
+                    ]),
+                    m("h1.df-title",
+                        "Laboratorio"
+                    ),
+
+                    m("div.row.tx-14", [
+
+                        m("div.col-sm-6",
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                                m("div.mg-b-25",
+                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
+                                ),
+                                m("h5.tx-inverse.mg-b-20",
+                                    "Pedidos de Laboratorio"
+                                ),
+
+                                m("a.tx-medium", { href: "#!/laboratorio/pedidos" }, [
+                                    "Ir a Pedidos de Laboratorio",
+                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                ])
+                            ])
+                        ),
+
+                    ]),
+
+                ])
+            ),
+        ];
+    },
+
+};
+
+
+function loadCustomPage() {
 
     feather.replace();
 
@@ -126,4 +189,6 @@ $(function() {
         }
     });
 
-})
+};
+
+export default Laboratorio;

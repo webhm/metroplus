@@ -1,6 +1,5 @@
 const Sidebarlab = {
     page: "",
-
     setPage: (page) => {
         Sidebarlab.page = page;
     },

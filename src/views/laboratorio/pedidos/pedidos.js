@@ -7,33 +7,46 @@ import m from 'mithril';
 const iPedido = {
     view: (_data) => {
         return [
-            m("td",
-                _data.attrs.HC
-            ),
             m("td", [
-                m("p.mg-0",
-                    _data.attrs.NOMBRE_PACIENTE
-                ),
-                m("p.mg-0",
-                    _data.attrs.ADMISION
-                )
+                m("p.mg-0.tx-12", [
+                    m("i.fas.fa-calendar.mg-r-5.text-secondary"),
+                    _data.attrs.FECHA + " " + _data.attrs.HORA
+                ]),
             ]),
             m("td", [
-                m("div.dropdown", [
-                    m("button.btn.btn-xs.btn-block.btn-outline-primary.dropdown-toggle[type='button'][id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']",
-                        " Pedido "
+                m("p.mg-0", [
+                    m("i.fas.fa-user.mg-r-5.text-secondary"),
+                    _data.attrs.NOMBRE_PACIENTE,
+                ]),
+                m("p.mg-0", [
+                    m("span.badge.badge-primary.mg-r-5",
+                        "HC: " + _data.attrs.HC
                     ),
-                    m(".dropdown-menu[aria-labelledby='dropdownMenuButton']", [
-                        m("a.dropdown-item[href='#']",
-                            "Action"
-                        ),
-                        m("a.dropdown-item[href='#']",
-                            "Another action"
-                        ),
-                        m("a.dropdown-item[href='#']",
-                            "Something else here"
-                        )
-                    ])
+                ]),
+                m("p.mg-0", [
+                    m("span.badge.badge-secondary.mg-r-5",
+                        "N° Adm. GEMA N°: " + _data.attrs.ADMISION
+                    ),
+                    m("span.badge.badge-secondary.mg-r-5",
+                        "N° Pedido GEMA N°: " + _data.attrs.NUM_PEDIDO_GEMA
+                    )
+                ]),
+                m("p.mg-0", [
+                    m("span.badge.badge-success.mg-r-5",
+                        "N° At. MV: " + _data.attrs.ATEN_MV
+                    ),
+                    m("span.badge.badge-success.mg-r-5",
+                        "N° Pedido MV: " + _data.attrs.NUM_PEDIDO_MV
+                    )
+                ])
+            ]),
+            m("td", [
+                m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
+                    m("a.btn.btn-xs.btn-primary", { href: "#!/laboratorio/pedido/" + _data.attrs.NUM_PEDIDO_MV, target: "_blank" }, "Ver Pedido"),
+                    m("button.btn.btn-xs.btn-secondary[type='button']",
+                        "Nuevo Mensaje"
+                    ),
+
                 ])
             ])
         ];
@@ -45,14 +58,14 @@ const iPedido = {
 
 const Pedidos = {
     oninit: () => {
+        HeaderPrivate.page = "";
+        Sidebarlab.page = "";
         if (!Auth.isLogin()) {
             return m.route.set('/auth');
         }
     },
     oncreate: () => {
         document.title = "Pedidos de Laboratorio | " + App.title;
-        HeaderPrivate.page = "";
-        Sidebarlab.page = "";
         loadCustomPage();
         loadPacientes();
     },
@@ -99,6 +112,94 @@ const Pedidos = {
 
                 ])
             ),
+            m("div.section-nav", [
+                m("label.nav-label",
+                    "Mensajes de Pedido"
+                ),
+                m("nav.nav.flex-column[id='navSection']", [
+                    m("div.demo-static-toast.mg-b-5",
+                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                            m("div.toast-header.bg-danger", [
+                                m("h6.tx-white.tx-14.mg-b-0.mg-r-auto",
+                                    "Alerta"
+                                ),
+                                m("small.tx-white",
+                                    "15:47"
+                                ),
+
+                            ]),
+                            m("div.toast-body",
+                                "Muestra pendiente "
+                            )
+                        ])
+                    ),
+                    m("div.demo-static-toast.mg-b-5",
+                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                            m("div.toast-header.bg-success", [
+                                m("h6.tx-white.tx-14.mg-b-0.mg-r-auto",
+                                    "Nuevo Pedido"
+                                ),
+                                m("small.tx-white",
+                                    "15:47"
+                                ),
+
+                            ]),
+                            m("div.toast-body",
+                                "Nuevo pedido"
+                            )
+                        ])
+                    ),
+                    m("div.demo-static-toast.mg-b-5",
+                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                            m("div.toast-header.bg-warning", [
+                                m("h6.tx-14.mg-b-0.mg-r-auto",
+                                    "Alerta"
+                                ),
+                                m("small",
+                                    "15:47"
+                                ),
+
+                            ]),
+                            m("div.toast-body",
+                                "Muestra recibida "
+                            )
+                        ])
+                    ),
+                    m("div.demo-static-toast.mg-b-5",
+                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                            m("div.toast-header.bg-danger", [
+                                m("h6.tx-white.tx-14.mg-b-0.mg-r-auto",
+                                    "Alerta"
+                                ),
+                                m("small.tx-white",
+                                    "15:47"
+                                ),
+
+                            ]),
+                            m("div.toast-body",
+                                "Muestra recibida "
+                            )
+                        ])
+                    ),
+                    m("div.demo-static-toast.mg-b-5",
+                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                            m("div.toast-header.bg-danger", [
+                                m("h6.tx-white.tx-14.mg-b-0.mg-r-auto",
+                                    "Alerta"
+                                ),
+                                m("small.tx-white",
+                                    "15:47"
+                                ),
+
+                            ]),
+                            m("div.toast-body",
+                                "Muestra recibida "
+                            )
+                        ])
+                    )
+
+                ])
+            ])
 
         ];
     },
@@ -167,19 +268,63 @@ function loadPacientes() {
         cache: false,
         order: false,
         columns: [{
-            title: "HC:"
+            title: "PEDIDO:"
         }, {
             title: "DETALLE PEDIDO:"
         }, {
-            title: "OPCIONES"
+            title: "OPCIONES:"
         }, ],
-        aoColumnDefs: false,
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-            m.mount(nRow, { view: function() { return m(iPedido, aData) } });
-        },
+        aoColumnDefs: [{
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.HC;
+                },
+                visible: false,
+                aTargets: [1],
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.NOMBRE_PACIENTE;
+
+                },
+                visible: true,
+                aTargets: [2],
+            },
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+            },
+        ],
+
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
         drawCallback: function(settings) {
             $(".table-content").show();
             $(".table-loader").hide();
+
+            settings.aoData.map(function(_i) {
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+            })
+
+        },
+        liveAjax: {
+            // 6 second interval
+            interval: 6000,
+            // Do _not_ fire the DT callbacks for every XHR request made by liveAjax
+            dtCallbacks: false,
+            // Abort the XHR polling if one of the below errors were encountered
+            abortOn: ["error", "timeout", "parsererror"],
+            // Disable pagination resetting on updates ("true" will send the viewer
+            // to the first page every update)
+            resetPaging: false,
         },
 
     });

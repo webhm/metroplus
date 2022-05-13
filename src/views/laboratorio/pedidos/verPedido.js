@@ -1,18 +1,93 @@
-import Auth from '../../models/auth';
-import HeaderPrivate from '../layout/header-private';
-import Sidebarlab from './sidebarLab';
-import App from '../app';
+import Auth from '../../../models/auth';
+import HeaderPrivate from '../../layout/header-private';
+import Sidebarlab from '../sidebarLab';
+import App from '../../app';
+import Loader from '../../loader';
+import m from 'mithril';
 
-const Laboratorio = {
-    oninit: () => {
+const DetallePedido = {
+    detalle: null,
+    error: "",
+    fetch: function() {
+        m.request({
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
+            })
+            .then(function(result) {
+                DetallePedido.detalle = result.data;
+            })
+            .catch(function(e) {
+                DetallePedido.error = e.message;
+            })
+    }
+}
+
+const Pedido = {
+    oninit: DetallePedido.fetch,
+
+    view: () => {
+        return DetallePedido.error ? [
+            m(".alert.alert-danger[role='alert']",
+                DetallePedido.error
+            )
+        ] : DetallePedido.detalle ? [
+            m("p.mg-5.tx-20", [
+                m("i.fas.fa-user.mg-r-5.text-secondary"),
+                DetallePedido.detalle.NOMBRE_PACIENTE,
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-primary.mg-r-5.tx-14",
+                    "HC: " + DetallePedido.detalle.HC
+                ),
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-secondary.mg-r-5.tx-14",
+                    "N° Adm. GEMA N°: " + DetallePedido.detalle.ADMISION
+                ),
+                m("span.badge.badge-secondary.mg-r-5.tx-14",
+                    "N° Pedido GEMA N°: " + DetallePedido.detalle.NUM_PEDIDO_GEMA
+                )
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-success.mg-r-5.tx-14",
+                    "N° At. MV: " + DetallePedido.detalle.ATEN_MV
+                ),
+                m("span.badge.badge-success.mg-r-5.tx-14",
+                    "N° Pedido MV: " + DetallePedido.detalle.NUM_PEDIDO_MV
+                )
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-light.wd-100p.tx-14",
+                    "Detalle: "
+                )
+            ]),
+            m("p.mg-5", [
+                DetallePedido.detalle.DESCRIPCION.split("\n").map(function(_i) {
+                    return m("p.mg-0", _i)
+                })
+            ])
+        ] : m("div.placeholder-paragraph.wd-100p", [
+            m("div.line"),
+            m("div.line")
+        ])
+    }
+}
+
+
+
+
+const VerPedido = {
+    idPedido: null,
+    oninit: (_data) => {
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
+        VerPedido.idPedido = _data.attrs.idPedido;
         if (!Auth.isLogin()) {
             return m.route.set('/auth');
         }
     },
     oncreate: () => {
-        document.title = "Laboratorio | " + App.title;
+        document.title = "Detalle Pedido N°: " + VerPedido.idPedido + " | " + App.title;
         loadCustomPage();
     },
     view: () => {
@@ -27,29 +102,36 @@ const Laboratorio = {
                                 "Metrovirtual"
                             )
                         ),
+                        m("li.breadcrumb-item",
+                            m("a", { href: "#!/laboratorio" },
+                                "Laboratorio"
+                            )
+                        ),
+                        m("li.breadcrumb-item",
+                            m("a", { href: "#!/laboratorio/pedidos" },
+                                "Pedidos de Laboratorio"
+                            )
+                        ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Laboratorio"
+                            "Detalle"
                         )
                     ]),
                     m("h1.df-title",
-                        "Laboratorio"
+                        "Detalle de Pedido N°: " + VerPedido.idPedido
                     ),
 
                     m("div.row.tx-14", [
 
-                        m("div.col-sm-6",
+                        m("div.col-12",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                                 m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
+                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='file']")
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Pedidos de Laboratorio"
+                                    "Detalle de Pedido N°: " + VerPedido.idPedido
                                 ),
+                                m(Pedido)
 
-                                m("a.tx-medium", { href: "#!/laboratorio/pedidos" }, [
-                                    "Ir a Pedidos de Laboratorio",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
                             ])
                         ),
 
@@ -57,6 +139,30 @@ const Laboratorio = {
 
                 ])
             ),
+            m("div.section-nav", [
+                m("label.nav-label",
+                    "Mensajes de Pedido"
+                ),
+                m("nav.nav.flex-column[id='navSection']", [
+                    m("div.demo-static-toast",
+                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                            m("div.toast-header.bg-danger", [
+                                m("h6.tx-white.tx-14.mg-b-0.mg-r-auto",
+                                    "Alerta"
+                                ),
+                                m("small.tx-white",
+                                    "15:47"
+                                ),
+
+                            ]),
+                            m("div.toast-body",
+                                "Mensaje de ejemplo"
+                            )
+                        ])
+                    )
+
+                ])
+            ])
         ];
     },
 
@@ -192,4 +298,4 @@ function loadCustomPage() {
 
 };
 
-export default Laboratorio;
+export default VerPedido;

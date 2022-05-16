@@ -6,99 +6,267 @@ import Loader from '../../loader';
 import m from 'mithril';
 
 const DetallePedido = {
-    detalle: null,
+    data: [],
+    detalle: [],
     error: "",
-    fetch: function () {
+    fetch: () => {
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
-        })
-            .then(function (result) {
-                DetallePedido.detalle = result.data;
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
             })
-            .catch(function (e) {
-                DetallePedido.error = e.message;
-            })
-    }
-}
-
-const Pedido = {
-    oninit: DetallePedido.fetch,
-
-    view: () => {
-        return DetallePedido.error ? [
-            m(".alert.alert-danger[role='alert']",
-                DetallePedido.error
-            )
-        ] : DetallePedido.detalle ? [
-            m("p.mg-5.tx-20", [
-                m("i.fas.fa-user.mg-r-5.text-secondary"),
-                DetallePedido.detalle.NOMBRE_PACIENTE,
-            ]),
-            m("p.mg-5", [
-                m("span.badge.badge-primary.mg-r-5.tx-14",
-                    "HC: " + DetallePedido.detalle.HC
-                ),
-            ]),
-            m("p.mg-5", [
-                m("span.badge.badge-secondary.mg-r-5.tx-14",
-                    "N° Adm. GEMA N°: " + DetallePedido.detalle.ADMISION
-                ),
-                m("span.badge.badge-secondary.mg-r-5.tx-14",
-                    "N° Pedido GEMA N°: " + DetallePedido.detalle.NUM_PEDIDO_GEMA
-                )
-            ]),
-            m("p.mg-5", [
-                m("span.badge.badge-success.mg-r-5.tx-14",
-                    "N° At. MV: " + DetallePedido.detalle.ATEN_MV
-                ),
-                m("span.badge.badge-success.mg-r-5.tx-14",
-                    "N° Pedido MV: " + DetallePedido.detalle.NUM_PEDIDO_MV
-                )
-            ]),
-            m("p.mg-5", "Opciones Disponibles:"),
-            m("hr.wd-100p.mg-t-0.mg-b-5"),
-
-            m("p.mg-5.text-right", [
-                m("button.btn.btn-xs.btn-success.mg-l-2.tx-semibold[type='button']", [
-                    m("i.fas.fa-user-edit.mg-r-2",)
-                ], "Editar Muestras"
-                ),
-                m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']",
-                    "Anular Muestras"
-                ),
-                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']",
-                    "Enviar Mensaje"
-                )
-            ]),
-            m("p.mg-5", [
-                m("span.badge.badge-light.wd-100p.tx-14",
-                    "Detalle: ",
-                ),
-            ]),
-
-            m("p.mg-5", [
-                DetallePedido.detalle.DESCRIPCION.split("\n").map(function (_val, _i, _contentData) {
-
-                    console.log(_contentData.length)
-
+            .then(function(result) {
+                DetallePedido.data = result.data;
+                result.data.DESCRIPCION.split("\n").map(function(_val, _i, _contentData) {
                     _i = _i + 1;
                     if (_contentData.length !== _i) {
+                        DetallePedido.detalle.push(_val)
+                    }
 
-                        return m("div.custom-control.custom-checkbox",
-                            [
-                                m("input.custom-control-input[type='checkbox'][id='item" + _i + "']"),
-                                m("label.custom-control-label[for='item" + _i + "']",
-                                    _val
-                                )
-                            ]
+                })
+            })
+            .catch(function(e) {
+                DetallePedido.error = e.message;
+            })
+    },
+    view: () => {
+
+        if (EditarPedido.detalle.length !== 0) {
+            return DetallePedido.detalle.map(function(_val, _i, _contentData) {
+                if (_contentData.length !== _i) {
+
+                    if (EditarPedido.detalle[_i].indexOf("...") !== -1) {
+                        return m("p.mg-0",
+                            EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3)
+                        )
+                    } else {
+                        return m("p.mg-0",
+                            _val
                         )
                     }
 
 
 
-                })
-            ])
+
+                }
+            })
+        }
+
+
+    },
+}
+
+const EditarPedido = {
+    detalle: [],
+    error: "",
+    observaciones: "",
+    view: () => {
+        return EditarPedido.detalle.map(function(_val, _i, _contentData) {
+            if (_contentData.length !== _i) {
+                if (_val.indexOf("...") !== -1) {
+                    return m("div.custom-control.custom-checkbox", [
+                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                            checked: true,
+                            onclick: function(e) {
+                                if (!this.checked) {
+                                    EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
+                                }
+                                EditarPedido.udpateDataPedido();
+                            }
+
+                        }),
+                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                            (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
+                        )
+                    ])
+                } else {
+                    return m("div.custom-control.custom-checkbox", [
+                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                            onclick: function(e) {
+                                if (this.checked) {
+                                    EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm') + " ...";
+                                }
+                                EditarPedido.udpateDataPedido();
+                            }
+
+                        }),
+                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                            (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
+                        )
+                    ])
+                }
+
+
+            }
+
+        })
+    },
+    oninit: () => {
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-lab/" + VerPedido.idPedido,
+                data: { dataPedido: DetallePedido.detalle },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                console.log(result)
+                if (result.status) {
+                    EditarPedido.detalle = result.data;
+                }
+            })
+            .catch(function(e) {
+                EditarPedido.error = e.message;
+            })
+    },
+    udpateDataPedido: () => {
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedido.idPedido,
+                data: { dataPedido: EditarPedido.detalle },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                if (result.status) {
+                    EditarPedido.detalle = result.data;
+                }
+            })
+            .catch(function(e) {
+                EditarPedido.error = e.message;
+            })
+    },
+
+}
+
+const Pedido = {
+    ver: true,
+    eliminar: false,
+    editar: false,
+    labelOperation: "Detalle:",
+    oninit: () => {
+        DetallePedido.fetch();
+    },
+    view: () => {
+        return DetallePedido.error ? [
+            m(".alert.alert-danger[role='alert']",
+                DetallePedido.error
+            )
+        ] : DetallePedido.detalle.length !== 0 ? [
+            m("p.mg-5.tx-20", [
+                m("i.fas.fa-user.mg-r-5.text-secondary"),
+                DetallePedido.data.NOMBRE_PACIENTE,
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-primary.mg-r-5.tx-14",
+                    "HC: " + DetallePedido.data.HC
+                ),
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-secondary.mg-r-5.tx-14",
+                    "N° Adm. GEMA N°: " + DetallePedido.data.ADMISION
+                ),
+                m("span.badge.badge-secondary.mg-r-5.tx-14",
+                    "N° Pedido GEMA N°: " + DetallePedido.data.NUM_PEDIDO_GEMA
+                )
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-success.mg-r-5.tx-14",
+                    "N° At. MV: " + DetallePedido.data.ATEN_MV
+                ),
+                m("span.badge.badge-success.mg-r-5.tx-14",
+                    "N° Pedido MV: " + DetallePedido.data.NUM_PEDIDO_MV
+                )
+            ]),
+            m("p.mg-5", "Opciones Disponibles:"),
+            m("hr.wd-100p.mg-t-0.mg-b-5"),
+            m("p.mg-5.text-right", [
+                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                    onclick: function() {
+                        Pedido.ver = true;
+                        Pedido.editar = false;
+                        Pedido.eliminar = false;
+                        Pedido.labelOperation = "Detalle:";
+                    },
+                }, [
+                    m("i.fas.fa-file-alt.mg-r-5", )
+                ], "Ver Detalle"),
+                m("button.btn.btn-xs.btn-success.mg-l-2.tx-semibold[type='button']", {
+                    onclick: function() {
+                        Pedido.ver = false;
+                        Pedido.editar = true;
+                        Pedido.eliminar = false;
+                        Pedido.labelOperation = "Editar:";
+
+                    },
+                }, [
+                    m("i.fas.fa-user-edit.mg-r-5", )
+                ], "Editar Muestras"),
+                m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
+                    onclick: function() {
+                        Pedido.ver = false;
+                        Pedido.editar = false;
+                        Pedido.eliminar = true;
+                        Pedido.labelOperation = "Anular:";
+
+                    },
+                }, [
+                    m("i.fas.fa-trash-alt.mg-r-5", )
+                ], "Anular Muestras"),
+                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", [
+                    m("i.fas.fa-paper-plane.mg-r-5", )
+                ], "Enviar Mensaje")
+            ]),
+            m("p.mg-5", [
+                m("span.badge.badge-light.wd-100p.tx-14",
+                    Pedido.labelOperation
+                ),
+            ]),
+            m("p.mg-5." + ((Pedido.ver) ? "" : "d-none"), [
+                m(DetallePedido)
+            ]),
+            m("p.mg-5." + ((Pedido.editar) ? "" : "d-none"), [
+                m(EditarPedido)
+
+            ]),
+            m("hr.wd-100p.mg-t-0.mg-b-5"),
+            m("p.mg-5." + ((Pedido.editar) ? "" : "d-none"), [
+                m("span.badge.badge-light.wd-100p.tx-14",
+                    "Observaciones: ",
+                ),
+                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
+                    oninput: function(e) { EditarPedido.observaciones = e.target.value; },
+                }),
+                m("div.mg-0.mg-t-5.text-right", [
+                    m("button.btn.btn-xs.btn-outline-primary.mg-l-2.tx-semibold[type='button']", {
+                        onclick: function() {
+                            Pedido.ver = true;
+                            Pedido.editar = false;
+                            Pedido.eliminar = false;
+                            Pedido.labelOperation = "Detalle:";
+
+                        },
+                    }, [
+                        m("i.fas.fa-file-alt.mg-r-5", )
+                    ], "Guardar"),
+                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                        onclick: function() {
+                            Pedido.ver = false;
+                            Pedido.editar = true;
+                            Pedido.eliminar = false;
+                            Pedido.labelOperation = "Editar:";
+
+                        },
+                    }, [
+                        m("i.fas.fa-paper-plane.mg-r-5", )
+                    ], "Guardar y Notificar"),
+
+                ]),
+                m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+            ]),
+
         ] : m("div.placeholder-paragraph.wd-100p", [
             m("div.line"),
             m("div.line")
@@ -202,6 +370,7 @@ const VerPedido = {
 };
 
 
+
 function loadCustomPage() {
 
     feather.replace();
@@ -225,7 +394,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function () {
+    $(window).resize(function() {
         showNavbarActiveSub()
     })
 
@@ -234,7 +403,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -245,7 +414,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -257,24 +426,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function (e) {
+    $('#mainMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function (e) {
+    $('#sidebarMenuOpen').on('click', function(e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function (e) {
+    $('#navbarSearch').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function (e) {
+    $('#navbarSearchClose').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -292,7 +461,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function (e) {
+        $('.sidebar-nav .with-sub').on('click', function(e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -301,18 +470,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function (e) {
+    $('#mainMenuOpen').on('click touchstart', function(e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function (e) {
+    $('#sidebarMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

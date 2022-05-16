@@ -8,15 +8,15 @@ import m from 'mithril';
 const DetallePedido = {
     detalle: null,
     error: "",
-    fetch: function() {
+    fetch: function () {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
+        })
+            .then(function (result) {
                 DetallePedido.detalle = result.data;
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 DetallePedido.error = e.message;
             })
     }
@@ -56,14 +56,47 @@ const Pedido = {
                     "N° Pedido MV: " + DetallePedido.detalle.NUM_PEDIDO_MV
                 )
             ]),
-            m("p.mg-5", [
-                m("span.badge.badge-light.wd-100p.tx-14",
-                    "Detalle: "
+            m("p.mg-5", "Opciones Disponibles:"),
+            m("hr.wd-100p.mg-t-0.mg-b-5"),
+
+            m("p.mg-5.text-right", [
+                m("button.btn.btn-xs.btn-success.mg-l-2.tx-semibold[type='button']", [
+                    m("i.fas.fa-user-edit.mg-r-2",)
+                ], "Editar Muestras"
+                ),
+                m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']",
+                    "Anular Muestras"
+                ),
+                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']",
+                    "Enviar Mensaje"
                 )
             ]),
             m("p.mg-5", [
-                DetallePedido.detalle.DESCRIPCION.split("\n").map(function(_i) {
-                    return m("p.mg-0", _i)
+                m("span.badge.badge-light.wd-100p.tx-14",
+                    "Detalle: ",
+                ),
+            ]),
+
+            m("p.mg-5", [
+                DetallePedido.detalle.DESCRIPCION.split("\n").map(function (_val, _i, _contentData) {
+
+                    console.log(_contentData.length)
+
+                    _i = _i + 1;
+                    if (_contentData.length !== _i) {
+
+                        return m("div.custom-control.custom-checkbox",
+                            [
+                                m("input.custom-control-input[type='checkbox'][id='item" + _i + "']"),
+                                m("label.custom-control-label[for='item" + _i + "']",
+                                    _val
+                                )
+                            ]
+                        )
+                    }
+
+
+
                 })
             ])
         ] : m("div.placeholder-paragraph.wd-100p", [
@@ -192,7 +225,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function() {
+    $(window).resize(function () {
         showNavbarActiveSub()
     })
 
@@ -201,7 +234,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -212,7 +245,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -224,24 +257,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function(e) {
+    $('#mainMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function(e) {
+    $('#sidebarMenuOpen').on('click', function (e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
+    $('#navbarSearch').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function(e) {
+    $('#navbarSearchClose').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -259,7 +292,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
+        $('.sidebar-nav .with-sub').on('click', function (e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -268,18 +301,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function(e) {
+    $('#mainMenuOpen').on('click touchstart', function (e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function(e) {
+    $('#sidebarMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

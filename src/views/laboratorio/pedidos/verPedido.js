@@ -137,6 +137,25 @@ const EditarPedido = {
                 EditarPedido.error = e.message;
             })
     },
+    sendNotiLab: () => {
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/noti-eme/" + VerPedido.idPedido,
+                data: { message: EditarPedido.observaciones },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                if (result.status) {
+                    EditarPedido.observaciones = "";
+                    alert('Mensaje enviado con éxito.')
+                }
+            })
+            .catch(function(e) {
+                EditarPedido.error = e.message;
+            })
+    },
 
 }
 
@@ -202,8 +221,8 @@ const Pedido = {
                     },
                 }, [
                     m("i.fas.fa-user-edit.mg-r-5", )
-                ], "Editar Muestras"),
-                m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
+                ], "Recibir Muestras"),
+                m("button.btn.btn-xs.btn-danger.d-none.mg-l-2.tx-semibold[type='button']", {
                     onclick: function() {
                         Pedido.ver = false;
                         Pedido.editar = false;
@@ -214,7 +233,7 @@ const Pedido = {
                 }, [
                     m("i.fas.fa-trash-alt.mg-r-5", )
                 ], "Anular Muestras"),
-                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", [
+                m("button.btn.btn-xs.btn-primary.d-none.mg-l-2.tx-semibold[type='button']", [
                     m("i.fas.fa-paper-plane.mg-r-5", )
                 ], "Enviar Mensaje")
             ]),
@@ -237,30 +256,22 @@ const Pedido = {
                 ),
                 m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
                     oninput: function(e) { EditarPedido.observaciones = e.target.value; },
+                    value: EditarPedido.observaciones,
                 }),
                 m("div.mg-0.mg-t-5.text-right", [
-                    m("button.btn.btn-xs.btn-outline-primary.mg-l-2.tx-semibold[type='button']", {
-                        onclick: function() {
-                            Pedido.ver = true;
-                            Pedido.editar = false;
-                            Pedido.eliminar = false;
-                            Pedido.labelOperation = "Detalle:";
 
-                        },
-                    }, [
-                        m("i.fas.fa-file-alt.mg-r-5", )
-                    ], "Guardar"),
                     m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
                         onclick: function() {
-                            Pedido.ver = false;
-                            Pedido.editar = true;
-                            Pedido.eliminar = false;
-                            Pedido.labelOperation = "Editar:";
-
+                            if (EditarPedido.observaciones.length !== 0) {
+                                EditarPedido.sendNotiLab();
+                            } else {
+                                alert("Observaciones es obligatorio.");
+                            }
                         },
                     }, [
                         m("i.fas.fa-paper-plane.mg-r-5", )
                     ], "Guardar y Notificar"),
+
 
                 ]),
                 m("hr.wd-100p.mg-t-5.mg-b-5"),
@@ -345,22 +356,6 @@ const VerPedido = {
                     "Mensajes de Pedido"
                 ),
                 m("nav.nav.flex-column[id='navSection']", [
-                    m("div.demo-static-toast",
-                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
-                            m("div.toast-header.bg-danger", [
-                                m("h6.tx-white.tx-14.mg-b-0.mg-r-auto",
-                                    "Alerta"
-                                ),
-                                m("small.tx-white",
-                                    "15:47"
-                                ),
-
-                            ]),
-                            m("div.toast-body",
-                                "Mensaje de ejemplo"
-                            )
-                        ])
-                    )
 
                 ])
             ])

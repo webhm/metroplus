@@ -8,28 +8,21 @@ const iPedido = {
 
     view: (_data) => {
         return [
-            m("p.mg-0", [
+            m("p.mg-0.tx-18", [
                 m("i.fas.fa-user.mg-r-5.text-secondary"),
-                _data.attrs.NOMBRE_PACIENTE,
+                _data.attrs.PTE_MV,
             ]),
             m("p.mg-0", [
-                m("span.badge.badge-primary.mg-r-5",
-                    "HC: " + _data.attrs.HC
+                m("div.tx-15.text-secondary.mg-r-5",
+                    "HC: " + _data.attrs.HC_MV + "01"
                 ),
             ]),
+
             m("p.mg-0", [
-                m("span.badge.badge-secondary.mg-r-5",
-                    "N° Adm. GEMA N°: " + _data.attrs.ADMISION
+                m("div.tx-15.text-secondary.mg-r-5",
+                    "N° At. MV: " + _data.attrs.AT_MV
                 ),
-                m("span.badge.badge-secondary.mg-r-5",
-                    "N° Pedido GEMA N°: " + _data.attrs.NUM_PEDIDO_GEMA
-                )
-            ]),
-            m("p.mg-0", [
-                m("span.badge.badge-success.mg-r-5",
-                    "N° At. MV: " + _data.attrs.ATEN_MV
-                ),
-                m("span.badge.badge-success.mg-r-5",
+                m("div.tx-15.text-secondary.mg-r-5",
                     "N° Pedido MV: " + _data.attrs.NUM_PEDIDO_MV
                 )
             ]),
@@ -86,11 +79,11 @@ const Pedidos = {
                     ),
 
                     m("div.row.tx-14", [
-                        m(".df-example.demo-table.mg-b-20[data-label='Filtrar'][id='filterTable']",
+                        m(".df-example.demo-table.mg-b-20.wd-100p[data-label='Filtrar'][id='filterTable']",
                             m("div.row", [
                                 m("div.col-sm-12.pd-b-10",
                                     m("div.input-group", [
-                                        m("input.form-control.mg-b-20[aautofocus=''][id='_dt_search_text'][placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']"),
+                                        m("input.form-control.mg-b-20.wd-100p[aautofocus=''][id='_dt_search_text'][placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']"),
                                         m("div.input-group-append",
                                             m("button.btn.btn-outline-light[id='button-buscar-t'][type='button']", [
                                                 m("i.icon.ion-md-search-outline"),
@@ -99,7 +92,7 @@ const Pedidos = {
                                         )
                                     ])
                                 ),
-                                m("div.col-sm-12.pd-b-10",
+                                m("div.col-sm-12.pd-b-10.d-none",
                                     m("div.input-group", [
                                         m("input.form-control[id='desde'][placeholder='Desde'][title='Desde'][type='text']"),
                                         m("input.form-control[id='hasta'][placeholder='Hasta'][title='Hasta'][type='text']"),
@@ -241,86 +234,91 @@ function loadPacientes() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.NOMBRE_PACIENTE;
-
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-                orderable: false,
-
-            },
-        ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
         },
-        drawCallback: function(settings) {
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
+
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "5%",
+
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [4],
+            width: "55%",
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+        },
+        drawCallback: function (settings) {
             $(".table-content").show();
             $(".table-loader").hide();
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
-                            _i._aData.FECHA + " " + _i._aData.HORA
+                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
 
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
                             m("a.btn.btn-xs.btn-primary", { href: "#!/laboratorio/pedido/" + _i._aData.NUM_PEDIDO_MV, target: "_blank" }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),
                             ], "Ver Pedido"),
+
 
                         ])
                     }
@@ -328,12 +326,12 @@ function loadPacientes() {
             })
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -345,20 +343,20 @@ function loadPacientes() {
     });
 
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');
@@ -386,7 +384,7 @@ function loadNotificacionesPacientes() {
     var table = $("#table-state").DataTable({
         "ajax": {
 
-            url: "https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio",
+            url: "https://api.hospitalmetropolitano.org/t/v1/npl",
             dataSrc: "data",
             serverSide: true,
         },
@@ -398,8 +396,8 @@ function loadNotificacionesPacientes() {
         order: false,
         columns: false,
         aoColumnDefs: false,
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {},
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) { },
         rowId: "NUM_PEDIDO_MV",
         liveAjax: {
             interval: 10000,
@@ -408,160 +406,160 @@ function loadNotificacionesPacientes() {
         },
     })
 
-    /**
-     * Event:       xhrErr.liveAjax
-     * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
-     *              all of the xhrErr*.liveAjax events below)
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErr.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErr", "General XHR Error: " + thrown);
-    })
+        /**
+         * Event:       xhrErr.liveAjax
+         * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
+         *              all of the xhrErr*.liveAjax events below)
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErr.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErr", "General XHR Error: " + thrown);
+        })
 
-    /**
-     * Event:       xhrErrTimeout.liveAjax
-     * Description: Triggered when a 'timeout' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrTimeout.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrTimeout", "XHR Error: Timeout");
-    })
+        /**
+         * Event:       xhrErrTimeout.liveAjax
+         * Description: Triggered when a 'timeout' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrTimeout.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrTimeout", "XHR Error: Timeout");
+        })
 
-    /**
-     * Event:       xhrErrError.liveAjax
-     * Description: Triggered when a 'error' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrError.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("XHR Error: Error");
-    })
+        /**
+         * Event:       xhrErrError.liveAjax
+         * Description: Triggered when a 'error' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrError.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("XHR Error: Error");
+        })
 
-    /**
-     * Event:       xhrErrAbort.liveAjax
-     * Description: Triggered when an 'abort' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrAbort.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrAbort", "XHR Error: Abort");
-    })
+        /**
+         * Event:       xhrErrAbort.liveAjax
+         * Description: Triggered when an 'abort' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrAbort.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrAbort", "XHR Error: Abort");
+        })
 
-    /**
-     * Event:       xhrErrParseerror.liveAjax
-     * Description: Triggered when a 'parsererror' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrParseerror.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrParseerror", "XHR Error: Parse Error");
-    })
+        /**
+         * Event:       xhrErrParseerror.liveAjax
+         * Description: Triggered when a 'parsererror' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrParseerror.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrParseerror", "XHR Error: Parse Error");
+        })
 
-    /**
-     * Event:       xhrErrUnknown.liveAjax
-     * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
-     *              happen actually, seeing as how all the textStatus values from
-     *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
-     *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
-     *              updated
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrUnknown.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
-    })
+        /**
+         * Event:       xhrErrUnknown.liveAjax
+         * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
+         *              happen actually, seeing as how all the textStatus values from
+         *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
+         *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
+         *              updated
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrUnknown.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
+        })
 
-    /**
-     * Event:       xhrSkipped.liveAjax
-     * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
-     */
-    .on("xhrSkipped.liveAjax", function(e, settings, reason) {
-        console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
-    })
+        /**
+         * Event:       xhrSkipped.liveAjax
+         * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
+         */
+        .on("xhrSkipped.liveAjax", function (e, settings, reason) {
+            console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
+        })
 
-    /**
-     * Event:       setInterval.liveAjax
-     * Description: Triggered when the setTimeout interval has been changed
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("setInterval.liveAjax", function(e, settings, interval) {
-        console.log("setInterval", "XHR polling interval set to " + interval);
-    })
+        /**
+         * Event:       setInterval.liveAjax
+         * Description: Triggered when the setTimeout interval has been changed
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("setInterval.liveAjax", function (e, settings, interval) {
+            console.log("setInterval", "XHR polling interval set to " + interval);
+        })
 
-    /**
-     * Event:       init.liveAjax
-     * Description: Triggered when the liveAjax plugin has been initialized
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("init.liveAjax", function(e, settings, xhr) {
-        console.log("init", "liveAjax initiated");
-    })
+        /**
+         * Event:       init.liveAjax
+         * Description: Triggered when the liveAjax plugin has been initialized
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("init.liveAjax", function (e, settings, xhr) {
+            console.log("init", "liveAjax initiated");
+        })
 
-    /**
-     * Event:       clearTimeout.liveAjax
-     * Description: Triggered when the timeout has been cleared, killing the XHR polling
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("clearTimeout.liveAjax", function(e, settings, xhr) {
-        console.log("clearTimeout", "liveAjax timeout cleared");
-    })
+        /**
+         * Event:       clearTimeout.liveAjax
+         * Description: Triggered when the timeout has been cleared, killing the XHR polling
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("clearTimeout.liveAjax", function (e, settings, xhr) {
+            console.log("clearTimeout", "liveAjax timeout cleared");
+        })
 
-    /**
-     * Event:       abortXhr.liveAjax
-     * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("abortXhr.liveAjax", function(e, settings, xhr) {
-        console.log("abortXhr", "liveAjax XHR request was aborted");
-    })
+        /**
+         * Event:       abortXhr.liveAjax
+         * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("abortXhr.liveAjax", function (e, settings, xhr) {
+            console.log("abortXhr", "liveAjax XHR request was aborted");
+        })
 
-    /**
-     * Event:       setPause.liveAjax
-     * Description: Triggered when the liveAjax XHR polling was paused or un-paused
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("setPause.liveAjax", function(e, settings, paused) {
-        console.log(
-            "setPause",
-            "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
-        );
-    })
+        /**
+         * Event:       setPause.liveAjax
+         * Description: Triggered when the liveAjax XHR polling was paused or un-paused
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("setPause.liveAjax", function (e, settings, paused) {
+            console.log(
+                "setPause",
+                "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
+            );
+        })
 
-    /**
-     * Event:       onUpdate.liveAjax
-     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
-     */
-    .on("onUpdate.liveAjax", function(e, settings, updates, json, xhr) {
+        /**
+         * Event:       onUpdate.liveAjax
+         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
+         */
+        .on("onUpdate.liveAjax", function (e, settings, updates, json, xhr) {
 
-        if (updates.create.length > 0) {
-            updates.create.map(function(_i) {
-                nueva_notificacion(_i)
-            })
-        }
+            if (updates.create.length > 0) {
+                updates.create.map(function (_i) {
+                    nueva_notificacion(_i)
+                })
+            }
 
 
 
-        console.log(
-            "onUpdate",
-            "JSON Processed - Table updated with new data; " +
-            (updates.delete.length || 0) +
-            " deletes, " +
-            (updates.create.length || 0) +
-            " additions, " +
-            Object.keys(updates.update).length +
-            " updates"
-        );
-    })
+            console.log(
+                "onUpdate",
+                "JSON Processed - Table updated with new data; " +
+                (updates.delete.length || 0) +
+                " deletes, " +
+                (updates.create.length || 0) +
+                " additions, " +
+                Object.keys(updates.update).length +
+                " updates"
+            );
+        })
 
-    /**
-     * Event:       noUpdate.liveAjax
-     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
-     */
-    .on("noUpdate.liveAjax", function(e, settings, json, xhr) {
-        console.log(
-            "noUpdate",
-            "JSON Processed - Table not updated, no new data"
-        );
-    });
+        /**
+         * Event:       noUpdate.liveAjax
+         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
+         */
+        .on("noUpdate.liveAjax", function (e, settings, json, xhr) {
+            console.log(
+                "noUpdate",
+                "JSON Processed - Table not updated, no new data"
+            );
+        });
 
 
     return table;
@@ -631,22 +629,22 @@ function loadNotificaciones() {
         order: false,
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
                 m.mount(_i.anCells[0], {
-                    view: function() {
+                    view: function () {
                         return m("div.demo-static-toast",
                             m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
                                 m("div.toast-header.bg-danger", [
@@ -657,7 +655,7 @@ function loadNotificaciones() {
                                         moment.unix(_i._aData.timestamp).format("HH:mm")
                                     ),
                                 ]),
-                                m("div.toast-body",
+                                m("div.toast-body.small",
                                     _i._aData.message
                                 )
                             ])
@@ -678,161 +676,161 @@ function loadNotificaciones() {
         },
     })
 
-    /**
-     * Event:       xhrErr.liveAjax
-     * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
-     *              all of the xhrErr*.liveAjax events below)
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErr.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErr", "General XHR Error: " + thrown);
-    })
+        /**
+         * Event:       xhrErr.liveAjax
+         * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
+         *              all of the xhrErr*.liveAjax events below)
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErr.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErr", "General XHR Error: " + thrown);
+        })
 
-    /**
-     * Event:       xhrErrTimeout.liveAjax
-     * Description: Triggered when a 'timeout' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrTimeout.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrTimeout", "XHR Error: Timeout");
-    })
+        /**
+         * Event:       xhrErrTimeout.liveAjax
+         * Description: Triggered when a 'timeout' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrTimeout.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrTimeout", "XHR Error: Timeout");
+        })
 
-    /**
-     * Event:       xhrErrError.liveAjax
-     * Description: Triggered when a 'error' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrError.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("XHR Error: Error");
-    })
+        /**
+         * Event:       xhrErrError.liveAjax
+         * Description: Triggered when a 'error' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrError.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("XHR Error: Error");
+        })
 
-    /**
-     * Event:       xhrErrAbort.liveAjax
-     * Description: Triggered when an 'abort' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrAbort.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrAbort", "XHR Error: Abort");
-    })
+        /**
+         * Event:       xhrErrAbort.liveAjax
+         * Description: Triggered when an 'abort' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrAbort.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrAbort", "XHR Error: Abort");
+        })
 
-    /**
-     * Event:       xhrErrParseerror.liveAjax
-     * Description: Triggered when a 'parsererror' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrParseerror.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrParseerror", "XHR Error: Parse Error");
-    })
+        /**
+         * Event:       xhrErrParseerror.liveAjax
+         * Description: Triggered when a 'parsererror' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrParseerror.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrParseerror", "XHR Error: Parse Error");
+        })
 
-    /**
-     * Event:       xhrErrUnknown.liveAjax
-     * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
-     *              happen actually, seeing as how all the textStatus values from
-     *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
-     *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
-     *              updated
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrUnknown.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
-    })
+        /**
+         * Event:       xhrErrUnknown.liveAjax
+         * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
+         *              happen actually, seeing as how all the textStatus values from
+         *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
+         *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
+         *              updated
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrUnknown.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
+        })
 
-    /**
-     * Event:       xhrSkipped.liveAjax
-     * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
-     */
-    .on("xhrSkipped.liveAjax", function(e, settings, reason) {
-        console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
-    })
+        /**
+         * Event:       xhrSkipped.liveAjax
+         * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
+         */
+        .on("xhrSkipped.liveAjax", function (e, settings, reason) {
+            console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
+        })
 
-    /**
-     * Event:       setInterval.liveAjax
-     * Description: Triggered when the setTimeout interval has been changed
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("setInterval.liveAjax", function(e, settings, interval) {
-        console.log("setInterval", "XHR polling interval set to " + interval);
-    })
+        /**
+         * Event:       setInterval.liveAjax
+         * Description: Triggered when the setTimeout interval has been changed
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("setInterval.liveAjax", function (e, settings, interval) {
+            console.log("setInterval", "XHR polling interval set to " + interval);
+        })
 
-    /**
-     * Event:       init.liveAjax
-     * Description: Triggered when the liveAjax plugin has been initialized
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("init.liveAjax", function(e, settings, xhr) {
-        console.log("init", "liveAjax initiated");
-    })
+        /**
+         * Event:       init.liveAjax
+         * Description: Triggered when the liveAjax plugin has been initialized
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("init.liveAjax", function (e, settings, xhr) {
+            console.log("init", "liveAjax initiated");
+        })
 
-    /**
-     * Event:       clearTimeout.liveAjax
-     * Description: Triggered when the timeout has been cleared, killing the XHR polling
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("clearTimeout.liveAjax", function(e, settings, xhr) {
-        console.log("clearTimeout", "liveAjax timeout cleared");
-    })
+        /**
+         * Event:       clearTimeout.liveAjax
+         * Description: Triggered when the timeout has been cleared, killing the XHR polling
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("clearTimeout.liveAjax", function (e, settings, xhr) {
+            console.log("clearTimeout", "liveAjax timeout cleared");
+        })
 
-    /**
-     * Event:       abortXhr.liveAjax
-     * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("abortXhr.liveAjax", function(e, settings, xhr) {
-        console.log("abortXhr", "liveAjax XHR request was aborted");
-    })
+        /**
+         * Event:       abortXhr.liveAjax
+         * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("abortXhr.liveAjax", function (e, settings, xhr) {
+            console.log("abortXhr", "liveAjax XHR request was aborted");
+        })
 
-    /**
-     * Event:       setPause.liveAjax
-     * Description: Triggered when the liveAjax XHR polling was paused or un-paused
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("setPause.liveAjax", function(e, settings, paused) {
-        console.log(
-            "setPause",
-            "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
-        );
-    })
+        /**
+         * Event:       setPause.liveAjax
+         * Description: Triggered when the liveAjax XHR polling was paused or un-paused
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("setPause.liveAjax", function (e, settings, paused) {
+            console.log(
+                "setPause",
+                "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
+            );
+        })
 
-    /**
-     * Event:       onUpdate.liveAjax
-     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
-     */
-    .on("onUpdate.liveAjax", function(e, settings, updates, json, xhr) {
+        /**
+         * Event:       onUpdate.liveAjax
+         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
+         */
+        .on("onUpdate.liveAjax", function (e, settings, updates, json, xhr) {
 
-        if (updates.create.length > 0) {
-            updates.create.map(function(_i) {
-                nueva_notificacion(_i)
-            })
-        }
+            if (updates.create.length > 0) {
+                updates.create.map(function (_i) {
+                    nueva_notificacion_muestra(_i)
+                })
+            }
 
 
 
-        console.log(
-            "onUpdate",
-            "JSON Processed - Table updated with new data; " +
-            (updates.delete.length || 0) +
-            " deletes, " +
-            (updates.create.length || 0) +
-            " additions, " +
-            Object.keys(updates.update).length +
-            " updates"
-        );
-    })
+            console.log(
+                "onUpdate",
+                "JSON Processed - Table updated with new data; " +
+                (updates.delete.length || 0) +
+                " deletes, " +
+                (updates.create.length || 0) +
+                " additions, " +
+                Object.keys(updates.update).length +
+                " updates"
+            );
+        })
 
-    /**
-     * Event:       noUpdate.liveAjax
-     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
-     */
-    .on("noUpdate.liveAjax", function(e, settings, json, xhr) {
-        console.log(
-            "noUpdate",
-            "JSON Processed - Table not updated, no new data"
-        );
+        /**
+         * Event:       noUpdate.liveAjax
+         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
+         */
+        .on("noUpdate.liveAjax", function (e, settings, json, xhr) {
+            console.log(
+                "noUpdate",
+                "JSON Processed - Table not updated, no new data"
+            );
 
-    });
+        });
 
 
     return table;
@@ -843,7 +841,26 @@ function loadNotificaciones() {
 
 }
 
-
+function nueva_notificacion_muestra(_mData) {
+    if (Notification) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission()
+        }
+        var title = "Metrovirtual: Muestra Pendiente"
+        var extra = {
+            icon: "assets/favicon.ico",
+            body: "Pedido N°: " + _mData.idPedido
+        }
+        var noti = new Notification(title, extra)
+        noti.onclick = () => {
+            window.open("#!/laboratorio/pedido/" + _mData.NUM_PEDIDO_MV)
+        }
+        noti.onclose = {
+            // Al cerrar
+        }
+        setTimeout(function () { noti.close() }, 30000)
+    }
+}
 
 
 function nueva_notificacion(_mData) {
@@ -854,7 +871,7 @@ function nueva_notificacion(_mData) {
         var title = "Metrovirtual: Nuevo Pedido"
         var extra = {
             icon: "assets/favicon.ico",
-            body: "Pedido N°: " + _mData.NUM_PEDIDO_MV + "\n" + "HC: " + _mData.HC + "\n" + "Pte: " + _mData.NOMBRE_PACIENTE
+            body: "Pedido N°: " + _mData.NUM_PEDIDO_MV + "\n" + "HC: " + _mData.HC_MV + "\n" + "Pte: " + _mData.PTE_MV
         }
         var noti = new Notification(title, extra)
         noti.onclick = () => {
@@ -863,7 +880,7 @@ function nueva_notificacion(_mData) {
         noti.onclose = {
             // Al cerrar
         }
-        setTimeout(function() { noti.close() }, 13000)
+        setTimeout(function () { noti.close() }, 30000)
     }
 }
 
@@ -890,7 +907,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function() {
+    $(window).resize(function () {
         showNavbarActiveSub()
     })
 
@@ -899,7 +916,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -910,7 +927,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -922,24 +939,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function(e) {
+    $('#mainMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function(e) {
+    $('#sidebarMenuOpen').on('click', function (e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
+    $('#navbarSearch').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function(e) {
+    $('#navbarSearchClose').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -957,7 +974,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
+        $('.sidebar-nav .with-sub').on('click', function (e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -966,18 +983,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function(e) {
+    $('#mainMenuOpen').on('click touchstart', function (e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function(e) {
+    $('#sidebarMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

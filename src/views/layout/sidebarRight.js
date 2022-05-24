@@ -1,7 +1,12 @@
+import Notificaciones from '../../models/notificaciones';
+
+
 const SidebarRight = {
     view: () => {
         return [
             m("div.navbar-right", [
+
+                m(Notificaciones),
                 m("div.dropdown.dropdown-profile", [
                     m("a.dropdown-link[href=''][data-toggle='dropdown'][data-display='static']",
                         m("div.avatar.avatar-sm",

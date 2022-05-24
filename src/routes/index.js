@@ -7,7 +7,8 @@ import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import verPedido from '../views/laboratorio/pedidos/verPedido'
 import Pacientes from '../views/pacientes/pacientes';
 import MiPerfil from '../views/perfil/perfil';
-import _404 from '../views/404'
+import _404 from '../views/404';
+import Inicio from '../views/inicio/inicio';
 
 
 
@@ -16,6 +17,7 @@ import _404 from '../views/404'
 // Routes here
 const Routes = {
     '/': App,
+    '/inicio': Inicio,
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': verPedido, //verPedido

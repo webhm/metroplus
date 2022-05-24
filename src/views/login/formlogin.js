@@ -1,4 +1,5 @@
 import Auth from '../../models/auth';
+import App from '../app';
 
 const FormLogin = {
 
@@ -19,7 +20,7 @@ const FormLogin = {
                                             )
                                         ),
                                         m("p",
-                                            "MetroQ aplicación web para la administración de servicios digitales."
+                                            App.title + " aplicación web para la administración de servicios digitales."
                                         ),
 
                                     ])
@@ -33,6 +34,9 @@ const FormLogin = {
                                         ),
                                         m("p.tx-color-03.tx-16.mg-b-40",
                                             "¡Bienvenido! Por favor, inicie sesión para continuar."
+                                        ),
+                                        m(".alert.alert-" + Auth.statusError + "." + Auth.statusHide + "[role='alert']",
+                                            Auth.messageError
                                         ),
                                         m("div.form-group",
                                             [
@@ -68,7 +72,7 @@ const FormLogin = {
                                             "Entrar"
                                         ),
                                         m("div.divider-text",
-                                            "v1.0.0"
+                                            "Hospital Metropolitano"
                                         ),
                                         m("div.ht-80",
                                         ),

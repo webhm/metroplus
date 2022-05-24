@@ -11,13 +11,7 @@ const HeadPublic = {
                         )
                     ])
                 ),
-                m("div.navbar-right", [
-                    m("a.btn.btn-buy[href='https://www.hospitalmetropolitano.org']", [
-                        m("span",
-                            "Hospital Metropolitano"
-                        )
-                    ])
-                ])
+
             ])
         ];
     },

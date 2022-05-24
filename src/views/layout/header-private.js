@@ -36,10 +36,28 @@ const HeaderPrivate = {
                         m("li.nav-label.pd-l-20.pd-lg-l-25.d-lg-none",
                             "Menu"
                         ),
+                        m("li.nav-item." + ((HeaderPrivate.page == "inicio") ? "active" : ""),
+                            m("a.nav-link", { href: "#!/inicio" }, [
+                                m("i[data-feather='layout']"),
+                                " Inicio "
+                            ])
+                        ),
                         m("li.nav-item." + ((HeaderPrivate.page == "laboratorio") ? "active" : ""),
                             m("a.nav-link", { href: "#!/laboratorio" }, [
                                 m("i[data-feather='layout']"),
                                 " Laboratorio "
+                            ])
+                        ),
+                        m("li.nav-item." + ((HeaderPrivate.page == "imagen") ? "active" : ""),
+                            m("a.nav-link", { href: "#!/imagen" }, [
+                                m("i[data-feather='layout']"),
+                                " Imagen "
+                            ])
+                        ),
+                        m("li.nav-item." + ((HeaderPrivate.page == "farmacia") ? "active" : ""),
+                            m("a.nav-link", { href: "#!/farmacia" }, [
+                                m("i[data-feather='layout']"),
+                                " Farmacia "
                             ])
                         ),
                         m("li.nav-item",

@@ -23,6 +23,8 @@
     },
     "homepage": "https://github.com/martinxapps/metroq.hm.med.ec#readme",
     "dependencies": {
+        "crypto-js": "^4.1.1",
+        "localstorage-slim": "^2.2.0",
         "mithril": "^1.1.6"
     },
     "devDependencies": {

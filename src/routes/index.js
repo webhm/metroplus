@@ -9,9 +9,7 @@ import Pacientes from '../views/pacientes/pacientes';
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
 import Inicio from '../views/inicio/inicio';
-
-
-
+import ReloadNotification from '../views/layout/reload-notificacion';
 
 
 // Routes here
@@ -25,6 +23,7 @@ const Routes = {
     '/pacientes': Pacientes, // Pacientes
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir
+    '/notificaciones': ReloadNotification, // ReloadNotificaciones
     "/:404...": _404
 };
 

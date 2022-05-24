@@ -24,7 +24,7 @@ const App = {
     view: () => {
         return [
             m(Loader),
-            setTimeout(function () { App.isAuth() }, 300)
+            setTimeout(function() { App.isAuth() }, 300)
         ];
     },
 };

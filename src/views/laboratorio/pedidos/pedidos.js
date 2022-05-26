@@ -48,23 +48,34 @@ const Updates = {
 
         let localNotificaciones = Encrypt.getData();
 
-        localNotificaciones.notificaciones.map(function(_v, _i) {
-
-
-            if (_v.id !== Updates.data.notificaciones[_i].id) {
-                nueva_notificacion_muestra(_v);
+        for (var i = 0; i < Updates.data.notificaciones.length; i++) {
+            var igual = false;
+            for (var j = 0; j < localNotificaciones.notificaciones.length & !igual; j++) {
+                if (Updates.data.notificaciones[i]['id'] == localNotificaciones.notificaciones[j]['id']) {
+                    igual = true;
+                }
             }
-        });
-
-        localNotificaciones.pedidos.map(function(_v, _i) {
-            if (_v.id !== Updates.data.pedidos[_i].id) {
-                nueva_notificacion(_v);
+            if (!igual) {
+                nueva_notificacion_muestra(Updates.data.notificaciones[i]);
             }
-        });
+        }
 
+
+        for (var i = 0; i < Updates.data.pedidos.length; i++) {
+            var igual = false;
+            for (var j = 0; j < localNotificaciones.pedidos.length & !igual; j++) {
+                if (Updates.data.pedidos[i]['NUM_PEDIDO_MV'] == localNotificaciones.pedidos[j]['NUM_PEDIDO_MV']) {
+                    igual = true;
+                }
+            }
+            if (!igual) {
+                nueva_notificacion(Updates.data.pedidos[i]);
+            }
+        }
+
+        Encrypt.setData(Updates.data)
         setTimeout(function() {
             console.log("updates", Updates.data)
-            Encrypt.setData(Updates.data)
             Updates.fetch();
         }, 5000);
 

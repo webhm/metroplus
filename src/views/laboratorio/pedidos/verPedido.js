@@ -17,11 +17,8 @@ const DetallePedido = {
             .then(function(result) {
                 DetallePedido.data = result.data;
                 result.data.DESCRIPCION.map(function(_val, _i, _contentData) {
-                    _i = _i + 1;
-                    if (_contentData.length !== _i) {
-                        DetallePedido.detalle.push(_val)
-                    }
-
+                    DetallePedido.detalle.push(_val);
+                    EditarPedido.detalle.push(_val);
                 })
             })
             .catch(function(e) {
@@ -32,21 +29,14 @@ const DetallePedido = {
 
         if (EditarPedido.detalle.length !== 0) {
             return DetallePedido.detalle.map(function(_val, _i, _contentData) {
-                if (_contentData.length !== _i) {
-
-                    if (EditarPedido.detalle[_i].indexOf("...") !== -1) {
-                        return m("p.mg-0",
-                            EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3)
-                        )
-                    } else {
-                        return m("p.mg-0",
-                            _val
-                        )
-                    }
-
-
-
-
+                if (EditarPedido.detalle[_i].indexOf("...") !== -1) {
+                    return m("p.mg-0",
+                        EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3)
+                    )
+                } else {
+                    return m("p.mg-0",
+                        _val
+                    )
                 }
             })
         }
@@ -61,42 +51,40 @@ const EditarPedido = {
     observaciones: "",
     view: () => {
         return EditarPedido.detalle.map(function(_val, _i, _contentData) {
-            if (_contentData.length !== _i) {
-                if (_val.indexOf("...") !== -1) {
-                    return m("div.custom-control.custom-checkbox", [
-                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
-                            checked: true,
-                            onclick: function(e) {
-                                if (!this.checked) {
-                                    EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
-                                }
-                                EditarPedido.udpateDataPedido();
+            if (_val.indexOf("...") !== -1) {
+                return m("div.custom-control.custom-checkbox", [
+                    m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                        checked: true,
+                        onclick: function(e) {
+                            if (!this.checked) {
+                                EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
                             }
+                            EditarPedido.udpateDataPedido();
+                        }
 
-                        }),
-                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
-                            (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
-                        )
-                    ])
-                } else {
-                    return m("div.custom-control.custom-checkbox", [
-                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
-                            onclick: function(e) {
-                                if (this.checked) {
-                                    EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm') + " ...";
-                                }
-                                EditarPedido.udpateDataPedido();
+                    }),
+                    m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                        (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
+                    )
+                ])
+            } else {
+                return m("div.custom-control.custom-checkbox", [
+                    m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                        onclick: function(e) {
+                            if (this.checked) {
+                                EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm') + " ...";
                             }
+                            EditarPedido.udpateDataPedido();
+                        }
 
-                        }),
-                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
-                            (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
-                        )
-                    ])
-                }
-
-
+                    }),
+                    m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                        (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
+                    )
+                ])
             }
+
+
 
         })
     },

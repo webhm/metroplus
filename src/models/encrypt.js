@@ -4,10 +4,10 @@ import AES from 'crypto-js/aes';
 
 
 const Encrypt = {
-    oninput: () => {
+    oninit: () => {
         // update localstorage-slim
-        ls.config.encrypt = true;             // global encryption
-        ls.config.secret = 'v4.Metrovirtual';   // global secret
+        ls.config.encrypt = true; // global encryption
+        ls.config.secret = 'v4.Metrovirtual'; // global secret
 
         // update encrypter to use AES encryption
         ls.config.encrypter = (data, secret) => AES.encrypt(JSON.stringify(data), secret).toString();
@@ -22,14 +22,23 @@ const Encrypt = {
             }
         };
     },
+    setDataNotificaciones: (_data) => {
+        Encrypt.oninit();
+        return ls.set('updatesNotificaciones', _data);
+    },
+    getDataNotificaciones: () => {
+        Encrypt.oninit();
+        return ls.get('updatesNotificaciones');
+    },
     setData: (_data) => {
+        Encrypt.oninit();
         return ls.set('updates', _data);
     },
     getData: (_data) => {
+        Encrypt.oninit();
         return ls.get('updates');
     },
 
 };
 
 export default Encrypt;
-

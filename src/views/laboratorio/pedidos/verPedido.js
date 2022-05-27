@@ -9,7 +9,10 @@ const DetallePedido = {
     data: [],
     detalle: [],
     error: "",
+    numPedido: 0,
     fetch: () => {
+
+
         m.request({
                 method: "GET",
                 url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
@@ -19,6 +22,11 @@ const DetallePedido = {
                 result.data.DESCRIPCION.map(function(_val, _i, _contentData) {
                     DetallePedido.detalle.push(_val);
                     EditarPedido.detalle.push(_val);
+
+                    if (_val.indexOf("-R-") !== -1) {
+                        DetallePedido.numPedido = (DetallePedido.numPedido + 1);
+                    }
+
                 })
             })
             .catch(function(e) {
@@ -31,11 +39,11 @@ const DetallePedido = {
             return DetallePedido.detalle.map(function(_val, _i, _contentData) {
                 if (EditarPedido.detalle[_i].indexOf("...") !== -1) {
                     return m("p.mg-0",
-                        EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3)
+                        DetallePedido.detalle[_i] + " " + EditarPedido.detalle[_i].split("...")[1]
                     )
                 } else {
                     return m("p.mg-0",
-                        _val
+                        DetallePedido.detalle[_i]
                     )
                 }
             })
@@ -49,58 +57,138 @@ const EditarPedido = {
     detalle: [],
     error: "",
     observaciones: "",
+    checkedAll: false,
+    numPedido: 0,
+
     view: () => {
-        return EditarPedido.detalle.map(function(_val, _i, _contentData) {
-            if (_val.indexOf("...") !== -1) {
-                return m("div.custom-control.custom-checkbox", [
-                    m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
-                        checked: true,
-                        onclick: function(e) {
-                            if (!this.checked) {
-                                EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
-                            }
-                            EditarPedido.udpateDataPedido();
-                        }
 
-                    }),
-                    m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
-                        (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
-                    )
-                ])
-            } else {
-                return m("div.custom-control.custom-checkbox", [
-                    m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
-                        onclick: function(e) {
-                            if (this.checked) {
-                                EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm') + " ...";
-                            }
-                            EditarPedido.udpateDataPedido();
-                        }
 
-                    }),
-                    m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
-                        (EditarPedido.detalle[_i].indexOf("...") !== -1) ? EditarPedido.detalle[_i].substring(0, EditarPedido.detalle[_i].length - 3) : EditarPedido.detalle[_i],
-                    )
-                ])
-            }
+        return [
+            m("div.custom-control.custom-checkbox", [
+                m("input.custom-control-input[type='checkbox'][id='selectTodos']", {
+                    checked: EditarPedido.checkedAll,
+                    onclick: function(e) {
+                        EditarPedido.seleccionarTodos(this.checked);
+                    }
+                }),
+                m("label.custom-control-label.tx-semibold[for='selectTodos']", "SELECCIONAR TODOS")
+            ]),
+            EditarPedido.detalle.map(function(_val, _i, _contentData) {
 
 
 
-        })
+                if (_val.indexOf("...") !== -1) {
+
+                    if (EditarPedido.detalle.length === (_i + 1)) {
+
+                        EditarPedido.checkedAll = true;
+
+                    }
+
+                    return m("div.custom-control.custom-checkbox", [
+                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                            checked: true,
+                            onclick: function(e) {
+                                if (!this.checked) {
+                                    EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
+                                    Pedido.statusPedido = 3;
+                                    Pedido.classPedido = "tx-warning";
+                                    Pedido.descPedido = "Muestras Pendientes";
+                                }
+                                EditarPedido.udpateDataPedido();
+
+
+                            },
+                            onupdate: (e) => {
+                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1]: DetallePedido.detalle[_i];
+                            },
+
+                        }),
+                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                            (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i],
+                        )
+                    ])
+                } else {
+
+
+                    return m("div.custom-control.custom-checkbox", [
+                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+
+                            onclick: function(e) {
+                                if (this.checked) {
+                                    EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " ... - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm');
+                                }
+                                EditarPedido.udpateDataPedido();
+                            },
+                            onupdate: (e) => {
+                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1]: DetallePedido.detalle[_i];
+                            },
+
+                        }),
+                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                            (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i],
+                        )
+                    ])
+                }
+
+
+
+            }),
+
+        ]
     },
     oninit: () => {
+
+
+        if (DetallePedido.detalle.length === DetallePedido.numPedido) {
+            Pedido.statusPedido = 4;
+            Pedido.descPedido = "Finalizado - Cancelado";
+            Pedido.classPedido = "tx-success";
+        }
+
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-lab/" + VerPedido.idPedido,
-                data: { dataPedido: DetallePedido.detalle },
+                data: {
+                    dataPedido: DetallePedido.detalle,
+                    statusPedido: Pedido.statusPedido,
+                },
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
-                console.log(result)
                 if (result.status) {
+
+
+
                     EditarPedido.detalle = result.data;
+
+                    if (result.statusPedido == null || result.statusPedido == 1) {
+                        Pedido.statusPedido = 1;
+                        Pedido.classPedido = "tx-gray-500";
+                        Pedido.descPedido = "Pendiente";
+                    }
+
+
+                    if (result.statusPedido == 2) {
+                        Pedido.statusPedido = 2;
+                        Pedido.classPedido = "tx-primary";
+                        Pedido.descPedido = "Gestionado";
+                    }
+
+                    if (result.statusPedido == 3) {
+                        Pedido.statusPedido = 3;
+                        Pedido.classPedido = "tx-warning";
+                        Pedido.descPedido = "Muestras Pendientes";
+                    }
+
+                    if (result.statusPedido == 4) {
+                        Pedido.statusPedido = 4;
+                        Pedido.classPedido = "tx-success";
+                        Pedido.descPedido = "Finalizado - Cancelado";
+                    }
+
                 }
             })
             .catch(function(e) {
@@ -111,14 +199,25 @@ const EditarPedido = {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedido.idPedido,
-                data: { dataPedido: EditarPedido.detalle },
+                data: {
+                    dataPedido: EditarPedido.detalle,
+                    statusPedido: Pedido.statusPedido
+
+                },
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
                 if (result.status) {
+
                     EditarPedido.detalle = result.data;
+
+
+
+
+
+
                 }
             })
             .catch(function(e) {
@@ -147,6 +246,40 @@ const EditarPedido = {
                 EditarPedido.error = e.message;
             })
     },
+    seleccionarTodos: (status) => {
+
+        if (status) {
+            Pedido.statusPedido = 2;
+            Pedido.classPedido = "tx-primary";
+            Pedido.descPedido = "Gestionado";
+            EditarPedido.checkedAll = true;
+
+        } else {
+            Pedido.statusPedido = 3;
+            Pedido.classPedido = "tx-warning";
+            Pedido.descPedido = "Muestras Pendientes";
+            EditarPedido.checkedAll = false;
+
+        }
+
+        return EditarPedido.detalle.map(function(_val, _i, _contentData) {
+
+            if (status) {
+                EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " ... - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm');
+                document.getElementById(VerPedido.idPedido + "-" + _i).checked = true;
+
+
+            } else {
+                EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
+                document.getElementById(VerPedido.idPedido + "-" + _i).checked = false;
+            }
+
+            if (EditarPedido.detalle.length === (_i + 1)) {
+                EditarPedido.udpateDataPedido();
+            }
+
+        })
+    },
 
 }
 
@@ -155,6 +288,9 @@ const Pedido = {
     eliminar: false,
     editar: false,
     labelOperation: "Detalle:",
+    statusPedido: 1,
+    descPedido: "...",
+    classPedido: "tx-gray-500",
     oninit: () => {
         DetallePedido.fetch();
     },
@@ -164,23 +300,20 @@ const Pedido = {
                 DetallePedido.error
             )
         ] : DetallePedido.detalle.length !== 0 ? [
+
             m("p.mg-5.tx-20", [
                 m("i.fas.fa-user.mg-r-5.text-secondary"),
                 DetallePedido.data.NOMBRE_PACIENTE,
+            ]),
+            m("p.mg-5.tx-15", [
+                "Fecha Pedido: " + DetallePedido.data.FECHA_PEDIDO,
             ]),
             m("p.mg-5", [
                 m("span.badge.badge-primary.mg-r-5.tx-14",
                     "HC: " + DetallePedido.data.HC
                 ),
             ]),
-            m("p.mg-5", [
-                m("span.badge.badge-primary.mg-r-5.tx-14",
-                    "N° At. MV: " + DetallePedido.data.ATEN_MV
-                ),
-                m("span.badge.badge-primary.mg-r-5.tx-14",
-                    "N° Pedido MV: " + DetallePedido.data.NUM_PEDIDO_MV
-                )
-            ]),
+
             m("p.mg-5", "Opciones Disponibles:"),
             m("hr.wd-100p.mg-t-0.mg-b-5"),
             m("p.mg-5.text-right", [
@@ -269,10 +402,9 @@ const Pedido = {
 }
 
 
-
-
 const VerPedido = {
     idPedido: null,
+
     oninit: (_data) => {
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
@@ -281,11 +413,17 @@ const VerPedido = {
             return m.route.set('/auth');
         }
     },
+
+
     oncreate: () => {
         document.title = "Detalle Pedido N°: " + VerPedido.idPedido + " | " + App.title;
         loadNotificaciones();
         loadCustomPage();
+
+
+
     },
+
     view: () => {
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
@@ -321,10 +459,10 @@ const VerPedido = {
                         m("div.col-12",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                                 m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='file']")
+                                    m("i.tx-60.fas.fa-file." + Pedido.classPedido)
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Detalle de Pedido N°: " + VerPedido.idPedido
+                                    "Detalle de Pedido N°: " + VerPedido.idPedido + " - Status: " + Pedido.descPedido
                                 ),
                                 m(Pedido)
 
@@ -337,7 +475,7 @@ const VerPedido = {
             ),
             m("div.section-nav", [
                 m("label.nav-label",
-                    "Mensajes de Pedido"
+                    "Notificaciones"
                 ),
                 m("nav.nav.flex-column[id='navSection']", [
                     m("table.table.table-sm[id='table-notificaciones'][width='100%']"),

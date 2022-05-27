@@ -119,8 +119,6 @@ const Pedidos = {
     oncreate: () => {
         document.title = "Pedidos de Laboratorio | " + App.title;
         ReloadNotification.loadPage = "/laboratorio/pedidos";
-        Notificaciones.num = 0;
-        window.localStorage.removeItem('updates');
         Updates.fetch();
         loadCustomPage();
         loadPedidos();
@@ -207,7 +205,14 @@ const Pedidos = {
                 m("nav.nav.flex-column[id='navSection']", [
                     m("table.table.table-sm[id='table-notificaciones'][width='100%']"),
 
-                ])
+                ]),
+                m("label.nav-label.mg-t-20.tx-center", [
+                        m("a", { href: "#!/notificaciones-lab" },
+                            "Ver Todo"
+                        )
+                    ],
+
+                ),
             ])
         ];
     },

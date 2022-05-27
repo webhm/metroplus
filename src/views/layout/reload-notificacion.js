@@ -5,6 +5,7 @@ import Loader from "../loader";
 const ReloadNotification = {
     loadPage: "",
     view: (_data) => {
+        window.localStorage.removeItem('updates');
         Notificaciones.num = 0;
         return [
             m(Loader),

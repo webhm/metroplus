@@ -1,24 +1,10 @@
-import Auth from '../../models/auth';
 import HeaderPrivate from '../layout/header-private';
 import Sidebarlab from './sidebarLab';
 import App from '../app';
 
-const Laboratorio = {
-    oninit: () => {
-        HeaderPrivate.page = "";
-        Sidebarlab.page = "";
-        if (!Auth.isLogin()) {
-            return m.route.set('/auth');
-        }
-    },
-    oncreate: () => {
-        document.title = "Laboratorio | " + App.title;
-        loadCustomPage();
-    },
+const MenuLaboratorio = {
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -57,6 +43,27 @@ const Laboratorio = {
 
                 ])
             ),
+        ];
+    },
+
+};
+
+const Laboratorio = {
+    oninit: () => {
+        HeaderPrivate.page = "";
+        Sidebarlab.page = "";
+        App.isAuth();
+
+    },
+    oncreate: () => {
+        document.title = "Laboratorio | " + App.title;
+        loadCustomPage();
+    },
+    view: () => {
+        return [
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+            m(Sidebarlab),
+            m(MenuLaboratorio)
         ];
     },
 

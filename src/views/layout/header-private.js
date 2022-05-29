@@ -13,20 +13,32 @@ const HeaderPrivate = {
                     m("i[data-feather='arrow-left']")
                 ),
                 m("div.navbar-brand",
-                    m("a.df-logo", { href: "/" }, [
+                    m("a.df-logo", { href: "#!/" }, [
                         "Metro",
                         m("span",
                             "Virtual"
-                        )
+                        ), [
+                            m("span", {
+                                "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                            },
+                                "Admin"
+                            )
+                        ]
                     ])
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
                     m("div.navbar-menu-header", [
-                        m("a.df-logo", { href: "/" }, [
+                        m("a.df-logo", { href: "#!/" }, [
                             "Metro",
                             m("span",
                                 "Virtual"
-                            )
+                            ), [
+                                m("span", {
+                                    "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                                },
+                                    "Admin"
+                                )
+                            ]
                         ]),
                         m("a[id='mainMenuClose'][href='']",
                             m("i[data-feather='x']")

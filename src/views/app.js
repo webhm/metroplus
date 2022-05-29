@@ -1,13 +1,11 @@
 import Auth from '../models/auth';
 import Loader from './loader';
-import ls from 'localstorage-slim';
-import encUTF8 from 'crypto-js/enc-utf8';
-import AES from 'crypto-js/aes';
 
 
 const App = {
     title: "Metrovirtual v4.0",
     oninit: () => {
+
         document.title = "Cargando...";
     },
     oncreate: () => {
@@ -15,16 +13,17 @@ const App = {
 
     },
     isAuth: () => {
-        if (Auth.isLogin()) {
-            return m.route.set('/inicio');
-        } else {
+        if (!Auth.isLogin()) {
             return m.route.set('/auth');
         }
     },
     view: () => {
         return [
             m(Loader),
-            setTimeout(function() { App.isAuth() }, 300)
+            setTimeout(function () {
+                App.isAuth()
+                m.route.set('/inicio');
+            }, 300)
         ];
     },
 };

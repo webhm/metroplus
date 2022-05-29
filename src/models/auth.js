@@ -1,7 +1,7 @@
+import m from 'mithril';
 import App from '../views/app';
 import _Error_ from '../views/error';
-import Loader from '../views/loader';
-import Login from '../views/login/login';
+
 
 
 
@@ -27,21 +27,18 @@ const Auth = {
         Auth.statusHide = "";
         Auth.statusError = "danger";
         Auth.messageError = message;
-        m.mount(document.body.querySelector('#app'), Login);
 
     },
     setSuccess: (message) => {
         Auth.statusHide = "";
         Auth.statusError = "success";
         Auth.messageError = message;
-        m.mount(document.body.querySelector('#app'), Login);
 
     },
     setProcess: () => {
         Auth.statusHide = "";
         Auth.statusError = "warning";
         Auth.messageError = 'Procesando...';
-        m.mount(document.body.querySelector('#app'), Loader);
     },
     login: () => {
         Auth.imputDisabled = true;
@@ -66,7 +63,7 @@ const Auth = {
                         Auth.messageError = "";
                         Auth.username = "";
                         Auth.password = "";
-                        App.isAuth()
+                        m.route.set('/inicio');
                     }, 900);
                 } else {
                     Auth.imputDisabled = false;

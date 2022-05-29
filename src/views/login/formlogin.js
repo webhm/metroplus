@@ -35,7 +35,7 @@ const FormLogin = {
                                         m("p.tx-color-03.tx-16.mg-b-40",
                                             "¡Bienvenido! Por favor, inicie sesión para continuar."
                                         ),
-                                        m(".alert.alert-" + Auth.statusError + "." + Auth.statusHide + "[role='alert']",
+                                        m(".tx-semibold.alert.alert-solid.alert-" + Auth.statusError + "." + Auth.statusHide + "[role='alert']",
                                             Auth.messageError
                                         ),
                                         m("div.form-group",

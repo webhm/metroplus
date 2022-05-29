@@ -1,15 +1,14 @@
-import Auth from '../../models/auth';
 import HeaderPrivate from '../layout/header-private';
 import App from '../app';
 import SidebarRight from '../layout/sidebarRight';
+import m from 'mithril';
+
 
 
 const Inicio = {
     oninit: () => {
         HeaderPrivate.page = "";
-        if (!Auth.isLogin()) {
-            return m.route.set('/auth');
-        }
+        App.isAuth();
     },
     oncreate: () => {
         document.title = "Inicio | " + App.title;
@@ -24,7 +23,13 @@ const Inicio = {
                         "Metro",
                         m("span",
                             "Virtual"
-                        )
+                        ), [
+                            m("span", {
+                                "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                            },
+                                "Admin"
+                            )
+                        ]
                     ])
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
@@ -33,7 +38,13 @@ const Inicio = {
                             "Metro",
                             m("span",
                                 "Virtual"
-                            )
+                            ), [
+                                m("span", {
+                                    "style": { "font-size": "0.9rem ", "margin-top": "0.3rem", "padding-left": "0.2rem" }
+                                },
+                                    "Admin"
+                                )
+                            ]
                         ]),
                         m("a[id='mainMenuClose'][href='']",
                             m("i[data-feather='x']")
@@ -101,6 +112,7 @@ const Inicio = {
                                 m("h5.tx-inverse.mg-b-20",
                                     "Laboratorio"
                                 ),
+
 
                                 m("a.tx-medium", { href: "#!/laboratorio" }, [
                                     "Ir a Laboratorio",

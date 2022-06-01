@@ -1,4 +1,43 @@
 import SidebarRight from './sidebarRight';
+import Encrypt from '../../models/encrypt';
+
+
+
+const MenuHeader = {
+    view: () => {
+
+        let _data = Encrypt.getDataUser();
+
+        if (_data.length !== 0) {
+            return [
+                m("li.nav-item",
+                    m("a.nav-link", { href: "#!/inicio" }, [
+                        m("i[data-feather='layout']"),
+                        " Inicio "
+                    ])
+                ),
+                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                    return [
+                        m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+                            m("a.nav-link", { href: "#!/" + _v }, [
+                                m("i[data-feather='layout']"),
+                                _v.charAt(0).toUpperCase() + _v.slice(1)
+                            ])
+                        ),
+                    ]
+
+                })
+            ]
+        }
+
+
+
+    },
+
+};
+
+
+
 
 const HeaderPrivate = {
     page: "",
@@ -19,7 +58,7 @@ const HeaderPrivate = {
                             "Virtual"
                         ), [
                             m("span", {
-                                "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                                "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
                             },
                                 "Admin"
                             )
@@ -34,7 +73,7 @@ const HeaderPrivate = {
                                 "Virtual"
                             ), [
                                 m("span", {
-                                    "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                                    "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
                                 },
                                     "Admin"
                                 )
@@ -48,36 +87,7 @@ const HeaderPrivate = {
                         m("li.nav-label.pd-l-20.pd-lg-l-25.d-lg-none",
                             "Menu"
                         ),
-                        m("li.nav-item." + ((HeaderPrivate.page == "inicio") ? "active" : ""),
-                            m("a.nav-link", { href: "#!/inicio" }, [
-                                m("i[data-feather='layout']"),
-                                " Inicio "
-                            ])
-                        ),
-                        m("li.nav-item." + ((HeaderPrivate.page == "laboratorio") ? "active" : ""),
-                            m("a.nav-link", { href: "#!/laboratorio" }, [
-                                m("i[data-feather='layout']"),
-                                " Laboratorio "
-                            ])
-                        ),
-                        m("li.nav-item." + ((HeaderPrivate.page == "imagen") ? "active" : ""),
-                            m("a.nav-link", { href: "#!/imagen" }, [
-                                m("i[data-feather='layout']"),
-                                " Imagen "
-                            ])
-                        ),
-                        m("li.nav-item." + ((HeaderPrivate.page == "farmacia") ? "active" : ""),
-                            m("a.nav-link", { href: "#!/farmacia" }, [
-                                m("i[data-feather='layout']"),
-                                " Farmacia "
-                            ])
-                        ),
-                        m("li.nav-item",
-                            m("a.nav-link", { href: "#!/configuracion" }, [
-                                m("i[data-feather='layout']"),
-                                " Configuración "
-                            ])
-                        )
+                        m(MenuHeader)
                     ])
                 ]),
                 m(SidebarRight)

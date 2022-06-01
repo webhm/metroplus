@@ -1,18 +1,23 @@
 import m from 'mithril';
-import App from '../views/app';
 import _Error_ from '../views/error';
+import Encrypt from '../models/encrypt';
+
 
 
 
 
 
 const Auth = {
+    rol: null,
+    labelRol: null,
+    modulesAccess: [],
     username: "",
     password: "",
     messageError: "",
     statusHide: " d-none",
     statusError: "warning",
     imputDisabled: false,
+
 
     setUsername: (value) => {
         Auth.username = value
@@ -55,7 +60,10 @@ const Auth = {
 
                 if (data.status) {
                     window.localStorage.accessToken = data.jwt;
-                    Auth.setSuccess('Bienvenido');
+                    Auth.rol = data.data.rol;
+                    Auth.modulesAccess = data.data.modulesAccess;
+                    Encrypt.setDataUser({ rol: Auth.rol, modulesAccess: Auth.modulesAccess })
+                    Auth.setSuccess('¡Bienvenido!');
                     setTimeout(function () {
                         Auth.imputDisabled = false;
                         Auth.statusHide = "d-none";

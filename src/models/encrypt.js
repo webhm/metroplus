@@ -34,9 +34,17 @@ const Encrypt = {
         Encrypt.oninit();
         return ls.set('updates', _data);
     },
+    setDataUser: (_data) => {
+        Encrypt.oninit();
+        return ls.set('dataUser', _data);
+    },
     getData: (_data) => {
         Encrypt.oninit();
         return ls.get('updates');
+    },
+    getDataUser: (_data) => {
+        Encrypt.oninit();
+        return ls.get('dataUser');
     },
 
 };

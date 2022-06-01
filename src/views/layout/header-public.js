@@ -10,7 +10,7 @@ const HeadPublic = {
                             "Virtual"
                         ), [
                             m("span", {
-                                "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                                "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
                             },
                                 "Admin"
                             )

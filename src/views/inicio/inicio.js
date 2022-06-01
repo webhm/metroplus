@@ -2,6 +2,81 @@ import HeaderPrivate from '../layout/header-private';
 import App from '../app';
 import SidebarRight from '../layout/sidebarRight';
 import m from 'mithril';
+import Encrypt from '../../models/encrypt';
+
+
+const MenuInicio = {
+    view: () => {
+
+        let _data = Encrypt.getDataUser();
+
+        console.log(_data.modulesAccess)
+
+        if (_data.length !== 0) {
+            return [
+                m("li.nav-item.active",
+                    m("a.nav-link", { href: "#!/inicio" }, [
+                        m("i[data-feather='layout']"),
+                        " Inicio "
+                    ])
+                ),
+                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                    return [
+                        m("li.nav-item",
+                            m("a.nav-link", { href: "#!/" + _v }, [
+                                m("i[data-feather='layout']"),
+                                _v.charAt(0).toUpperCase() + _v.slice(1)
+                            ])
+                        ),
+                    ]
+
+                })
+            ]
+        }
+
+
+
+    },
+
+};
+
+
+const ModulesAccess = {
+    view: () => {
+
+        let _data = Encrypt.getDataUser();
+
+        if (_data.length !== 0) {
+            return [
+
+                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                    return [
+                        m("div.col-sm-6.mg-b-20",
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+
+                                m("h5.tx-inverse.mg-b-20",
+                                    _v.charAt(0).toUpperCase() + _v.slice(1)
+                                ),
+
+
+                                m("a.tx-medium", { href: "#!/" + _v }, [
+                                    "Ir a " + _v.charAt(0).toUpperCase() + _v.slice(1),
+                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                ])
+                            ])
+                        ),
+
+                    ]
+
+                })
+            ]
+        }
+
+
+
+    },
+
+};
 
 
 
@@ -25,7 +100,7 @@ const Inicio = {
                             "Virtual"
                         ), [
                             m("span", {
-                                "style": { "font-size": "0.9rem ", "margin-top": "0.4rem", "padding-left": "0.2rem" }
+                                "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
                             },
                                 "Admin"
                             )
@@ -40,7 +115,7 @@ const Inicio = {
                                 "Virtual"
                             ), [
                                 m("span", {
-                                    "style": { "font-size": "0.9rem ", "margin-top": "0.3rem", "padding-left": "0.2rem" }
+                                    "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
                                 },
                                     "Admin"
                                 )
@@ -54,36 +129,8 @@ const Inicio = {
                         m("li.nav-label.pd-l-20.pd-lg-l-25.d-lg-none",
                             "Menu"
                         ),
-                        m("li.nav-item.active",
-                            m("a.nav-link", { href: "#!/inicio" }, [
-                                m("i[data-feather='layout']"),
-                                " Inicio "
-                            ])
-                        ),
-                        m("li.nav-item",
-                            m("a.nav-link", { href: "#!/laboratorio" }, [
-                                m("i[data-feather='layout']"),
-                                " Laboratorio "
-                            ])
-                        ),
-                        m("li.nav-item",
-                            m("a.nav-link", { href: "#!/imagen" }, [
-                                m("i[data-feather='layout']"),
-                                " Imagen "
-                            ])
-                        ),
-                        m("li.nav-item",
-                            m("a.nav-link", { href: "#!/farmacia" }, [
-                                m("i[data-feather='layout']"),
-                                " Farmacia "
-                            ])
-                        ),
-                        m("li.nav-item",
-                            m("a.nav-link", { href: "#!/configuracion" }, [
-                                m("i[data-feather='layout']"),
-                                " Configuración "
-                            ])
-                        )
+                        m(MenuInicio),
+
                     ])
                 ]),
                 m(SidebarRight)
@@ -106,59 +153,8 @@ const Inicio = {
 
                     m("div.row.tx-14", [
 
-                        m("div.col-sm-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                        m(ModulesAccess),
 
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Laboratorio"
-                                ),
-
-
-                                m("a.tx-medium", { href: "#!/laboratorio" }, [
-                                    "Ir a Laboratorio",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
-                            ])
-                        ),
-                        m("div.col-sm-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Imagen"
-                                ),
-
-                                m("a.tx-medium", { href: "#!/imagen" }, [
-                                    "Ir a Imagen",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
-                            ])
-                        ),
-                        m("div.col-sm-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Farmacia"
-                                ),
-
-                                m("a.tx-medium", { href: "#!/farmacia" }, [
-                                    "Ir a Farmacia",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
-                            ])
-                        ),
-                        m("div.col-sm-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Configuración"
-                                ),
-
-                                m("a.tx-medium", { href: "#!/configuracion" }, [
-                                    "Ir a Configuración",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
-                            ])
-                        ),
 
                     ]),
 

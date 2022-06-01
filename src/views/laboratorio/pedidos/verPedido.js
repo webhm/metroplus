@@ -36,21 +36,40 @@ const ListaNotitifaciones = {
             return ListaNotitifaciones.data.map(function (_v, _i, _contentData) {
 
                 if (_i < 4) {
-                    return m("div.demo-static-toast.mg-b-5",
-                        m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
-                            m("div.toast-header.bg-danger", [
-                                m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
-                                    _v.title
-                                ),
-                                m("small.tx-white",
-                                    moment.unix(_v.timestamp).format("HH:mm")
-                                ),
-                            ]),
-                            m("div.toast-body.small",
-                                _v.message
-                            )
-                        ])
-                    )
+                    if (_v.title == 'Nuevo Mensaje') {
+                        return m("div.demo-static-toast.mg-b-5",
+                            m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                                m("div.toast-header.bg-primary", [
+                                    m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                        _v.title
+                                    ),
+                                    m("small.tx-white",
+                                        moment.unix(_v.timestamp).format("HH:mm")
+                                    ),
+                                ]),
+                                m("div.toast-body.small",
+                                    _v.message
+                                )
+                            ])
+                        )
+                    } else {
+                        return m("div.demo-static-toast.mg-b-5",
+                            m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", [
+                                m("div.toast-header.bg-danger", [
+                                    m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                        _v.title
+                                    ),
+                                    m("small.tx-white",
+                                        moment.unix(_v.timestamp).format("HH:mm")
+                                    ),
+                                ]),
+                                m("div.toast-body.small",
+                                    _v.message
+                                )
+                            ])
+                        )
+                    }
+
                 }
 
             })
@@ -65,8 +84,33 @@ const ListaNotitifaciones = {
 }
 
 const MensajesPedido = {
+    messagePedido: null,
     oncreate: () => {
         ListaNotitifaciones.fetch();
+    },
+    sendMessage: () => {
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/message-pedido/" + VerPedido.idPedido,
+            data: {
+                dataPedido: DetallePedido.data,
+                message: MensajesPedido.messagePedido
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                if (result.status) {
+                    MensajesPedido.messagePedido = "";
+                    ListaNotitifaciones.fetch();
+                    alert('Mensaje enviado con éxito.')
+                    reloadNotificacion();
+                }
+            })
+            .catch(function (e) {
+                EditarPedido.error = e.message;
+            })
     },
     view: () => {
         return m("table.table.table-sm[id='table-notificaciones'][width='100%']")
@@ -369,7 +413,7 @@ const EditarPedido = {
 
 const Pedido = {
     ver: true,
-    eliminar: false,
+    nuevoMensaje: false,
     editar: false,
     labelOperation: "Detalle:",
     statusPedido: 1,
@@ -408,7 +452,7 @@ const Pedido = {
                     onclick: function () {
                         Pedido.ver = true;
                         Pedido.editar = false;
-                        Pedido.eliminar = false;
+                        Pedido.nuevoMensaje = false;
                         Pedido.labelOperation = "Detalle:";
                     },
                 }, [
@@ -418,7 +462,7 @@ const Pedido = {
                     onclick: function () {
                         Pedido.ver = false;
                         Pedido.editar = true;
-                        Pedido.eliminar = false;
+                        Pedido.nuevoMensaje = false;
                         Pedido.labelOperation = "Editar:";
 
                     },
@@ -426,7 +470,15 @@ const Pedido = {
                     m("i.fas.fa-user-edit.mg-r-5",)
                 ], "Recibir Muestras"),
 
-                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", [
+                m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                    onclick: function () {
+                        Pedido.ver = false;
+                        Pedido.editar = false;
+                        Pedido.nuevoMensaje = true;
+                        Pedido.labelOperation = "Nuevo Mensaje:";
+
+                    },
+                }, [
                     m("i.fas.fa-paper-plane.mg-r-5",)
                 ], "Enviar Mensaje")
             ]),
@@ -435,7 +487,7 @@ const Pedido = {
                     Pedido.labelOperation
                 ),
             ]),
-            m("p.mg-5." + ((Pedido.ver) ? "" : "d-none"), [
+            m("p.mg-5." + ((Pedido.ver || Pedido.nuevoMensaje) ? "" : "d-none"), [
                 m(DetallePedido)
             ]),
             m("p.mg-5." + ((Pedido.editar) ? "" : "d-none"), [
@@ -469,12 +521,37 @@ const Pedido = {
                 m("hr.wd-100p.mg-t-5.mg-b-5"),
 
             ]),
-
             m("p.mg-5." + ((Pedido.ver) ? "" : "d-none"), [
                 m("span.badge.badge-light.wd-100p.tx-14",
                     "Historial de Mensajes",
                 ),
                 m(MensajesPedido)
+            ]),
+            m("hr.wd-100p.mg-t-0.mg-b-5"),
+            m("p.mg-5." + ((Pedido.nuevoMensaje) ? "" : "d-none"), [
+                m("span.badge.badge-light.wd-100p.tx-14",
+                    "Nuevo Mensaje:",
+                ),
+                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Nuevo Mensaje']", {
+                    oninput: function (e) { MensajesPedido.messagePedido = e.target.value; },
+                    value: MensajesPedido.messagePedido,
+                }),
+                m("div.mg-0.mg-t-5.text-right", [
+
+                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                        onclick: function () {
+                            if (MensajesPedido.messagePedido.length !== 0) {
+                                MensajesPedido.sendMessage();
+                            } else {
+                                alert("Nuevo Mnesaje es obligatorio.");
+                            }
+                        },
+                    }, [
+                        m("i.fas.fa-paper-plane.mg-r-5",)
+                    ], "Enviar"),
+
+
+                ]),
             ]),
             m("hr.wd-100p.mg-t-0.mg-b-5"),
 
@@ -724,7 +801,7 @@ function loadNotificaciones() {
             lengthMenu: "Mostrar _MENU_ registros por página",
             sProcessing: "Procesando...",
             sZeroRecords: "Sin Notificaciones",
-            sEmptyTable: "Ningún dato disponible en esta tabla",
+            sEmptyTable: "Sin Notificaciones",
             sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
             sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
@@ -764,23 +841,44 @@ function loadNotificaciones() {
             settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
                     view: function () {
-                        return m("div.demo-static-toast",
-                            m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
-                                "style": { "max-width": "none" }
-                            }, [
-                                m("div.toast-header.bg-danger", [
-                                    m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
-                                        _v._aData.title
-                                    ),
-                                    m("small.tx-white",
-                                        moment.unix(_v._aData.timestamp).format("HH:mm")
-                                    ),
-                                ]),
-                                m("div.toast-body.small",
-                                    _v._aData.message
-                                )
-                            ])
-                        )
+                        if (_v._aData.title == 'Nuevo Mensaje') {
+                            return m("div.demo-static-toast",
+                                m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
+                                    "style": { "max-width": "none" }
+                                }, [
+                                    m("div.toast-header.bg-primary", [
+                                        m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                            _v._aData.title
+                                        ),
+                                        m("small.tx-white",
+                                            moment.unix(_v._aData.timestamp).format("HH:mm")
+                                        ),
+                                    ]),
+                                    m("div.toast-body.small",
+                                        _v._aData.message
+                                    )
+                                ])
+                            )
+                        } else {
+                            return m("div.demo-static-toast",
+                                m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
+                                    "style": { "max-width": "none" }
+                                }, [
+                                    m("div.toast-header.bg-danger", [
+                                        m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                            _v._aData.title
+                                        ),
+                                        m("small.tx-white",
+                                            moment.unix(_v._aData.timestamp).format("HH:mm")
+                                        ),
+                                    ]),
+                                    m("div.toast-body.small",
+                                        _v._aData.message
+                                    )
+                                ])
+                            )
+                        }
+
                     }
                 });
 

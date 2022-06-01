@@ -127,7 +127,7 @@ const Pedidos = {
     view: () => {
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab, { oncreate: Sidebarlab.setPage("pedidosLaboratorio") }),
+            m(Sidebarlab, { oncreate: Sidebarlab.setPage(12) }),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -578,7 +578,7 @@ function nueva_notificacion_muestra(_mData) {
         Notificaciones.setNot();
 
         var _data_ = JSON.parse(_mData.dataPedido);
-        var title = "Metrovirtual: Muestra Pendiente"
+        var title = "Metrovirtual: " + _mData.title;
         var extra = {
             icon: "assets/favicon.ico",
             body: "Pedido N°: " + _mData.idPedido + "\n" + "HC: " + _data_.HC + "\n" + "Pte: " + _data_.NOMBRE_PACIENTE

@@ -1,3 +1,35 @@
+import Encrypt from '../../models/encrypt';
+
+
+const MenuSidebar = {
+    view: () => {
+
+        let _data = Encrypt.getDataUser();
+
+        if (_data.length !== 0) {
+            return [
+
+                _data.modulesAccess.laboratorio.map(function (_v, _i, _contentData) {
+                    return [
+                        m("a." + ((Sidebarlab.page == _v.id) ? "active" : ""), { href: "#!/" + _v.href },
+                            _v.label
+                        ),
+
+                    ]
+
+                })
+            ]
+        }
+
+
+
+    },
+
+};
+
+
+
+
 const Sidebarlab = {
     page: "",
     setPage: (page) => {
@@ -23,15 +55,15 @@ const Sidebarlab = {
                             "Laboratorio"
                         ),
                         m("li.nav-item.show", [
-                            m("a.nav-link.with-sub[href='']", [
+                            m("a.nav-link.with-sub", {
+                                href: "#!/laboratorio"
+                            }, [
                                 m("i[data-feather='layout']"),
                                 " Laboratorio"
                             ]),
                             m("nav.nav", [
-                                m("a." + ((Sidebarlab.page == "pedidosLaboratorio") ? "active" : ""), { href: "#!/laboratorio/pedidos" },
-                                    "Pedidos de Laboratorio"
-                                ),
 
+                                m(MenuSidebar)
 
                             ])
                         ]),

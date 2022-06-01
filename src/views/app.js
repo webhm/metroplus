@@ -3,7 +3,7 @@ import Loader from './loader';
 
 
 const App = {
-    title: "Metrovirtual v4.0",
+    title: "Metrovirtual Admin v1.0.0",
     oninit: () => {
 
         document.title = "Cargando...";

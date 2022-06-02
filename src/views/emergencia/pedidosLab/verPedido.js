@@ -1,5 +1,5 @@
 import HeaderPrivate from '../../layout/header-private';
-import Sidebarlab from '../sidebarLab';
+import SidebarEme from '../sidebarEme';
 import App from '../../app';
 import m from 'mithril';
 
@@ -81,6 +81,7 @@ const ListaNotitifaciones = {
 
     },
 }
+
 
 const MensajesPedido = {
     messagePedido: null,
@@ -278,9 +279,6 @@ const EditarPedido = {
                         Pedido.descPedido = "Finalizado - Cancelado";
                     }
 
-                    if (result.statusPedido !== 4) {
-                        EditarPedido.validarStatus();
-                    }
 
                     ListaNotitifaciones.fetch();
 
@@ -387,7 +385,7 @@ const EditarPedido = {
         } else {
             Pedido.statusPedido = 3;
             Pedido.classPedido = "tx-warning";
-            Pedido.descPedido = "Muestras Pendientes";
+            Pedido.descPedido = "EditarMuestras Pendientes";
             EditarPedido.checkedAll = false;
 
         }
@@ -416,6 +414,8 @@ const Pedido = {
     ver: true,
     nuevoMensaje: false,
     editar: false,
+    entregar: false,
+    enviar: false,
     labelOperation: "Detalle:",
     statusPedido: 1,
     descPedido: "...",
@@ -453,23 +453,39 @@ const Pedido = {
                     onclick: function() {
                         Pedido.ver = true;
                         Pedido.editar = false;
+                        Pedido.entregar = false;
+                        Pedido.enviar = false;
                         Pedido.nuevoMensaje = false;
                         Pedido.labelOperation = "Detalle:";
                     },
                 }, [
                     m("i.fas.fa-file-alt.mg-r-5", )
                 ], "Ver Detalle"),
-                m("button.btn.btn-xs.btn-success.mg-l-2.tx-semibold[type='button']", {
+                m("button.btn.btn-xs.btn-outline-primary.mg-l-2.tx-semibold[type='button']", {
                     onclick: function() {
                         Pedido.ver = false;
-                        Pedido.editar = true;
+                        Pedido.editar = false;
+                        Pedido.entregar = true;
+                        Pedido.enviar = false;
                         Pedido.nuevoMensaje = false;
-                        Pedido.labelOperation = "Editar:";
+                        Pedido.labelOperation = "Entregar Muestras:";
 
                     },
                 }, [
                     m("i.fas.fa-user-edit.mg-r-5", )
-                ], "Recibir Muestras"),
+                ], "Entregar Muestras"),
+                m("button.btn.btn-xs.btn-outline-primary.mg-l-2.tx-semibold[type='button']", {
+                    onclick: function() {
+                        Pedido.ver = false;
+                        Pedido.editar = false;
+                        Pedido.entregar = false;
+                        Pedido.enviar = true;
+                        Pedido.nuevoMensaje = false;
+                        Pedido.labelOperation = "Enviar Muestras:";
+                    },
+                }, [
+                    m("i.fas.fa-paper-plane.mg-r-5", )
+                ], "Enviar Muestras"),
 
                 m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
                     onclick: function() {
@@ -495,32 +511,8 @@ const Pedido = {
                 m(EditarPedido)
             ]),
             m("hr.wd-100p.mg-t-0.mg-b-5"),
-            m("p.mg-5." + ((Pedido.editar) ? "" : "d-none"), [
-                m("span.badge.badge-light.wd-100p.tx-14",
-                    "Observaciones: ",
-                ),
-                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                    oninput: function(e) { EditarPedido.observaciones = e.target.value; },
-                    value: EditarPedido.observaciones,
-                }),
-                m("div.mg-0.mg-t-5.text-right", [
-
-                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                        onclick: function() {
-                            if (EditarPedido.observaciones.length !== 0) {
-                                EditarPedido.sendNotiLab();
-                            } else {
-                                alert("Observaciones es obligatorio.");
-                            }
-                        },
-                    }, [
-                        m("i.fas.fa-paper-plane.mg-r-5", )
-                    ], "Guardar y Notificar"),
-
-
-                ]),
-                m("hr.wd-100p.mg-t-5.mg-b-5"),
-
+            m("p.mg-5." + ((Pedido.entregar) ? "" : "d-none"), [
+                m(EditarMuestras),
             ]),
             m("p.mg-5." + ((Pedido.ver) ? "" : "d-none"), [
                 m("span.badge.badge-light.wd-100p.tx-14",
@@ -571,7 +563,7 @@ const VerPedido = {
     oninit: (_data) => {
         App.isAuth();
         HeaderPrivate.page = "";
-        Sidebarlab.page = "";
+        SidebarEme.page = "";
         VerPedido.idPedido = _data.attrs.idPedido;
         DetallePedido.data = [];
         DetallePedido.detalle = [];
@@ -583,8 +575,8 @@ const VerPedido = {
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab),
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("emergencia") }),
+            m(SidebarEme),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -643,7 +635,114 @@ const VerPedido = {
 
 };
 
+const EditarMuestras = {
+    detalle: [],
+    error: "",
+    observaciones: "",
+    checkedAll: false,
+    muestras: { "1": "Orina", "2": "Heces", "3": "Tubo Rojo", "4": "Tubo Lila", "5": "Tubo Celeste", "6": "Tubo Verde", "7": "Tubo Negro", "8": "LCR", "9": "Esputo", "10": "Jeringuilla", "11": "Gasometria", "12": "Secreciones", "13": "Culturetes", "14": "Frascos de Cultivo", "15": "Isopado", "16": "Estrep Test", "17": "AmniSure", "18": "Tubo Liquidos" },
+    oninit: () => {
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-eme-lab/" + VerPedido.idPedido,
+                data: {
+                    dataPedido: EditarMuestras.muestras,
+                    statusPedido: Pedido.statusPedido,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                if (result.status) {
+                    EditarMuestras.detalle = result.data;
+                }
+            })
+            .catch(function(e) {
+                EditarMuestras.error = e.message;
+            })
+    },
+    view: () => {
 
+        if (EditarMuestras.detalle.length !== 0) {
+            return [
+                m("div.custom-control.custom-checkbox", [
+                    m("input.custom-control-input[type='checkbox'][id='selectTodosMuestra']", {
+                        checked: EditarMuestras.checkedAll,
+                        onclick: function(e) {
+                            EditarMuestras.seleccionarTodos(this.checked);
+                        }
+                    }),
+                    m("label.custom-control-label.tx-semibold[for='selectTodosMuestra']", "SELECCIONAR TODOS")
+                ]),
+                Object.keys(EditarMuestras.detalle).map(function(_i) {
+
+                    if (EditarMuestras.detalle[_i].indexOf("...") !== -1) {
+
+                        return m("div.custom-control.custom-checkbox", [
+                            m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i] + "']", {
+                                checked: true,
+                                onclick: function(e) {
+                                    if (!this.checked) {
+                                        EditarMuestras.checkedAll = false;
+                                    }
+                                    EditarMuestras.udpateDataMuestras();
+                                },
+                                onupdate: (e) => {
+                                    (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1]: EditarMuestras.muestras[_i];
+                                },
+
+                            }),
+                            m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                                (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1] : EditarMuestras.detalle[_i],
+                            )
+                        ])
+
+                    } else {
+
+
+                        return m("div.custom-control.custom-checkbox", [
+                            m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i] + "']", {
+                                onclick: function(e) {
+                                    if (this.checked) {
+                                        EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - Entregado: " + moment().format('DD-MM-YYYY HH:mm');
+                                    }
+                                    EditarMuestras.udpateDataMuestras();
+
+                                },
+                                onupdate: (e) => {
+                                    (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1]: EditarMuestras.muestras[_i];
+                                },
+                            }),
+                            m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                                EditarMuestras.detalle[_i]
+                            )
+                        ])
+                    }
+
+                })
+
+            ]
+        }
+
+
+    },
+    seleccionarTodos: (status) => {
+
+        if (status) {
+            EditarMuestras.checkedAll = true;
+        } else {
+            EditarMuestras.checkedAll = false;
+        }
+
+        return EditarMuestras.detalle.map(function(_val, _i, _contentData) {
+
+            console.log(_val)
+
+        })
+    },
+    udpateDataMuestras: () => {},
+};
 
 function loadCustomPage() {
 

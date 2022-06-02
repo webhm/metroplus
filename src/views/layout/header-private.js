@@ -16,15 +16,20 @@ const MenuHeader = {
                         " Inicio "
                     ])
                 ),
-                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
-                    return [
-                        m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
-                            m("a.nav-link", { href: "#!/" + _v }, [
-                                m("i[data-feather='layout']"),
-                                _v.charAt(0).toUpperCase() + _v.slice(1)
-                            ])
-                        ),
-                    ]
+                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
+
+                    if (_data.modulesAccess[_v].length !== 0) {
+                        return [
+                            m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+                                m("a.nav-link", { href: "#!/" + _v }, [
+                                    m("i[data-feather='layout']"),
+                                    _v.charAt(0).toUpperCase() + _v.slice(1)
+                                ])
+                            ),
+                        ]
+                    }
+
+
 
                 })
             ]
@@ -56,13 +61,7 @@ const HeaderPrivate = {
                         "Metro",
                         m("span",
                             "Virtual"
-                        ), [
-                            m("span", {
-                                "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
-                            },
-                                "Admin"
-                            )
-                        ]
+                        ),
                     ])
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
@@ -71,13 +70,7 @@ const HeaderPrivate = {
                             "Metro",
                             m("span",
                                 "Virtual"
-                            ), [
-                                m("span", {
-                                    "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
-                                },
-                                    "Admin"
-                                )
-                            ]
+                            ),
                         ]),
                         m("a[id='mainMenuClose'][href='']",
                             m("i[data-feather='x']")

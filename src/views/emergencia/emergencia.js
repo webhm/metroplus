@@ -1,165 +1,69 @@
 import HeaderPrivate from '../layout/header-private';
+import SidebarEme from './sidebarEme';
 import App from '../app';
-import SidebarRight from '../layout/sidebarRight';
-import m from 'mithril';
-import Encrypt from '../../models/encrypt';
 
-
-const MenuInicio = {
-    view: () => {
-
-        let _data = Encrypt.getDataUser();
-
-        console.log(_data.modulesAccess)
-
-        if (_data.length !== 0) {
-            return [
-                m("li.nav-item.active",
-                    m("a.nav-link", { href: "#!/inicio" }, [
-                        m("i[data-feather='layout']"),
-                        " Inicio "
-                    ])
-                ),
-                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
-
-                    if (_data.modulesAccess[_v].length !== 0) {
-                        return [
-                            m("li.nav-item",
-                                m("a.nav-link", { href: "#!/" + _v }, [
-                                    m("i[data-feather='layout']"),
-                                    _v.charAt(0).toUpperCase() + _v.slice(1)
-                                ])
-                            ),
-                        ]
-                    }
-
-
-
-
-                })
-            ]
-        }
-
-
-
-    },
-
-};
-
-
-const ModulesAccess = {
-    view: () => {
-
-        let _data = Encrypt.getDataUser();
-
-        if (_data.length !== 0) {
-            return [
-
-                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
-
-                    if (_data.modulesAccess[_v].length !== 0) {
-                        return [
-                            m("div.col-sm-6.mg-b-20",
-                                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                    m("h5.tx-inverse.mg-b-20",
-                                        _v.charAt(0).toUpperCase() + _v.slice(1)
-                                    ),
-
-                                    m("a.tx-medium", { href: "#!/" + _v }, [
-                                        "Ir a " + _v.charAt(0).toUpperCase() + _v.slice(1),
-                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                    ])
-
-                                ])
-                            ),
-
-                        ]
-                    }
-
-
-
-
-                })
-            ]
-        }
-
-
-
-    },
-
-};
-
-
-
-const Inicio = {
-    oninit: () => {
-        HeaderPrivate.page = "";
-        App.isAuth();
-    },
-    oncreate: () => {
-        document.title = "Inicio | " + App.title;
-        loadCustomPage();
-    },
+const MenuEmergencia = {
     view: () => {
         return [
-            m("header.navbar.navbar-header.navbar-header-fixed", [
-
-                m("div.navbar-brand",
-                    m("a.df-logo", { href: "/" }, [
-                        "Metro",
-                        m("span",
-                            "Virtual"
-                        ),
-                    ])
-                ),
-                m(".navbar-menu-wrapper[id='navbarMenu']", [
-                    m("div.navbar-menu-header", [
-                        m("a.df-logo", { href: "/" }, [
-                            "Metro",
-                            m("span",
-                                "Virtual"
-                            ),
-                        ]),
-                        m("a[id='mainMenuClose'][href='']",
-                            m("i[data-feather='x']")
-                        )
-                    ]),
-                    m("ul.nav.navbar-menu", [
-                        m("li.nav-label.pd-l-20.pd-lg-l-25.d-lg-none",
-                            "Menu"
-                        ),
-                        m(MenuInicio),
-
-                    ])
-                ]),
-                m(SidebarRight)
-            ]),
             m("div.content.content-components",
                 m("div.container", [
-                    m("ol.breadcrumb.df-breadcrumbs", [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m("a[href='#']",
                                 "Metrovirtual"
                             )
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Inicio"
+                            "Emergencia"
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Inicio:"
+                        "Emergencia:"
                     ),
 
                     m("div.row.tx-14", [
 
-                        m(ModulesAccess),
+                        m("div.col-sm-6",
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                                m("div.mg-b-25",
+                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
+                                ),
+                                m("h5.tx-inverse.mg-b-20",
+                                    "Pedidos de Laboratorio"
+                                ),
 
+                                m("a.tx-medium", { href: "#!/emergencia/pedidos/laboratorio" }, [
+                                    "Ir a Pedidos de Laboratorio",
+                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                ])
+                            ])
+                        ),
 
                     ]),
 
                 ])
             ),
+        ];
+    },
+
+};
+
+const Emergencia = {
+    oninit: () => {
+        HeaderPrivate.page = "";
+        SidebarEme.page = "";
+        App.isAuth();
+
+    },
+    oncreate: () => {
+        document.title = "Emergencia | " + App.title;
+        loadCustomPage();
+    },
+    view: () => {
+        return [
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("emergencia") }),
+            m(SidebarEme),
+            m(MenuEmergencia)
         ];
     },
 
@@ -298,4 +202,4 @@ function loadCustomPage() {
 
 
 
-export default Inicio;
+export default Emergencia;

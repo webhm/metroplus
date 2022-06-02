@@ -1,6 +1,6 @@
 import Encrypt from '../../../models/encrypt';
 import HeaderPrivate from '../../layout/header-private';
-import Sidebarlab from '../sidebarLab';
+import SidebarEme from '../sidebarEme';
 import App from '../../app';
 import m from 'mithril';
 import Notificaciones from '../../../models/notificaciones';
@@ -16,7 +16,7 @@ const Updates = {
     fetchPedidos: () => {
         m.request({
                 method: "GET",
-                url: " https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio?start=0&length=10",
+                url: " https://api.hospitalmetropolitano.org/t/v1/emergencia-pedidos-laboratorio?start=0&length=10",
             })
             .then(function(res) {
                 Updates.data.pedidos = res.data;
@@ -111,13 +111,13 @@ const Pedidos = {
     pedidos: [],
     oninit: () => {
         HeaderPrivate.page = "";
-        Sidebarlab.page = "";
+        SidebarEme.page = "";
         App.isAuth();
 
     },
     oncreate: () => {
         document.title = "Pedidos de Laboratorio | " + App.title;
-        ReloadNotification.loadPage = "/laboratorio/pedidos";
+        ReloadNotification.loadPage = "/emergencia/pedidos";
         Updates.fetch();
         loadCustomPage();
         loadPedidos();
@@ -126,8 +126,8 @@ const Pedidos = {
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab, { oncreate: Sidebarlab.setPage(1) }),
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("emergencia") }),
+            m(SidebarEme, { oncreate: SidebarEme.setPage(2) }),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -137,8 +137,8 @@ const Pedidos = {
                             )
                         ),
                         m("li.breadcrumb-item",
-                            m("a", { href: "#!/laboratorio" },
-                                "Laboratorio"
+                            m("a", { href: "#!/emergencia" },
+                                "Emergencia"
                             )
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
@@ -263,7 +263,7 @@ function loadPedidos() {
     $.fn.dataTable.ext.errMode = "none";
     var table = $("#table-pedidos").DataTable({
         "ajax": {
-            url: "https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio",
+            url: "https://api.hospitalmetropolitano.org/t/v1/emergencia-pedidos-laboratorio",
             dataSrc: "data",
             serverSide: true,
         },
@@ -393,7 +393,7 @@ function loadPedidos() {
                 m.mount(_i.anCells[5], {
                     view: function() {
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-                            m("a.btn.btn-xs.btn-primary", { href: "#!/laboratorio/pedido/" + _i._aData.NUM_PEDIDO_MV, target: "_blank" }, [
+                            m("a.btn.btn-xs.btn-primary", { href: "#!/emergencia/laboratorio/pedido/" + _i._aData.NUM_PEDIDO_MV, target: "_blank" }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),
                             ], "Ver Pedido"),
 
@@ -584,7 +584,7 @@ function nueva_notificacion_muestra(_mData) {
         }
         var noti = new Notification(title, extra)
         noti.onclick = () => {
-            window.open("#!/laboratorio/pedido/" + _mData.idPedido)
+            window.open("#!/emergencia/laboratorio/pedido/" + _mData.idPedido)
         }
         noti.onclose = {
             // Al cerrar

@@ -9,9 +9,9 @@ const MenuSidebar = {
         if (_data.length !== 0) {
             return [
 
-                _data.modulesAccess.laboratorio.map(function(_v, _i, _contentData) {
+                _data.modulesAccess.emergencia.map(function(_v, _i, _contentData) {
                     return [
-                        m("a." + ((Sidebarlab.page == _v.idModulo) ? "active" : ""), { href: "#!/" + _v.href },
+                        m("a." + ((SidebarEme.page == _v.idModulo) ? "active" : ""), { href: "#!/" + _v.href },
                             _v.label
                         ),
 
@@ -30,10 +30,10 @@ const MenuSidebar = {
 
 
 
-const Sidebarlab = {
+const SidebarEme = {
     page: "",
     setPage: (page) => {
-        Sidebarlab.page = page;
+        SidebarEme.page = page;
     },
     view: () => {
         return [
@@ -52,14 +52,14 @@ const Sidebarlab = {
                 m("div.sidebar-body",
                     m("ul.sidebar-nav", [
                         m("li.nav-label.mg-b-15",
-                            "Laboratorio"
+                            "Emergencia"
                         ),
                         m("li.nav-item.show", [
                             m("a.nav-link.with-sub", {
-                                href: "#!/laboratorio"
+                                href: "#!/emergencia"
                             }, [
                                 m("i[data-feather='layout']"),
-                                " Laboratorio"
+                                "Emergencia"
                             ]),
                             m("nav.nav", [
 
@@ -76,4 +76,4 @@ const Sidebarlab = {
 
 };
 
-export default Sidebarlab;
+export default SidebarEme;

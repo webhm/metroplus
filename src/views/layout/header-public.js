@@ -8,13 +8,7 @@ const HeadPublic = {
                         "Metro",
                         m("span",
                             "Virtual"
-                        ), [
-                            m("span", {
-                                "style": { "font-size": "0.9rem ", "margin-top": "0.38rem", "padding-left": "0.2rem" }
-                            },
-                                "Admin"
-                            )
-                        ]
+                        ),
                     ])
                 ),
 

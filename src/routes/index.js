@@ -11,8 +11,8 @@ import Inicio from '../views/inicio/inicio';
 import ReloadNotification from '../views/layout/reload-notificacion';
 import VerPedido from '../views/laboratorio/pedidos/verPedido'
 import Emergencia from '../views/emergencia/emergencia'
-import EmergenciaPedidosLaboratorio from '../views/emergencia/pedidosLab/pedidos'
-import VerPedidoEmergencia from '../views/emergencia/pedidosLab/verPedido'
+import EmergenciaAuxiliarPedidosLaboratorio from '../views/emergencia/auxiliar/pedidos'
+import VerPedidoAuxiliarEmergencia from '../views/emergencia/auxiliar/verPedido'
 
 
 
@@ -25,8 +25,10 @@ const Routes = {
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
     '/emergencia': Emergencia, //Emergencia
-    '/emergencia/pedidos/laboratorio': EmergenciaPedidosLaboratorio, //EmergenciaPedidos
-    '/emergencia/laboratorio/pedido/:idPedido': VerPedidoEmergencia, //verPedido
+    '/emergencia/auxiliar/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio
+    '/emergencia/auxiliar/pedido/:idPedido': VerPedidoAuxiliarEmergencia, //EmergenciaAuxiliarPedidosLaboratorio
+    '/emergencia/enfermeria/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio
+    '/emergencia/enfermeria/pedido/:idPedido': VerPedidoAuxiliarEmergencia, //EmergenciaAuxiliarPedidosLaboratorio
     '/auth': Login, // Login
     '/pacientes': Pacientes, // Pacientes
     '/mi-perfil': MiPerfil, // MiPerfil

@@ -2,20 +2,21 @@ import HeaderPrivate from '../../layout/header-private';
 import SidebarEme from '../sidebarEme';
 import App from '../../app';
 import m from 'mithril';
+import Auth from '../../../models/auth';
 
 const ListaNotitifaciones = {
     data: false,
     fetch: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedido/" + VerPedido.idPedido,
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedido/" + VerPedidoAuxiliarEmergencia.idPedido,
+        })
+            .then(function (result) {
                 ListaNotitifaciones.data = result.data;
                 loadNotificaciones();
 
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -32,7 +33,7 @@ const ListaNotitifaciones = {
         }
 
         if (ListaNotitifaciones.data.length !== 0) {
-            return ListaNotitifaciones.data.map(function(_v, _i, _contentData) {
+            return ListaNotitifaciones.data.map(function (_v, _i, _contentData) {
 
                 if (_i < 4) {
                     if (_v.title == 'Nuevo Mensaje') {
@@ -90,17 +91,17 @@ const MensajesPedido = {
     },
     sendMessage: () => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/message-pedido/" + VerPedido.idPedido,
-                data: {
-                    dataPedido: DetallePedido.data,
-                    message: MensajesPedido.messagePedido
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/message-pedido/" + VerPedidoAuxiliarEmergencia.idPedido,
+            data: {
+                dataPedido: DetallePedido.data,
+                message: MensajesPedido.messagePedido
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
                     MensajesPedido.messagePedido = "";
                     ListaNotitifaciones.fetch();
@@ -108,7 +109,7 @@ const MensajesPedido = {
                     reloadNotificacion();
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
@@ -124,12 +125,12 @@ const DetallePedido = {
     numPedido: 0,
     fetch: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-eme-lab/" + VerPedido.idPedido,
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-eme-lab/" + VerPedidoAuxiliarEmergencia.idPedido,
+        })
+            .then(function (result) {
                 DetallePedido.data = result.data;
-                result.data.DESCRIPCION.map(function(_val, _i, _contentData) {
+                result.data.DESCRIPCION.map(function (_val, _i, _contentData) {
                     DetallePedido.detalle.push(_val);
                     EditarPedido.detalle.push(_val);
                     if (_val.indexOf("-R-") !== -1) {
@@ -137,14 +138,14 @@ const DetallePedido = {
                     }
                 })
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 DetallePedido.error = e.message;
             })
     },
     view: () => {
 
         if (EditarPedido.detalle.length !== 0) {
-            return DetallePedido.detalle.map(function(_val, _i, _contentData) {
+            return DetallePedido.detalle.map(function (_val, _i, _contentData) {
                 if (EditarPedido.detalle[_i].indexOf("...") !== -1) {
                     return m("p.mg-0",
                         DetallePedido.detalle[_i] + " " + EditarPedido.detalle[_i].split("...")[1]
@@ -172,13 +173,13 @@ const EditarPedido = {
             m("div.custom-control.custom-checkbox", [
                 m("input.custom-control-input[type='checkbox'][id='selectTodos']", {
                     checked: EditarPedido.checkedAll,
-                    onclick: function(e) {
+                    onclick: function (e) {
                         EditarPedido.seleccionarTodos(this.checked);
                     }
                 }),
                 m("label.custom-control-label.tx-semibold[for='selectTodos']", "SELECCIONAR TODOS")
             ]),
-            EditarPedido.detalle.map(function(_val, _i, _contentData) {
+            EditarPedido.detalle.map(function (_val, _i, _contentData) {
 
 
 
@@ -187,9 +188,9 @@ const EditarPedido = {
 
 
                     return m("div.custom-control.custom-checkbox", [
-                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                        m("input.custom-control-input[type='checkbox'][id='" + VerPedidoAuxiliarEmergencia.idPedido + "-" + _i + "']", {
                             checked: true,
-                            onclick: function(e) {
+                            onclick: function (e) {
                                 if (!this.checked) {
                                     EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
                                     Pedido.statusPedido = 3;
@@ -198,17 +199,17 @@ const EditarPedido = {
                                     EditarPedido.checkedAll = false;
 
                                 }
-                                EditarPedido.udpateDataPedido();
+                                EditarPedido.updateDataPedido();
 
 
 
                             },
                             onupdate: (e) => {
-                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1]: DetallePedido.detalle[_i];
+                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i];
                             },
 
                         }),
-                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                        m("label.custom-control-label[for='" + VerPedidoAuxiliarEmergencia.idPedido + "-" + _i + "']",
                             (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i],
                         )
                     ])
@@ -216,21 +217,21 @@ const EditarPedido = {
 
 
                     return m("div.custom-control.custom-checkbox", [
-                        m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
+                        m("input.custom-control-input[type='checkbox'][id='" + VerPedidoAuxiliarEmergencia.idPedido + "-" + _i + "']", {
 
-                            onclick: function(e) {
+                            onclick: function (e) {
                                 if (this.checked) {
                                     EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " ... - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm');
                                 }
-                                EditarPedido.udpateDataPedido();
+                                EditarPedido.updateDataPedido();
 
                             },
                             onupdate: (e) => {
-                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1]: DetallePedido.detalle[_i];
+                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i];
                             },
 
                         }),
-                        m("label.custom-control-label[for='" + VerPedido.idPedido + "-" + _i + "']",
+                        m("label.custom-control-label[for='" + VerPedidoAuxiliarEmergencia.idPedido + "-" + _i + "']",
                             (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i],
                         )
                     ])
@@ -243,37 +244,23 @@ const EditarPedido = {
         ]
     },
     oninit: () => {
-        if (DetallePedido.detalle.length === DetallePedido.numPedido) {
-            Pedido.statusPedido = 4;
-            Pedido.descPedido = "Finalizado - Cancelado";
-            Pedido.classPedido = "tx-success";
-        }
+
 
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-eme-lab/" + VerPedido.idPedido,
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-eme-lab/" + VerPedidoAuxiliarEmergencia.idPedido,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
 
 
                     EditarPedido.detalle = result.data;
 
-                    if (result.statusPedido == null || result.statusPedido == 1) {
-                        Pedido.statusPedido = 1;
-                        Pedido.classPedido = "tx-gray-500";
-                        Pedido.descPedido = "Pendiente";
-                    }
 
-                    if (result.statusPedido == 4) {
-                        Pedido.statusPedido = 4;
-                        Pedido.classPedido = "tx-success";
-                        Pedido.descPedido = "Finalizado - Cancelado";
-                    }
 
 
 
@@ -282,25 +269,25 @@ const EditarPedido = {
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
-    udpateDataPedido: () => {
+    updateDataPedido: () => {
         EditarPedido.validarStatus();
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedido.idPedido,
-                data: {
-                    dataPedido: EditarPedido.detalle,
-                    statusPedido: Pedido.statusPedido
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedidoAuxiliarEmergencia.idPedido,
+            data: {
+                dataPedido: EditarPedido.detalle,
+                statusPedido: Pedido.statusPedido
 
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
                     EditarPedido.detalle = result.data;
@@ -310,23 +297,23 @@ const EditarPedido = {
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
     sendNotiLab: () => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/noti-eme/" + VerPedido.idPedido,
-                data: {
-                    dataPedido: DetallePedido.data,
-                    message: EditarPedido.observaciones
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/noti-eme/" + VerPedidoAuxiliarEmergencia.idPedido,
+            data: {
+                dataPedido: DetallePedido.data,
+                message: EditarPedido.observaciones
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
                     EditarPedido.observaciones = "";
                     ListaNotitifaciones.fetch();
@@ -336,14 +323,14 @@ const EditarPedido = {
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
     validarStatus: () => {
         let _np = 0;
         let _vp = 0;
-        EditarPedido.detalle.map(function(_val, _i, _contentData) {
+        EditarPedido.detalle.map(function (_val, _i, _contentData) {
 
 
 
@@ -353,52 +340,24 @@ const EditarPedido = {
                 _vp = (_vp + 1);
             }
 
-            if (EditarPedido.detalle.length === (_i + 1)) {
-                if (EditarPedido.detalle.length === _np) {
-                    Pedido.statusPedido = 2;
-                    Pedido.classPedido = "tx-primary";
-                    Pedido.descPedido = "Gestionado";
-                    EditarPedido.checkedAll = true;
 
-                }
-
-                if (_vp > 0) {
-                    Pedido.statusPedido = 3;
-                    Pedido.classPedido = "tx-warning";
-                    Pedido.descPedido = "Muestras Pendientes";
-                    EditarPedido.checkedAll = false;
-                }
-            }
         })
     },
     seleccionarTodos: (status) => {
 
-        if (status) {
-            Pedido.statusPedido = 2;
-            Pedido.classPedido = "tx-primary";
-            Pedido.descPedido = "Gestionado";
-            EditarPedido.checkedAll = true;
 
-        } else {
-            Pedido.statusPedido = 3;
-            Pedido.classPedido = "tx-warning";
-            Pedido.descPedido = "EditarMuestras Pendientes";
-            EditarPedido.checkedAll = false;
-
-        }
-
-        return EditarPedido.detalle.map(function(_val, _i, _contentData) {
+        return EditarPedido.detalle.map(function (_val, _i, _contentData) {
 
             if (status) {
                 EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " ... - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm');
-                document.getElementById(VerPedido.idPedido + "-" + _i).checked = true;
+                document.getElementById(VerPedidoAuxiliarEmergencia.idPedido + "-" + _i).checked = true;
             } else {
                 EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
-                document.getElementById(VerPedido.idPedido + "-" + _i).checked = false;
+                document.getElementById(VerPedidoAuxiliarEmergencia.idPedido + "-" + _i).checked = false;
             }
 
             if (EditarPedido.detalle.length === (_i + 1)) {
-                EditarPedido.udpateDataPedido();
+                EditarPedido.updateDataPedido();
 
             }
 
@@ -433,6 +392,7 @@ const Pedido = {
             ]),
             m("p.mg-5.tx-15", [
                 "Fecha Pedido: " + DetallePedido.data.FECHA_PEDIDO,
+                ((Pedido.statusPedido === 2) ? [m("span.tx-indigo.tx-semibold", " Usuario: " + Auth.user.user)] : "")
             ]),
             m("p.mg-5", [
                 m("span.badge.badge-primary.mg-r-5.tx-14",
@@ -445,7 +405,7 @@ const Pedido = {
             m("hr.wd-100p.mg-t-0.mg-b-5"),
             m("p.mg-5.text-right", [
                 m("button.btn.btn-xs.btn-primary.mg-l-2.mg-b-5.tx-semibold[type='button']", {
-                    onclick: function() {
+                    onclick: function () {
                         Pedido.ver = true;
                         Pedido.editar = false;
                         Pedido.entregar = false;
@@ -454,39 +414,25 @@ const Pedido = {
                         Pedido.labelOperation = "Detalle:";
                     },
                 }, [
-                    m("i.fas.fa-file-alt.mg-r-5", )
+                    m("i.fas.fa-file-alt.mg-r-5",)
                 ], "Ver Detalle"),
-                m("button.btn.btn-xs.btn-outline-primary.mg-l-2.mg-b-5.tx-semibold[type='button']", {
-                    onclick: function() {
+                m("button.btn.btn-xs.btn-primary.mg-l-2.mg-b-5.tx-semibold[type='button']", {
+                    onclick: function () {
                         Pedido.ver = false;
                         Pedido.editar = false;
                         Pedido.entregar = true;
                         Pedido.enviar = false;
                         Pedido.nuevoMensaje = false;
-                        Pedido.labelOperation = "Entregar Muestras:";
-                        EditarMuestras.status = "Entregada";
-
-
-                    },
-                }, [
-                    m("i.fas.fa-user-edit.mg-r-5", )
-                ], "Entregar Muestras"),
-                m("button.btn.btn-xs.btn-outline-primary.mg-l-2.mg-b-5.tx-semibold[type='button']", {
-                    onclick: function() {
-                        Pedido.ver = false;
-                        Pedido.editar = false;
-                        Pedido.entregar = false;
-                        Pedido.enviar = true;
-                        Pedido.nuevoMensaje = false;
                         Pedido.labelOperation = "Enviar Muestras:";
                         EditarMuestras.status = "Enviada";
+
                     },
                 }, [
-                    m("i.fas.fa-paper-plane.mg-r-5", )
+                    m("i.fas.fa-user-edit.mg-r-5",)
                 ], "Enviar Muestras"),
 
                 m("button.btn.btn-xs.btn-primary.mg-l-2.mg-b-5.tx-semibold[type='button']", {
-                    onclick: function() {
+                    onclick: function () {
                         Pedido.ver = false;
                         Pedido.editar = false;
                         Pedido.entregar = false;
@@ -497,7 +443,7 @@ const Pedido = {
 
                     },
                 }, [
-                    m("i.fas.fa-paper-plane.mg-r-5", )
+                    m("i.fas.fa-paper-plane.mg-r-5",)
                 ], "Enviar Mensaje")
             ]),
             m("p.mg-5", [
@@ -515,26 +461,27 @@ const Pedido = {
             m("hr.wd-100p.mg-t-0.mg-b-5"),
             m("p.mg-5." + ((Pedido.entregar || Pedido.enviar) ? "" : "d-none"), [
                 m(EditarMuestras),
+
             ]),
             m("p.mg-5." + ((Pedido.ver) ? "" : "d-none"), [
                 m("span.badge.badge-light.wd-100p.tx-14",
                     "Historial de Mensajes",
                 ),
-                m(MensajesPedido)
+                m(MensajesPedido),
+
             ]),
-            m("hr.wd-100p.mg-t-0.mg-b-5"),
             m("p.mg-5." + ((Pedido.nuevoMensaje) ? "" : "d-none"), [
                 m("span.badge.badge-light.wd-100p.tx-14",
                     "Nuevo Mensaje:",
                 ),
                 m("textarea.form-control.mg-t-5[rows='5'][placeholder='Nuevo Mensaje']", {
-                    oninput: function(e) { MensajesPedido.messagePedido = e.target.value; },
+                    oninput: function (e) { MensajesPedido.messagePedido = e.target.value; },
                     value: MensajesPedido.messagePedido,
                 }),
                 m("div.mg-0.mg-t-5.text-right", [
 
                     m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                        onclick: function() {
+                        onclick: function () {
                             if (MensajesPedido.messagePedido.length !== 0) {
                                 MensajesPedido.sendMessage();
                             } else {
@@ -542,7 +489,7 @@ const Pedido = {
                             }
                         },
                     }, [
-                        m("i.fas.fa-paper-plane.mg-r-5", )
+                        m("i.fas.fa-paper-plane.mg-r-5",)
                     ], "Enviar"),
 
 
@@ -560,19 +507,19 @@ const Pedido = {
     }
 }
 
-const VerPedido = {
+const VerPedidoAuxiliarEmergencia = {
     idPedido: null,
     oninit: (_data) => {
         App.isAuth();
         HeaderPrivate.page = "";
         SidebarEme.page = "";
-        VerPedido.idPedido = _data.attrs.idPedido;
+        VerPedidoAuxiliarEmergencia.idPedido = _data.attrs.idPedido;
         DetallePedido.data = [];
         DetallePedido.detalle = [];
         EditarPedido.detalle = [];
     },
     oncreate: () => {
-        document.title = "Detalle Pedido N°: " + VerPedido.idPedido + " | " + App.title;
+        document.title = "Detalle Pedido N°: " + VerPedidoAuxiliarEmergencia.idPedido + " | " + App.title;
         loadCustomPage();
     },
     view: () => {
@@ -602,7 +549,7 @@ const VerPedido = {
                         )
                     ]),
                     m("h1.df-title",
-                        "Detalle de Pedido N°: " + VerPedido.idPedido
+                        "Detalle de Pedido N°: " + VerPedidoAuxiliarEmergencia.idPedido
                     ),
 
                     m("div.row.tx-14", [
@@ -613,7 +560,7 @@ const VerPedido = {
                                     m("i.tx-60.fas.fa-file." + Pedido.classPedido)
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Detalle de Pedido N°: " + VerPedido.idPedido + " - Status: " + Pedido.descPedido
+                                    "Detalle de Pedido N°: " + VerPedidoAuxiliarEmergencia.idPedido + " - Status: " + Pedido.descPedido
                                 ),
                                 m(Pedido)
 
@@ -646,24 +593,25 @@ const EditarMuestras = {
     muestras: { "1": "Orina", "2": "Heces", "3": "Tubo Rojo", "4": "Tubo Lila", "5": "Tubo Celeste", "6": "Tubo Verde", "7": "Tubo Negro", "8": "LCR", "9": "Esputo", "10": "Jeringuilla", "11": "Gasometria", "12": "Secreciones", "13": "Culturetes", "14": "Frascos de Cultivo", "15": "Isopado", "16": "Estrep Test", "17": "AmniSure", "18": "Tubo Liquidos" },
     oninit: () => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-eme-lab/" + VerPedido.idPedido,
-                data: {
-                    dataPedido: EditarMuestras.muestras,
-                    statusPedido: Pedido.statusPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-eme-lab/" + VerPedidoAuxiliarEmergencia.idPedido,
+            data: {
+                dataPedido: EditarMuestras.muestras,
+                statusPedido: Pedido.statusPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
-                    EditarPedido.statusPedido = result.statusPedido;
+                    Pedido.statusPedido = result.statusPedido;
                     EditarMuestras.detalle = result.data;
+                    EditarMuestras.validarStatus();
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarMuestras.error = e.message;
             })
     },
@@ -671,31 +619,33 @@ const EditarMuestras = {
 
         if (EditarMuestras.detalle.length !== 0) {
             return [
-                m("div.custom-control.custom-checkbox", [
+                m("div.custom-control.custom-checkbox.tx-18", [
                     m("input.custom-control-input[type='checkbox'][id='selectTodosMuestra']", {
                         checked: EditarMuestras.checkedAll,
-                        onclick: function(e) {
+                        onclick: function (e) {
                             EditarMuestras.seleccionarTodos(this.checked);
                         }
                     }),
                     m("label.custom-control-label.tx-semibold[for='selectTodosMuestra']", "SELECCIONAR TODOS")
                 ]),
-                Object.keys(EditarMuestras.detalle).map(function(_i) {
+                Object.keys(EditarMuestras.detalle).map(function (_i) {
 
                     if (EditarMuestras.detalle[_i].indexOf("...") !== -1) {
 
-                        return m("div.custom-control.custom-checkbox", [
+                        return m("div.custom-control.custom-checkbox.tx-18", [
                             m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']", {
                                 checked: true,
-                                onclick: function(e) {
+                                onclick: function (e) {
                                     if (!this.checked) {
+                                        Pedido.statusPedido = 1;
+
                                         EditarMuestras.checkedAll = false;
                                         EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i];
                                     }
-                                    EditarMuestras.udpateDataMuestras();
+                                    EditarMuestras.updateDataMuestras();
                                 },
                                 onupdate: (e) => {
-                                    (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1]: EditarMuestras.muestras[_i];
+                                    (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1] : EditarMuestras.muestras[_i];
                                 },
 
                             }),
@@ -707,18 +657,18 @@ const EditarMuestras = {
                     } else {
 
 
-                        return m("div.custom-control.custom-checkbox", [
+                        return m("div.custom-control.custom-checkbox.tx-18", [
                             m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']", {
-                                onclick: function(e) {
+                                onclick: function (e) {
                                     if (this.checked) {
-
+                                        Pedido.statusPedido = 2;
                                         EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - " + EditarMuestras.status + ": " + moment().format('DD-MM-YYYY HH:mm');
                                     }
-                                    EditarMuestras.udpateDataMuestras();
+                                    EditarMuestras.updateDataMuestras();
 
                                 },
                                 onupdate: (e) => {
-                                    (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1]: EditarMuestras.muestras[_i];
+                                    (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1] : EditarMuestras.muestras[_i];
                                 },
                             }),
                             m("label.custom-control-label[for='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']",
@@ -738,32 +688,106 @@ const EditarMuestras = {
     seleccionarTodos: (status) => {
 
         if (status) {
+            Pedido.statusPedido = 2;
             EditarMuestras.checkedAll = true;
         } else {
+            Pedido.statusPedido = 1;
             EditarMuestras.checkedAll = false;
         }
 
-        return Object.keys(EditarMuestras.detalle).map(function(_i) {
+        return [
+            Object.keys(EditarMuestras.detalle).map(function (_i) {
 
-            let _id = EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-");
+                let _id = EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-");
 
-            if (status) {
-                EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - " + EditarMuestras.status + ": " + moment().format('DD-MM-YYYY HH:mm');
-                document.getElementById(_id).checked = true;
-            } else {
-                EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i];
-                document.getElementById(_id).checked = false;
-            }
+                if (status) {
+                    EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - " + EditarMuestras.status + ": " + moment().format('DD-MM-YYYY HH:mm');
+                    document.getElementById(_id).checked = true;
+                } else {
+                    EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i];
+                    document.getElementById(_id).checked = false;
+                }
 
-            if (EditarMuestras.detalle.length === (_i + 1)) {
-                EditarMuestras.udpateDataPedido();
-            }
 
-        })
+
+            }),
+            EditarMuestras.updateDataMuestras()
+        ]
 
 
     },
-    udpateDataMuestras: () => {
+    validarStatus: () => {
+
+        if (Pedido.statusPedido == 1) {
+            Pedido.classPedido = "tx-gray-500";
+            Pedido.descPedido = "Pendiente";
+        }
+
+        if (Pedido.statusPedido == 2) {
+            Pedido.classPedido = "tx-primary";
+            Pedido.descPedido = "Gestionado";
+        }
+
+        let _val = 0;
+
+        Object.keys(EditarMuestras.detalle).map(function (_i) {
+
+            if (!(EditarMuestras.detalle[_i].indexOf("...") !== -1)) {
+
+                _val = (_val + 1);
+
+
+                if (Object.keys(EditarMuestras.detalle).length === _val) {
+                    console.log(_val)
+
+                    if (_val === Object.keys(EditarMuestras.detalle).length) {
+                        Pedido.statusPedido == 1
+                        Pedido.classPedido = "tx-gray-500";
+                        Pedido.descPedido = "Pendiente";
+
+                    }
+                }
+
+            } else {
+                Pedido.statusPedido = 2;
+                Pedido.classPedido = "tx-primary";
+                Pedido.descPedido = "Gestionado";
+
+            }
+
+        })
+    },
+    updateDataMuestras: () => {
+
+        return [
+            EditarMuestras.validarStatus(),
+            m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-eme-lab/" + VerPedidoAuxiliarEmergencia.idPedido,
+                data: {
+                    dataPedido: EditarMuestras.detalle,
+                    statusPedido: Pedido.statusPedido
+
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            }).then(function (result) {
+                if (result.status) {
+
+                    EditarMuestras.detalle = result.data;
+                    EditarMuestras.validarStatus();
+
+
+
+                }
+            }).catch(function (e) {
+                EditarMuestras.error = e.message;
+            })
+        ]
+
+
+
 
     },
 };
@@ -791,7 +815,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function() {
+    $(window).resize(function () {
         showNavbarActiveSub()
     })
 
@@ -800,7 +824,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -811,7 +835,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -823,24 +847,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function(e) {
+    $('#mainMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function(e) {
+    $('#sidebarMenuOpen').on('click', function (e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
+    $('#navbarSearch').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function(e) {
+    $('#navbarSearchClose').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -858,7 +882,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
+        $('.sidebar-nav .with-sub').on('click', function (e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -867,18 +891,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function(e) {
+    $('#mainMenuOpen').on('click touchstart', function (e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function(e) {
+    $('#sidebarMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it
@@ -950,21 +974,21 @@ function loadNotificaciones() {
 
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function() {
+                    view: function () {
                         if (_v._aData.title == 'Nuevo Mensaje') {
                             return m("div.demo-static-toast",
                                 m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
@@ -1026,4 +1050,4 @@ function reloadNotificacion() {
 
 
 
-export default VerPedido;
+export default VerPedidoAuxiliarEmergencia;

@@ -8,6 +8,7 @@ import Encrypt from '../models/encrypt';
 
 
 const Auth = {
+    user: [],
     rol: null,
     labelRol: null,
     modulesAccess: [],
@@ -60,9 +61,11 @@ const Auth = {
 
                 if (data.status) {
                     window.localStorage.accessToken = data.jwt;
+                    Auth.user = data.data.user;
                     Auth.rol = data.data.rol;
+                    Auth.user.rol = Auth.rol;
                     Auth.modulesAccess = data.data.modulesAccess;
-                    Encrypt.setDataUser({ rol: Auth.rol, modulesAccess: Auth.modulesAccess })
+                    Encrypt.setDataUser({ user: Auth.user, modulesAccess: Auth.modulesAccess })
                     Auth.setSuccess('¡Bienvenido!');
                     setTimeout(function () {
                         Auth.imputDisabled = false;

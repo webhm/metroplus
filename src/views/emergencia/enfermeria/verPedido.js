@@ -423,13 +423,13 @@ const Pedido = {
                         Pedido.entregar = true;
                         Pedido.enviar = false;
                         Pedido.nuevoMensaje = false;
-                        Pedido.labelOperation = "Entregar Muestras:";
-                        EditarMuestras.status = "Entregada";
+                        Pedido.labelOperation = "Enviar Muestras:";
+                        EditarMuestras.status = "Enviada";
 
                     },
                 }, [
                     m("i.fas.fa-user-edit.mg-r-5",)
-                ], "Entregar Muestras"),
+                ], "Enviar Muestras"),
 
                 m("button.btn.btn-xs.btn-primary.mg-l-2.mg-b-5.tx-semibold[type='button']", {
                     onclick: function () {
@@ -588,39 +588,42 @@ const NumeroMuestras = {
     numero: 0,
     items: [],
     oninit: (_data) => {
-        NumeroMuestras.items[_data.attrs._id] = {
+
+        var _idC = _data.attrs._id;
+
+        console.log('idc', _idC)
+
+
+        NumeroMuestras.items[_idC] = {
             numero: 0,
         };
 
     },
-
-
     view: (_data) => {
+
+        var _idC = _data.attrs._id;
 
         return [
             m("div.card.text-right",
-                m("div.card-body",
-                    [
-                        m("h5.card-title",
-                            NumeroMuestras.items[_data.attrs._id].numero
-                        ),
-
-                        m("button.btn.btn-xs.btn-outline-light.tx-semibold.mg-b-5[type='button']", {
-                            onclick: () => {
-                                NumeroMuestras.items[_data.attrs._id].numero = (NumeroMuestras.items[_data.attrs._id].numero + 1);
-                            }
-                        },
-                            m("i.fas.fa-plus-circle")
-                        ),
-                        m("button.btn.btn-xs.btn-outline-light.tx-semibold.mg-b-5[type='button']", {
-                            onclick: () => {
-                                NumeroMuestras.items[_data.attrs._id].numero = (NumeroMuestras.items[_data.attrs._id].numero - 1);
-                            }
-                        },
-                            m("i.fas.fa-window-minimize")
-                        ),
-                    ]
-                )
+                m("div.card-body", [
+                    m("h5.card-title",
+                        NumeroMuestras.items[_idC].numero
+                    ),
+                    m("button.btn.btn-xs.btn-outline-light.tx-semibold.mg-b-5[type='button']", {
+                        onclick: () => {
+                            NumeroMuestras.items[_idC].numero = (NumeroMuestras.items[_idC].numero + 1);
+                        }
+                    },
+                        "+"
+                    ),
+                    m("button.btn.btn-xs.btn-outline-light.tx-semibold.mg-b-5[type='button']", {
+                        onclick: () => {
+                            NumeroMuestras.items[_idC].numero = (NumeroMuestras.items[_idC].numero - 1);
+                        }
+                    },
+                        "-"
+                    ),
+                ])
             ),
 
 
@@ -632,6 +635,7 @@ const NumeroMuestras = {
 };
 
 const EditarMuestras = {
+    user: "",
     status: "",
     detalle: [],
     error: "",
@@ -679,36 +683,33 @@ const EditarMuestras = {
 
                 Object.keys(EditarMuestras.detalle).map(function (_i) {
 
+                    var _idC = EditarMuestras.muestras[_i].toLowerCase().replaceAll(" ", "_");
 
 
                     if (EditarMuestras.detalle[_i].indexOf("...") !== -1) {
 
-                        (NumeroMuestras.items[EditarMuestras.muestras[_i]] !== undefined) ? [
-                            NumeroMuestras.items[EditarMuestras.muestras[_i]].numero = parseFloat(EditarMuestras.detalle[_i].split("...")[2])
+
+                        (NumeroMuestras.items[_idC] !== undefined) ? [
+                            NumeroMuestras.items[_idC].numero = parseFloat(EditarMuestras.detalle[_i].split("...")[2])
                         ] : [];
 
                         return [
                             m(NumeroMuestras, {
-                                _id: EditarMuestras.detalle[_i].split("...")[0].replace(/\s/g, '')
+                                _id: _idC
                             }),
 
 
                             m("div.pd-25.custom-control.custom-checkbox.tx-18", [
 
 
-                                m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']", {
+                                m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i].toLowerCase().replaceAll(" ", "_") + "']", {
                                     checked: true,
-                                    oninit: () => {
-
-
-                                    },
                                     onclick: function (e) {
                                         if (!this.checked) {
                                             Pedido.statusPedido = 1;
-
                                             EditarMuestras.checkedAll = false;
                                             EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i];
-                                            NumeroMuestras.items[EditarMuestras.detalle[_i]].numero = 0;
+                                            NumeroMuestras.items[EditarMuestras.muestras[_i].toLowerCase().replaceAll(" ", "_")].numero = 0;
 
                                         }
                                         EditarMuestras.updateDataMuestras();
@@ -718,8 +719,7 @@ const EditarMuestras = {
                                     },
 
                                 }),
-                                m("label.custom-control-label[for='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']",
-                                    (NumeroMuestras.items[EditarMuestras.muestras[_i]] !== undefined) ? NumeroMuestras.items[EditarMuestras.muestras[_i]].numero + " " : "",
+                                m("label.custom-control-label[for='" + EditarMuestras.detalle[_i].toLowerCase().replaceAll(" ", "_") + "']",
                                     (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1] : EditarMuestras.detalle[_i],
                                 )
                             ]),
@@ -732,16 +732,16 @@ const EditarMuestras = {
 
                         return [
                             m(NumeroMuestras, {
-                                _id: EditarMuestras.detalle[_i]
+                                _id: _idC
                             }),
                             m("div.pd-25.custom-control.custom-checkbox.tx-18", [
 
 
-                                m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']", {
+                                m("input.custom-control-input[type='checkbox'][id='" + EditarMuestras.detalle[_i].toLowerCase().replaceAll(" ", "_") + "']", {
                                     onclick: function (e) {
                                         if (this.checked) {
                                             Pedido.statusPedido = 2;
-                                            EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - " + EditarMuestras.status + ": " + moment().format('DD-MM-YYYY HH:mm') + " ... " + NumeroMuestras.items[EditarMuestras.muestras[_i]].numero;
+                                            EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - " + EditarMuestras.status + ": " + moment().format('DD-MM-YYYY HH:mm') + " ... " + NumeroMuestras.items[_idC].numero;
                                         }
                                         EditarMuestras.updateDataMuestras();
 
@@ -751,7 +751,7 @@ const EditarMuestras = {
                                         (EditarMuestras.detalle[_i].indexOf("...") !== -1) ? EditarMuestras.muestras[_i] + EditarMuestras.detalle[_i].split("...")[1] : EditarMuestras.muestras[_i];
                                     },
                                 }),
-                                m("label.custom-control-label[for='" + EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-") + "']",
+                                m("label.custom-control-label[for='" + EditarMuestras.detalle[_i].toLowerCase().replaceAll(" ", "_") + "']",
                                     EditarMuestras.detalle[_i]
 
                                 )
@@ -782,7 +782,7 @@ const EditarMuestras = {
         return [
             Object.keys(EditarMuestras.detalle).map(function (_i) {
 
-                let _id = EditarMuestras.detalle[_i].toLowerCase().replace(" ", "-");
+                let _id = EditarMuestras.detalle[_i].toLowerCase().replaceAll(" ", "_");
 
                 if (status) {
                     EditarMuestras.detalle[_i] = EditarMuestras.muestras[_i] + " ... - " + EditarMuestras.status + ": " + moment().format('DD-MM-YYYY HH:mm');
@@ -822,7 +822,6 @@ const EditarMuestras = {
 
 
                 if (Object.keys(EditarMuestras.detalle).length === _val) {
-                    console.log(_val)
 
                     if (_val === Object.keys(EditarMuestras.detalle).length) {
                         Pedido.statusPedido == 1

@@ -16,7 +16,7 @@ const MenuHeader = {
                         " Inicio "
                     ])
                 ),
-                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
                         return [
@@ -62,6 +62,7 @@ const HeaderPrivate = {
                         m("span",
                             "Virtual"
                         ),
+                        "+"
                     ])
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
@@ -71,6 +72,7 @@ const HeaderPrivate = {
                             m("span",
                                 "Virtual"
                             ),
+                            "+"
                         ]),
                         m("a[id='mainMenuClose'][href='']",
                             m("i[data-feather='x']")

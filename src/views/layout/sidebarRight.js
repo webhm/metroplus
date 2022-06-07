@@ -17,7 +17,8 @@ const SidebarRight = {
                     m("div.dropdown-menu.dropdown-menu-right.tx-13", [
 
                         m("h6.tx-semibold.mg-b-5",
-                            Auth.user.user.toUpperCase()
+                            (Auth.user.user !== undefined) ? Auth.user.user.toUpperCase() : ""
+
                         ),
                         m("p.mg-b-25.tx-12.tx-color-03", [
                             (Auth.rol == 1) ? "Administrador" : "",

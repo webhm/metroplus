@@ -9,6 +9,7 @@ const HeadPublic = {
                         m("span",
                             "Virtual"
                         ),
+                        "+"
                     ])
                 ),
 

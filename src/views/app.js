@@ -5,7 +5,7 @@ import Encrypt from '../models/encrypt';
 
 
 const App = {
-    title: "Metrovirtual Admin v1.0.0",
+    title: "Metrovirtual Plus v1.0.0",
     oninit: () => {
 
         document.title = "Cargando...";
@@ -34,7 +34,8 @@ const App = {
                     }
 
                 }),
-                (_ac == 0) ? m.route.set('/inicio') : true
+                (_ac == 0) ? m.route.set('/inicio') : true,
+                (Auth.rol)
             ]
         }
 

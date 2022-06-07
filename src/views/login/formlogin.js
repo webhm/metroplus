@@ -11,21 +11,7 @@ const FormLogin = {
                 m("div.container",
                     m("div.media.align-items-stretch.justify-content-center.ht-100p.pos-relative",
                         [
-                            m("div.media-body.align-items-center.d-none.d-lg-flex",
-                                [
-                                    m("div.footer-widget", [
-                                        m("div.logo",
-                                            m("a.d-inline-block.mb-5[href='/']",
-                                                m("img[alt='HM'][src='assets/images/logo-hm.svg']")
-                                            )
-                                        ),
-                                        m("p",
-                                            App.title + " aplicación web para la administración de servicios digitales."
-                                        ),
 
-                                    ])
-                                ]
-                            ),
                             m("div.sign-wrapper.mg-lg-l-50.mg-xl-l-60",
                                 m("div.wd-100p",
                                     [
@@ -71,8 +57,11 @@ const FormLogin = {
                                         },
                                             "Entrar"
                                         ),
-                                        m("div.divider-text",
-                                            "Hospital Metropolitano"
+                                        m("div.text-center.tx-gray-500.mg-t-20",
+                                            "Metrovirtual Plus v1.0.0"
+                                        ),
+                                        m("div.text-center.tx-gray-500",
+                                            "Created by Hospital Metropolitano"
                                         ),
                                         m("div.ht-80",
                                         ),

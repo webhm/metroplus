@@ -4,6 +4,7 @@ import Salir from '../views/salir'
 import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
+import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import Pacientes from '../views/pacientes/pacientes';
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
@@ -27,6 +28,7 @@ const Routes = {
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
+    '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos
     '/emergencia': Emergencia, //Emergencia
     '/emergencia/auxiliar/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio
     '/emergencia/auxiliar/pedido/:idPedido': VerPedidoAuxiliarEmergencia, //EmergenciaAuxiliarPedidosLaboratorio

@@ -15,21 +15,21 @@ const Updates = {
 
     fetchPedidos: () => {
         m.request({
-            method: "GET",
-            url: " https://api.hospitalmetropolitano.org/t/v1/emergencia-pedidos-laboratorio?start=0&length=10",
-        })
-            .then(function (res) {
+                method: "GET",
+                url: " https://api.hospitalmetropolitano.org/t/v1/emergencia-pedidos-laboratorio?start=0&length=10",
+            })
+            .then(function(res) {
                 Updates.data.pedidos = res.data;
                 Updates.fetchNotificaciones();
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
     },
     fetchNotificaciones: () => {
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
-        })
-            .then(function (res) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
+            })
+            .then(function(res) {
                 Updates.data.notificaciones = res.data;
                 if (localStorage.updates == undefined) {
                     Encrypt.setData(Updates.data)
@@ -38,7 +38,7 @@ const Updates = {
                     Updates.notificar();
                 }
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
     },
     fetch: () => {
         Updates.fetchPedidos();
@@ -74,7 +74,7 @@ const Updates = {
         }
 
         Encrypt.setData(Updates.data)
-        setTimeout(function () {
+        setTimeout(function() {
             console.log("updates", Updates.data)
             Updates.fetch();
         }, 5000);
@@ -205,11 +205,11 @@ const PedidosAuxiliar = {
                     m("table.table.table-sm[id='table-notificaciones'][width='100%']"),
 
                 ]),
-                m("label.nav-label.mg-t-20.tx-center", [
-                    m("a", { href: "#!/notificaciones-lab" },
-                        "Ver Todo"
-                    )
-                ],
+                m("label.nav-label.mg-t-20.tx-center.d-none", [
+                        m("a", { href: "#!/notificaciones-lab" },
+                            "Ver Todo"
+                        )
+                    ],
 
                 ),
             ])
@@ -310,88 +310,88 @@ function loadPedidos() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        },],
+        }, ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.HC_MV;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.PTE_MV;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
             },
-            visible: true,
-            aTargets: [3],
-            width: "20%",
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [3],
+                width: "20%",
 
-            orderable: false,
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [4],
-            width: "60%",
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+                width: "60%",
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [5],
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [5],
 
-            orderable: false,
+                orderable: false,
 
-        },
+            },
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
         },
-        drawCallback: function (settings) {
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function () {
+                    view: function() {
 
 
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
@@ -409,12 +409,12 @@ function loadPedidos() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -426,20 +426,20 @@ function loadPedidos() {
     });
 
 
-    $('#button-buscar-t').click(function (e) {
+    $('#button-buscar-t').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function (e) {
+    $('#filtrar').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function (e) {
+    $('#resetTable').click(function(e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');
@@ -513,28 +513,28 @@ function loadNotificaciones() {
         order: false,
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return "";
+                mRender: function(data, type, row, meta) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: true,
-            aTargets: [0],
-            orderable: false,
-        },
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
 
 
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
                 m.mount(_i.anCells[0], {
-                    view: function () {
+                    view: function() {
                         return m("div.demo-static-toast",
                             m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
                                 onclick: () => {
-                                    window.open("#!/laboratorio/pedido/" + _i._aData.idPedido)
+                                    m.route.set('/emergencia/auxiliar/pedido/' + _i._aData.idPedido);
                                 },
                             }, [
                                 m("div.toast-header.bg-danger", [
@@ -587,12 +587,12 @@ function nueva_notificacion_muestra(_mData) {
         }
         var noti = new Notification(title, extra)
         noti.onclick = () => {
-            window.open("#!/emergencia/laboratorio/pedido/" + _mData.idPedido)
+            m.route.set("/emergencia/auxiliar/pedido/" + _mData.idPedido);
         }
         noti.onclose = {
             // Al cerrar
         }
-        setTimeout(function () { noti.close() }, 30000)
+        setTimeout(function() { noti.close() }, 30000)
     }
 }
 
@@ -611,12 +611,12 @@ function nueva_notificacion(_mData) {
         }
         var noti = new Notification(title, extra)
         noti.onclick = () => {
-            window.open("#!/laboratorio/pedido/" + _mData.NUM_PEDIDO_MV)
+            m.route.set("/emergencia/auxiliar/pedido/" + _mData.NUM_PEDIDO_MV);
         }
         noti.onclose = {
             // Al cerrar
         }
-        setTimeout(function () { noti.close() }, 30000)
+        setTimeout(function() { noti.close() }, 30000)
     }
 }
 
@@ -643,7 +643,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function () {
+    $(window).resize(function() {
         showNavbarActiveSub()
     })
 
@@ -652,7 +652,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -663,7 +663,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -675,24 +675,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function (e) {
+    $('#mainMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function (e) {
+    $('#sidebarMenuOpen').on('click', function(e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function (e) {
+    $('#navbarSearch').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function (e) {
+    $('#navbarSearchClose').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -710,7 +710,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function (e) {
+        $('.sidebar-nav .with-sub').on('click', function(e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -719,18 +719,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function (e) {
+    $('#mainMenuOpen').on('click touchstart', function(e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function (e) {
+    $('#sidebarMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

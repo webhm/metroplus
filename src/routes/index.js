@@ -5,7 +5,6 @@ import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
-import Pacientes from '../views/pacientes/pacientes';
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
 import Inicio from '../views/inicio/inicio';
@@ -18,8 +17,8 @@ import EmergenciaEnfermeriaPedidosLaboratorio from '../views/emergencia/enfermer
 import VerPedidoEnfermeriaEmergencia from '../views/emergencia/enfermeria/verPedido'
 import Farmacia from '../views/farmacia//farmacia'
 import FarmaciaRecetasAlta from '../views/farmacia//recetas/recetasAlta'
-
-
+import Admisiones from '../views/admisiones/admisiones'
+import PacientesAdmisiones from '../views/admisiones/pacientes/pacientes'
 
 
 // Routes here
@@ -37,8 +36,9 @@ const Routes = {
     '/emergencia/enfermeria/pedido/:idPedido': VerPedidoEnfermeriaEmergencia, //VerPedidoEnfermeriaEmergencia
     '/farmacia': Farmacia, //Farmacia
     '/farmacia/recetas': FarmaciaRecetasAlta, //FarmaciaRecetasAlta
+    '/admisiones': Admisiones, //Admisiones
+    '/admisiones/pacientes': PacientesAdmisiones, //PacientesAdmisiones
     '/auth': Login, // Login
-    '/pacientes': Pacientes, // Pacientes
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir
     '/notificaciones': ReloadNotification, // ReloadNotificaciones

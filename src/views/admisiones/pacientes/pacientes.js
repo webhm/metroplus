@@ -1,63 +1,10 @@
 import Encrypt from '../../../models/encrypt';
 import HeaderPrivate from '../../layout/header-private';
+import SidebarAdm from '../sidebarAdm';
 import App from '../../app';
 import m from 'mithril';
 import Notificaciones from '../../../models/notificaciones';
-import ReloadNotification from '../../layout/reload-notificacion';
-import SidebarFarma from '../sidebarFarma';
 
-
-const Updates = {
-    data: {
-        formularios: [],
-        notificaciones: [],
-    },
-    fetchNotificaciones: () => {
-        m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/recetas-alta?start=0&length=6",
-            })
-            .then(function(res) {
-                Updates.data.notificaciones = res.data;
-                if (localStorage.updates == undefined) {
-                    Encrypt.setData(Updates.data)
-                    Updates.notificar();
-                } else {
-                    Updates.notificar();
-                }
-            })
-            .catch(function(e) {});
-    },
-    fetch: () => {
-        Updates.fetchNotificaciones();
-    },
-
-    notificar: () => {
-
-        let localNotificaciones = Encrypt.getData();
-
-        for (var i = 0; i < Updates.data.notificaciones.length; i++) {
-            var igual = false;
-            for (var j = 0; j < localNotificaciones.notificaciones.length & !igual; j++) {
-                if (Updates.data.notificaciones[i]['id'] == localNotificaciones.notificaciones[j]['id']) {
-                    igual = true;
-                }
-            }
-            if (!igual) {
-                nueva_notificacion_FOR(Updates.data.notificaciones[i]);
-            }
-        }
-
-
-
-        Encrypt.setData(Updates.data)
-        setTimeout(function() {
-            Updates.fetch();
-        }, 5000);
-
-    },
-
-};
 
 
 const iPedido = {
@@ -66,16 +13,16 @@ const iPedido = {
         return [
             m("p.mg-0.tx-18", [
                 m("i.fas.fa-user.mg-r-5.text-secondary"),
-                _data.attrs.NM_PACIENTE,
+                _data.attrs.PTE_MV,
             ]),
             m("p.mg-0", [
                 m("div.tx-15.text-secondary.mg-r-5",
-                    "HC: " + _data.attrs.CD_PACIENTE
+                    "HC: " + _data.attrs.HC_MV
                 ),
             ]),
             m("p.mg-0", [
                 m("div.tx-15.text-secondary.mg-r-5",
-                    "N° Atención MV: " + _data.attrs.CD_ATENDIMENTO
+                    "N° Pedido MV: " + _data.attrs.NUM_PEDIDO_MV
                 )
             ]),
         ];
@@ -83,106 +30,146 @@ const iPedido = {
 
 };
 
-const RecetasAlta = {
-    notificaciones: [],
-    pedidos: [],
+const PacientesAdmisiones = {
+    pacientes: [],
+    tipoBusqueda: "",
+    searchField: "",
     oninit: () => {
         HeaderPrivate.page = "";
-        SidebarFarma.page = "";
+        SidebarAdm.page = "";
+        PacientesAdmisiones.searchField = "";
         App.isAuth();
-
     },
     oncreate: () => {
-        document.title = "Recetas de Alta | " + App.title;
-        ReloadNotification.loadPage = "/formacia/recetas";
-        Updates.fetch();
+        document.title = "Pacientes de Admisiones | " + App.title;
         loadCustomPage();
-        loadRecetas();
     },
     view: () => {
+
+
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("farmacia") }),
-            m(SidebarFarma, { oncreate: SidebarFarma.setPage(5) }),
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("admisiones") }),
+            m(SidebarAdm, { oncreate: SidebarAdm.setPage(7) }),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
-
                             m(m.route.Link, { href: "/" }, [
-                                "Metrovirtual"
-                            ]),
-
+                                " Metrovirtual "
+                            ])
                         ),
                         m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/admisiones" }, [
+                                " Admisiones "
+                            ])
 
-                            m(m.route.Link, { href: "/farmacia" }, [
-                                "Farmacia"
-                            ]),
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Recetas de Alta"
+                            "Pacientes de Admisiones"
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Recetas de Alta:"
+                        "Pacientes de Admisiones:"
                     ),
 
                     m("div.row.tx-14", [
-                        m(".col-12.mg-b-10.wd-100p[data-label='Filtrar'][id='filterTable']",
-                            m("div.row", [
-                                m("div.col-sm-12.pd-b-10",
-                                    m("div.input-group", [
-                                        m("input.form-control.mg-b-20.wd-100p[aautofocus=''][id='_dt_search_text'][placeholder='Buscar por NHC o Apellidos y Nombres completos del Paciente'][title='Buscar'][type='text']"),
-                                        m("div.input-group-append",
-                                            m("button.btn.btn-outline-light[id='button-buscar-t'][type='button']", [
-                                                m("i.icon.ion-md-search"),
-                                                " Buscar "
-                                            ]),
-                                            m("button.btn.btn-outline-light[id='resetTable'][type='button']", [
-                                                m("i.icon.ion-md-close-circle"),
-                                                " Borrar "
-                                            ])
-                                        )
-                                    ])
-                                ),
-                                m("div.col-sm-12.pd-b-10.d-none",
-                                    m("div.input-group", [
-                                        m("input.form-control[id='desde'][placeholder='Desde'][title='Desde'][type='text']"),
-                                        m("input.form-control[id='hasta'][placeholder='Hasta'][title='Hasta'][type='text']"),
-                                        m("div.input-group-append", [
-                                            m("button.btn.btn-outline-light[id='filtrar'][title='Buscar'][type='button']", [
-                                                m("i.icon.ion-md-funnel"),
-                                                " Filtrar "
-                                            ]),
+                        m(".col-12.mg-b-10.wd-100p",
+                            m("div.row.mg-t-20", [
 
+
+                                m("div.col-sm-12.pd-b-10.mg-b-10", [
+                                        m('label.d-none', [
+                                            m("i.fas.fa-info-circle.mg-r-2"),
+                                            "Buscar por NHC o Nombres y Apellidos completos del Paciente"
+                                        ]),
+                                        m("div.mg-b-5.d-flex", [
+                                            m("div.custom-control.custom-radio.mg-r-15", [
+                                                m("input.custom-control-input[type='radio'][id='cc'][name='tipoBusqueda'][checked]"),
+                                                m("label.custom-control-label[for='cc']",
+                                                    "Cédula"
+                                                )
+                                            ]),
+                                            m("div.custom-control.custom-radio.mg-r-15", [
+                                                m("input.custom-control-input[type='radio'][id='pte'][name='tipoBusqueda']"),
+                                                m("label.custom-control-label[for='pte']",
+                                                    "Apellidos y Nombres completos"
+                                                )
+                                            ])
+                                        ]),
+                                        m("div.mg-t-15.input-group", [
+                                            m("input.form-control.mg-b-20.wd-100p[placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']", {
+                                                oninput: (e) => {
+                                                    PacientesAdmisiones.searchField = e.target.value;
+                                                },
+                                                value: PacientesAdmisiones.searchField
+                                            }),
+                                            m("div.input-group-append",
+                                                m("button.btn.btn-outline-light[type='button']", {
+                                                    onclick: () => {
+                                                        loadPacientes([{ "nhc": "dsdsd" }]);
+                                                    }
+                                                }, [
+                                                    m("i.icon.ion-md-search"),
+                                                    " Buscar "
+                                                ]),
+                                                m("button.btn.btn-outline-light[id='resetTable'][type='button']", [
+                                                    m("i.icon.ion-md-close-circle"),
+                                                    " Borrar "
+                                                ])
+                                            )
                                         ])
-                                    ])
-                                )
+                                    ]
+
+
+                                ),
+
                             ])
                         ),
                         m("div.col-12", [
-                            m("div.table-loader.wd-100p",
+                            m("label.nav-label",
+                                "Pacientes de Admisiones"
+                            ),
+                            m("div.table-loader.wd-100p", {
+                                    style: { "display": "none" }
+                                },
                                 m("div.placeholder-paragraph", [
                                     m("div.line"),
                                     m("div.line")
                                 ])
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.",
-                                m("table.table.table-sm[id='table-recetas'][width='100%']"),
-
+                                m("table.table.table-sm[id='table-pacientes'][width='100%']"),
                             )
                         ])
                     ]),
                 ])
             ),
+            m("div.section-nav", [
+                m("label.nav-label",
+                    "Opciones Pacientes"
+                ),
+                m("nav.nav.flex-column[id='navSection']", [
+                    m("table.table.table-sm[id='table-notificaciones'][width='100%']"),
 
+                ]),
+                m("label.nav-label.mg-t-20.tx-center.d-none", [
+                        m(m.route.Link, { href: "/notificaciones-lab" }, [
+                            "Ver Todo"
+                        ])
+
+
+                    ],
+
+                ),
+            ])
         ];
     },
 
 };
 
 
-function loadRecetas() {
+
+function loadPacientes(pacientes = []) {
 
     $(".table-content").hide();
     $(".table-loader").show();
@@ -203,14 +190,8 @@ function loadRecetas() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-recetas").DataTable({
-        "ajax": {
-            url: "https://api.hospitalmetropolitano.org/t/v1/recetas-alta",
-            dataSrc: "data",
-            serverSide: true,
-        },
-        processing: true,
-        serverSide: true,
+    var table = $("#table-pacientes").DataTable({
+        data: pacientes,
         responsive: false,
         dom: 'ltp',
         language: {
@@ -244,14 +225,6 @@ function loadRecetas() {
             title: "ID:"
         }, {
             title: "HC"
-        }, {
-            title: "PACINTE"
-        }, {
-            title: "FECHA:"
-        }, {
-            title: "PACIENTE:"
-        }, {
-            title: "OPCIONES:"
         }, ],
         aoColumnDefs: [{
                 mRender: function(data, type, row, meta) {
@@ -263,54 +236,14 @@ function loadRecetas() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.HC_MV;
+                    return full.nhc;
                 },
-                visible: false,
+                visible: true,
                 aTargets: [1],
                 orderable: false,
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
 
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "15%",
-
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "50%",
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-                width: "35%",
-                orderable: false,
-
-            },
         ],
         fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
@@ -320,48 +253,11 @@ function loadRecetas() {
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function(_i) {
-
-
-                m.mount(_i.anCells[3], {
-                    view: function() {
-                        return m("p.mg-0.tx-12", [
-                            m("i.fas.fa-calendar.mg-r-5.text-secondary"),
-                            _i._aData.DT_ATENDIMENTO
-                        ])
-                    }
-                });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
-                m.mount(_i.anCells[5], {
-                    view: function() {
-
-                        return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-                            m("a.btn.btn-xs.btn-primary", { href: _i._aData.URL, target: "_blank" }, [
-                                m("i.fas.fa-file-alt.mg-r-5"),
-                            ], "Ver Receta de Alta"),
-
-                        ])
-
-
-
-                    }
-                });
-            })
 
 
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
-        // Do some staff here...
-        $('.table-loader').hide();
-        $('.table-content').show();
-        //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
-        // Do some staff here...
-        $('.table-loader').show();
-        $('.table-content').hide();
-
     });
 
     $('.dataTables_length select').select2({
@@ -397,6 +293,59 @@ function loadRecetas() {
 
 }
 
+
+function nueva_notificacion_muestra(_mData) {
+    if (Notification) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission()
+        }
+
+
+        Notificaciones.setNot();
+
+        var _data_ = JSON.parse(_mData.dataPedido);
+        var title = "Metrovirtual: " + _mData.title;
+        var extra = {
+            icon: "assets/favicon.ico",
+            body: "Pedido N°: " + _mData.idPedido + "\n" + "HC: " + _data_.HC + "\n" + "Pte: " + _data_.NOMBRE_PACIENTE
+
+        }
+        var noti = new Notification(title, extra)
+        noti.onclick = () => {
+            m.route.set("/laboratorio/pedido/" + _mData.idPedido);
+
+        }
+        noti.onclose = {
+            // Al cerrar
+        }
+        setTimeout(function() { noti.close() }, 30000)
+    }
+}
+
+function nueva_notificacion(_mData) {
+    if (Notification) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission()
+        }
+
+        Notificaciones.setNot();
+
+        var title = "Metrovirtual: Nuevo Pedido"
+        var extra = {
+            icon: "assets/favicon.ico",
+            body: "Pedido N°: " + _mData.NUM_PEDIDO_MV + "\n" + "HC: " + _mData.HC_MV + "\n" + "Pte: " + _mData.PTE_MV
+        }
+        var noti = new Notification(title, extra)
+        noti.onclick = () => {
+            m.route.set("/laboratorio/pedido/" + _mData.NUM_PEDIDO_MV);
+
+        }
+        noti.onclose = {
+            // Al cerrar
+        }
+        setTimeout(function() { noti.close() }, 30000)
+    }
+}
 
 function loadCustomPage() {
 
@@ -527,28 +476,4 @@ function loadCustomPage() {
 
 };
 
-function nueva_notificacion(_mData) {
-    if (Notification) {
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission()
-        }
-
-        Notificaciones.setNot();
-
-        var title = "Metrovirtual: Nuevo Formulario"
-        var extra = {
-            icon: "assets/favicon.ico",
-            body: "Pte: " + _mData.NM_PACIENTE + "\n"
-        }
-        var noti = new Notification(title, extra)
-        noti.onclick = () => {
-            window.location.reload();
-        }
-        noti.onclose = {
-            // Al cerrar
-        }
-        setTimeout(function() { noti.close() }, 30000)
-    }
-}
-
-export default RecetasAlta;
+export default PacientesAdmisiones;

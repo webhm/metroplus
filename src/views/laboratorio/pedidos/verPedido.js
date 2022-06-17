@@ -91,7 +91,7 @@ const MensajesPedido = {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/message-pedido/" + VerPedido.idPedido,
-                data: {
+                body: {
                     dataPedido: DetallePedido.data,
                     message: MensajesPedido.messagePedido
                 },
@@ -251,7 +251,7 @@ const EditarPedido = {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-lab/" + VerPedido.idPedido,
-                data: {
+                body: {
                     dataPedido: DetallePedido.detalle,
                     statusPedido: Pedido.statusPedido,
                 },
@@ -296,7 +296,7 @@ const EditarPedido = {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedido.idPedido,
-                data: {
+                body: {
                     dataPedido: EditarPedido.detalle,
                     statusPedido: Pedido.statusPedido
 
@@ -323,7 +323,7 @@ const EditarPedido = {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/noti-eme/" + VerPedido.idPedido,
-                data: {
+                body: {
                     dataPedido: DetallePedido.data,
                     message: EditarPedido.observaciones
                 },

@@ -12,7 +12,6 @@ const Updates = {
         pedidos: [],
         notificaciones: [],
     },
-
     fetchPedidos: () => {
         m.request({
                 method: "GET",
@@ -132,14 +131,15 @@ const Pedidos = {
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
-                            m("a[href='#']",
-                                "Metrovirtual"
-                            )
+                            m(m.route.Link, { href: "/" }, [
+                                " Metrovirtual "
+                            ])
                         ),
                         m("li.breadcrumb-item",
-                            m("a", { href: "#!/laboratorio" },
-                                "Laboratorio"
-                            )
+                            m(m.route.Link, { href: "/laboratorio" }, [
+                                " Laboratorio "
+                            ])
+
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
                             "Pedidos de Laboratorio"
@@ -205,10 +205,12 @@ const Pedidos = {
                     m("table.table.table-sm[id='table-notificaciones'][width='100%']"),
 
                 ]),
-                m("label.nav-label.mg-t-20.tx-center", [
-                        m("a", { href: "#!/notificaciones-lab" },
+                m("label.nav-label.mg-t-20.tx-center.d-none", [
+                        m(m.route.Link, { href: "/notificaciones-lab" }, [
                             "Ver Todo"
-                        )
+                        ])
+
+
                     ],
 
                 ),
@@ -531,7 +533,8 @@ function loadNotificaciones() {
                         return m("div.demo-static-toast",
                             m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
                                 onclick: () => {
-                                    window.open("#!/laboratorio/pedido/" + _i._aData.idPedido)
+                                    m.route.set("/laboratorio/pedido/" + _i._aData.idPedido);
+
                                 },
                             }, [
                                 m("div.toast-header.bg-danger", [
@@ -584,7 +587,8 @@ function nueva_notificacion_muestra(_mData) {
         }
         var noti = new Notification(title, extra)
         noti.onclick = () => {
-            window.open("#!/laboratorio/pedido/" + _mData.idPedido)
+            m.route.set("/laboratorio/pedido/" + _mData.idPedido);
+
         }
         noti.onclose = {
             // Al cerrar
@@ -608,7 +612,8 @@ function nueva_notificacion(_mData) {
         }
         var noti = new Notification(title, extra)
         noti.onclick = () => {
-            window.open("#!/laboratorio/pedido/" + _mData.NUM_PEDIDO_MV)
+            m.route.set("/laboratorio/pedido/" + _mData.NUM_PEDIDO_MV);
+
         }
         noti.onclose = {
             // Al cerrar

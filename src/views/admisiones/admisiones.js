@@ -1,8 +1,8 @@
 import HeaderPrivate from '../layout/header-private';
-import Sidebarlab from './sidebarLab';
+import SidebarAdm from './sidebarAdm';
 import App from '../app';
 
-const MenuLaboratorio = {
+const MenuAdmisiones = {
     view: () => {
         return [
             m("div.content.content-components",
@@ -14,11 +14,11 @@ const MenuLaboratorio = {
                             ])
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Laboratorio"
+                            "Admisiones"
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Laboratorio:"
+                        "Admisiones:"
                     ),
 
                     m("div.row.tx-14", [
@@ -26,13 +26,13 @@ const MenuLaboratorio = {
                         m("div.col-sm-6",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
+                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='users']")
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Pedidos de Laboratorio"
+                                    "Pacientes de Admisiones"
                                 ),
-                                m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
-                                    "Ir a Pedidos de Laboratorio",
+                                m(m.route.Link, { href: "/admisiones/pacientes", class: "tx-medium" }, [
+                                    "Ir a Pacientes de Admisiones",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
                                 ]),
 
@@ -40,7 +40,7 @@ const MenuLaboratorio = {
                             ])
                         ),
 
-                        m("div.col-sm-6",
+                        m("div.col-sm-6.d-none",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='file-text']")
@@ -66,22 +66,22 @@ const MenuLaboratorio = {
 
 };
 
-const Laboratorio = {
+const Admisiones = {
     oninit: () => {
         HeaderPrivate.page = "";
-        Sidebarlab.page = "";
+        SidebarAdm.page = "";
         App.isAuth();
 
     },
     oncreate: () => {
-        document.title = "Laboratorio | " + App.title;
+        document.title = "Admisiones | " + App.title;
         loadCustomPage();
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab),
-            m(MenuLaboratorio)
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("admisiones") }),
+            m(SidebarAdm),
+            m(MenuAdmisiones)
         ];
     },
 
@@ -220,4 +220,4 @@ function loadCustomPage() {
 
 
 
-export default Laboratorio;
+export default Admisiones;

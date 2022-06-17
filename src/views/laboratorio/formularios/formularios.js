@@ -107,14 +107,18 @@ const Formularios = {
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
-                            m("a[href='#']",
+
+                            m(m.route.Link, { href: "/" }, [
                                 "Metrovirtual"
-                            )
+                            ])
+
+
                         ),
                         m("li.breadcrumb-item",
-                            m("a", { href: "#!/laboratorio" },
+                            m(m.route.Link, { href: "/laboratorio" }, [
                                 "Laboratorio"
-                            )
+                            ])
+
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
                             "Formularios Epidemiológicos"

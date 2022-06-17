@@ -9,11 +9,14 @@ const MenuSidebar = {
         if (_data.length !== 0) {
             return [
 
-                _data.modulesAccess.emergencia.map(function(_v, _i, _contentData) {
+                _data.modulesAccess.emergencia.map(function (_v, _i, _contentData) {
                     return [
-                        m("a." + ((SidebarEme.page == _v.idModulo) ? "active" : ""), { href: "#!/" + _v.href },
+
+                        m(m.route.Link, { href: "/" + _v.href, class: ((SidebarEme.page == _v.idModulo) ? "active" : "") }, [
                             _v.label
-                        ),
+                        ]),
+
+
 
                     ]
 
@@ -55,12 +58,12 @@ const SidebarEme = {
                             "Emergencia"
                         ),
                         m("li.nav-item.show", [
-                            m("a.nav-link.with-sub", {
-                                href: "#!/emergencia"
-                            }, [
+                            m(m.route.Link, { href: "/emergencia", class: "nav-link with-sub" }, [
                                 m("i[data-feather='layout']"),
                                 "Emergencia"
                             ]),
+
+
                             m("nav.nav", [
 
                                 m(MenuSidebar)

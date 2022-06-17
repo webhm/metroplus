@@ -9,11 +9,11 @@ const MenuSidebar = {
         if (_data.length !== 0) {
             return [
 
-                _data.modulesAccess.farmacia.map(function(_v, _i, _contentData) {
+                _data.modulesAccess.farmacia.map(function (_v, _i, _contentData) {
                     return [
-                        m("a." + ((SidebarFarma.page == _v.idModulo) ? "active" : ""), { href: "#!/" + _v.href },
+                        m(m.route.Link, { href: "/" + _v.href, class: ((SidebarFarma.page == _v.idModulo) ? "active" : "") }, [
                             _v.label
-                        ),
+                        ]),
 
                     ]
 

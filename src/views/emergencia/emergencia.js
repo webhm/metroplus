@@ -9,9 +9,11 @@ const MenuEmergencia = {
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
-                            m("a[href='#']",
+
+                            m(m.route.Link, { href: "/" }, [
                                 "Metrovirtual"
-                            )
+                            ]),
+
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
                             "Emergencia"
@@ -31,11 +33,11 @@ const MenuEmergencia = {
                                 m("h5.tx-inverse.mg-b-20",
                                     "Pedidos de Laboratorio Auxiliar"
                                 ),
-
-                                m("a.tx-medium", { href: "#!/emergencia/auxiliar/pedidos/laboratorio" }, [
+                                m(m.route.Link, { href: "/emergencia/auxiliar/pedidos/laboratorio", class: "tx-medium" }, [
                                     "Ir a Pedidos de Laboratorio - Auxiliar",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
+                                ]),
+
                             ])
                         ),
 
@@ -47,11 +49,11 @@ const MenuEmergencia = {
                                 m("h5.tx-inverse.mg-b-20",
                                     "Pedidos de Laboratorio Enfermería"
                                 ),
-
-                                m("a.tx-medium", { href: "#!/emergencia/enfermeria/pedidos/laboratorio" }, [
+                                m(m.route.Link, { href: "/emergencia/enfermeria/pedidos/laboratorio", class: "tx-medium" }, [
                                     "Ir a Pedidos de Laboratorio - Enfermería",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ])
+                                ]),
+
                             ])
                         ),
 

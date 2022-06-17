@@ -392,8 +392,11 @@ function loadPedidos() {
                 m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
                     view: function () {
+
+
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-                            m("a.btn.btn-xs.btn-primary", { href: "#!/emergencia/auxiliar/pedido/" + _i._aData.NUM_PEDIDO_MV, target: "_blank" }, [
+
+                            m(m.route.Link, { href: "/emergencia/auxiliar/pedido/" + _i._aData.NUM_PEDIDO_MV, target: "_blank", class: "btn btn-xs btn-primary" }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),
                             ], "Ver Pedido"),
 

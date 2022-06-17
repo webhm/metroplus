@@ -1,7 +1,7 @@
 # Metrovirtual Plus
 Autoservicio HIS ERP
 
-A boilerplate Mithril application with ES6+, Babel, Webpack 7, Less, Webpack dev server hot reload
+A boilerplate Mithril application with ES6+, Babel, Webpack 7, CSS, Webpack dev server hot reload
 
 ### Use
 ```shell

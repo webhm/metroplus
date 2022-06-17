@@ -11,7 +11,7 @@ const MenuHeader = {
         if (_data.length !== 0) {
             return [
                 m("li.nav-item",
-                    m("a.nav-link", { href: "#!/inicio" }, [
+                    m(m.route.Link, { href: "/inicio", class: "nav-link" }, [
                         m("i[data-feather='layout']"),
                         " Inicio "
                     ])
@@ -21,10 +21,13 @@ const MenuHeader = {
                     if (_data.modulesAccess[_v].length !== 0) {
                         return [
                             m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
-                                m("a.nav-link", { href: "#!/" + _v }, [
+
+                                m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
                                     m("i[data-feather='layout']"),
                                     _v.charAt(0).toUpperCase() + _v.slice(1)
-                                ])
+                                ]),
+
+
                             ),
                         ]
                     }
@@ -57,17 +60,17 @@ const HeaderPrivate = {
                     m("i[data-feather='arrow-left']")
                 ),
                 m("div.navbar-brand",
-                    m("a.df-logo", { href: "#!/" }, [
+                    m(m.route.Link, { href: "/", class: "df-logo" }, [
                         "Metro",
                         m("span",
                             "Virtual"
                         ),
                         "+"
-                    ])
+                    ]),
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
                     m("div.navbar-menu-header", [
-                        m("a.df-logo", { href: "#!/" }, [
+                        m(m.route.Link, { href: "/", class: "df-logo" }, [
                             "Metro",
                             m("span",
                                 "Virtual"

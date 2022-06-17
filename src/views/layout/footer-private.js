@@ -17,10 +17,11 @@ const FooterPrivate = {
                 ]),
                 m("div",
                     m("nav.nav", [
-
-                        m("a.nav-link", { href: "#!/ayuda" },
+                        m(m.route.Link, { href: "/ayuda", class: "nav-link" }, [
                             "Ayuda"
-                        )
+
+                        ]),
+
                     ])
                 )
             ])

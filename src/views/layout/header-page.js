@@ -6,7 +6,7 @@ const HeaderPage = {
                     m("div.overlay.op-P9"),
                     m("div.container",
                         m("div.row",
-                            m("div.col-md-12", )
+                            m("div.col-md-12",)
                         )
                     )
                 ]),
@@ -22,11 +22,13 @@ const HeaderPage = {
                                 )
                             ),
                             m("div.col-6.text-right", [
-                                m("a", { href: "#!/mi-perfil" },
+                                m(m.route.Link, { href: "/mi-perfil", class: "nav-link" }, [
                                     m("div.features-circle.m-bg-3.text-active.d-inline-flex.align-items-center.justify-content-center.rounded-circle", { "style": { "height": "50px", "width": "50px" } },
                                         m("i.icofont-doctor", { "style": { "fontSize": "20px" } })
                                     )
-                                ),
+
+                                ]),
+
 
                             ]),
 

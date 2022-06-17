@@ -16,7 +16,8 @@ import EmergenciaAuxiliarPedidosLaboratorio from '../views/emergencia/auxiliar/p
 import VerPedidoAuxiliarEmergencia from '../views/emergencia/auxiliar/verPedido'
 import EmergenciaEnfermeriaPedidosLaboratorio from '../views/emergencia/enfermeria/pedidos'
 import VerPedidoEnfermeriaEmergencia from '../views/emergencia/enfermeria/verPedido'
-
+import Farmacia from '../views/farmacia//farmacia'
+import FarmaciaRecetasAlta from '../views/farmacia//recetas/recetasAlta'
 
 
 
@@ -34,6 +35,8 @@ const Routes = {
     '/emergencia/auxiliar/pedido/:idPedido': VerPedidoAuxiliarEmergencia, //EmergenciaAuxiliarPedidosLaboratorio
     '/emergencia/enfermeria/pedidos/laboratorio': EmergenciaEnfermeriaPedidosLaboratorio, //EmergenciaEnfermeriaPedidosLaboratorio
     '/emergencia/enfermeria/pedido/:idPedido': VerPedidoEnfermeriaEmergencia, //VerPedidoEnfermeriaEmergencia
+    '/farmacia': Farmacia, //Farmacia
+    '/farmacia/recetas': FarmaciaRecetasAlta, //FarmaciaRecetasAlta
     '/auth': Login, // Login
     '/pacientes': Pacientes, // Pacientes
     '/mi-perfil': MiPerfil, // MiPerfil
@@ -41,6 +44,7 @@ const Routes = {
     '/notificaciones': ReloadNotification, // ReloadNotificaciones
     "/:404...": _404
 };
+
 
 const DefaultRoute = '/';
 

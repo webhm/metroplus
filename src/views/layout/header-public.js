@@ -4,13 +4,13 @@ const HeadPublic = {
             m("header.navbar.navbar-header.navbar-header-fixed", [
 
                 m("div.navbar-brand",
-                    m("a.df-logo", { href: "#!/" }, [
+                    m(m.route.Link, { href: "/", class: "df-logo" }, [
                         "Metro",
                         m("span",
                             "Virtual"
                         ),
                         "+"
-                    ])
+                    ]),
                 ),
 
             ])

@@ -1,8 +1,8 @@
 import HeaderPrivate from '../layout/header-private';
-import Sidebarlab from './sidebarLab';
+import SidebarFarma from './sidebarFarma';
 import App from '../app';
 
-const MenuLaboratorio = {
+const MenuFarmacia = {
     view: () => {
         return [
             m("div.content.content-components",
@@ -14,46 +14,30 @@ const MenuLaboratorio = {
                             )
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Laboratorio"
+                            "Farmacia"
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Laboratorio:"
+                        "Farmacia:"
                     ),
 
                     m("div.row.tx-14", [
 
-                        m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Pedidos de Laboratorio"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
-                                    "Ir a Pedidos de Laboratorio",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
 
-
-                            ])
-                        ),
 
                         m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='file-text']")
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Formularios Epidemiológicos"
+                                    "Recetas de Alta"
                                 ),
-                                m(m.route.Link, { href: "/laboratorio/formularios", class: "tx-medium" }, [
-                                    "Ir a Formularios Epidemiológicos",
+
+                                m("a.tx-medium", { href: "#!/farmacia/recetas" }, [
+                                    "Ir a Recetas de Alta",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
-
-
+                                ])
                             ])
                         ),
 
@@ -66,22 +50,22 @@ const MenuLaboratorio = {
 
 };
 
-const Laboratorio = {
+const Farmacia = {
     oninit: () => {
         HeaderPrivate.page = "";
-        Sidebarlab.page = "";
+        SidebarFarma.page = "";
         App.isAuth();
 
     },
     oncreate: () => {
-        document.title = "Laboratorio | " + App.title;
+        document.title = "Farmacia | " + App.title;
         loadCustomPage();
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab),
-            m(MenuLaboratorio)
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("farmacia") }),
+            m(SidebarFarma),
+            m(MenuFarmacia)
         ];
     },
 
@@ -111,7 +95,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function () {
+    $(window).resize(function() {
         showNavbarActiveSub()
     })
 
@@ -120,7 +104,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -131,7 +115,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -143,24 +127,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function (e) {
+    $('#mainMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function (e) {
+    $('#sidebarMenuOpen').on('click', function(e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function (e) {
+    $('#navbarSearch').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function (e) {
+    $('#navbarSearchClose').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -178,7 +162,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function (e) {
+        $('.sidebar-nav .with-sub').on('click', function(e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -187,18 +171,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function (e) {
+    $('#mainMenuOpen').on('click touchstart', function(e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function (e) {
+    $('#sidebarMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it
@@ -220,4 +204,4 @@ function loadCustomPage() {
 
 
 
-export default Laboratorio;
+export default Farmacia;

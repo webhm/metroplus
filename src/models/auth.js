@@ -52,7 +52,7 @@ const Auth = {
         return m.request({
             method: "POST",
             url: "https://api.hospitalmetropolitano.org/t/v1/auth",
-            data: {
+            body: {
                 user: Auth.username,
                 pass: Auth.password
             }

@@ -979,6 +979,8 @@ BUGS:
 *::after {
   box-sizing: border-box; }
 
+
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -987,6 +989,8 @@ html {
 
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
+
+
 
 body {
   margin: 0;
@@ -1000,6 +1004,8 @@ body {
 
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important; }
+
+
 
 hr {
   box-sizing: content-box;

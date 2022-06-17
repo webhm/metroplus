@@ -1,6 +1,34 @@
 import Auth from '../../models/auth';
 import Notificaciones from '../../models/notificaciones';
 
+const vRol = {
+
+    view: () => {
+
+
+        if (Auth.rol == 1) {
+            return "Administrador";
+        }
+
+        if (Auth.rol == 2) {
+            return "Coordinador";
+        }
+
+        if (Auth.rol == 3) {
+            return "Gestionador";
+        }
+
+        if (Auth.rol == 4) {
+            return "Operador";
+        }
+
+        if (Auth.rol == 4) {
+            return "Usuario";
+        }
+
+
+    },
+};
 
 const SidebarRight = {
     view: () => {
@@ -21,23 +49,19 @@ const SidebarRight = {
 
                         ),
                         m("p.mg-b-25.tx-12.tx-color-03", [
-                            (Auth.rol == 1) ? "Administrador" : "",
-                            (Auth.rol == 2) ? "Coordinador" : "",
-                            (Auth.rol == 3) ? "Gestionador" : "",
-                            (Auth.rol == 4) ? "Operador" : "",
-                            (Auth.rol == 5) ? "Usuario" : "",
-                        ]
-                        ),
-                        m("a.dropdown-item", { href: "#!/mi-perfil" }, [
+                            m(vRol)
+                        ]),
+                        m(m.route.Link, { href: "/", class: "dropdown-item d-none" }, [
                             m("i[data-feather='user']"),
                             " Mi Perfil "
                         ]),
-                        m("div.dropdown-divider"),
 
-                        m("a.dropdown-item", { href: "#!/salir" }, [
+                        m("div.dropdown-divider"),
+                        m(m.route.Link, { href: "/salir", class: "dropdown-item" }, [
                             m("i[data-feather='log-out']"),
                             "Salir"
-                        ])
+                        ]),
+
                     ])
                 ])
             ])

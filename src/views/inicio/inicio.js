@@ -14,31 +14,33 @@ const MenuInicio = {
         if (_data !== null && _data.length !== 0) {
             return [
                 m("li.nav-item.active",
-                    m("a.nav-link", { href: "#!/inicio" }, [
+
+                    m(m.route.Link, { href: "/inicio", class: "nav-link" }, [
                         m("i[data-feather='layout']"),
                         " Inicio "
                     ])
+
+
                 ),
                 Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
+
+
                         return [
                             m("li.nav-item",
-                                m("a.nav-link", { href: "#!/" + _v }, [
+                                m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
                                     m("i[data-feather='layout']"),
                                     _v.charAt(0).toUpperCase() + _v.slice(1)
                                 ])
+
                             ),
                         ]
                     }
 
-
-
-
                 })
             ]
         }
-
 
 
     },
@@ -47,9 +49,14 @@ const MenuInicio = {
 
 
 const ModulesAccess = {
+    isContent: false,
     view: () => {
 
+        MenuInicio.isContent = false;
+
         let _data = Encrypt.getDataUser();
+
+
 
         if (_data !== null && _data.length !== 0) {
             return [
@@ -57,6 +64,9 @@ const ModulesAccess = {
                 Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
+
+                        MenuInicio.isContent = true;
+
                         return [
                             m("div.col-sm-6.mg-b-20",
                                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
@@ -64,16 +74,29 @@ const ModulesAccess = {
                                     m("h5.tx-inverse.mg-b-20",
                                         _v.charAt(0).toUpperCase() + _v.slice(1)
                                     ),
-
-                                    m("a.tx-medium", { href: "#!/" + _v }, [
+                                    m(m.route.Link, { href: "/" + _v, class: "tx-medium tx-primary" }, [
                                         "Ir a " + _v.charAt(0).toUpperCase() + _v.slice(1),
                                         m("i.icon.ion-md-arrow-forward.mg-l-5")
                                     ])
+
+
+
 
                                 ])
                             ),
 
                         ]
+                    }
+
+                    if (Object.keys(_data.modulesAccess).length == (_i + 1)) {
+                        if (!MenuInicio.isContent) {
+                            return [
+                                m("p.df-lead.pd-15",
+                                    "Todavía no tienes acceso a ningún Módulo disponible. Comunícate a CONCAS Ext: 2020 y solicita activación. Att: Metrovirtual Plus."
+                                )
+                            ]
+                        }
+
                     }
 
 
@@ -105,17 +128,19 @@ const Inicio = {
             m("header.navbar.navbar-header.navbar-header-fixed", [
 
                 m("div.navbar-brand",
-                    m("a.df-logo", { href: "/" }, [
+                    m(m.route.Link, { href: "/", class: "df-logo" }, [
                         "Metro",
                         m("span",
                             "Virtual"
                         ),
                         "+"
-                    ])
+                    ]),
+
+
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
                     m("div.navbar-menu-header", [
-                        m("a.df-logo", { href: "/" }, [
+                        m(m.route.Link, { href: "/", class: "df-logo" }, [
                             "Metro",
                             m("span",
                                 "Virtual"
@@ -140,9 +165,11 @@ const Inicio = {
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs", [
                         m("li.breadcrumb-item",
-                            m("a[href='#']",
+                            m(m.route.Link, { href: "/", }, [
                                 "Metrovirtual"
-                            )
+
+                            ]),
+
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
                             "Inicio"

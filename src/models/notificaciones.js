@@ -21,8 +21,11 @@ const Notificaciones = {
                         "Notificaciones"
                     ),
                     m("a.dropdown-item", {
-                            href: "#!/notificaciones",
-                        },
+                        onclick: (e) => {
+                            e.preventDefault();
+                            m.route.set('/notificaciones');
+                        }
+                    },
                         m("div.media", [
 
                             m("div.media-body.mg-l-15", [

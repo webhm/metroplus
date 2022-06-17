@@ -1,10 +1,10 @@
 import Encrypt from '../../../models/encrypt';
 import HeaderPrivate from '../../layout/header-private';
-import Sidebarlab from '../sidebarLab';
 import App from '../../app';
 import m from 'mithril';
 import Notificaciones from '../../../models/notificaciones';
 import ReloadNotification from '../../layout/reload-notificacion';
+import SidebarFarma from '../sidebarFarma';
 
 
 const Updates = {
@@ -15,7 +15,7 @@ const Updates = {
     fetchNotificaciones: () => {
         m.request({
                 method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/formularios-epis?start=0&length=6",
+                url: "https://api.hospitalmetropolitano.org/t/v1/recetas-alta?start=0&length=6",
             })
             .then(function(res) {
                 Updates.data.notificaciones = res.data;
@@ -83,26 +83,26 @@ const iPedido = {
 
 };
 
-const Formularios = {
+const RecetasAlta = {
     notificaciones: [],
     pedidos: [],
     oninit: () => {
         HeaderPrivate.page = "";
-        Sidebarlab.page = "";
+        SidebarFarma.page = "";
         App.isAuth();
 
     },
     oncreate: () => {
-        document.title = "Formularios Epidemiológicos | " + App.title;
-        ReloadNotification.loadPage = "/laboratorio/formularios";
+        document.title = "Recetas de Alta | " + App.title;
+        ReloadNotification.loadPage = "/formacia/recetas";
         Updates.fetch();
         loadCustomPage();
-        loadFormularios();
+        loadRecetas();
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab, { oncreate: Sidebarlab.setPage(6) }),
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("farmacia") }),
+            m(SidebarFarma, { oncreate: SidebarFarma.setPage(5) }),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -112,16 +112,16 @@ const Formularios = {
                             )
                         ),
                         m("li.breadcrumb-item",
-                            m("a", { href: "#!/laboratorio" },
-                                "Laboratorio"
+                            m("a", { href: "#!/farmacia" },
+                                "Farmacia"
                             )
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Formularios Epidemiológicos"
+                            "Recetas de Alta"
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Formularios Epidemiológicos:"
+                        "Recetas de Alta:"
                     ),
 
                     m("div.row.tx-14", [
@@ -165,8 +165,7 @@ const Formularios = {
                                 ])
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.",
-                                m("table.table.table-sm[id='table-formularios'][width='100%']"),
-                                m("table.d-none[id='table-status-formularios'][width='100%']"),
+                                m("table.table.table-sm[id='table-recetas'][width='100%']"),
 
                             )
                         ])
@@ -180,7 +179,7 @@ const Formularios = {
 };
 
 
-function loadFormularios() {
+function loadRecetas() {
 
     $(".table-content").hide();
     $(".table-loader").show();
@@ -201,9 +200,9 @@ function loadFormularios() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-formularios").DataTable({
+    var table = $("#table-recetas").DataTable({
         "ajax": {
-            url: "https://api.hospitalmetropolitano.org/t/v1/formularios-epis",
+            url: "https://api.hospitalmetropolitano.org/t/v1/recetas-alta",
             dataSrc: "data",
             serverSide: true,
         },
@@ -333,26 +332,12 @@ function loadFormularios() {
                 m.mount(_i.anCells[5], {
                     view: function() {
 
-                        if (_i._aData.CD_DOCUMENTO == '313') {
+                        return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
+                            m("a.btn.btn-xs.btn-primary", { href: _i._aData.URL, target: "_blank" }, [
+                                m("i.fas.fa-file-alt.mg-r-5"),
+                            ], "Ver Receta de Alta"),
 
-                            // Epi 1
-                            return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-                                m("a.btn.btn-xs.btn-primary", { href: _i._aData.URL, target: "_blank" }, [
-                                    m("i.fas.fa-file-alt.mg-r-5"),
-                                ], "Ver Ficha Epi 1"),
-
-                            ])
-
-                        } else {
-
-                            // Epidemiológica
-                            return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-                                m("a.btn.btn-xs.btn-primary", { href: _i._aData.URL, target: "_blank" }, [
-                                    m("i.fas.fa-file-alt.mg-r-5"),
-                                ], "Ver Ficha Epidemiológica"),
-
-                            ])
-                        }
+                        ])
 
 
 
@@ -563,4 +548,4 @@ function nueva_notificacion(_mData) {
     }
 }
 
-export default Formularios;
+export default RecetasAlta;

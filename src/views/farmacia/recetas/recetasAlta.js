@@ -2,7 +2,6 @@ import Encrypt from '../../../models/encrypt';
 import HeaderPrivate from '../../layout/header-private';
 import App from '../../app';
 import m from 'mithril';
-import Notificaciones from '../../../models/notificaciones';
 import ReloadNotification from '../../layout/reload-notificacion';
 import SidebarFarma from '../sidebarFarma';
 
@@ -14,10 +13,10 @@ const Updates = {
     },
     fetchNotificaciones: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/recetas-alta?start=0&length=6",
-            })
-            .then(function(res) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/recetas-alta?start=0&length=6",
+        })
+            .then(function (res) {
                 Updates.data.notificaciones = res.data;
                 if (localStorage.updates == undefined) {
                     Encrypt.setData(Updates.data)
@@ -26,7 +25,7 @@ const Updates = {
                     Updates.notificar();
                 }
             })
-            .catch(function(e) {});
+            .catch(function (e) { });
     },
     fetch: () => {
         Updates.fetchNotificaciones();
@@ -51,7 +50,7 @@ const Updates = {
 
 
         Encrypt.setData(Updates.data)
-        setTimeout(function() {
+        setTimeout(function () {
             Updates.fetch();
         }, 5000);
 
@@ -95,8 +94,6 @@ const RecetasAlta = {
     oncreate: () => {
         document.title = "Recetas de Alta | " + App.title;
         ReloadNotification.loadPage = "/formacia/recetas";
-        Updates.fetch();
-        loadCustomPage();
         loadRecetas();
     },
     view: () => {
@@ -252,88 +249,88 @@ function loadRecetas() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
-
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "15%",
-
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "50%",
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-                width: "35%",
-                orderable: false,
-
-            },
-        ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
         },
-        drawCallback: function(settings) {
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
+
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "15%",
+
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [4],
+            width: "50%",
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [5],
+            width: "35%",
+            orderable: false,
+
+        },
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+        },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.DT_ATENDIMENTO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
 
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
                             m("a.btn.btn-xs.btn-primary", { href: _i._aData.URL, target: "_blank" }, [
@@ -352,12 +349,12 @@ function loadRecetas() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -369,20 +366,20 @@ function loadRecetas() {
     });
 
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');
@@ -398,157 +395,5 @@ function loadRecetas() {
 }
 
 
-function loadCustomPage() {
-
-    feather.replace();
-
-    ////////// NAVBAR //////////
-
-    // Initialize PerfectScrollbar of navbar menu for mobile only
-    if (window.matchMedia('(max-width: 991px)').matches) {
-        const psNavbar = new PerfectScrollbar('#navbarMenu', {
-            suppressScrollX: true
-        });
-    }
-
-    // Showing sub-menu of active menu on navbar when mobile
-    function showNavbarActiveSub() {
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            $('#navbarMenu .active').addClass('show');
-        } else {
-            $('#navbarMenu .active').removeClass('show');
-        }
-    }
-
-    showNavbarActiveSub()
-    $(window).resize(function() {
-        showNavbarActiveSub()
-    })
-
-    // Initialize backdrop for overlay purpose
-    $('body').append('<div class="backdrop"></div>');
-
-
-    // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
-        e.preventDefault();
-        $(this).parent().toggleClass('show');
-        $(this).parent().siblings().removeClass('show');
-
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            psNavbar.update();
-        }
-    })
-
-    // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
-        e.stopPropagation();
-
-        // closing nav sub menu of header when clicking outside of it
-        if (window.matchMedia('(min-width: 992px)').matches) {
-            var navTarg = $(e.target).closest('.navbar-menu .nav-item').length;
-            if (!navTarg) {
-                $('.navbar-header .show').removeClass('show');
-            }
-        }
-    })
-
-    $('#mainMenuClose').on('click', function(e) {
-        e.preventDefault();
-        $('body').removeClass('navbar-nav-show');
-    });
-
-    $('#sidebarMenuOpen').on('click', function(e) {
-        e.preventDefault();
-        $('body').addClass('sidebar-show');
-    })
-
-    // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
-        e.preventDefault();
-        $('.navbar-search').addClass('visible');
-        $('.backdrop').addClass('show');
-    })
-
-    $('#navbarSearchClose').on('click', function(e) {
-        e.preventDefault();
-        $('.navbar-search').removeClass('visible');
-        $('.backdrop').removeClass('show');
-    })
-
-
-
-    ////////// SIDEBAR //////////
-
-    // Initialize PerfectScrollbar for sidebar menu
-    if ($('#sidebarMenu').length) {
-        const psSidebar = new PerfectScrollbar('#sidebarMenu', {
-            suppressScrollX: true
-        });
-
-
-        // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
-            e.preventDefault();
-            $(this).parent().toggleClass('show');
-
-            psSidebar.update();
-        })
-    }
-
-
-    $('#mainMenuOpen').on('click touchstart', function(e) {
-        e.preventDefault();
-        $('body').addClass('navbar-nav-show');
-    })
-
-    $('#sidebarMenuClose').on('click', function(e) {
-        e.preventDefault();
-        $('body').removeClass('sidebar-show');
-    })
-
-    // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
-        e.stopPropagation();
-
-        // closing of sidebar menu when clicking outside of it
-        if (!$(e.target).closest('.burger-menu').length) {
-            var sb = $(e.target).closest('.sidebar').length;
-            var nb = $(e.target).closest('.navbar-menu-wrapper').length;
-            if (!sb && !nb) {
-                if ($('body').hasClass('navbar-nav-show')) {
-                    $('body').removeClass('navbar-nav-show');
-                } else {
-                    $('body').removeClass('sidebar-show');
-                }
-            }
-        }
-    });
-
-};
-
-function nueva_notificacion(_mData) {
-    if (Notification) {
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission()
-        }
-
-        Notificaciones.setNot();
-
-        var title = "Metrovirtual: Nuevo Formulario"
-        var extra = {
-            icon: "assets/favicon.ico",
-            body: "Pte: " + _mData.NM_PACIENTE + "\n"
-        }
-        var noti = new Notification(title, extra)
-        noti.onclick = () => {
-            window.location.reload();
-        }
-        noti.onclose = {
-            // Al cerrar
-        }
-        setTimeout(function() { noti.close() }, 30000)
-    }
-}
 
 export default RecetasAlta;

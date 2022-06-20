@@ -15,21 +15,21 @@ const Updates = {
 
     fetchPedidos: () => {
         m.request({
-                method: "GET",
-                url: " https://api.hospitalmetropolitano.org/t/v1/emergencia-pedidos-laboratorio?start=0&length=10",
-            })
-            .then(function(res) {
+            method: "GET",
+            url: " https://api.hospitalmetropolitano.org/t/v1/emergencia-pedidos-laboratorio?start=0&length=10",
+        })
+            .then(function (res) {
                 Updates.data.pedidos = res.data;
                 Updates.fetchNotificaciones();
             })
-            .catch(function(e) {});
+            .catch(function (e) { });
     },
     fetchNotificaciones: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
-            })
-            .then(function(res) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
+        })
+            .then(function (res) {
                 Updates.data.notificaciones = res.data;
                 if (localStorage.updates == undefined) {
                     Encrypt.setData(Updates.data)
@@ -38,7 +38,7 @@ const Updates = {
                     Updates.notificar();
                 }
             })
-            .catch(function(e) {});
+            .catch(function (e) { });
     },
     fetch: () => {
         Updates.fetchPedidos();
@@ -74,7 +74,7 @@ const Updates = {
         }
 
         Encrypt.setData(Updates.data)
-        setTimeout(function() {
+        setTimeout(function () {
             console.log("updates", Updates.data)
             Updates.fetch();
         }, 5000);
@@ -118,11 +118,8 @@ const PedidosAuxiliar = {
     oncreate: () => {
         document.title = "Pedidos de Laboratorio | " + App.title;
         ReloadNotification.loadPage = "/emergencia/pedidos";
-        Updates.fetch();
-        loadCustomPage();
         loadPedidos();
         loadNotificaciones();
-        idleLogout();
     },
     view: () => {
         return [
@@ -206,10 +203,10 @@ const PedidosAuxiliar = {
 
                 ]),
                 m("label.nav-label.mg-t-20.tx-center.d-none", [
-                        m("a", { href: "#!/notificaciones-lab" },
-                            "Ver Todo"
-                        )
-                    ],
+                    m("a", { href: "#!/notificaciones-lab" },
+                        "Ver Todo"
+                    )
+                ],
 
                 ),
             ])
@@ -310,88 +307,88 @@ function loadPedidos() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
-
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
-
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-
-                orderable: false,
-
-            },
-        ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
         },
-        drawCallback: function(settings) {
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
+
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "20%",
+
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+        },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
 
 
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
@@ -409,12 +406,12 @@ function loadPedidos() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -426,20 +423,20 @@ function loadPedidos() {
     });
 
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');
@@ -513,24 +510,24 @@ function loadNotificaciones() {
         order: false,
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
 
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
                 m.mount(_i.anCells[0], {
-                    view: function() {
+                    view: function () {
                         return m("div.demo-static-toast",
                             m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
                                 onclick: () => {
@@ -592,7 +589,7 @@ function nueva_notificacion_muestra(_mData) {
         noti.onclose = {
             // Al cerrar
         }
-        setTimeout(function() { noti.close() }, 30000)
+        setTimeout(function () { noti.close() }, 30000)
     }
 }
 
@@ -616,137 +613,8 @@ function nueva_notificacion(_mData) {
         noti.onclose = {
             // Al cerrar
         }
-        setTimeout(function() { noti.close() }, 30000)
+        setTimeout(function () { noti.close() }, 30000)
     }
 }
-
-function loadCustomPage() {
-
-    feather.replace();
-
-    ////////// NAVBAR //////////
-
-    // Initialize PerfectScrollbar of navbar menu for mobile only
-    if (window.matchMedia('(max-width: 991px)').matches) {
-        const psNavbar = new PerfectScrollbar('#navbarMenu', {
-            suppressScrollX: true
-        });
-    }
-
-    // Showing sub-menu of active menu on navbar when mobile
-    function showNavbarActiveSub() {
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            $('#navbarMenu .active').addClass('show');
-        } else {
-            $('#navbarMenu .active').removeClass('show');
-        }
-    }
-
-    showNavbarActiveSub()
-    $(window).resize(function() {
-        showNavbarActiveSub()
-    })
-
-    // Initialize backdrop for overlay purpose
-    $('body').append('<div class="backdrop"></div>');
-
-
-    // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
-        e.preventDefault();
-        $(this).parent().toggleClass('show');
-        $(this).parent().siblings().removeClass('show');
-
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            psNavbar.update();
-        }
-    })
-
-    // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
-        e.stopPropagation();
-
-        // closing nav sub menu of header when clicking outside of it
-        if (window.matchMedia('(min-width: 992px)').matches) {
-            var navTarg = $(e.target).closest('.navbar-menu .nav-item').length;
-            if (!navTarg) {
-                $('.navbar-header .show').removeClass('show');
-            }
-        }
-    })
-
-    $('#mainMenuClose').on('click', function(e) {
-        e.preventDefault();
-        $('body').removeClass('navbar-nav-show');
-    });
-
-    $('#sidebarMenuOpen').on('click', function(e) {
-        e.preventDefault();
-        $('body').addClass('sidebar-show');
-    })
-
-    // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
-        e.preventDefault();
-        $('.navbar-search').addClass('visible');
-        $('.backdrop').addClass('show');
-    })
-
-    $('#navbarSearchClose').on('click', function(e) {
-        e.preventDefault();
-        $('.navbar-search').removeClass('visible');
-        $('.backdrop').removeClass('show');
-    })
-
-
-
-    ////////// SIDEBAR //////////
-
-    // Initialize PerfectScrollbar for sidebar menu
-    if ($('#sidebarMenu').length) {
-        const psSidebar = new PerfectScrollbar('#sidebarMenu', {
-            suppressScrollX: true
-        });
-
-
-        // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
-            e.preventDefault();
-            $(this).parent().toggleClass('show');
-
-            psSidebar.update();
-        })
-    }
-
-
-    $('#mainMenuOpen').on('click touchstart', function(e) {
-        e.preventDefault();
-        $('body').addClass('navbar-nav-show');
-    })
-
-    $('#sidebarMenuClose').on('click', function(e) {
-        e.preventDefault();
-        $('body').removeClass('sidebar-show');
-    })
-
-    // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
-        e.stopPropagation();
-
-        // closing of sidebar menu when clicking outside of it
-        if (!$(e.target).closest('.burger-menu').length) {
-            var sb = $(e.target).closest('.sidebar').length;
-            var nb = $(e.target).closest('.navbar-menu-wrapper').length;
-            if (!sb && !nb) {
-                if ($('body').hasClass('navbar-nav-show')) {
-                    $('body').removeClass('navbar-nav-show');
-                } else {
-                    $('body').removeClass('sidebar-show');
-                }
-            }
-        }
-    });
-
-};
 
 export default PedidosAuxiliar;

@@ -1,6 +1,6 @@
 import { Routes, DefaultRoute } from './routes'
 
-// m.route.prefix = "";
+m.route.prefix = "";
 
 
 /* Wire up mithril app to DOM */

@@ -7,15 +7,15 @@ const ListaNotitifaciones = {
     data: false,
     fetch: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedido/" + VerPedido.idPedido,
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedido/" + VerPedido.idPedido,
+        })
+            .then(function (result) {
                 ListaNotitifaciones.data = result.data;
                 loadNotificaciones();
 
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -32,7 +32,7 @@ const ListaNotitifaciones = {
         }
 
         if (ListaNotitifaciones.data.length !== 0) {
-            return ListaNotitifaciones.data.map(function(_v, _i, _contentData) {
+            return ListaNotitifaciones.data.map(function (_v, _i, _contentData) {
 
                 if (_i < 4) {
                     if (_v.title == 'Nuevo Mensaje') {
@@ -89,17 +89,17 @@ const MensajesPedido = {
     },
     sendMessage: () => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/message-pedido/" + VerPedido.idPedido,
-                body: {
-                    dataPedido: DetallePedido.data,
-                    message: MensajesPedido.messagePedido
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/message-pedido/" + VerPedido.idPedido,
+            body: {
+                dataPedido: DetallePedido.data,
+                message: MensajesPedido.messagePedido
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
                     MensajesPedido.messagePedido = "";
                     ListaNotitifaciones.fetch();
@@ -107,7 +107,7 @@ const MensajesPedido = {
                     reloadNotificacion();
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
@@ -123,12 +123,12 @@ const DetallePedido = {
     numPedido: 0,
     fetch: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/ver-pedido-lab/" + VerPedido.idPedido,
+        })
+            .then(function (result) {
                 DetallePedido.data = result.data;
-                result.data.DESCRIPCION.map(function(_val, _i, _contentData) {
+                result.data.DESCRIPCION.map(function (_val, _i, _contentData) {
                     DetallePedido.detalle.push(_val);
                     EditarPedido.detalle.push(_val);
                     if (_val.indexOf("-R-") !== -1) {
@@ -136,14 +136,14 @@ const DetallePedido = {
                     }
                 })
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 DetallePedido.error = e.message;
             })
     },
     view: () => {
 
         if (EditarPedido.detalle.length !== 0) {
-            return DetallePedido.detalle.map(function(_val, _i, _contentData) {
+            return DetallePedido.detalle.map(function (_val, _i, _contentData) {
                 if (EditarPedido.detalle[_i].indexOf("...") !== -1) {
                     return m("p.mg-0",
                         DetallePedido.detalle[_i] + " " + EditarPedido.detalle[_i].split("...")[1]
@@ -171,13 +171,13 @@ const EditarPedido = {
             m("div.custom-control.custom-checkbox", [
                 m("input.custom-control-input[type='checkbox'][id='selectTodos']", {
                     checked: EditarPedido.checkedAll,
-                    onclick: function(e) {
+                    onclick: function (e) {
                         EditarPedido.seleccionarTodos(this.checked);
                     }
                 }),
                 m("label.custom-control-label.tx-semibold[for='selectTodos']", "SELECCIONAR TODOS")
             ]),
-            EditarPedido.detalle.map(function(_val, _i, _contentData) {
+            EditarPedido.detalle.map(function (_val, _i, _contentData) {
 
 
 
@@ -188,7 +188,7 @@ const EditarPedido = {
                     return m("div.custom-control.custom-checkbox", [
                         m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
                             checked: true,
-                            onclick: function(e) {
+                            onclick: function (e) {
                                 if (!this.checked) {
                                     EditarPedido.detalle[_i] = DetallePedido.detalle[_i];
                                     Pedido.statusPedido = 3;
@@ -203,7 +203,7 @@ const EditarPedido = {
 
                             },
                             onupdate: (e) => {
-                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1]: DetallePedido.detalle[_i];
+                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i];
                             },
 
                         }),
@@ -217,7 +217,7 @@ const EditarPedido = {
                     return m("div.custom-control.custom-checkbox", [
                         m("input.custom-control-input[type='checkbox'][id='" + VerPedido.idPedido + "-" + _i + "']", {
 
-                            onclick: function(e) {
+                            onclick: function (e) {
                                 if (this.checked) {
                                     EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " ... - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm');
                                 }
@@ -225,7 +225,7 @@ const EditarPedido = {
 
                             },
                             onupdate: (e) => {
-                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1]: DetallePedido.detalle[_i];
+                                (EditarPedido.detalle[_i].indexOf("...") !== -1) ? DetallePedido.detalle[_i] + EditarPedido.detalle[_i].split("...")[1] : DetallePedido.detalle[_i];
                             },
 
                         }),
@@ -249,17 +249,17 @@ const EditarPedido = {
         }
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-lab/" + VerPedido.idPedido,
-                body: {
-                    dataPedido: DetallePedido.detalle,
-                    statusPedido: Pedido.statusPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/send-pedido-lab/" + VerPedido.idPedido,
+            body: {
+                dataPedido: DetallePedido.detalle,
+                statusPedido: Pedido.statusPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
 
@@ -287,25 +287,25 @@ const EditarPedido = {
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
     udpateDataPedido: () => {
         EditarPedido.validarStatus();
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedido.idPedido,
-                body: {
-                    dataPedido: EditarPedido.detalle,
-                    statusPedido: Pedido.statusPedido
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-pedido-lab/" + VerPedido.idPedido,
+            body: {
+                dataPedido: EditarPedido.detalle,
+                statusPedido: Pedido.statusPedido
 
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
                     EditarPedido.detalle = result.data;
@@ -315,23 +315,23 @@ const EditarPedido = {
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
     sendNotiLab: () => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/noti-eme/" + VerPedido.idPedido,
-                body: {
-                    dataPedido: DetallePedido.data,
-                    message: EditarPedido.observaciones
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/noti-eme/" + VerPedido.idPedido,
+            body: {
+                dataPedido: DetallePedido.data,
+                message: EditarPedido.observaciones
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
                     EditarPedido.observaciones = "";
                     ListaNotitifaciones.fetch();
@@ -341,14 +341,14 @@ const EditarPedido = {
 
                 }
             })
-            .catch(function(e) {
+            .catch(function (e) {
                 EditarPedido.error = e.message;
             })
     },
     validarStatus: () => {
         let _np = 0;
         let _vp = 0;
-        EditarPedido.detalle.map(function(_val, _i, _contentData) {
+        EditarPedido.detalle.map(function (_val, _i, _contentData) {
 
 
 
@@ -392,7 +392,7 @@ const EditarPedido = {
 
         }
 
-        return EditarPedido.detalle.map(function(_val, _i, _contentData) {
+        return EditarPedido.detalle.map(function (_val, _i, _contentData) {
 
             if (status) {
                 EditarPedido.detalle[_i] = DetallePedido.detalle[_i] + " ... - Muestra Recibida: " + moment().format('DD-MM-YYYY HH:mm');
@@ -450,17 +450,17 @@ const Pedido = {
             m("hr.wd-100p.mg-t-0.mg-b-5"),
             m("p.mg-5.text-right", [
                 m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                    onclick: function() {
+                    onclick: function () {
                         Pedido.ver = true;
                         Pedido.editar = false;
                         Pedido.nuevoMensaje = false;
                         Pedido.labelOperation = "Detalle:";
                     },
                 }, [
-                    m("i.fas.fa-file-alt.mg-r-5", )
+                    m("i.fas.fa-file-alt.mg-r-5",)
                 ], "Ver Detalle"),
                 m("button.btn.btn-xs.btn-success.mg-l-2.tx-semibold[type='button']", {
-                    onclick: function() {
+                    onclick: function () {
                         Pedido.ver = false;
                         Pedido.editar = true;
                         Pedido.nuevoMensaje = false;
@@ -468,11 +468,11 @@ const Pedido = {
 
                     },
                 }, [
-                    m("i.fas.fa-user-edit.mg-r-5", )
+                    m("i.fas.fa-user-edit.mg-r-5",)
                 ], "Recibir Muestras"),
 
                 m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                    onclick: function() {
+                    onclick: function () {
                         Pedido.ver = false;
                         Pedido.editar = false;
                         Pedido.nuevoMensaje = true;
@@ -480,7 +480,7 @@ const Pedido = {
 
                     },
                 }, [
-                    m("i.fas.fa-paper-plane.mg-r-5", )
+                    m("i.fas.fa-paper-plane.mg-r-5",)
                 ], "Enviar Mensaje")
             ]),
             m("p.mg-5", [
@@ -500,13 +500,13 @@ const Pedido = {
                     "Observaciones: ",
                 ),
                 m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                    oninput: function(e) { EditarPedido.observaciones = e.target.value; },
+                    oninput: function (e) { EditarPedido.observaciones = e.target.value; },
                     value: EditarPedido.observaciones,
                 }),
                 m("div.mg-0.mg-t-5.text-right", [
 
                     m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                        onclick: function() {
+                        onclick: function () {
                             if (EditarPedido.observaciones.length !== 0) {
                                 EditarPedido.sendNotiLab();
                             } else {
@@ -514,7 +514,7 @@ const Pedido = {
                             }
                         },
                     }, [
-                        m("i.fas.fa-paper-plane.mg-r-5", )
+                        m("i.fas.fa-paper-plane.mg-r-5",)
                     ], "Guardar y Notificar"),
 
 
@@ -534,13 +534,13 @@ const Pedido = {
                     "Nuevo Mensaje:",
                 ),
                 m("textarea.form-control.mg-t-5[rows='5'][placeholder='Nuevo Mensaje']", {
-                    oninput: function(e) { MensajesPedido.messagePedido = e.target.value; },
+                    oninput: function (e) { MensajesPedido.messagePedido = e.target.value; },
                     value: MensajesPedido.messagePedido,
                 }),
                 m("div.mg-0.mg-t-5.text-right", [
 
                     m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                        onclick: function() {
+                        onclick: function () {
                             if (MensajesPedido.messagePedido.length !== 0) {
                                 MensajesPedido.sendMessage();
                             } else {
@@ -548,7 +548,7 @@ const Pedido = {
                             }
                         },
                     }, [
-                        m("i.fas.fa-paper-plane.mg-r-5", )
+                        m("i.fas.fa-paper-plane.mg-r-5",)
                     ], "Enviar"),
 
 
@@ -579,7 +579,6 @@ const VerPedido = {
     },
     oncreate: () => {
         document.title = "Detalle Pedido N°: " + VerPedido.idPedido + " | " + App.title;
-        loadCustomPage();
     },
     view: () => {
         return [
@@ -645,135 +644,6 @@ const VerPedido = {
 
 
 
-function loadCustomPage() {
-
-    feather.replace();
-
-    ////////// NAVBAR //////////
-
-    // Initialize PerfectScrollbar of navbar menu for mobile only
-    if (window.matchMedia('(max-width: 991px)').matches) {
-        const psNavbar = new PerfectScrollbar('#navbarMenu', {
-            suppressScrollX: true
-        });
-    }
-
-    // Showing sub-menu of active menu on navbar when mobile
-    function showNavbarActiveSub() {
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            $('#navbarMenu .active').addClass('show');
-        } else {
-            $('#navbarMenu .active').removeClass('show');
-        }
-    }
-
-    showNavbarActiveSub()
-    $(window).resize(function() {
-        showNavbarActiveSub()
-    })
-
-    // Initialize backdrop for overlay purpose
-    $('body').append('<div class="backdrop"></div>');
-
-
-    // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
-        e.preventDefault();
-        $(this).parent().toggleClass('show');
-        $(this).parent().siblings().removeClass('show');
-
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            psNavbar.update();
-        }
-    })
-
-    // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
-        e.stopPropagation();
-
-        // closing nav sub menu of header when clicking outside of it
-        if (window.matchMedia('(min-width: 992px)').matches) {
-            var navTarg = $(e.target).closest('.navbar-menu .nav-item').length;
-            if (!navTarg) {
-                $('.navbar-header .show').removeClass('show');
-            }
-        }
-    })
-
-    $('#mainMenuClose').on('click', function(e) {
-        e.preventDefault();
-        $('body').removeClass('navbar-nav-show');
-    });
-
-    $('#sidebarMenuOpen').on('click', function(e) {
-        e.preventDefault();
-        $('body').addClass('sidebar-show');
-    })
-
-    // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
-        e.preventDefault();
-        $('.navbar-search').addClass('visible');
-        $('.backdrop').addClass('show');
-    })
-
-    $('#navbarSearchClose').on('click', function(e) {
-        e.preventDefault();
-        $('.navbar-search').removeClass('visible');
-        $('.backdrop').removeClass('show');
-    })
-
-
-
-    ////////// SIDEBAR //////////
-
-    // Initialize PerfectScrollbar for sidebar menu
-    if ($('#sidebarMenu').length) {
-        const psSidebar = new PerfectScrollbar('#sidebarMenu', {
-            suppressScrollX: true
-        });
-
-
-        // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
-            e.preventDefault();
-            $(this).parent().toggleClass('show');
-
-            psSidebar.update();
-        })
-    }
-
-
-    $('#mainMenuOpen').on('click touchstart', function(e) {
-        e.preventDefault();
-        $('body').addClass('navbar-nav-show');
-    })
-
-    $('#sidebarMenuClose').on('click', function(e) {
-        e.preventDefault();
-        $('body').removeClass('sidebar-show');
-    })
-
-    // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
-        e.stopPropagation();
-
-        // closing of sidebar menu when clicking outside of it
-        if (!$(e.target).closest('.burger-menu').length) {
-            var sb = $(e.target).closest('.sidebar').length;
-            var nb = $(e.target).closest('.navbar-menu-wrapper').length;
-            if (!sb && !nb) {
-                if ($('body').hasClass('navbar-nav-show')) {
-                    $('body').removeClass('navbar-nav-show');
-                } else {
-                    $('body').removeClass('sidebar-show');
-                }
-            }
-        }
-    });
-
-};
-
 function loadNotificaciones() {
 
 
@@ -827,21 +697,21 @@ function loadNotificaciones() {
 
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function() {
+                    view: function () {
                         if (_v._aData.title == 'Nuevo Mensaje') {
                             return m("div.demo-static-toast",
                                 m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {

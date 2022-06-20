@@ -11,6 +11,7 @@ let config = {
     },
     output: {
         // output
+        publicPath: "/",
         path: path.resolve(__dirname, "dist"), // ouput path
         filename: "[name].js"
     },
@@ -104,6 +105,7 @@ let config = {
         hot: true,
         open: true,
         port: 3000,
+        historyApiFallback: true
     },
     devtool: "eval-source-map" // enable devtool for better debugging experience
 };

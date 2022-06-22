@@ -7,7 +7,7 @@ const opcionesPaciente = {
 
     view: (_data) => {
 
-        if (_data.attrs.STS_MV == 0) {
+        if (_data.attrs.STS_MV == 1) {
 
 
             return [
@@ -32,7 +32,10 @@ const opcionesPaciente = {
                 m(".btn-group[role='group'][aria-label='Opciones']", [
                     m(".", { class: "btn btn-xs btn-primary mg-r-5" }, [
                         m("i.fas.fa-file-alt.mg-r-5"),
-                    ], "Enviar Paciente a MV"),
+                    ], "Enviar Datos a MV"),
+                    m(".", { class: "btn btn-xs btn-outline-primary mg-r-5" }, [
+                        m("i.fas.fa-file-alt.mg-r-5"),
+                    ], "Presentar Datos al Paciente"),
 
 
 
@@ -150,70 +153,70 @@ const PacientesAdmisiones = {
                 title: "PACIENTE:"
             }, {
                 title: "OPCIONES:"
-            },],
+            }, ],
             aoColumnDefs: [{
-                mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    orderable: false,
                 },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.PTE_MV;
+                {
+                    mRender: function(data, type, full) {
+                        return full.HC_MV;
+                    },
+                    visible: false,
+                    aTargets: [1],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return full.PTE_MV;
 
-            },
-            {
-                mRender: function (data, type, full) {
-                    return "";
+                    },
+                    visible: false,
+                    aTargets: [2],
+                    orderable: false,
+
                 },
-                visible: true,
-                aTargets: [3],
-                width: "15%",
+                {
+                    mRender: function(data, type, full) {
+                        return "";
+                    },
+                    visible: true,
+                    aTargets: [3],
+                    width: "15%",
 
-                orderable: false,
+                    orderable: false,
 
-            },
-            {
-                mRender: function (data, type, full) {
-                    return "";
                 },
-                visible: true,
-                aTargets: [4],
-                width: "50%",
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return "";
+                    },
+                    visible: true,
+                    aTargets: [4],
+                    width: "50%",
+                    orderable: false,
 
-            },
-            {
-                mRender: function (data, type, full) {
-                    return "";
                 },
-                visible: true,
-                aTargets: [5],
-                width: "35%",
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return "";
+                    },
+                    visible: true,
+                    aTargets: [5],
+                    width: "35%",
+                    orderable: false,
 
-            },
+                },
             ],
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             },
-            drawCallback: function (settings) {
+            drawCallback: function(settings) {
 
                 PacientesAdmisiones.showBusquedas = "";
                 PacientesAdmisiones.showProcess = "d-none";
@@ -271,14 +274,14 @@ const PacientesAdmisiones = {
 
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/pacientes-admisiones",
-            body: {
-                tipoBusqueda: PacientesAdmisiones.tipoBusqueda,
-                pte: PacientesAdmisiones.searchField,
-            }
-        })
-            .then(function (res) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/pacientes-admisiones",
+                body: {
+                    tipoBusqueda: PacientesAdmisiones.tipoBusqueda,
+                    pte: PacientesAdmisiones.searchField,
+                }
+            })
+            .then(function(res) {
                 PacientesAdmisiones.showPacientes = "";
                 PacientesAdmisiones.showProcess = "d-none";
                 PacientesAdmisiones.pacientes = res.data;
@@ -287,7 +290,7 @@ const PacientesAdmisiones = {
                 table.clear();
                 table.rows.add(PacientesAdmisiones.pacientes).draw();
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
 
     },
     oninit: () => {
@@ -303,7 +306,7 @@ const PacientesAdmisiones = {
         PacientesAdmisiones.fetchUltimasBusquedas();
 
         //  Action
-        setTimeout(function () { document.getElementById("cc").click(); }, 500);
+        setTimeout(function() { document.getElementById("cc").click(); }, 500);
         loadPacientes();
         submitBusqueda();
     },
@@ -337,80 +340,80 @@ const PacientesAdmisiones = {
                         m("div.col-12.mg-b-10.wd-100p",
                             m("div.row.mg-t-10", [
                                 m("div.col-sm-12.pd-b-10.mg-b-10", [
-                                    m("label.nav-label.tx-semibold",
-                                        "Búsqueda de Pacientes:"
-                                    ),
-                                    m("hr"),
-                                    m('label.d-none', [
-                                        m("i.fas.fa-info-circle.mg-r-2"),
-                                        "Buscar por NHC o Nombres y Apellidos completos del Paciente"
-                                    ]),
-                                    m("div.mg-b-5.d-flex", [
-                                        m("div.custom-control.custom-radio.mg-r-15", [
-                                            m("input.custom-control-input[type='radio'][id='cc'][name='tipoBusqueda'][value='cc']", {
-                                                onclick: (e) => {
-                                                    if (e.target.checked) {
-                                                        PacientesAdmisiones.tipoBusqueda = e.target.value;
-                                                    }
-                                                }
-                                            }),
-                                            m("label.custom-control-label[for='cc']",
-                                                "Cédula"
-                                            )
+                                        m("label.nav-label.tx-semibold",
+                                            "Búsqueda de Pacientes:"
+                                        ),
+                                        m("hr"),
+                                        m('label.d-none', [
+                                            m("i.fas.fa-info-circle.mg-r-2"),
+                                            "Buscar por NHC o Nombres y Apellidos completos del Paciente"
                                         ]),
-                                        m("div.custom-control.custom-radio.mg-r-15", [
-                                            m("input.custom-control-input[type='radio'][id='pas'][name='tipoBusqueda'][value='pas']", {
-                                                onclick: (e) => {
-                                                    if (e.target.checked) {
-                                                        PacientesAdmisiones.tipoBusqueda = e.target.value;
+                                        m("div.mg-b-5.d-flex", [
+                                            m("div.custom-control.custom-radio.mg-r-15", [
+                                                m("input.custom-control-input[type='radio'][id='cc'][name='tipoBusqueda'][value='cc']", {
+                                                    onclick: (e) => {
+                                                        if (e.target.checked) {
+                                                            PacientesAdmisiones.tipoBusqueda = e.target.value;
+                                                        }
                                                     }
-                                                }
-                                            }),
-                                            m("label.custom-control-label[for='pas']",
-                                                "Pasaportte"
-                                            )
+                                                }),
+                                                m("label.custom-control-label[for='cc']",
+                                                    "Cédula"
+                                                )
+                                            ]),
+                                            m("div.custom-control.custom-radio.mg-r-15", [
+                                                m("input.custom-control-input[type='radio'][id='pas'][name='tipoBusqueda'][value='pas']", {
+                                                    onclick: (e) => {
+                                                        if (e.target.checked) {
+                                                            PacientesAdmisiones.tipoBusqueda = e.target.value;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.custom-control-label[for='pas']",
+                                                    "Pasaportte"
+                                                )
+                                            ]),
+                                            m("div.custom-control.custom-radio.mg-r-15", [
+                                                m("input.custom-control-input[type='radio'][id='pte'][name='tipoBusqueda'][value='pte']", {
+                                                    onclick: (e) => {
+                                                        if (e.target.checked) {
+                                                            PacientesAdmisiones.tipoBusqueda = e.target.value;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.custom-control-label[for='pte']",
+                                                    "Apellidos y Nombres completos"
+                                                )
+                                            ])
                                         ]),
-                                        m("div.custom-control.custom-radio.mg-r-15", [
-                                            m("input.custom-control-input[type='radio'][id='pte'][name='tipoBusqueda'][value='pte']", {
-                                                onclick: (e) => {
-                                                    if (e.target.checked) {
-                                                        PacientesAdmisiones.tipoBusqueda = e.target.value;
-                                                    }
-                                                }
+                                        m("div.mg-t-15.input-group", [
+                                            m("input.form-control.mg-b-20.wd-100p[placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']", {
+                                                oninput: (e) => {
+                                                    PacientesAdmisiones.searchField = e.target.value.toUpperCase();
+                                                },
+                                                value: PacientesAdmisiones.searchField
                                             }),
-                                            m("label.custom-control-label[for='pte']",
-                                                "Apellidos y Nombres completos"
+                                            m("div.input-group-append",
+                                                m("button.btn.btn-outline-light[type='button']", {
+                                                    onclick: () => {
+                                                        PacientesAdmisiones.fetchPacientes();
+                                                    }
+                                                }, [
+                                                    m("i.icon.ion-md-search"),
+                                                    " Buscar "
+                                                ]),
+
                                             )
                                         ])
-                                    ]),
-                                    m("div.mg-t-15.input-group", [
-                                        m("input.form-control.mg-b-20.wd-100p[placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']", {
-                                            oninput: (e) => {
-                                                PacientesAdmisiones.searchField = e.target.value.toUpperCase();
-                                            },
-                                            value: PacientesAdmisiones.searchField
-                                        }),
-                                        m("div.input-group-append",
-                                            m("button.btn.btn-outline-light[type='button']", {
-                                                onclick: () => {
-                                                    PacientesAdmisiones.fetchPacientes();
-                                                }
-                                            }, [
-                                                m("i.icon.ion-md-search"),
-                                                " Buscar "
-                                            ]),
-
-                                        )
-                                    ])
-                                ]
+                                    ]
 
 
                                 ),
                             ])
                         ),
                         m("div.table-loader.col-12.wd-100p", {
-                            class: PacientesAdmisiones.showProcess,
-                        },
+                                class: PacientesAdmisiones.showProcess,
+                            },
                             m("div.placeholder-paragraph", [
                                 m("div.line"),
                                 m("div.line")
@@ -460,7 +463,7 @@ const PacientesAdmisiones = {
 };
 
 function submitBusqueda() {
-    document.onkeypress = function (e) {
+    document.onkeypress = function(e) {
         if (!e) e = window.event;
         var keyCode = e.keyCode || e.which;
         if (keyCode == "13") {
@@ -522,71 +525,71 @@ function loadPacientes() {
         },
         cache: false,
         columns: [{
-            title: "Nº:"
-        },
-        {
-            title: "NHC:"
-        }, {
-            title: "N° ADM:"
-        },
-        {
-            title: "PACIENTE:"
-        },
+                title: "Nº:"
+            },
+            {
+                title: "NHC:"
+            }, {
+                title: "N° ADM:"
+            },
+            {
+                title: "PACIENTE:"
+            },
 
 
         ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: true,
+                aTargets: [0],
+                orderable: true,
             },
-            visible: true,
-            aTargets: [0],
-            orderable: true,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC;
-            },
-            visible: true,
-            aTargets: [1],
-            orderable: true,
+            {
+                mRender: function(data, type, full) {
+                    return full.HC;
+                },
+                visible: true,
+                aTargets: [1],
+                orderable: true,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.TOTAL_ADM;
             },
-            visible: true,
-            aTargets: [2],
-            orderable: true,
+            {
+                mRender: function(data, type, full) {
+                    return full.TOTAL_ADM;
+                },
+                visible: true,
+                aTargets: [2],
+                orderable: true,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                //DATA PACIENTE
-                return '';
             },
-            visible: true,
-            aTargets: [3],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    //DATA PACIENTE
+                    return '';
+                },
+                visible: true,
+                aTargets: [3],
+                orderable: false,
 
-        },
+            },
 
 
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
         },
-        drawCallback: function (settings) {
+        drawCallback: function(settings) {
 
             $(".table-loader").addClass("d-none");
             $(".table-content").removeClass("d-none");
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return [
                             m(iPaciente, _i._aData),
                             m(opcionesPaciente, _i._aData),

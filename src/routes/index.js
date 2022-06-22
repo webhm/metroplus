@@ -19,6 +19,9 @@ import Farmacia from '../views/farmacia//farmacia'
 import FarmaciaRecetasAlta from '../views/farmacia//recetas/recetasAlta'
 import Admisiones from '../views/admisiones/admisiones'
 import PacientesAdmisiones from '../views/admisiones/pacientes/pacientes'
+import Mantenimiento from '../views/mantenimiento/mantenimiento'
+import IntegracionHigienizacion from '../views/mantenimiento/higienizacion/higienizacion'
+
 
 
 // Routes here
@@ -38,6 +41,8 @@ const Routes = {
     '/farmacia/recetas': FarmaciaRecetasAlta, //FarmaciaRecetasAlta
     '/admisiones': Admisiones, //Admisiones
     '/admisiones/pacientes': PacientesAdmisiones, //PacientesAdmisiones
+    '/mantenimiento': Mantenimiento, //Mantenimiento
+    '/mantenimiento/higienizacion': IntegracionHigienizacion, //IntegracionHigienizacion
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

@@ -13,21 +13,21 @@ const Updates = {
     },
     fetchPedidos: () => {
         m.request({
-            method: "GET",
-            url: " https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio?start=0&length=10",
-        })
-            .then(function (res) {
+                method: "GET",
+                url: " https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio?start=0&length=10",
+            })
+            .then(function(res) {
                 Updates.data.pedidos = res.data;
                 Updates.fetchNotificaciones();
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
     },
     fetchNotificaciones: () => {
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
-        })
-            .then(function (res) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
+            })
+            .then(function(res) {
                 Updates.data.notificaciones = res.data;
                 if (localStorage.updates == undefined) {
                     Encrypt.setData(Updates.data)
@@ -36,7 +36,7 @@ const Updates = {
                     Updates.notificar();
                 }
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
     },
     fetch: () => {
         Updates.fetchPedidos();
@@ -72,7 +72,7 @@ const Updates = {
         }
 
         Encrypt.setData(Updates.data)
-        setTimeout(function () {
+        setTimeout(function() {
             console.log("updates", Updates.data)
             Updates.fetch();
         }, 5000);
@@ -201,12 +201,12 @@ const Pedidos = {
 
                 ]),
                 m("label.nav-label.mg-t-20.tx-center.d-none", [
-                    m(m.route.Link, { href: "/notificaciones-lab" }, [
-                        "Ver Todo"
-                    ])
+                        m(m.route.Link, { href: "/notificaciones-lab" }, [
+                            "Ver Todo"
+                        ])
 
 
-                ],
+                    ],
 
                 ),
             ])
@@ -287,92 +287,98 @@ function loadPedidos() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        },],
+        }, ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.HC_MV;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.PTE_MV;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
             },
-            visible: true,
-            aTargets: [3],
-            width: "20%",
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [3],
+                width: "20%",
 
-            orderable: false,
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [4],
-            width: "60%",
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+                width: "60%",
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [5],
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [5],
 
-            orderable: false,
+                orderable: false,
 
-        },
+            },
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
         },
-        drawCallback: function (settings) {
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function () {
+                    view: function() {
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-                            m("a.btn.btn-xs.btn-primary", { href: "#!/laboratorio/pedido/" + _i._aData.NUM_PEDIDO_MV, target: "_blank" }, [
+
+                            m(m.route.Link, {
+                                class: "btn btn-xs btn-primary",
+                                href: "/laboratorio/pedido/" + _i._aData.NUM_PEDIDO_MV,
+                                target: "_blank"
+                            }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),
                             ], "Ver Pedido"),
+
 
                         ])
                     }
@@ -383,12 +389,12 @@ function loadPedidos() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -400,20 +406,20 @@ function loadPedidos() {
     });
 
 
-    $('#button-buscar-t').click(function (e) {
+    $('#button-buscar-t').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function (e) {
+    $('#filtrar').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function (e) {
+    $('#resetTable').click(function(e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

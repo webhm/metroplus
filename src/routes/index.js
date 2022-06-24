@@ -21,6 +21,8 @@ import Admisiones from '../views/admisiones/admisiones'
 import PacientesAdmisiones from '../views/admisiones/pacientes/pacientes'
 import Mantenimiento from '../views/mantenimiento/mantenimiento'
 import IntegracionHigienizacion from '../views/mantenimiento/higienizacion/higienizacion'
+import Hospitalizacion from '../views/hospitalizacion/hospitalizacion'
+import HospitalizacionPB from '../views/hospitalizacion/pb/pb'
 
 
 
@@ -43,6 +45,9 @@ const Routes = {
     '/admisiones/pacientes': PacientesAdmisiones, //PacientesAdmisiones
     '/mantenimiento': Mantenimiento, //Mantenimiento
     '/mantenimiento/higienizacion': IntegracionHigienizacion, //IntegracionHigienizacion
+    '/hospitalizacion': Hospitalizacion, //Hospitalizacion
+    '/hospitalizacion/pb': HospitalizacionPB, //HospitalizacionPB
+
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

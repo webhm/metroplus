@@ -22,20 +22,38 @@ const MenuInicio = {
 
 
                 ),
-                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
 
+                        if (_v == 'hospitalizacion') {
 
-                        return [
-                            m("li.nav-item",
-                                m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
-                                    m("i[data-feather='layout']"),
-                                    _v.charAt(0).toUpperCase() + _v.slice(1)
-                                ])
+                            return [
+                                m("li.nav-item",
+                                    m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Hospitalizacion"
+                                    ])
 
-                            ),
-                        ]
+                                ),
+                            ]
+
+                        } else {
+
+                            return [
+                                m("li.nav-item",
+                                    m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        _v.charAt(0).toUpperCase() + _v.slice(1)
+                                    ])
+
+                                ),
+                            ]
+
+                        }
+
+
+
                     }
 
                 })
@@ -61,31 +79,60 @@ const ModulesAccess = {
         if (_data !== null && _data.length !== 0) {
             return [
 
-                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
 
                         MenuInicio.isContent = true;
 
-                        return [
-                            m("div.col-sm-6.mg-b-20",
-                                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                        if (_v === 'hospitalizacion') {
 
-                                    m("h5.tx-inverse.mg-b-20",
-                                        _v.charAt(0).toUpperCase() + _v.slice(1)
-                                    ),
-                                    m(m.route.Link, { href: "/" + _v, class: "tx-medium tx-primary" }, [
-                                        "Ir a " + _v.charAt(0).toUpperCase() + _v.slice(1),
-                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
+                            return [
+                                m("div.col-sm-6.mg-b-20",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+
+                                        m("h5.tx-inverse.mg-b-20",
+                                            "Hospitalización"
+                                        ),
+                                        m(m.route.Link, { href: "/" + _v, class: "tx-medium tx-primary" }, [
+                                            "Ir a Hospitalización",
+                                            m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                        ])
+
+
+
+
                                     ])
+                                ),
+
+                            ]
+
+                        } else {
+
+                            return [
+                                m("div.col-sm-6.mg-b-20",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+
+                                        m("h5.tx-inverse.mg-b-20",
+                                            _v.charAt(0).toUpperCase() + _v.slice(1)
+                                        ),
+                                        m(m.route.Link, { href: "/" + _v, class: "tx-medium tx-primary" }, [
+                                            "Ir a " + _v.charAt(0).toUpperCase() + _v.slice(1),
+                                            m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                        ])
 
 
 
 
-                                ])
-                            ),
+                                    ])
+                                ),
 
-                        ]
+                            ]
+
+                        }
+
+
+
                     }
 
                     if (Object.keys(_data.modulesAccess).length == (_i + 1)) {

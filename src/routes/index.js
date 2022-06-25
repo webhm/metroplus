@@ -3,6 +3,7 @@ import App from '../views/app'
 import Salir from '../views/salir'
 import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
+import NotificacionesLab from '../views/laboratorio/notificaciones/notificaciones'
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import MiPerfil from '../views/perfil/perfil';
@@ -22,7 +23,7 @@ import PacientesAdmisiones from '../views/admisiones/pacientes/pacientes'
 import Mantenimiento from '../views/mantenimiento/mantenimiento'
 import IntegracionHigienizacion from '../views/mantenimiento/higienizacion/higienizacion'
 import Hospitalizacion from '../views/hospitalizacion/hospitalizacion'
-import HospitalizacionPB from '../views/hospitalizacion/pb/pb'
+import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
 
 
 
@@ -31,6 +32,7 @@ const Routes = {
     '/': App,
     '/inicio': Inicio,
     '/laboratorio': Laboratorio, //Laboratorio
+    '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos
@@ -46,8 +48,7 @@ const Routes = {
     '/mantenimiento': Mantenimiento, //Mantenimiento
     '/mantenimiento/higienizacion': IntegracionHigienizacion, //IntegracionHigienizacion
     '/hospitalizacion': Hospitalizacion, //Hospitalizacion
-    '/hospitalizacion/pb': HospitalizacionPB, //HospitalizacionPB
-
+    '/hospitalizacion/pasaportes': Pasaportes, //HospitalizacionPB
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

@@ -1,9 +1,9 @@
 import HeaderPrivate from '../../layout/header-private';
-import SidebarHospital from '../sidebarHospital';
+import SidebarLab from '../sidebarLab';
 import App from '../../app';
 import m from 'mithril';
 
-const PB = {
+const NotificacionesLab = {
     pacientes: [],
     showPacientes: "d-none",
     showBusquedas: "d-none",
@@ -12,19 +12,19 @@ const PB = {
     showProcess: "d-none",
     oninit: () => {
         HeaderPrivate.page = "";
-        SidebarHospital.page = "";
-        PB.searchField = "";
-        PB.showBusquedas = "";
-        PB.pacientes = [];
+        SidebarLab.page = "";
+        NotificacionesLab.searchField = "";
+        NotificacionesLab.showBusquedas = "";
+        NotificacionesLab.pacientes = [];
         App.isAuth();
     },
     oncreate: () => {
-        document.title = "Hospitalización PB | " + App.title;
+        document.title = "Notificaciones de Laboratorio | " + App.title;
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("hospitalizacion") }),
-            m(SidebarHospital, { oncreate: SidebarHospital.setPage(9) }),
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -34,37 +34,45 @@ const PB = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/admisiones" }, [
-                                " Admisiones "
+                            m(m.route.Link, { href: "/laboratorio" }, [
+                                " LABORATORIO "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Hospitalización PB"
+                            "Notificaciones de Laboratorio"
                         )
                     ]),
-                    m("h1.df-title.mg-t-20.mg-b-10",
-                        "Hospitalización PB:"
+                    m("h1.df-title.mg-t-20.mg-b-10", [
+                        m("i.fas.fa-bell.mg-r-5"),
+                        "Notificaciones de Laboratorio:"
+
+                    ]
+
                     ),
 
                     m("div.row.tx-14", [
                         m("div.col-12.mg-b-10.wd-100p",
                             m("div.row.mg-t-10", [
                                 m("div.col-sm-12.pd-b-10.mg-b-10", [
-                                        m("label.nav-label.tx-semibold",
-                                            "Búsqueda de Pacientes:"
-                                        ),
-                                        m("hr"),
+                                    m("label.nav-label.tx-semibold",
+                                        [
+                                            m("i.fas.fa-history.mg-r-5"),
+                                            "Notificaciones Pendientes: "
+                                        ]
 
-                                    ]
+                                    ),
+                                    m("hr"),
+
+                                ]
 
 
                                 ),
                             ])
                         ),
                         m("div.table-loader.col-12.wd-100p", {
-                                class: PB.showProcess,
-                            },
+                            class: NotificacionesLab.showProcess,
+                        },
                             m("div.placeholder-paragraph", [
                                 m("div.line"),
                                 m("div.line")
@@ -86,8 +94,24 @@ const PB = {
             ),
             m("div.section-nav", [
                 m("label.nav-label.mg-b-10",
-                    "Opciones Pacientes"
+                    "Notificaciones de Laboratorio"
                 ),
+                m("a.nav-link[href='#']", [
+                    m("i.fas.fa-history.mg-r-5"),
+                    "Notificaciones Pendientes"
+                ]),
+                m("a.nav-link[href='#']", [
+                    m("i.fas.fa-paper-plane.mg-r-5"),
+                    "Notificaciones Enviadas"
+                ]),
+                m("a.nav-link[href='#']", [
+                    m("i.fas.fa-exclamation-triangle.mg-r-5"),
+                    "Notificaciones con Error"
+                ]),
+                m("a.nav-link[href='#']", [
+                    m("i.fas.fa-bell.mg-r-5"),
+                    "Configuracion"
+                ])
 
             ])
         ];
@@ -96,4 +120,4 @@ const PB = {
 };
 
 
-export default PB;
+export default NotificacionesLab;

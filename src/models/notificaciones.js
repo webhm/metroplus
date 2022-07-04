@@ -1,4 +1,6 @@
 import m from "mithril";
+import * as PusherPushNotifications from "@pusher/push-notifications-web";
+
 
 
 const Updates = {
@@ -135,7 +137,12 @@ const StoreNotificacion = {
 
     },
     oninit: () => {
-        StoreNotificacion.despacharMensajes();
+
+        const beamsClient = new PusherPushNotifications.Client({ instanceId: '75c0a111-da02-4af0-b35b-66124bd7f2b5' });
+
+        beamsClient.start().then(() => beamsClient.addDeviceInterest('Metrovirtual')).then(() => console.log('Successfully registered and subscribed!')).catch(console.error);
+
+
     },
     view: () => {
 
@@ -151,12 +158,7 @@ const Notificaciones = {
     setNot: () => {
         Notificaciones.num = Notificaciones.num + 1;
     },
-    nuevoMensaje: () => {
-        setTimeout(function() {
-            StoreNotificacion.nuevaNotificacion({ mensaje: "espor aqui donde estamos" })
-        }, 8000);
 
-    },
     view: () => {
         return [
             m(StoreNotificacion),

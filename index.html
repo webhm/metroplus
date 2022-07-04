@@ -68,13 +68,6 @@
 		<script src="assets/dashforge/lib/contextmenu/dist/jquery.contextMenu.js"></script>
 		<script src="assets/dashforge/lib/contextmenu/dist/jquery.ui.position.min.js"></script>
 		<script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
-		<script>
-			const beamsClient = new PusherPushNotifications.Client({instanceId: '75c0a111-da02-4af0-b35b-66124bd7f2b5'});
-
-beamsClient.start().then(() => beamsClient.addDeviceInterest('hello')).then(() => console.log('Successfully registered and subscribed!')).catch(console.error);
-		</script>
-
 		<script src="service-worker.js"></script>
-
 	</body>
 </html>

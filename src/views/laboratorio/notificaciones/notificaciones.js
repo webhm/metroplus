@@ -44,7 +44,6 @@ const NotificacionesLab = {
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10", [
-                        m("i.fas.fa-bell.mg-r-5"),
                         "Notificaciones de Laboratorio:"
 
                     ]
@@ -55,18 +54,73 @@ const NotificacionesLab = {
                         m("div.col-12.mg-b-10.wd-100p",
                             m("div.row.mg-t-10", [
                                 m("div.col-sm-12.pd-b-10.mg-b-10", [
-                                    m("label.nav-label.tx-semibold",
-                                        [
-                                            m("i.fas.fa-history.mg-r-5"),
-                                            "Notificaciones Pendientes: "
-                                        ]
 
-                                    ),
                                     m("hr"),
+
 
                                 ]
 
 
+                                ),
+                                m("div.col-sm-6",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                        m("div.mg-b-25",
+                                            m("i.fas.fa-filter.tx-50.tx-gray-500")
+                                        ),
+                                        m("h5.tx-inverse.mg-b-20",
+                                            "Filtros"
+                                        ),
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                            "Ir a Filtros",
+                                        ]),
+
+
+                                    ])
+                                ),
+                                m("div.col-sm-6",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                        m("div.mg-b-25",
+                                            m("i.fas.fa-mail-bulk.tx-50.tx-gray-500")
+                                        ),
+                                        m("h5.tx-inverse.mg-b-20",
+                                            "Notificaciones Enviadas"
+                                        ),
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                            "Ir a Notificaciones Enviadas",
+                                        ]),
+
+
+                                    ])
+                                ),
+                                m("div.col-sm-6",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                        m("div.mg-b-25",
+                                            m("i.fas.fa-exclamation-triangle.tx-50.tx-gray-500")
+                                        ),
+                                        m("h5.tx-inverse.mg-b-20",
+                                            "Notificaciones con Error"
+                                        ),
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                            "Ir a Notificaciones con Error",
+                                        ]),
+
+
+                                    ])
+                                ),
+                                m("div.col-sm-6",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                        m("div.mg-b-25",
+                                            m("i.fas.fa-hourglass.tx-50.tx-gray-500")
+                                        ),
+                                        m("h5.tx-inverse.mg-b-20",
+                                            "Notificaciones Pendientes"
+                                        ),
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                            "Ir a Notificaciones Pendientes",
+                                        ]),
+
+
+                                    ])
                                 ),
                             ])
                         ),
@@ -93,25 +147,7 @@ const NotificacionesLab = {
                 ])
             ),
             m("div.section-nav", [
-                m("label.nav-label.mg-b-10",
-                    "Notificaciones de Laboratorio"
-                ),
-                m("a.nav-link[href='#']", [
-                    m("i.fas.fa-history.mg-r-5"),
-                    "Notificaciones Pendientes"
-                ]),
-                m("a.nav-link[href='#']", [
-                    m("i.fas.fa-paper-plane.mg-r-5"),
-                    "Notificaciones Enviadas"
-                ]),
-                m("a.nav-link[href='#']", [
-                    m("i.fas.fa-exclamation-triangle.mg-r-5"),
-                    "Notificaciones con Error"
-                ]),
-                m("a.nav-link[href='#']", [
-                    m("i.fas.fa-bell.mg-r-5"),
-                    "Configuracion"
-                ])
+
 
             ])
         ];

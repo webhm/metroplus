@@ -4,6 +4,8 @@ import Salir from '../views/salir'
 import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
 import NotificacionesLab from '../views/laboratorio/notificaciones/notificaciones'
+import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
+
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import MiPerfil from '../views/perfil/perfil';
@@ -33,6 +35,7 @@ const Routes = {
     '/inicio': Inicio,
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
+    '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos

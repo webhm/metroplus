@@ -569,7 +569,6 @@ const Pedido = {
 const VerPedido = {
     idPedido: null,
     oninit: (_data) => {
-        App.isAuth();
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
         VerPedido.idPedido = _data.attrs.idPedido;

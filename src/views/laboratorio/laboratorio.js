@@ -24,7 +24,7 @@ const MenuLaboratorio = {
                     m("div.row.tx-14", [
 
                         m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
                                 ),
@@ -41,7 +41,7 @@ const MenuLaboratorio = {
                         ),
 
                         m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='file-text']")
                                 ),

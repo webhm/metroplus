@@ -70,9 +70,8 @@ const HeaderPrivate = {
                     m(m.route.Link, { href: "/", class: "df-logo" }, [
                         "Metro",
                         m("span",
-                            "Virtual"
+                            "Plus+"
                         ),
-                        "+"
                     ]),
                 ),
                 m(".navbar-menu-wrapper[id='navbarMenu']", [
@@ -80,9 +79,8 @@ const HeaderPrivate = {
                         m(m.route.Link, { href: "/", class: "df-logo" }, [
                             "Metro",
                             m("span",
-                                "Virtual"
+                                "Plus+"
                             ),
-                            "+"
                         ]),
                         m("a[id='mainMenuClose'][href='']",
                             m("i[data-feather='x']")

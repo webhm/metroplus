@@ -7,9 +7,8 @@ const HeadPublic = {
                     m(m.route.Link, { href: "/", class: "df-logo" }, [
                         "Metro",
                         m("span",
-                            "Virtual"
+                            "Plus+"
                         ),
-                        "+"
                     ]),
                 ),
 

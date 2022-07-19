@@ -58,7 +58,7 @@ const FormLogin = {
                                             "Entrar"
                                         ),
                                         m("div.text-center.tx-gray-500.mg-t-20",
-                                            "Metrovirtual Plus v1.0.0"
+                                            "MetroPlus v1.0.0"
                                         ),
                                         m("div.text-center.tx-gray-500",
                                             "Created by Hospital Metropolitano"

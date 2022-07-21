@@ -14,6 +14,7 @@ const iPedido = {
             m("p.mg-0.tx-18", [
                 m("i.fas.fa-user.mg-r-5.text-secondary"),
                 _data.attrs.PTE_MV,
+                " " + _data.attrs.UNIDAD + ": " + _data.attrs.CAMA,
             ]),
             m("p.mg-0", [
                 m("div.tx-15.text-secondary.mg-r-5",
@@ -127,12 +128,12 @@ const Pedidos = {
 
                 ]),
                 m("label.nav-label.mg-t-20.tx-center.d-none", [
-                        m(m.route.Link, { href: "/notificaciones-lab" }, [
-                            "Ver Todo"
-                        ])
+                    m(m.route.Link, { href: "/notificaciones-lab" }, [
+                        "Ver Todo"
+                    ])
 
 
-                    ],
+                ],
 
                 ),
             ])
@@ -213,88 +214,88 @@ function loadPedidos() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
-
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
-
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-
-                orderable: false,
-
-            },
-        ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
         },
-        drawCallback: function(settings) {
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
+
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "20%",
+
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+        },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
                         return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
 
                             m(m.route.Link, {
@@ -315,12 +316,12 @@ function loadPedidos() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -332,20 +333,20 @@ function loadPedidos() {
     });
 
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

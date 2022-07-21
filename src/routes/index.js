@@ -7,6 +7,7 @@ import NotificacionesLab from '../views/laboratorio/notificaciones/notificacione
 import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
 
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
+import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
@@ -36,6 +37,7 @@ const Routes = {
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
+    '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista,
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos

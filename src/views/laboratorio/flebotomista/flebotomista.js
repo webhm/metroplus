@@ -1,9 +1,7 @@
-import Encrypt from '../../../models/encrypt';
 import HeaderPrivate from '../../layout/header-private';
 import Sidebarlab from '../sidebarLab';
 import App from '../../app';
 import m from 'mithril';
-import ReloadNotification from '../../layout/reload-notificacion';
 
 
 
@@ -11,19 +9,52 @@ const iPedido = {
 
     view: (_data) => {
         return [
-            m("p.mg-0.tx-18", [
-                m("i.fas.fa-user.mg-r-5.text-secondary"),
+            ((_data.attrs.TIPO_PEDIDO == 'R') ? [
+                m("span", {
+                    class: "badge badge-primary mg-b-2 mg-r-2",
+                }, [
+                    m("i.fas.fa-file-alt.mg-r-5"),
+                ], "Pedido Normal"),
+
+            ] : [
+                m("span", {
+                    class: "badge badge-danger mg-b-2 mg-r-2",
+                }, [
+                    m("i.fas.fa-file-alt.mg-r-5"),
+                ], "Urgente"),
+            ]),
+            ((_data.attrs.SN_RESULTADO) ? [
+                m("span", {
+                    class: "badge  badge-success mg-b-2 mg-r-2",
+                }, [
+                    m("i.fas.fa-file-alt.mg-r-5"),
+                ], " Resultado Listo "),
+
+            ] : [
+                m("span", {
+                    class: "badge badge-warning mg-b-2 mg-r-2",
+                }, [
+                    m("i.fas.fa-clock.mg-r-5"),
+                ], " Pendiente Resultado "),
+            ]),
+
+
+            m("p.mg-0.tx-14", [
+                m("i.tx-14.fas.fa-user.mg-r-5"),
                 _data.attrs.PTE_MV,
             ]),
 
+
             m("p.mg-0", [
-                m("div.tx-15.text-secondary.mg-r-5",
-                    "HC: " + _data.attrs.HC_MV
-                ),
+                m("div.tx-12.mg-r-5",
+                    m("i.tx-12.fas.fa-file.mg-r-5"),
+                    "N° Pedido: " + _data.attrs.NUM_PEDIDO_MV
+                )
             ]),
             m("p.mg-0", [
-                m("div.tx-15.text-secondary.mg-r-5",
-                    "N° Pedido MV: " + _data.attrs.NUM_PEDIDO_MV
+                m("div.tx-12.mg-r-5",
+                    m("i.tx-12.fas.fa-h-square.mg-r-5"),
+                    "NHC: " + _data.attrs.HC_MV + " UBICACION: " + _data.attrs.SECTOR + ": " + _data.attrs.UBICACION
                 )
             ]),
         ];
@@ -31,24 +62,92 @@ const iPedido = {
 
 };
 
-const Pedidos = {
-    notificaciones: [],
-    pedidos: [],
+
+
+
+const VerPedido = {
+    numeroPedido: "",
+    numeroHistoriaClinica: "",
+    track: "",
+    data: [],
     oninit: () => {
+        if (VerPedido.data.length == 0) {
+            console.log("pedido fetch")
+        }
+
+    },
+    view: () => {
+
+        return [
+            m("div.col-12", [
+                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                    m("div.mg-b-25",
+                        m("i.tx-60.fas.fa-file")
+                    ),
+                    m("h5.tx-inverse.mg-b-20",
+                        "Detalle de Pedido N°: " + VerPedido.numeroPedido
+                    ),
+                    m("p.mg-5.tx-20", [
+                        m("i.fas.fa-user.mg-r-5.text-secondary"),
+                        VerPedido.data.PTE_MV
+
+                    ]),
+                    m("p.mg-5.tx-15", [
+                        "Fecha Pedido: ",
+                        VerPedido.data.FECHA_PEDIDO,
+                        " Hora: ",
+                        VerPedido.data.HORA_PEDIDO,
+                    ]),
+                    m("p.mg-5", [
+                        "Historía Clínica: ",
+
+                    ]),
+                    m("p.mg-5", [
+                        m("span.badge.badge-primary.mg-r-5.tx-14",
+                            "GEMA: " + VerPedido.data.HC_MV + "01",
+                        ),
+                        m("span.badge.badge-success.mg-r-5.tx-14",
+                            "MV: " + VerPedido.data.HC_MV
+                        ),
+                    ]),
+                    m("p.mg-5", "Opciones Disponibles:"),
+                ])
+
+            ]),
+        ];
+    },
+
+};
+
+const Flebotomista = {
+    notificaciones: [],
+    flebotomista: [],
+    verPedido: false,
+    oninit: (_data) => {
+        Flebotomista.verPedido = false;
+        if (_data.attrs.numeroHistoriaClinica !== undefined && _data.attrs.numeroPedido !== undefined && _data.attrs.track == "view") {
+            Flebotomista.verPedido = true;
+            VerPedido.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
+            VerPedido.numeroPedido = _data.attrs.numeroPedido;
+            VerPedido.track = _data.attrs.track;
+        }
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
         App.isAuth();
-
+    },
+    onupdate: (_data) => {
+        if (!isObjEmpty(_data.attrs)) {
+            Flebotomista.verPedido = false;
+        }
     },
     oncreate: () => {
-        document.title = "Pedidos de Laboratorio | " + App.title;
-        ReloadNotification.loadPage = "/laboratorio/pedidos";
-        loadPedidos();
+        document.title = "Bitácora Flebotomista | " + App.title;
+        loadFlebotomista();
     },
     view: () => {
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(Sidebarlab, { oncreate: Sidebarlab.setPage(1) }),
+            m(Sidebarlab, { oncreate: Sidebarlab.setPage(16) }),
             m("div.content.content-components",
                 m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
@@ -64,14 +163,17 @@ const Pedidos = {
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos de Laboratorio"
-                        )
+                            "Bitácora Flebotomista"
+                        ),
+
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos de Laboratorio:"
+                        ((!Flebotomista.verPedido) ? "Bitácora Flebotomista:" : "Detalle de Pedido N°: " + VerPedido.numeroPedido)
                     ),
 
-                    m("div.row.tx-14", [
+                    m("div.row.tx-14", {
+                        class: ((Flebotomista.verPedido) ? "d-none" : "")
+                    }, [
                         m(".col-12.mg-b-10.wd-100p[data-label='Filtrar'][id='filterTable']",
                             m("div.row", [
                                 m("div.col-sm-12.pd-b-10",
@@ -112,30 +214,31 @@ const Pedidos = {
                                 ])
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.",
-                                m("table.table.table-sm[id='table-pedidos'][width='100%']"),
-                                m("table.table.table-sm.d-none[id='table-state-pedidos'][width='100%']")
+                                m("table.table.table-sm[id='table-flebotomista'][width='100%']"),
                             )
                         ])
                     ]),
+                    m("div.row", {
+                        class: ((!Flebotomista.verPedido) ? "d-none" : "")
+                    }, [
+
+                        m(VerPedido)
+                    ])
+
+
+
+
+
+
                 ])
             ),
             m("div.section-nav", [
                 m("label.nav-label",
-                    "Notificaciones"
+                    "Bitácora Flebotomista"
                 ),
-                m("nav.nav.flex-column[id='navSection']", [
-                    m("table.table.table-sm[id='table-notificaciones'][width='100%']"),
+                m("div.mg-t-10",
 
-                ]),
-                m("label.nav-label.mg-t-20.tx-center.d-none", [
-                        m(m.route.Link, { href: "/notificaciones-lab" }, [
-                            "Ver Todo"
-                        ])
-
-
-                    ],
-
-                ),
+                )
             ])
         ];
     },
@@ -144,7 +247,7 @@ const Pedidos = {
 
 
 
-function loadPedidos() {
+function loadFlebotomista() {
 
     $(".table-content").hide();
     $(".table-loader").show();
@@ -165,9 +268,9 @@ function loadPedidos() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-pedidos").DataTable({
+    var table = $("#table-flebotomista").DataTable({
         "ajax": {
-            url: "https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio",
+            url: "https://api.hospitalmetropolitano.org/t/v1/pedidos-flebotomista-laboratorio",
             dataSrc: "data",
             serverSide: true,
         },
@@ -282,6 +385,8 @@ function loadPedidos() {
             $(".table-content").show();
             $(".table-loader").hide();
 
+
+
             settings.aoData.map(function(_i) {
 
 
@@ -296,18 +401,30 @@ function loadPedidos() {
                 m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
                     view: function() {
-                        return m(".btn-group.wd-100p[role='group'][aria-label='Opciones']", [
-
+                        return [
                             m(m.route.Link, {
-                                class: "btn btn-xs btn-primary",
-                                href: "/laboratorio/pedido/" + _i._aData.NUM_PEDIDO_MV,
-                                target: "_blank"
+                                class: "btn btn-xs btn-block btn-primary mg-b-2",
+                                href: "/laboratorio/flebotomista/",
+                                params: {
+                                    numeroHistoriaClinica: _i._aData.HC_MV,
+                                    numeroPedido: _i._aData.NUM_PEDIDO_MV,
+                                    track: "view",
+
+                                },
+                                onclick: () => {
+                                    Flebotomista.verPedido = true;
+                                    VerPedido.numeroHistoriaClinica = _i._aData.HC_MV;
+                                    VerPedido.numeroPedido = _i._aData.NUM_PEDIDO_MV;
+                                    VerPedido.track = "view";
+                                    VerPedido.data = _i._aData;
+                                }
                             }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),
                             ], "Ver Pedido"),
 
 
-                        ])
+
+                        ]
                     }
                 });
             })
@@ -362,5 +479,14 @@ function loadPedidos() {
 }
 
 
+function isObjEmpty(obj) {
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) return false;
+    }
 
-export default Pedidos;
+    return true;
+}
+
+
+
+export default Flebotomista;

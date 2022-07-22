@@ -5,9 +5,9 @@ import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
 import NotificacionesLab from '../views/laboratorio/notificaciones/notificaciones'
 import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
-
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
+import PedidoFlebotomista from '../views/laboratorio/flebotomista/pedidoFlebo'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
@@ -38,6 +38,7 @@ const Routes = {
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
     '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista,
+    '/laboratorio/flebotomista/pedido/:idPedido': PedidoFlebotomista, //PedidoFlebotomista,
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos

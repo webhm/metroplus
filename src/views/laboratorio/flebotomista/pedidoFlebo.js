@@ -60,11 +60,173 @@ const iPedido = {
 
 };
 
+const StatusPedido = {
+    error: "",
+    data: [],
+    fetch: () => {
+        StatusPedido.error = "";
+        StatusPedido.data = [];
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                if (result.status) {
+                    StatusPedido.data = result.data;
+                } else {
+                    StatusPedido.error = result.message;
+                }
 
-const Flebotomista = {
+            })
+            .catch(function(e) {
+
+            })
+
+    },
+
+
+};
+
+const VerPedido = {
+    numeroPedido: "",
+    numeroHistoriaClinica: "",
+    track: "",
+    data: [],
+    view: () => {
+        if (StatusPedido.data.length !== 0) {
+            return [
+
+                m("div.", [
+                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                        m("div.mg-b-20",
+                            m("i.tx-60.fas.fa-file")
+                        ),
+                        ((VerPedido.data.TIPO_PEDIDO == 'R') ? [
+                            m("span", {
+                                class: "badge badge-primary mg-b-2 mg-r-2",
+                            }, [
+                                m("i.fas.fa-file-alt.mg-r-5"),
+                            ], "Pedido Normal"),
+
+                        ] : [
+                            m("span", {
+                                class: "badge badge-danger mg-b-2 mg-r-2",
+                            }, [
+                                m("i.fas.fa-file-alt.mg-r-5"),
+                            ], "Pedido Urgente"),
+                        ]),
+                        m("h5.tx-inverse.mg-t-30.mg-b-5",
+                            "Detalle de Pedido N°: " + VerPedido.numeroPedido
+                        ),
+                        m("p.mg-5.tx-20", [
+                            m("i.fas.fa-user.mg-r-5.mg-b-2.text-secondary"),
+                            VerPedido.data.PTE_MV
+
+                        ]),
+                        m("p.mg-5.tx-15", [
+                            "Fecha Pedido: ",
+                            VerPedido.data.FECHA_PEDIDO,
+                            " Hora: ",
+                            VerPedido.data.HORA_PEDIDO,
+                        ]),
+                        m("p.mg-5", [
+                            "Historía Clínica: ",
+
+                        ]),
+                        m("p.mg-5", [
+                            m("span.badge.badge-primary.mg-r-5.tx-14",
+                                "GEMA: " + VerPedido.data.HC_MV + "01",
+                            ),
+                            m("span.badge.badge-success.mg-r-5.tx-14",
+                                "MV: " + VerPedido.data.HC_MV
+                            ),
+                        ]),
+                        m("ul.nav.nav-tabs.mg-t-15[id='myTab'][role='tablist']", [
+                            m("li.nav-item",
+                                m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']",
+                                    "Detalle Pedido"
+                                )
+                            ),
+                            m("li.nav-item",
+                                m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#profile'][role='tab'][aria-controls='profile'][aria-selected='false']",
+                                    "Toma de Muestras"
+                                )
+                            ),
+                            m("li.nav-item",
+                                m("a.nav-link[id='contact-tab'][data-toggle='tab'][href='#contact'][role='tab'][aria-controls='contact'][aria-selected='false']",
+                                    "Comentarios"
+                                )
+                            )
+                        ]),
+                        m(".tab-content.bd.bd-gray-300.bd-t-0.pd-20.mg-t-10[id='myTabContent']", [
+                            m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
+                                (StatusPedido.error ? [
+                                    m("p.mg-0",
+                                        StatusPedido.error
+                                    )
+                                ] : StatusPedido.data !== undefined && StatusPedido.data.length !== 0 ? [
+                                    StatusPedido.data.map(function(_val, _i, _contentData) {
+                                        return m("p.mg-0",
+                                            _val.NM_EXA_LAB
+                                        )
+                                    })
+                                ] : m("div.placeholder-paragraph.wd-100p", [
+                                    m("div.line"),
+                                    m("div.line")
+                                ]))
+                            ]),
+                            m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", [
+                                m("h6",
+                                    "Profile"
+                                ),
+                                m("p.mg-b-0",
+                                    "Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat."
+                                )
+                            ]),
+                            m(".tab-pane.fade[id='contact'][role='tabpanel'][aria-labelledby='contact-tab']", [
+                                m("h6",
+                                    "Contact"
+                                ),
+                                m("p.mg-b-0",
+                                    "Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex."
+                                )
+                            ])
+                        ]),
+
+                    ])
+                ])
+
+            ]
+        } else {
+
+            return [
+                m("div.table-loader.wd-100p",
+                    m("div.placeholder-paragraph", [
+                        m("div.line"),
+                        m("div.line")
+                    ])
+                ),
+            ]
+        }
+
+    },
+
+};
+
+const PedidoFlebotomista = {
     notificaciones: [],
     flebotomista: [],
     oninit: (_data) => {
+        if (_data.attrs.idPedido !== undefined) {
+            VerPedido.numeroPedido = _data.attrs.idPedido;
+            StatusPedido.fetch();
+        }
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
         App.isAuth();
@@ -72,7 +234,7 @@ const Flebotomista = {
 
     oncreate: () => {
         document.title = "Bitácora Flebotomista | " + App.title;
-        // loadFlebotomista();
+        loadFlebotomista();
     },
     view: (_data) => {
         return [
@@ -98,53 +260,10 @@ const Flebotomista = {
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Bitácora Flebotomista:"
+                        "Detalle de Pedido N°: " + VerPedido.numeroPedido
                     ),
-                    m("div.row", [
-                        m("div.col-12.mg-b-10.wd-100p[data-label='Filtrar'][id='filterTable']",
-                            m("div.row", [
-                                m("div.col-sm-12.pd-b-10",
-                                    m("div.input-group", [
-                                        m("input.form-control.mg-b-20.wd-100p[aautofocus=''][id='_dt_search_text'][placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']"),
-                                        m("div.input-group-append",
-                                            m("button.btn.btn-outline-light[id='button-buscar-t'][type='button']", [
-                                                m("i.icon.ion-md-search"),
-                                                " Buscar "
-                                            ]),
-                                            m("button.btn.btn-outline-light[id='resetTable'][type='button']", [
-                                                m("i.icon.ion-md-close-circle"),
-                                                " Borrar "
-                                            ])
-                                        )
-                                    ])
-                                ),
-                                m("div.col-sm-12.pd-b-10.d-none",
-                                    m("div.input-group", [
-                                        m("input.form-control[id='desde'][placeholder='Desde'][title='Desde'][type='text']"),
-                                        m("input.form-control[id='hasta'][placeholder='Hasta'][title='Hasta'][type='text']"),
-                                        m("div.input-group-append", [
-                                            m("button.btn.btn-outline-light[id='filtrar'][title='Buscar'][type='button']", [
-                                                m("i.icon.ion-md-funnel"),
-                                                " Filtrar "
-                                            ]),
 
-                                        ])
-                                    ])
-                                )
-                            ])
-                        ),
-                        m("div.col-12", [
-                            m("div.table-loader.wd-100p",
-                                m("div.placeholder-paragraph", [
-                                    m("div.line"),
-                                    m("div.line")
-                                ])
-                            ),
-                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.",
-                                m("table.table.table-sm[id='table-flebotomista'][width='100%']"),
-                            )
-                        ])
-                    ]),
+                    m(VerPedido)
 
                 ])
             ),
@@ -390,11 +509,20 @@ function loadFlebotomista() {
                         return [
                             m(m.route.Link, {
                                 class: "btn btn-xs btn-block btn-primary mg-b-2",
-                                href: "/laboratorio/flebotomista/pedido/:idPedido",
+                                href: "/laboratorio/flebotomista/",
                                 params: {
-                                    idPedido: _i._aData.NUM_PEDIDO_MV,
-                                },
+                                    numeroHistoriaClinica: _i._aData.HC_MV,
+                                    numeroPedido: _i._aData.NUM_PEDIDO_MV,
+                                    track: "view",
 
+                                },
+                                onclick: () => {
+                                    VerPedido.numeroHistoriaClinica = _i._aData.HC_MV;
+                                    VerPedido.numeroPedido = _i._aData.NUM_PEDIDO_MV;
+                                    VerPedido.track = "view";
+                                    VerPedido.data = _i._aData;
+                                    StatusPedido.fetch();
+                                }
                             }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),
                             ], "Ver Pedido"),
@@ -466,4 +594,4 @@ function isObjEmpty(obj) {
 
 
 
-export default Flebotomista;
+export default PedidoFlebotomista;

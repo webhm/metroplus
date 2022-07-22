@@ -38,7 +38,6 @@ const Pedidos = {
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
         App.isAuth();
-
     },
     oncreate: () => {
         document.title = "Pedidos de Laboratorio | " + App.title;

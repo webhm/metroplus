@@ -62,6 +62,36 @@ const iPedido = {
 
 };
 
+const StatusPedido = {
+    error: "",
+    data: [],
+
+    fetch: () => {
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                console.log(result)
+                StatusPedido.data = result.data;
+            })
+            .catch(function (e) {
+
+            })
+
+    },
+    view: () => {
+
+
+    },
+
+};
 
 
 
@@ -72,7 +102,7 @@ const VerPedido = {
     data: [],
     oninit: () => {
         if (VerPedido.data.length == 0) {
-            console.log("pedido fetch")
+            StatusPedido.fetch();
         }
 
     },
@@ -81,14 +111,28 @@ const VerPedido = {
         return [
             m("div.col-12", [
                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-                    m("div.mg-b-25",
+                    m("div.mg-b-20",
                         m("i.tx-60.fas.fa-file")
                     ),
-                    m("h5.tx-inverse.mg-b-20",
+                    ((VerPedido.data.TIPO_PEDIDO == 'R') ? [
+                        m("span", {
+                            class: "badge badge-primary mg-b-2 mg-r-2",
+                        }, [
+                            m("i.fas.fa-file-alt.mg-r-5"),
+                        ], "Pedido Normal"),
+
+                    ] : [
+                        m("span", {
+                            class: "badge badge-danger mg-b-2 mg-r-2",
+                        }, [
+                            m("i.fas.fa-file-alt.mg-r-5"),
+                        ], "Pedido Urgente"),
+                    ]),
+                    m("h5.tx-inverse.mg-t-30.mg-b-5",
                         "Detalle de Pedido N°: " + VerPedido.numeroPedido
                     ),
                     m("p.mg-5.tx-20", [
-                        m("i.fas.fa-user.mg-r-5.text-secondary"),
+                        m("i.fas.fa-user.mg-r-5.mg-b-2.text-secondary"),
                         VerPedido.data.PTE_MV
 
                     ]),
@@ -110,11 +154,68 @@ const VerPedido = {
                             "MV: " + VerPedido.data.HC_MV
                         ),
                     ]),
-                    m("p.mg-5", "Opciones Disponibles:"),
-                ])
+                    m("ul.nav.nav-tabs.mg-t-15[id='myTab'][role='tablist']",
+                        [
+                            m("li.nav-item",
+                                m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']",
+                                    "Detalle Pedido"
+                                )
+                            ),
+                            m("li.nav-item",
+                                m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#profile'][role='tab'][aria-controls='profile'][aria-selected='false']",
+                                    "Toma de Muestras"
+                                )
+                            ),
+                            m("li.nav-item",
+                                m("a.nav-link[id='contact-tab'][data-toggle='tab'][href='#contact'][role='tab'][aria-controls='contact'][aria-selected='false']",
+                                    "Comentarios"
+                                )
+                            )
+                        ]
+                    ),
+                    m(".tab-content.bd.bd-gray-300.bd-t-0.pd-20.mg-t-10[id='myTabContent']",
+                        [
+                            m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']",
+                                [
+                                    ((StatusPedido.data.length !== 0) ?
+                                        [
+                                            StatusPedido.data.map(function (_val, _i, _contentData) {
+                                                return m("p.mg-0",
+                                                    StatusPedido.data[_i]
+                                                )
+                                            })
+                                        ] : []
+                                    )
+                                ]
+                            ),
+                            m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']",
+                                [
+                                    m("h6",
+                                        "Profile"
+                                    ),
+                                    m("p.mg-b-0",
+                                        "Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat."
+                                    )
+                                ]
+                            ),
+                            m(".tab-pane.fade[id='contact'][role='tabpanel'][aria-labelledby='contact-tab']",
+                                [
+                                    m("h6",
+                                        "Contact"
+                                    ),
+                                    m("p.mg-b-0",
+                                        "Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex."
+                                    )
+                                ]
+                            )
+                        ]
+                    ),
 
-            ]),
-        ];
+                ]
+                )
+            ])
+
+        ]
     },
 
 };
@@ -236,8 +337,99 @@ const Flebotomista = {
                 m("label.nav-label",
                     "Bitácora Flebotomista"
                 ),
-                m("div.mg-t-10",
+                m("div.mg-t-10.bg-white",
+                    m("div.col-12.mg-t-30.mg-lg-t-0",
+                        m("div.row",
+                            [
+                                m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30",
+                                    [
+                                        m("div.d-flex.align-items-center.justify-content-between.mg-b-5",
+                                            [
+                                                m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
+                                                    "Pendientes"
+                                                ),
+                                                m("span.tx-10.tx-color-04",
+                                                    "65% goal reached"
+                                                )
+                                            ]
+                                        ),
+                                        m("div.d-flex.align-items-end.justify-content-between.mg-b-5",
+                                            [
+                                                m("h5.tx-normal.tx-rubik.lh-2.mg-b-0",
+                                                    "13,596"
+                                                ),
+                                                m("h6.tx-normal.tx-rubik.tx-color-03.lh-2.mg-b-0",
+                                                    "20,000"
+                                                )
+                                            ]
+                                        ),
+                                        m("div.progress.ht-4.mg-b-0.op-5",
+                                            m(".progress-bar.bg-teal.wd-65p[role='progressbar'][aria-valuenow='65'][aria-valuemin='0'][aria-valuemax='100']")
+                                        )
+                                    ]
+                                ),
+                                m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30",
+                                    [
+                                        m("div.d-flex.align-items-center.justify-content-between.mg-b-5",
+                                            [
+                                                m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
+                                                    "Recibidas"
+                                                ),
+                                                m("span.tx-10.tx-color-04",
+                                                    "45% goal reached"
+                                                )
+                                            ]
+                                        ),
+                                        m("div.d-flex.justify-content-between.mg-b-5",
+                                            [
+                                                m("h5.tx-normal.tx-rubik.mg-b-0",
+                                                    "83,123"
+                                                ),
+                                                m("h5.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                                                    m("small",
+                                                        "250,000"
+                                                    )
+                                                )
+                                            ]
+                                        ),
+                                        m("div.progress.ht-4.mg-b-0.op-5",
+                                            m(".progress-bar.bg-orange.wd-45p[role='progressbar'][aria-valuenow='45'][aria-valuemin='0'][aria-valuemax='100']")
+                                        )
+                                    ]
+                                ),
+                                m("div.col-sm-6.col-lg-12.mg-t-30.mg-b-30",
+                                    [
+                                        m("div.d-flex.align-items-center.justify-content-between.mg-b-5",
+                                            [
+                                                m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
+                                                    "Procesadas"
+                                                ),
+                                                m("span.tx-10.tx-color-04",
+                                                    "20% goal reached"
+                                                )
+                                            ]
+                                        ),
+                                        m("div.d-flex.justify-content-between.mg-b-5",
+                                            [
+                                                m("h5.tx-normal.tx-rubik.mg-b-0",
+                                                    "16,869"
+                                                ),
+                                                m("h5.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                                                    m("small",
+                                                        "85,000"
+                                                    )
+                                                )
+                                            ]
+                                        ),
+                                        m("div.progress.ht-4.mg-b-0.op-5",
+                                            m(".progress-bar.bg-pink.wd-20p[role='progressbar'][aria-valuenow='20'][aria-valuemin='0'][aria-valuemax='100']")
+                                        )
+                                    ]
+                                ),
 
+                            ]
+                        )
+                    )
                 )
             ])
         ];
@@ -317,90 +509,90 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
-
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
-
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-
-                orderable: false,
-
-            },
-        ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
         },
-        drawCallback: function(settings) {
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
+
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "20%",
+
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+        },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
                         return [
                             m(m.route.Link, {
                                 class: "btn btn-xs btn-block btn-primary mg-b-2",
@@ -433,12 +625,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -450,20 +642,20 @@ function loadFlebotomista() {
     });
 
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

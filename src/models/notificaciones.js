@@ -137,11 +137,11 @@ const StoreNotificacion = {
 
     },
     oninit: () => {
-
+        /*
         const beamsClient = new PusherPushNotifications.Client({ instanceId: '75c0a111-da02-4af0-b35b-66124bd7f2b5' });
         beamsClient.removeDeviceInterest('Metrovirtual');
         beamsClient.start().then(() => beamsClient.addDeviceInterest('Metrovirtual')).then(() => console.log('Successfully registered and subscribed!')).catch(console.error);
-
+*/
 
     },
     view: () => {

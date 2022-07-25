@@ -69,25 +69,28 @@ const StatusPedido = {
         StatusPedido.error = "";
         StatusPedido.data = [];
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
                     StatusPedido.data = result.data;
+                    VerPedido.data = result.data[0];
+                    VerPedido.pendienteMuestras = result.pendienteMuestras;
+                    VerPedido.pendienteResultado = result.pendienteResultado;
                     VerPedido.validarStatus();
                 } else {
                     StatusPedido.error = result.message;
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
 
             })
 
@@ -96,8 +99,49 @@ const StatusPedido = {
 
 };
 
+
+
 const DetallePedido = {
+    checkedAll: false,
+    seleccionarTodos: (status) => {
+
+        DetallePedido.checkedAll = status;
+        var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+
+        return StatusPedido.data.map(function(_val, _i, _contentData) {
+            if (status) {
+                StatusPedido.data[_i]['TIMESTAMP_TOMA'] = _fechaToma;
+            } else {
+                StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+            }
+        })
+    },
+    udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                    cod_exa_lab: cod_exa_lab,
+                    sts: sts
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                if (result.status) {
+                    console.log(result)
+
+                }
+            })
+            .catch(function(e) {})
+    },
     view: () => {
+
+
+        VerPedido.validarStatus();
+
         if (StatusPedido.error) {
             return [
                 m("p.mg-0",
@@ -170,11 +214,7 @@ const DetallePedido = {
                                 "Toma de Muestras"
                             )
                         ),
-                        m("li.nav-item",
-                            m("a.nav-link[id='contact-tab'][data-toggle='tab'][href='#contact'][role='tab'][aria-controls='contact'][aria-selected='false']",
-                                "Comentarios"
-                            )
-                        )
+
                     ]),
                     m(".tab-content.bd.bd-gray-300.bd-t-0.pd-20.mg-t-10[id='myTabContent']", [
                         m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
@@ -187,57 +227,46 @@ const DetallePedido = {
                                     "Detalle Pedido:"
                                 ),
                                 m("div.table-responsive",
-                                    m("table.table.table-dashboard.mg-b-0",
-                                        [
-                                            m("thead",
-                                                m("tr",
-                                                    [
-                                                        m("th",
-                                                            "FECHA DE TOMA DE MUESTRA"
+                                    m("table.table.table-dashboard.mg-b-0", [
+                                        m("thead",
+                                            m("tr", [
+                                                m("th",
+                                                    "FECHA PROGRAMADA"
+                                                ),
+                                                m("th.text-right",
+                                                    "EXAMEN"
+                                                ),
+
+
+
+                                            ])
+                                        ),
+                                        m("tbody", [
+                                            StatusPedido.data.map(function(_val, _i, _contentData) {
+
+
+
+
+
+                                                return [
+
+                                                    m("tr", [
+                                                        m("td.tx-color-03.tx-normal",
+                                                            _val.DT_COLETA + " " + _val.HORA_MUESTRA
                                                         ),
-                                                        m("th.text-right",
-                                                            "EXAMEN"
-                                                        ),
-                                                        m("th.text-right",
-                                                            "FECHA TOMA"
-                                                        ),
-                                                        m("th.text-right",
-                                                            "FECHA RECEPCIÓN"
+                                                        m("td.tx-medium.text-right",
+                                                            _val.NM_EXA_LAB
                                                         ),
 
-                                                    ]
-                                                )
-                                            ),
-                                            m("tbody",
-                                                [
-                                                    StatusPedido.data.map(function (_val, _i, _contentData) {
-                                                        return [
-
-                                                            m("tr",
-                                                                [
-                                                                    m("td.tx-color-03.tx-normal",
-                                                                        _val.DT_COLETA + " " + _val.HORA_MUESTRA
-                                                                    ),
-                                                                    m("td.tx-medium.text-right",
-                                                                        _val.NM_EXA_LAB
-                                                                    ),
-                                                                    m("td.text-right.tx-teal",
-                                                                        "+ $32,580.00"
-                                                                    ),
-                                                                    m("td.text-right.tx-pink",
-                                                                        "- $3,023.10"
-                                                                    ),
-
-                                                                ]
-                                                            ),
-                                                        ]
-                                                    })
 
 
+                                                    ]),
                                                 ]
-                                            )
-                                        ]
-                                    )
+                                            })
+
+
+                                        ])
+                                    ])
                                 )
 
 
@@ -251,80 +280,115 @@ const DetallePedido = {
                                 "Registro de Toma de Muestras::"
                             ),
                             m("div.table-responsive",
-                                m("table.table.table-dashboard.mg-b-0",
-                                    [
-                                        m("thead",
-                                            m("tr",
-                                                [
-                                                    m("th",
-                                                        "FECHA DE TOMA DE MUESTRA"
-                                                    ),
-                                                    m("th.text-right",
-                                                        "EXAMEN"
-                                                    ),
+                                m("table.table.table-dashboard.mg-b-0", [
+                                    m("thead",
+                                        m("tr", [
+                                            m("th",
+                                                "FECHA DE TOMA DE MUESTRA"
+                                            ),
+                                            m("th.text-right",
+                                                "EXAMEN"
+                                            ),
 
 
-                                                ]
-                                            )
-                                        ),
-                                        m("tbody",
-                                            [
-                                                StatusPedido.data.map(function (_val, _i, _contentData) {
+                                        ])
+                                    ),
+                                    m("tbody", [
+                                        m("tr.", [
+                                            m("td.tx-normal",
+                                                m("div.custom-control.custom-checkbox", [
+                                                    m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
-                                                    StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
-
-                                                    return [
-
-                                                        m("tr",
-                                                            [
-                                                                m("td.tx-color-03.tx-normal",
-                                                                    m("div.custom-control.custom-checkbox", [
-                                                                        m("input.custom-control-input[type='checkbox'][id='" + _val.NM_EXA_LAB + "']", {
-                                                                            onclick: function (e) {
-                                                                                StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "88";
-
-                                                                                console.log(StatusPedido.data[_i]);
+                                                        checked: DetallePedido.checkedAll,
+                                                        onclick: function(e) {
+                                                            DetallePedido.seleccionarTodos(this.checked);
+                                                        }
 
 
+                                                    }),
+                                                    m("label.custom-control-label[for='selectTomaTodos']",
+                                                        'Seleccionar Todos'
+                                                    )
+                                                ])
+                                            ),
+                                            m("td.tx-medium.text-right", ),
+                                        ]),
 
-                                                                            },
-                                                                            onupdate: (e) => {
-                                                                                (StatusPedido.data[_i]['TIMESTAMP_TOMA'].length !== 0) ? StatusPedido.data[_i]['TIMESTAMP_TOMA'] : "";
-                                                                            },
+                                        StatusPedido.data.map(function(_val, _i, _contentData) {
+                                            if (StatusPedido.data[_i]['TIMESTAMP_TOMA'].length !== 0) {
+                                                return [
+                                                    m("tr", [
+                                                        m("td.tx-normal",
+                                                            m("div.custom-control.custom-checkbox", [
+                                                                m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                                    checked: true,
+                                                                    onclick: function(e) {
 
+                                                                        if (!this.checked) {
+                                                                            StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+                                                                        }
 
-                                                                        }),
-                                                                        m("label.custom-control-label[for='" + _val.NM_EXA_LAB + "']",
-                                                                            StatusPedido.data[_i]['TIMESTAMP_TOMA']
-                                                                        )
-                                                                    ])
-                                                                ),
-                                                                m("td.tx-medium.text-right",
-                                                                    _val.NM_EXA_LAB
-                                                                ),
+                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
 
+                                                                    },
 
-
-                                                            ]
+                                                                }),
+                                                                m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
+                                                                    StatusPedido.data[_i]['TIMESTAMP_TOMA']
+                                                                )
+                                                            ])
                                                         ),
-                                                    ]
-                                                })
+                                                        m("td.tx-medium.text-right",
+                                                            _val.NM_EXA_LAB
+                                                        ),
 
 
-                                            ]
-                                        )
-                                    ]
-                                )
+
+                                                    ]),
+                                                ]
+                                            } else {
+                                                return [
+                                                    m("tr", [
+                                                        m("td.tx-normal",
+                                                            m("div.custom-control.custom-checkbox", [
+                                                                m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                                    onclick: function(e) {
+
+                                                                        if (this.checked) {
+                                                                            StatusPedido.data[_i]['TIMESTAMP_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
+
+                                                                        }
+
+                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
+
+
+                                                                    },
+
+                                                                }),
+                                                                m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
+                                                                    StatusPedido.data[_i]['TIMESTAMP_TOMA']
+                                                                )
+                                                            ])
+                                                        ),
+                                                        m("td.tx-medium.text-right",
+                                                            _val.NM_EXA_LAB
+                                                        ),
+
+
+
+                                                    ]),
+                                                ]
+                                            }
+
+
+                                        })
+
+
+                                    ])
+                                ])
                             )
                         ]),
-                        m(".tab-pane.fade[id='contact'][role='tabpanel'][aria-labelledby='contact-tab']", [
-                            m("h6",
-                                "Contact"
-                            ),
-                            m("p.mg-b-0",
-                                "Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex."
-                            )
-                        ])
+
                     ]),
 
                 ])
@@ -352,22 +416,33 @@ const VerPedido = {
     data: [],
     classPedido: "",
     descSstatusPedido: "",
+    pendienteResultado: false,
+    pendienteMuestras: false,
     validarStatus: () => {
-        if (!VerPedido.data.SN_RESULTADO) {
+
+        if (!VerPedido.pendienteMuestras && !VerPedido.pendienteResultado) {
             VerPedido.classPedido = "tx-warning";
             VerPedido.descSstatusPedido = "Muestras Pendientes";
         }
+
+        if (!VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
+            VerPedido.classPedido = "tx-orange";
+            VerPedido.descSstatusPedido = "Pendiente Resultado";
+        }
+
+
+        if (VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
+            VerPedido.classPedido = "tx-success";
+            VerPedido.descSstatusPedido = "Finalizado";
+        }
     },
-
     view: () => {
-
 
         return [
 
-            m("div.animated.fadeInUp",
-                {
-                    class: (Flebotomista.showBitacora.length !== 0 ? "" : "d-none")
-                }, [
+            m("div.animated.fadeInUp", {
+                class: (Flebotomista.showBitacora.length !== 0 ? "" : "d-none")
+            }, [
                 m(DetallePedido)
             ])
 
@@ -386,48 +461,40 @@ const Flebotomista = {
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             Flebotomista.showBitacora = "";
-
         } else {
             Flebotomista.showBitacora = "d-none";
             VerPedido.numeroPedido = _data.attrs.numeroPedido;
-            StatusPedido.fetch;
-
         }
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
         App.isAuth();
+        console.log(Flebotomista)
     },
 
     oncreate: (_data) => {
         document.title = "Bitácora Flebotomista | " + App.title;
-        loadFlebotomista();
-
+        if (isObjEmpty(_data.attrs)) {
+            loadFlebotomista();
+        } else {
+            StatusPedido.fetch();
+        }
     },
     onupdate: (_data) => {
-        console.log("_data", _data)
         if (isObjEmpty(_data.attrs)) {
-
             Flebotomista.showBitacora = "";
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
-
-
         } else {
             Flebotomista.showBitacora = "d-none";
-
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
     view: (_data) => {
 
 
         if (isObjEmpty(_data.attrs)) {
-
             Flebotomista.showBitacora = "";
-
-
         } else {
             Flebotomista.showBitacora = "d-none";
-
         }
 
         return [
@@ -664,90 +731,90 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        },],
+        }, ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.HC_MV;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.PTE_MV;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
             },
-            visible: true,
-            aTargets: [3],
-            width: "20%",
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [3],
+                width: "20%",
 
-            orderable: false,
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [4],
-            width: "60%",
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+                width: "60%",
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [5],
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [5],
 
-            orderable: false,
+                orderable: false,
 
-        },
+            },
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
         },
-        drawCallback: function (settings) {
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function () {
+                    view: function() {
                         return [
                             m(m.route.Link, {
                                 class: "btn btn-xs btn-block btn-primary mg-b-2",
@@ -781,12 +848,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -798,20 +865,20 @@ function loadFlebotomista() {
     });
 
 
-    $('#button-buscar-t').click(function (e) {
+    $('#button-buscar-t').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function (e) {
+    $('#filtrar').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function (e) {
+    $('#resetTable').click(function(e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

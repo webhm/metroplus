@@ -2,7 +2,6 @@ import HeaderPrivate from '../../layout/header-private';
 import Sidebarlab from '../sidebarLab';
 import App from '../../app';
 import m from 'mithril';
-import { version } from 'less';
 
 const iPedido = {
 
@@ -61,12 +60,339 @@ const iPedido = {
 
 };
 
+const StatusPedido = {
+    error: "",
+    data: [],
+    fetch: () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        StatusPedido.error = "";
+        StatusPedido.data = [];
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                if (result.status) {
+                    StatusPedido.data = result.data;
+                    VerPedido.validarStatus();
+                } else {
+                    StatusPedido.error = result.message;
+                }
+
+            })
+            .catch(function (e) {
+
+            })
+
+    },
+
+
+};
+
+const DetallePedido = {
+    view: () => {
+        if (StatusPedido.error) {
+            return [
+                m("p.mg-0",
+                    StatusPedido.error
+                )
+            ]
+        } else if (StatusPedido.data.length !== 0) {
+            return [
+                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                    m("div.mg-b-20",
+                        m("i.tx-60.fas.fa-file." + VerPedido.classPedido)
+                    ),
+                    ((VerPedido.data.TIPO_PEDIDO == 'R') ? [
+                        m("span.pd-6.wd-100p.wd-md-20p", {
+                            class: "badge badge-primary mg-b-2 mg-r-2",
+                        }, [
+                            m("i.fas.fa-file-alt.mg-r-5"),
+                        ], "Pedido Normal"),
+
+                    ] : [
+                        m("span.pd-6.wd-100p.wd-md-20p", {
+                            class: "badge badge-danger mg-b-2 mg-r-2 ",
+                        }, [
+                            m("i.fas.fa-file-alt.mg-r-5"),
+                        ], "Pedido Urgente"),
+                    ]),
+                    m("h5.tx-inverse.mg-t-30.mg-b-5",
+                        "Detalle de Pedido N°: " + VerPedido.numeroPedido + " - Status: " + VerPedido.descSstatusPedido
+                    ),
+                    m("p.mg-5.tx-20", [
+                        m("i.fas.fa-user.mg-r-8.text-secondary"),
+                        VerPedido.data.PTE_MV
+
+                    ]),
+                    m("p.mg-5.tx-15", [
+                        "Fecha Pedido: ",
+                        VerPedido.data.FECHA_PEDIDO,
+                        " Hora: ",
+                        VerPedido.data.HORA_PEDIDO,
+                    ]),
+                    m("p.mg-5.tx-15", [
+                        "Médico: ",
+                        VerPedido.data.MED_MV,
+
+                        " - ",
+                        VerPedido.data.SECTOR,
+                        ": ",
+                        VerPedido.data.UBICACION,
+                    ]),
+                    m("p.mg-5", [
+                        "Historía Clínica: ",
+
+                    ]),
+                    m("p.mg-5", [
+                        m("span.badge.badge-primary.mg-r-5.tx-14",
+                            "GEMA: " + VerPedido.data.HC_MV + "01",
+                        ),
+                        m("span.badge.badge-success.mg-r-5.tx-14",
+                            "MV: " + VerPedido.data.HC_MV
+                        ),
+                    ]),
+                    m("ul.nav.nav-tabs.mg-t-15[id='myTab'][role='tablist']", [
+                        m("li.nav-item",
+                            m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']",
+                                "Detalle Pedido"
+                            )
+                        ),
+                        m("li.nav-item",
+                            m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#profile'][role='tab'][aria-controls='profile'][aria-selected='false']",
+                                "Toma de Muestras"
+                            )
+                        ),
+                        m("li.nav-item",
+                            m("a.nav-link[id='contact-tab'][data-toggle='tab'][href='#contact'][role='tab'][aria-controls='contact'][aria-selected='false']",
+                                "Comentarios"
+                            )
+                        )
+                    ]),
+                    m(".tab-content.bd.bd-gray-300.bd-t-0.pd-20.mg-t-10[id='myTabContent']", [
+                        m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
+                            (StatusPedido.error ? [
+                                m("p.mg-0",
+                                    StatusPedido.error
+                                )
+                            ] : StatusPedido.data !== undefined && StatusPedido.data.length !== 0 ? [
+                                m("h6",
+                                    "Detalle Pedido:"
+                                ),
+                                m("div.table-responsive",
+                                    m("table.table.table-dashboard.mg-b-0",
+                                        [
+                                            m("thead",
+                                                m("tr",
+                                                    [
+                                                        m("th",
+                                                            "FECHA DE TOMA DE MUESTRA"
+                                                        ),
+                                                        m("th.text-right",
+                                                            "EXAMEN"
+                                                        ),
+                                                        m("th.text-right",
+                                                            "FECHA TOMA"
+                                                        ),
+                                                        m("th.text-right",
+                                                            "FECHA RECEPCIÓN"
+                                                        ),
+
+                                                    ]
+                                                )
+                                            ),
+                                            m("tbody",
+                                                [
+                                                    StatusPedido.data.map(function (_val, _i, _contentData) {
+                                                        return [
+
+                                                            m("tr",
+                                                                [
+                                                                    m("td.tx-color-03.tx-normal",
+                                                                        _val.DT_COLETA + " " + _val.HORA_MUESTRA
+                                                                    ),
+                                                                    m("td.tx-medium.text-right",
+                                                                        _val.NM_EXA_LAB
+                                                                    ),
+                                                                    m("td.text-right.tx-teal",
+                                                                        "+ $32,580.00"
+                                                                    ),
+                                                                    m("td.text-right.tx-pink",
+                                                                        "- $3,023.10"
+                                                                    ),
+
+                                                                ]
+                                                            ),
+                                                        ]
+                                                    })
+
+
+                                                ]
+                                            )
+                                        ]
+                                    )
+                                )
+
+
+                            ] : m("div.placeholder-paragraph.wd-100p", [
+                                m("div.line"),
+                                m("div.line")
+                            ]))
+                        ]),
+                        m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", [
+                            m("h6",
+                                "Registro de Toma de Muestras::"
+                            ),
+                            m("div.table-responsive",
+                                m("table.table.table-dashboard.mg-b-0",
+                                    [
+                                        m("thead",
+                                            m("tr",
+                                                [
+                                                    m("th",
+                                                        "FECHA DE TOMA DE MUESTRA"
+                                                    ),
+                                                    m("th.text-right",
+                                                        "EXAMEN"
+                                                    ),
+
+
+                                                ]
+                                            )
+                                        ),
+                                        m("tbody",
+                                            [
+                                                StatusPedido.data.map(function (_val, _i, _contentData) {
+
+                                                    StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+
+                                                    return [
+
+                                                        m("tr",
+                                                            [
+                                                                m("td.tx-color-03.tx-normal",
+                                                                    m("div.custom-control.custom-checkbox", [
+                                                                        m("input.custom-control-input[type='checkbox'][id='" + _val.NM_EXA_LAB + "']", {
+                                                                            onclick: function (e) {
+                                                                                StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "88";
+
+                                                                                console.log(StatusPedido.data[_i]);
+
+
+
+                                                                            },
+                                                                            onupdate: (e) => {
+                                                                                (StatusPedido.data[_i]['TIMESTAMP_TOMA'].length !== 0) ? StatusPedido.data[_i]['TIMESTAMP_TOMA'] : "";
+                                                                            },
+
+
+                                                                        }),
+                                                                        m("label.custom-control-label[for='" + _val.NM_EXA_LAB + "']",
+                                                                            StatusPedido.data[_i]['TIMESTAMP_TOMA']
+                                                                        )
+                                                                    ])
+                                                                ),
+                                                                m("td.tx-medium.text-right",
+                                                                    _val.NM_EXA_LAB
+                                                                ),
+
+
+
+                                                            ]
+                                                        ),
+                                                    ]
+                                                })
+
+
+                                            ]
+                                        )
+                                    ]
+                                )
+                            )
+                        ]),
+                        m(".tab-pane.fade[id='contact'][role='tabpanel'][aria-labelledby='contact-tab']", [
+                            m("h6",
+                                "Contact"
+                            ),
+                            m("p.mg-b-0",
+                                "Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex."
+                            )
+                        ])
+                    ]),
+
+                ])
+            ]
+        } else {
+            return [
+                m("div.pd-t-10", [
+                    m("div.placeholder-paragraph.wd-100p", [
+                        m("div.line"),
+                        m("div.line")
+                    ])
+                ])
+
+            ]
+        }
+
+    }
+
+};
+
+const VerPedido = {
+    numeroPedido: "",
+    numeroHistoriaClinica: "",
+    track: "",
+    data: [],
+    classPedido: "",
+    descSstatusPedido: "",
+    validarStatus: () => {
+        if (!VerPedido.data.SN_RESULTADO) {
+            VerPedido.classPedido = "tx-warning";
+            VerPedido.descSstatusPedido = "Muestras Pendientes";
+        }
+    },
+
+    view: () => {
+
+
+        return [
+
+            m("div.animated.fadeInUp",
+                {
+                    class: (Flebotomista.showBitacora.length !== 0 ? "" : "d-none")
+                }, [
+                m(DetallePedido)
+            ])
+
+        ]
+
+    },
+
+};
+
+
 
 const Flebotomista = {
     notificaciones: [],
     flebotomista: [],
-    show: "",
+    showBitacora: "",
     oninit: (_data) => {
+        if (isObjEmpty(_data.attrs)) {
+            Flebotomista.showBitacora = "";
+
+        } else {
+            Flebotomista.showBitacora = "d-none";
+            VerPedido.numeroPedido = _data.attrs.numeroPedido;
+            StatusPedido.fetch;
+
+        }
         HeaderPrivate.page = "";
         Sidebarlab.page = "";
         App.isAuth();
@@ -74,21 +400,35 @@ const Flebotomista = {
 
     oncreate: (_data) => {
         document.title = "Bitácora Flebotomista | " + App.title;
+        loadFlebotomista();
 
-
+    },
+    onupdate: (_data) => {
+        console.log("_data", _data)
         if (isObjEmpty(_data.attrs)) {
-            loadFlebotomista();
-        }
 
+            Flebotomista.showBitacora = "";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+
+        } else {
+            Flebotomista.showBitacora = "d-none";
+
+        }
     },
     view: (_data) => {
 
-        if (isObjEmpty(_data.attrs)) {
-            Flebotomista.show = "";
-        } else {
-            Flebotomista.show = "d-none";
-        }
 
+        if (isObjEmpty(_data.attrs)) {
+
+            Flebotomista.showBitacora = "";
+
+
+        } else {
+            Flebotomista.showBitacora = "d-none";
+
+        }
 
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
@@ -113,11 +453,11 @@ const Flebotomista = {
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Bitácora Flebotomista:" + _data.attrs.idPedido
+                        (_data.attrs.numeroPedido == undefined) ? "Bitácora Flebotomista:" : "Detalle de Pedido N°: " + VerPedido.numeroPedido
                     ),
 
-                    m("div.row", {
-                        class: Flebotomista.show
+                    m("div.row.animated.fadeInUp", {
+                        class: Flebotomista.showBitacora
                     }, [
                         m("div.col-12.mg-b-10.wd-100p[data-label='Filtrar'][id='filterTable']",
                             m("div.row", [
@@ -166,14 +506,14 @@ const Flebotomista = {
                             )
                         ])
                     ]),
-
+                    m(VerPedido)
                 ])
             ),
             m("div.section-nav", [
                 m("label.nav-label",
                     "Bitácora Flebotomista"
                 ),
-                m("div.mg-t-10.bg-white",
+                m("div.mg-t-10.bg-white.d-none",
                     m("div.col-12.mg-t-30.mg-lg-t-0",
                         m("div.row", [
                             m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30", [
@@ -411,10 +751,20 @@ function loadFlebotomista() {
                         return [
                             m(m.route.Link, {
                                 class: "btn btn-xs btn-block btn-primary mg-b-2",
-                                href: "/laboratorio/flebotomista",
+                                href: "/laboratorio/flebotomista/",
                                 params: {
-                                    idPedido: _i._aData.NUM_PEDIDO_MV,
+                                    numeroHistoriaClinica: _i._aData.HC_MV,
+                                    numeroAtencion: _i._aData.AT_MV,
+                                    numeroPedido: _i._aData.NUM_PEDIDO_MV,
+                                    track: "view",
                                 },
+                                onclick: () => {
+                                    Flebotomista.showBitacora = "d-none";
+                                    VerPedido.numeroPedido = _i._aData.NUM_PEDIDO_MV;
+                                    VerPedido.data = _i._aData;
+                                    StatusPedido.fetch();
+                                }
+
 
                             }, [
                                 m("i.fas.fa-file-alt.mg-r-5"),

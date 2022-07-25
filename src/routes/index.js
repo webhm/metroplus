@@ -37,7 +37,6 @@ const Routes = {
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
     '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista,
-    '/laboratorio/flebotomista?idPedido=:idPedido': LaboratorioFlebotomista, //LaboratorioFlebotomista,
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
     '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos

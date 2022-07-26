@@ -63,11 +63,14 @@ const iPedido = {
 const StatusPedido = {
     error: "",
     data: [],
+    dataMuestras: [],
     fetch: () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         StatusPedido.error = "";
         StatusPedido.data = [];
+        StatusPedido.dataMuestras = [];
+
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
@@ -80,11 +83,14 @@ const StatusPedido = {
             })
             .then(function(result) {
                 if (result.status) {
+
                     StatusPedido.data = result.data;
                     VerPedido.data = result.data[0];
+                    VerPedido.dataMuestras = result.dataMuestras;
                     VerPedido.pendienteMuestras = result.pendienteMuestras;
                     VerPedido.pendienteResultado = result.pendienteResultado;
                     VerPedido.validarStatus();
+
                 } else {
                     StatusPedido.error = result.message;
                 }
@@ -106,13 +112,20 @@ const DetallePedido = {
     seleccionarTodos: (status) => {
 
         DetallePedido.checkedAll = status;
-        var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+        var _fechaToma = moment().format('DD-MM-YYYY HH:mm:ss');
 
         return StatusPedido.data.map(function(_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['TIMESTAMP_TOMA'] = _fechaToma;
+                StatusPedido.data[_i]['customCheked'] = true;
+                DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 1);
+
             } else {
                 StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+                StatusPedido.data[_i]['customCheked'] = false;
+                DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 2);
+
+
             }
         })
     },
@@ -130,17 +143,15 @@ const DetallePedido = {
                 },
             })
             .then(function(result) {
-                if (result.status) {
-                    console.log(result)
-
-                }
+                console.log(result)
             })
             .catch(function(e) {})
     },
+
     view: () => {
 
 
-        VerPedido.validarStatus();
+
 
         if (StatusPedido.error) {
             return [
@@ -294,7 +305,7 @@ const DetallePedido = {
                                         ])
                                     ),
                                     m("tbody", [
-                                        m("tr.", [
+                                        m("tr", [
                                             m("td.tx-normal",
                                                 m("div.custom-control.custom-checkbox", [
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
@@ -315,70 +326,54 @@ const DetallePedido = {
                                         ]),
 
                                         StatusPedido.data.map(function(_val, _i, _contentData) {
-                                            if (StatusPedido.data[_i]['TIMESTAMP_TOMA'].length !== 0) {
-                                                return [
-                                                    m("tr", [
-                                                        m("td.tx-normal",
-                                                            m("div.custom-control.custom-checkbox", [
-                                                                m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
-                                                                    checked: true,
-                                                                    onclick: function(e) {
 
-                                                                        if (!this.checked) {
-                                                                            StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
-                                                                        }
+                                            return [
+                                                m("tr", [
+                                                    m("td.tx-normal",
+                                                        m("div.custom-control.custom-checkbox", [
+                                                            m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                                checked: StatusPedido.data[_i]['customCheked'],
+                                                                onupdate: function(e) {
+                                                                    this.checked = StatusPedido.data[_i]['customCheked'];
+                                                                },
+                                                                onclick: function(e) {
 
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
+                                                                    StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
 
-                                                                    },
-
-                                                                }),
-                                                                m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
-                                                                    StatusPedido.data[_i]['TIMESTAMP_TOMA']
-                                                                )
-                                                            ])
-                                                        ),
-                                                        m("td.tx-medium.text-right",
-                                                            _val.NM_EXA_LAB
-                                                        ),
-
-
-
-                                                    ]),
-                                                ]
-                                            } else {
-                                                return [
-                                                    m("tr", [
-                                                        m("td.tx-normal",
-                                                            m("div.custom-control.custom-checkbox", [
-                                                                m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
-                                                                    onclick: function(e) {
-
-                                                                        if (this.checked) {
-                                                                            StatusPedido.data[_i]['TIMESTAMP_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
-
-                                                                        }
-
+                                                                    if (this.checked) {
+                                                                        StatusPedido.data[_i]['TIMESTAMP_TOMA'] = moment().format('DD-MM-YYYY HH:mm:ss');
                                                                         DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
 
-
-                                                                    },
-
-                                                                }),
-                                                                m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
-                                                                    StatusPedido.data[_i]['TIMESTAMP_TOMA']
-                                                                )
-                                                            ])
-                                                        ),
-                                                        m("td.tx-medium.text-right",
-                                                            _val.NM_EXA_LAB
-                                                        ),
+                                                                    } else {
+                                                                        DetallePedido.checkedAll = false;
+                                                                        StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
+                                                                    }
 
 
 
-                                                    ]),
-                                                ]
-                                            }
+                                                                },
+
+
+
+                                                            }),
+                                                            m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
+                                                                (StatusPedido.data[_i]['TIMESTAMP_TOMA'].length !== 0) ? StatusPedido.data[_i]['TIMESTAMP_TOMA'] : StatusPedido.data[_i]['TIMESTAMP_TOMA'],
+
+                                                            )
+                                                        ])
+                                                    ),
+                                                    m("td.tx-medium.text-right",
+                                                        _val.NM_EXA_LAB
+                                                    ),
+
+
+
+                                                ]),
+                                            ]
+
+
+
 
 
                                         })
@@ -420,21 +415,40 @@ const VerPedido = {
     pendienteMuestras: false,
     validarStatus: () => {
 
-        if (!VerPedido.pendienteMuestras && !VerPedido.pendienteResultado) {
+        if (VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
             VerPedido.classPedido = "tx-warning";
             VerPedido.descSstatusPedido = "Muestras Pendientes";
         }
 
         if (!VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
+            DetallePedido.checkedAll = true;
             VerPedido.classPedido = "tx-orange";
             VerPedido.descSstatusPedido = "Pendiente Resultado";
         }
 
 
-        if (VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
+        if (!VerPedido.pendienteMuestras && !VerPedido.pendienteResultado) {
             VerPedido.classPedido = "tx-success";
             VerPedido.descSstatusPedido = "Finalizado";
         }
+
+
+        for (var i = 0; i < StatusPedido.data.length; i++) {
+            for (var j = 0; j < VerPedido.dataMuestras.length; j++) {
+                if (StatusPedido.data[i]['CD_EXA_LAB'] == VerPedido.dataMuestras[j]['CD_EXA_LAB']) {
+                    StatusPedido.data[i]['TIMESTAMP_TOMA'] = VerPedido.dataMuestras[j]['DT_CONFIRMACAO'];
+                    StatusPedido.data[i]['customCheked'] = true;
+                }
+
+            }
+        }
+
+
+
+
+
+
+
     },
     view: () => {
 
@@ -458,6 +472,7 @@ const Flebotomista = {
     notificaciones: [],
     flebotomista: [],
     showBitacora: "",
+    filterPiso: "",
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             Flebotomista.showBitacora = "";
@@ -485,7 +500,6 @@ const Flebotomista = {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             Flebotomista.showBitacora = "d-none";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
     view: (_data) => {
@@ -523,44 +537,71 @@ const Flebotomista = {
                         (_data.attrs.numeroPedido == undefined) ? "Bitácora Flebotomista:" : "Detalle de Pedido N°: " + VerPedido.numeroPedido
                     ),
 
+                    m("p.mg-b-20.tx-12", {
+                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+
+                        }, [
+                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                            "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
+                            m("br"),
+                            Flebotomista.filterPiso
+                        ]
+
+                    ),
+
+
+
                     m("div.row.animated.fadeInUp", {
                         class: Flebotomista.showBitacora
                     }, [
-                        m("div.col-12.mg-b-10.wd-100p[data-label='Filtrar'][id='filterTable']",
+                        m("div.col-12.mg-b-5.wd-100p[data-label='Filtrar'][id='filterTable']",
+
                             m("div.row", [
+
                                 m("div.col-sm-12.pd-b-10",
                                     m("div.input-group", [
-                                        m("input.form-control.mg-b-20.wd-100p[aautofocus=''][id='_dt_search_text'][placeholder='Buscar por NHC o Nombres y Apellidos completos del Paciente'][title='Buscar'][type='text']"),
-                                        m("div.input-group-append",
-                                            m("button.btn.btn-outline-light[id='button-buscar-t'][type='button']", [
-                                                m("i.icon.ion-md-search"),
-                                                " Buscar "
-                                            ]),
-                                            m("button.btn.btn-outline-light[id='resetTable'][type='button']", [
-                                                m("i.icon.ion-md-close-circle"),
-                                                " Borrar "
-                                            ])
-                                        )
-                                    ])
-                                ),
-                                m("div.col-sm-12.pd-b-10.d-none",
-                                    m("div.input-group", [
-                                        m("input.form-control[id='desde'][placeholder='Desde'][title='Desde'][type='text']"),
-                                        m("input.form-control[id='hasta'][placeholder='Hasta'][title='Hasta'][type='text']"),
-                                        m("div.input-group-append", [
-                                            m("button.btn.btn-outline-light[id='filtrar'][title='Buscar'][type='button']", [
-                                                m("i.icon.ion-md-funnel"),
-                                                " Filtrar "
-                                            ]),
+                                        m(".df-example.demo-forms.wd-100p[data-label='Ubicaciones, Sectores, Pisos:']", [
+                                            m("input.form-control[type='text'][id='tipoPiso'][data-role='tagsinput']", {
+                                                oncreate: () => {
 
+
+                                                    var citynames = new Bloodhound({
+                                                        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                                                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                                        prefetch: {
+                                                            url: 'assets/citynames.json',
+                                                            filter: function(list) {
+                                                                return $.map(list, function(cityname) {
+                                                                    return { name: cityname };
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+
+                                                    citynames.initialize();
+
+                                                    $('#tipoPiso').tagsinput({
+                                                        typeaheadjs: {
+                                                            name: 'citynames',
+                                                            displayKey: 'name',
+                                                            valueKey: 'name',
+                                                            source: citynames.ttAdapter()
+                                                        }
+                                                    });
+
+                                                },
+                                                onchange: (e) => {
+                                                    Flebotomista.filterPiso = e.target.value;
+                                                }
+                                            }),
                                         ])
                                     ])
-                                )
+                                ),
+
+
                             ])
                         ),
                         m("div.col-12", [
-
-
 
                             m("div.table-loader.wd-100p",
                                 m("div.placeholder-paragraph", [
@@ -568,9 +609,12 @@ const Flebotomista = {
                                     m("div.line")
                                 ])
                             ),
-                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.",
+                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
+
                                 m("table.table.table-sm[id='table-flebotomista'][width='100%']"),
-                            )
+
+
+                            ])
                         ])
                     ]),
                     m(VerPedido)
@@ -580,7 +624,7 @@ const Flebotomista = {
                 m("label.nav-label",
                     "Bitácora Flebotomista"
                 ),
-                m("div.mg-t-10.bg-white.d-none",
+                m("div.mg-t-10.bg-white",
                     m("div.col-12.mg-t-30.mg-lg-t-0",
                         m("div.row", [
                             m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30", [
@@ -864,6 +908,11 @@ function loadFlebotomista() {
         minimumResultsForSearch: Infinity
     });
 
+    $('#tipoPiso').change(function(e) {
+        $('.table-loader').show();
+        $('.table-content').hide();
+        table.search($('#tipoPiso').val()).draw();
+    });
 
     $('#button-buscar-t').click(function(e) {
         e.preventDefault();
@@ -885,7 +934,6 @@ function loadFlebotomista() {
         $('#hasta').val('');
         table.search('').draw();
     });
-
 
     return table;
 

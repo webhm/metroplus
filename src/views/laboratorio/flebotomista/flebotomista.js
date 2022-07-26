@@ -610,7 +610,19 @@ const Flebotomista = {
                                 ])
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
-
+                                m("div.mg-b-10.d-flex.align-items-center.justify-content-between", [
+                                    m("h5.mg-b-0",
+                                        "Pedidos de Laboratorio: "
+                                    ),
+                                    m("div.d-flex.tx-18", [
+                                        m("a.link-03.lh-0[href='']",
+                                            m("i.icon.ion-md-refresh")
+                                        ),
+                                        m("a.link-03.lh-0.mg-l-10[href='']",
+                                            m("i.icon.ion-md-more")
+                                        )
+                                    ])
+                                ]),
                                 m("table.table.table-sm[id='table-flebotomista'][width='100%']"),
 
 

@@ -285,18 +285,22 @@ const DetallePedido = {
                                 m("table.table.table-dashboard.mg-b-0", [
                                     m("thead",
                                         m("tr", [
+                                            m("th.text-left",
+                                                "EXAMEN"
+                                            ),
                                             m("th",
                                                 "FECHA DE TOMA DE MUESTRA"
                                             ),
-                                            m("th.text-right",
-                                                "EXAMEN"
+                                            m("th.text-left",
+                                                "CANTIDAD"
                                             ),
-
-
+                                            m("th.text-left",
+                                                "INSUMOS"
+                                            ),
                                         ])
                                     ),
                                     m("tbody", [
-                                        m("tr", [
+                                        m("tr.d-none", [
                                             m("td.tx-normal",
                                                 m("div.custom-control.custom-checkbox", [
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
@@ -320,6 +324,10 @@ const DetallePedido = {
 
                                             return [
                                                 m("tr", [
+                                                    m("td.tx-medium.text-left",
+                                                        _val.NM_EXA_LAB
+                                                    ),
+
                                                     m("td.tx-normal",
                                                         m("div.custom-control.custom-checkbox", [
                                                             m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
@@ -354,9 +362,61 @@ const DetallePedido = {
                                                             )
                                                         ])
                                                     ),
-                                                    m("td.tx-medium.text-right",
-                                                        _val.NM_EXA_LAB
+
+                                                    m("td.tx-medium.text-left",
+                                                        1
                                                     ),
+                                                    m("td.tx-medium.text-left",
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_1'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_1']",
+                                                                "Tubo Lila"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_2'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_2']",
+                                                                "Tubo Rojo"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_3'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_3']",
+                                                                "Tubo Celeste"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_4'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_4']",
+                                                                "Tubo Negro"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_5'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_5']",
+                                                                "Tubo Verde"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_6'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_6']",
+                                                                "GSA V"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_7'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_7']",
+                                                                "HEMOCULTIVO"
+                                                            )
+                                                        ]),
+                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_8'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_8']",
+                                                                "QTB"
+                                                            )
+                                                        ])
+                                                    ),
+
 
                                                 ]),
                                             ]

@@ -40,7 +40,7 @@ const iPedido = {
                     m("i.tx-12.tx-primary.fas.fa-h-square.mg-r-5"),
                     "NHC: " + _data.attrs.HC_MV,
                     m("i.tx-12.tx-indigo.fas.fa-hospital.mg-l-5.mg-r-5"),
-                    _data.attrs.SECTOR + ": " + _data.attrs.UBICACION
+                    _data.attrs.NM_SECTOR
                 )
             ]),
         ];
@@ -57,26 +57,22 @@ const StatusPedido = {
 
         StatusPedido.error = "";
         StatusPedido.data = [];
-        StatusPedido.dataMuestras = [];
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
                     VerPedido.data = result.data[0];
-                    VerPedido.dataMuestras = result.dataMuestras;
-                    VerPedido.pendienteMuestras = result.pendienteMuestras;
-                    VerPedido.pendienteResultado = result.pendienteResultado;
                     VerPedido.validarStatus();
 
                 } else {
@@ -84,7 +80,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
 
             })
 
@@ -94,25 +90,22 @@ const StatusPedido = {
 };
 
 
-
 const DetallePedido = {
     checkedAll: false,
     seleccionarTodos: (status) => {
 
         DetallePedido.checkedAll = status;
-        var _fechaToma = moment().format('DD-MM-YYYY HH:mm:ss');
+        var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        $("#pedido_" + VerPedido.numeroPedido).parent().parent().remove();
-
-        return StatusPedido.data.map(function (_val, _i, _contentData) {
+        return StatusPedido.data.map(function(_val, _i, _contentData) {
             if (status) {
-                StatusPedido.data[_i]['TIMESTAMP_TOMA'] = _fechaToma;
+                StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
                 DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 1);
 
             } else {
-                StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+                StatusPedido.data[_i]['STATUS_TOMA'] = "";
                 StatusPedido.data[_i]['customCheked'] = false;
                 DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 2);
 
@@ -122,21 +115,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-                cod_exa_lab: cod_exa_lab,
-                sts: sts
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
-                console.log(result)
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                    cod_exa_lab: cod_exa_lab,
+                    sts: sts
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
             })
-            .catch(function (e) { })
+            .then(function(result) {
+                console.log(result)
+                VerPedido.validarStatus();
+            })
+            .catch(function(e) {})
     },
 
     view: () => {
@@ -153,11 +147,11 @@ const DetallePedido = {
         } else if (StatusPedido.data.length !== 0) {
             return [
                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-                    m("div.mg-b-20",
+                    m("div.mg-b-30",
                         m("i.tx-60.fas.fa-file." + VerPedido.classPedido)
                     ),
 
-                    m("h5.tx-inverse.mg-b-5",
+                    m("h5.tx-inverse.mg-b-10",
                         "Detalle de Pedido N°: " + VerPedido.numeroPedido + " - Status: " + VerPedido.descSstatusPedido
                     ),
                     ((VerPedido.data.TIPO_PEDIDO == 'R') ? [
@@ -174,28 +168,32 @@ const DetallePedido = {
                             m("i.fas.fa-file-alt.mg-r-5"),
                         ], "Pedido Urgente"),
                     ]),
-                    m("p.mg-5.tx-20", [
+                    m("p.mg-5.tx-20.mg-t-10", [
                         m("i.fas.fa-user.mg-r-8.text-secondary"),
                         VerPedido.data.PTE_MV
 
                     ]),
                     m("p.mg-5.tx-15", [
                         "Fecha Pedido: ",
-                        VerPedido.data.FECHA_PEDIDO,
-                        " Hora: ",
-                        VerPedido.data.HORA_PEDIDO,
+                        VerPedido.data.FECHA_TOMA
+
                     ]),
                     m("p.mg-5.tx-15", [
                         "Médico: ",
                         VerPedido.data.MED_MV,
 
-                        " - ",
+                    ]),
+                    m("p.mg-5.tx-15", [
+                        "Ubicaciòn: ",
                         VerPedido.data.SECTOR,
                         ": ",
-                        VerPedido.data.UBICACION,
+                        VerPedido.data.CAMA,
+
                     ]),
                     m("p.mg-5", [
                         "Historía Clínica: ",
+
+
 
                     ]),
                     m("p.mg-5", [
@@ -236,26 +234,29 @@ const DetallePedido = {
                                                 m("th",
                                                     "FECHA PROGRAMADA"
                                                 ),
+                                                m("th",
+                                                    "FECHA TOMA MUESTRA"
+                                                ),
+                                                m("th",
+                                                    "FECHA RECEP. LAB."
+                                                ),
                                                 m("th.text-right",
                                                     "EXAMEN"
                                                 ),
-
-
-
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function (_val, _i, _contentData) {
-
-
-
-
-
+                                            StatusPedido.data.map(function(_val, _i, _contentData) {
                                                 return [
-
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
-                                                            _val.DT_COLETA + " " + _val.HORA_MUESTRA
+                                                            _val.FECHA_TOMA + " " + _val.HORA_TOMA
+                                                        ),
+                                                        m("td.tx-color-03.tx-normal",
+                                                            (_val.STATUS_TOMA.length !== 0) ? _val.STATUS_TOMA : "Pendiente"
+                                                        ),
+                                                        m("td.tx-color-03.tx-normal",
+                                                            (_val.STATUS_TOMA.length !== 0) ? _val.STATUS_TOMA : "Pendiente"
                                                         ),
                                                         m("td.tx-medium.text-right",
                                                             _val.NM_EXA_LAB
@@ -266,8 +267,6 @@ const DetallePedido = {
                                                     ]),
                                                 ]
                                             })
-
-
                                         ])
                                     ])
                                 )
@@ -303,7 +302,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function (e) {
+                                                        onclick: function(e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -314,10 +313,10 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right",),
+                                            m("td.tx-medium.text-right", ),
                                         ]),
 
-                                        StatusPedido.data.map(function (_val, _i, _contentData) {
+                                        StatusPedido.data.map(function(_val, _i, _contentData) {
 
                                             return [
                                                 m("tr", [
@@ -325,20 +324,20 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox", [
                                                             m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function (e) {
+                                                                onupdate: function(e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function (e) {
+                                                                onclick: function(e) {
 
                                                                     StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
 
                                                                     if (this.checked) {
-                                                                        StatusPedido.data[_i]['TIMESTAMP_TOMA'] = moment().format('DD-MM-YYYY HH:mm:ss');
+                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
                                                                         DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
 
                                                                     } else {
                                                                         DetallePedido.checkedAll = false;
-                                                                        StatusPedido.data[_i]['TIMESTAMP_TOMA'] = "";
+                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = "";
                                                                         DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
                                                                     }
 
@@ -350,7 +349,7 @@ const DetallePedido = {
 
                                                             }),
                                                             m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
-                                                                (StatusPedido.data[_i]['TIMESTAMP_TOMA'].length !== 0) ? StatusPedido.data[_i]['TIMESTAMP_TOMA'] : StatusPedido.data[_i]['TIMESTAMP_TOMA'],
+                                                                (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['STATUS_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
 
                                                             )
                                                         ])
@@ -358,8 +357,6 @@ const DetallePedido = {
                                                     m("td.tx-medium.text-right",
                                                         _val.NM_EXA_LAB
                                                     ),
-
-
 
                                                 ]),
                                             ]
@@ -403,37 +400,63 @@ const VerPedido = {
     data: [],
     classPedido: "",
     descSstatusPedido: "",
-    pendienteResultado: false,
-    pendienteMuestras: false,
     validarStatus: () => {
-
-        if (VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
-            VerPedido.classPedido = "tx-warning";
-            VerPedido.descSstatusPedido = "Muestras Pendientes";
-        }
-
-        if (!VerPedido.pendienteMuestras && VerPedido.pendienteResultado) {
-            DetallePedido.checkedAll = true;
-            VerPedido.classPedido = "tx-orange";
-            VerPedido.descSstatusPedido = "Pendiente Resultado";
-        }
-
-
-        if (!VerPedido.pendienteMuestras && !VerPedido.pendienteResultado) {
-            VerPedido.classPedido = "tx-success";
-            VerPedido.descSstatusPedido = "Finalizado";
-        }
 
 
         for (var i = 0; i < StatusPedido.data.length; i++) {
-            for (var j = 0; j < VerPedido.dataMuestras.length; j++) {
-                if (StatusPedido.data[i]['CD_EXA_LAB'] == VerPedido.dataMuestras[j]['CD_EXA_LAB']) {
-                    StatusPedido.data[i]['TIMESTAMP_TOMA'] = VerPedido.dataMuestras[j]['DT_CONFIRMACAO'];
-                    StatusPedido.data[i]['customCheked'] = true;
-                }
-
+            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
+                StatusPedido.data[i]['customCheked'] = true;
             }
         }
+
+        var _r = 0;
+        var _t = 0;
+
+        for (var i = 0; i < StatusPedido.data.length; i++) {
+
+            if (StatusPedido.data[i]['STATUS_RESULTADO'].length !== 0) {
+                _r++;
+            }
+
+            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
+                _t++;
+            }
+
+        }
+
+        // Set State
+
+        if (StatusPedido.data.length !== _t && StatusPedido.data.length !== _r) {
+            VerPedido.classPedido = "tx-warning"
+            VerPedido.descSstatusPedido = "Muestras Pendientes";
+        }
+
+        if (StatusPedido.data.length == _t && StatusPedido.data.length !== _r) {
+            DetallePedido.checkedAll = true;
+            VerPedido.classPedido = "tx-orange"
+            VerPedido.descSstatusPedido = "Pendiente Resultado";
+        }
+
+        if (StatusPedido.data.length == _t && StatusPedido.data.length == _r) {
+            DetallePedido.checkedAll = true;
+            VerPedido.classPedido = "tx-success"
+            VerPedido.descSstatusPedido = "Finalizado - Cancelado";
+        }
+
+
+        /*
+
+        if (_t == StatusPedido.data.length) {
+            DetallePedido.checkedAll = true;
+            VerPedido.classPedido = "tx-orange";
+            VerPedido.descSstatusPedido = "Pendiente Resultado";
+            $("#pedido_" + VerPedido.numeroPedido).parent().parent().remove();
+
+        }
+
+
+        */
+
 
 
 
@@ -529,13 +552,13 @@ const Flebotomista = {
                     ),
 
                     m("p.mg-b-20.tx-14", {
-                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                    }, [
-                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                        "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
+                        }, [
+                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                            "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
 
-                    ]
+                        ]
 
                     ),
 
@@ -558,7 +581,14 @@ const Flebotomista = {
                                                     var citynames = new Bloodhound({
                                                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                                                         queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                                        local: [{ id: 1, name: 'EMERGENCIA' }, { id: 2, name: 'HOSPITALIZACION C2' }]
+                                                        local: [
+                                                            { id: 1, name: 'EMERGENCIA' },
+                                                            { id: 2, name: 'HOSPITALIZACION C2' },
+                                                            { id: 3, name: 'SERVICIOS AMBULATORIOS' },
+                                                            { id: 4, name: 'HOSPITALIZACION H2' },
+                                                            { id: 5, name: 'HOSPITALIZACION PB' },
+                                                            { id: 6, name: 'HOSPITALIZACION H1' }
+                                                        ]
                                                     });
 
                                                     citynames.initialize();
@@ -595,7 +625,7 @@ const Flebotomista = {
                                     m("h5.mg-b-0",
                                         "Pedidos de Laboratorio: "
                                     ),
-                                    m("div.d-flex.tx-15", [
+                                    m("div.tx-15.d-none", [
                                         m("a.link-03.lh-0[href='']",
                                             m("i.icon.ion-md-refresh"),
                                             " Actualizar"
@@ -616,7 +646,7 @@ const Flebotomista = {
                 m("label.nav-label",
                     "Bitácora Flebotomista"
                 ),
-                m("div.mg-t-10.bg-white",
+                m("div.mg-t-10.bg-white.d-none",
                     m("div.col-12.mg-t-30.mg-lg-t-0",
                         m("div.row", [
                             m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30", [
@@ -767,89 +797,88 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        },],
+        }, ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.HC_MV;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.PTE_MV;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
             },
-            visible: true,
-            aTargets: [3],
-            width: "20%",
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [3],
+                width: "20%",
 
-            orderable: false,
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [4],
-            width: "60%",
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+                width: "60%",
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [5],
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [5],
 
-            orderable: false,
+                orderable: false,
 
-        },
+            },
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        },
-        drawCallback: function (settings) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function () {
+                    view: function() {
                         return [
                             m(m.route.Link, {
                                 id: "pedido_" + _i._aData.NUM_PEDIDO_MV,
@@ -884,12 +913,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -900,7 +929,7 @@ function loadFlebotomista() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function (e) {
+    $('#tipoPiso').change(function(e) {
         $('.table-loader').show();
         $('.table-content').hide();
 
@@ -909,20 +938,20 @@ function loadFlebotomista() {
 
     });
 
-    $('#button-buscar-t').click(function (e) {
+    $('#button-buscar-t').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function (e) {
+    $('#filtrar').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function (e) {
+    $('#resetTable').click(function(e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

@@ -21,38 +21,26 @@ const iPedido = {
                     m("i.fas.fa-file-alt.mg-r-5"),
                 ], "Urgente"),
             ]),
-            ((_data.attrs.SN_RESULTADO) ? [
-                m("span", {
-                    class: "badge  badge-success mg-b-2 mg-r-2",
-                }, [
-                    m("i.fas.fa-file-alt.mg-r-5"),
-                ], " Resultado Listo "),
-
-            ] : [
-                m("span", {
-                    class: "badge badge-warning mg-b-2 mg-r-2",
-                }, [
-                    m("i.fas.fa-clock.mg-r-5"),
-                ], " Pendiente Resultado "),
-            ]),
 
 
             m("p.mg-0.tx-14", [
-                m("i.tx-14.fas.fa-user.mg-r-5"),
+                m("i.tx-14.tx-warning.fas.fa-user.mg-r-5"),
                 _data.attrs.PTE_MV,
             ]),
 
 
             m("p.mg-0", [
                 m("div.tx-12.mg-r-5",
-                    m("i.tx-12.fas.fa-file.mg-r-5"),
+                    m("i.tx-12.tx-orange.fas.fa-file.mg-r-5"),
                     "N° Pedido: " + _data.attrs.NUM_PEDIDO_MV
                 )
             ]),
             m("p.mg-0", [
                 m("div.tx-12.mg-r-5",
-                    m("i.tx-12.fas.fa-h-square.mg-r-5"),
-                    "NHC: " + _data.attrs.HC_MV + " UBICACION: " + _data.attrs.SECTOR + ": " + _data.attrs.UBICACION
+                    m("i.tx-12.tx-primary.fas.fa-h-square.mg-r-5"),
+                    "NHC: " + _data.attrs.HC_MV,
+                    m("i.tx-12.tx-indigo.fas.fa-hospital.mg-l-5.mg-r-5"),
+                    _data.attrs.SECTOR + ": " + _data.attrs.UBICACION
                 )
             ]),
         ];
@@ -72,16 +60,16 @@ const StatusPedido = {
         StatusPedido.dataMuestras = [];
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
@@ -96,7 +84,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -114,7 +102,10 @@ const DetallePedido = {
         DetallePedido.checkedAll = status;
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm:ss');
 
-        return StatusPedido.data.map(function(_val, _i, _contentData) {
+
+        $("#pedido_" + VerPedido.numeroPedido).parent().parent().remove();
+
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['TIMESTAMP_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
@@ -131,21 +122,21 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                    cod_exa_lab: cod_exa_lab,
-                    sts: sts
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+                cod_exa_lab: cod_exa_lab,
+                sts: sts
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 console.log(result)
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -165,6 +156,10 @@ const DetallePedido = {
                     m("div.mg-b-20",
                         m("i.tx-60.fas.fa-file." + VerPedido.classPedido)
                     ),
+
+                    m("h5.tx-inverse.mg-b-5",
+                        "Detalle de Pedido N°: " + VerPedido.numeroPedido + " - Status: " + VerPedido.descSstatusPedido
+                    ),
                     ((VerPedido.data.TIPO_PEDIDO == 'R') ? [
                         m("span.pd-6.wd-100p.wd-md-20p", {
                             class: "badge badge-primary mg-b-2 mg-r-2",
@@ -179,9 +174,6 @@ const DetallePedido = {
                             m("i.fas.fa-file-alt.mg-r-5"),
                         ], "Pedido Urgente"),
                     ]),
-                    m("h5.tx-inverse.mg-t-30.mg-b-5",
-                        "Detalle de Pedido N°: " + VerPedido.numeroPedido + " - Status: " + VerPedido.descSstatusPedido
-                    ),
                     m("p.mg-5.tx-20", [
                         m("i.fas.fa-user.mg-r-8.text-secondary"),
                         VerPedido.data.PTE_MV
@@ -253,7 +245,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function(_val, _i, _contentData) {
+                                            StatusPedido.data.map(function (_val, _i, _contentData) {
 
 
 
@@ -311,7 +303,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
+                                                        onclick: function (e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -322,10 +314,10 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right", ),
+                                            m("td.tx-medium.text-right",),
                                         ]),
 
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
+                                        StatusPedido.data.map(function (_val, _i, _contentData) {
 
                                             return [
                                                 m("tr", [
@@ -333,10 +325,10 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox", [
                                                             m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
+                                                                onupdate: function (e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function(e) {
+                                                                onclick: function (e) {
 
                                                                     StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
 
@@ -472,7 +464,6 @@ const Flebotomista = {
     notificaciones: [],
     flebotomista: [],
     showBitacora: "",
-    filterPiso: "",
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             Flebotomista.showBitacora = "";
@@ -537,15 +528,14 @@ const Flebotomista = {
                         (_data.attrs.numeroPedido == undefined) ? "Bitácora Flebotomista:" : "Detalle de Pedido N°: " + VerPedido.numeroPedido
                     ),
 
-                    m("p.mg-b-20.tx-12", {
-                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                    m("p.mg-b-20.tx-14", {
+                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                        }, [
-                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                            "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
-                            m("br"),
-                            Flebotomista.filterPiso
-                        ]
+                    }, [
+                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                        "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
+
+                    ]
 
                     ),
 
@@ -568,14 +558,7 @@ const Flebotomista = {
                                                     var citynames = new Bloodhound({
                                                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                                                         queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                                        prefetch: {
-                                                            url: 'assets/citynames.json',
-                                                            filter: function(list) {
-                                                                return $.map(list, function(cityname) {
-                                                                    return { name: cityname };
-                                                                });
-                                                            }
-                                                        }
+                                                        local: [{ id: 1, name: 'EMERGENCIA' }, { id: 2, name: 'HOSPITALIZACION C2' }]
                                                     });
 
                                                     citynames.initialize();
@@ -590,9 +573,7 @@ const Flebotomista = {
                                                     });
 
                                                 },
-                                                onchange: (e) => {
-                                                    Flebotomista.filterPiso = e.target.value;
-                                                }
+
                                             }),
                                         ])
                                     ])
@@ -614,13 +595,12 @@ const Flebotomista = {
                                     m("h5.mg-b-0",
                                         "Pedidos de Laboratorio: "
                                     ),
-                                    m("div.d-flex.tx-18", [
+                                    m("div.d-flex.tx-15", [
                                         m("a.link-03.lh-0[href='']",
-                                            m("i.icon.ion-md-refresh")
+                                            m("i.icon.ion-md-refresh"),
+                                            " Actualizar"
                                         ),
-                                        m("a.link-03.lh-0.mg-l-10[href='']",
-                                            m("i.icon.ion-md-more")
-                                        )
+
                                     ])
                                 ]),
                                 m("table.table.table-sm[id='table-flebotomista'][width='100%']"),
@@ -787,92 +767,92 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
-
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
-
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
-
-            },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
-
-                orderable: false,
-
-            },
-        ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
         },
-        drawCallback: function(settings) {
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
+
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "20%",
+
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
                         return [
                             m(m.route.Link, {
+                                id: "pedido_" + _i._aData.NUM_PEDIDO_MV,
                                 class: "btn btn-xs btn-block btn-primary mg-b-2",
                                 href: "/laboratorio/flebotomista/",
                                 params: {
@@ -904,12 +884,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -920,26 +900,29 @@ function loadFlebotomista() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function(e) {
+    $('#tipoPiso').change(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
-        table.search($('#tipoPiso').val()).draw();
+
+        table.search('tipoFiltro-' + $('#tipoPiso').val()).draw();
+
+
     });
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

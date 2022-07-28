@@ -4,6 +4,8 @@ import Sidebarlab from '../sidebarLab';
 import App from '../../app';
 import m from 'mithril';
 import ReloadNotification from '../../layout/reload-notificacion';
+import Notificaciones from '../../../models/notificaciones';
+
 
 
 
@@ -42,6 +44,7 @@ const Pedidos = {
     oncreate: () => {
         document.title = "Pedidos de Laboratorio | " + App.title;
         ReloadNotification.loadPage = "/laboratorio/pedidos";
+        Notificaciones.suscribirCanal('MetroPlus-Laboratorio');
         loadPedidos();
     },
     view: () => {

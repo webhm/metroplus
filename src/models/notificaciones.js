@@ -11,21 +11,21 @@ const Updates = {
     },
     fetchPedidos: () => {
         m.request({
-            method: "GET",
-            url: " https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio?start=0&length=10",
-        })
-            .then(function (res) {
+                method: "GET",
+                url: " https://api.hospitalmetropolitano.org/t/v1/pedidos-laboratorio?start=0&length=10",
+            })
+            .then(function(res) {
                 Updates.data.pedidos = res.data;
                 Updates.fetchNotificaciones();
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
     },
     fetchNotificaciones: () => {
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
-        })
-            .then(function (res) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/notificaciones-pedidos?start=0&length=6",
+            })
+            .then(function(res) {
                 Updates.data.notificaciones = res.data;
                 if (localStorage.updates == undefined) {
                     Encrypt.setData(Updates.data)
@@ -34,7 +34,7 @@ const Updates = {
                     Updates.notificar();
                 }
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
     },
     fetch: () => {
         Updates.fetchPedidos();
@@ -70,7 +70,7 @@ const Updates = {
         }
 
         Encrypt.setData(Updates.data)
-        setTimeout(function () {
+        setTimeout(function() {
             console.log("updates", Updates.data)
             Updates.fetch();
         }, 5000);
@@ -93,7 +93,7 @@ const StoreNotificacion = {
     despacharMensajes: () => {
 
         if (StoreNotificacion.notificaciones.length !== 0) {
-            StoreNotificacion.notificaciones.map(function (_i, _n) {
+            StoreNotificacion.notificaciones.map(function(_i, _n) {
 
                 Notificaciones.setNot();
                 console.log(_i)
@@ -118,11 +118,11 @@ const StoreNotificacion = {
                 body: _mData.message
             }
             var noti = new Notification(title, extra)
-            noti.onclick = () => { }
+            noti.onclick = () => {}
             noti.onclose = {
                 // Al cerrar
             }
-            setTimeout(function () { noti.close() }, 30000)
+            setTimeout(function() { noti.close() }, 30000)
         }
     },
     nuevaNotificacion: (nuevaNotificacion = {}) => {
@@ -130,7 +130,7 @@ const StoreNotificacion = {
         StoreNotificacion.notificaciones = [];
         dataNots.push(nuevaNotificacion);
 
-        setTimeout(function () {
+        setTimeout(function() {
             StoreNotificacion.notificaciones = dataNots;
             StoreNotificacion.despacharMensajes();
         }, 1000);
@@ -141,6 +141,13 @@ const StoreNotificacion = {
 
         const beamsClient = new PusherPushNotifications.Client({ instanceId: '75c0a111-da02-4af0-b35b-66124bd7f2b5' });
         beamsClient.start().then(() => beamsClient.addDeviceInterest('Metrovirtual')).then(() => console.log('Successfully registered and subscribed!')).catch(console.error);
+
+
+    },
+    suscribirCanal: (canal) => {
+
+        const beamsClient = new PusherPushNotifications.Client({ instanceId: '75c0a111-da02-4af0-b35b-66124bd7f2b5' });
+        beamsClient.start().then(() => beamsClient.addDeviceInterest(canal)).then(() => console.log('Successfully registered and subscribed! + ' + canal)).catch(console.error);
 
 
     },
@@ -158,6 +165,9 @@ const Notificaciones = {
     setNot: () => {
         Notificaciones.num = Notificaciones.num + 1;
     },
+    suscribirCanal: (canal) => {
+        return StoreNotificacion.suscribirCanal(canal);
+    },
 
     view: () => {
         return [
@@ -166,8 +176,8 @@ const Notificaciones = {
                 m("a.dropdown-link.new-indicator[href=''][data-toggle='dropdown']", [
                     m("i[data-feather='bell']"),
                     m("span", {
-                        class: ((Notificaciones.num == 0) ? "d-none" : "")
-                    },
+                            class: ((Notificaciones.num == 0) ? "d-none" : "")
+                        },
                         Notificaciones.num
                     )
                 ]),
@@ -178,11 +188,11 @@ const Notificaciones = {
                         "Notificaciones"
                     ),
                     m("a.dropdown-item", {
-                        onclick: (e) => {
-                            e.preventDefault();
-                            m.route.set('/notificaciones');
-                        }
-                    },
+                            onclick: (e) => {
+                                e.preventDefault();
+                                m.route.set('/notificaciones');
+                            }
+                        },
                         m("div.media", [
 
                             m("div.media-body.mg-l-15", [

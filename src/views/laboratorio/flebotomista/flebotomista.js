@@ -59,16 +59,16 @@ const StatusPedido = {
         StatusPedido.data = [];
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
@@ -80,7 +80,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -98,7 +98,7 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusPedido.data.map(function(_val, _i, _contentData) {
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
@@ -115,22 +115,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                    cod_exa_lab: cod_exa_lab,
-                    sts: sts
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+                cod_exa_lab: cod_exa_lab,
+                sts: sts
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 console.log(result)
                 VerPedido.validarStatus();
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -246,7 +246,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function(_val, _i, _contentData) {
+                                            StatusPedido.data.map(function (_val, _i, _contentData) {
                                                 return [
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
@@ -282,7 +282,7 @@ const DetallePedido = {
                                 "Registro de Toma de Muestras::"
                             ),
                             m("div.table-responsive",
-                                m("table.table.table-dashboard.mg-b-0", [
+                                m("table.table.table-dashboard.table-hover.mg-b-0", [
                                     m("thead",
                                         m("tr", [
                                             m("th.text-left",
@@ -306,7 +306,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
+                                                        onclick: function (e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -317,33 +317,48 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right", ),
+                                            m("td.tx-medium.text-right",),
                                         ]),
 
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
+                                        StatusPedido.data.map(function (_val, _i, _contentData) {
+
 
                                             return [
                                                 m("tr", [
-                                                    m("td.tx-medium.text-left",
+                                                    m("td.tx-18.tx-medium.text-left",
                                                         _val.NM_EXA_LAB
                                                     ),
 
-                                                    m("td.tx-normal",
-                                                        m("div.custom-control.custom-checkbox", [
-                                                            m("input.custom-control-input[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                    m("td.tx-16.tx-normal",
+                                                        m("div.custom-control.custom-checkbox.tx-16", [
+                                                            m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
+                                                                onupdate: function (e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function(e) {
+                                                                onclick: function (e) {
+
+
+
+                                                                    e.preventDefault();
+
+                                                                    var p = this.checked;
+
+                                                                    if (StatusPedido.data[_i]['tipoInsumo'].length == 0) {
+                                                                        alert("Necesita seleccionar el insumo correspondiente.");
+                                                                        throw "Necesita seleccionar el insumo correspondiente."
+                                                                    }
 
                                                                     StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
 
-                                                                    if (this.checked) {
+                                                                    if (p) {
+                                                                        this.checked = true;
                                                                         StatusPedido.data[_i]['STATUS_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
                                                                         DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
 
                                                                     } else {
+                                                                        this.checked = false;;
+
                                                                         DetallePedido.checkedAll = false;
                                                                         StatusPedido.data[_i]['STATUS_TOMA'] = "";
                                                                         DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
@@ -356,19 +371,51 @@ const DetallePedido = {
 
 
                                                             }),
-                                                            m("label.custom-control-label[for='" + _val.CD_EXA_LAB + "']",
+                                                            m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
                                                                 (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['STATUS_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
 
                                                             )
                                                         ])
                                                     ),
 
-                                                    m("td.tx-medium.text-left",
-                                                        1
+                                                    m("td.tx-16.tx-medium.text-left",
+                                                        [
+                                                            m(".btn-group.btn-group-sm.tx-16[role='group'][aria-label='Second group']",
+                                                                [
+                                                                    m("button.btn[type='button']",
+                                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5",
+                                                                            StatusPedido.data[_i]['cantidadInsumo']
+                                                                        )
+                                                                    ),
+                                                                    m("button.btn.btn[type='button']", {
+                                                                        onclick: () => {
+                                                                            StatusPedido.data[_i]['cantidadInsumo'] = (StatusPedido.data[_i]['cantidadInsumo'] + 1);
+                                                                        },
+
+                                                                    },
+                                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                                    ),
+                                                                    m("button.btn.btn[type='button']", {
+                                                                        onclick: () => {
+                                                                            StatusPedido.data[_i]['cantidadInsumo'] = (StatusPedido.data[_i]['cantidadInsumo'] - 1);
+                                                                        },
+
+                                                                    },
+                                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                                    ),
+
+                                                                ]
+                                                            )
+                                                        ]
                                                     ),
-                                                    m("td.tx-medium.text-left",
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_1'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
+                                                    m("td.tx-16.tx-medium.text-left",
+                                                        m("div.tx-16.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
+                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_1'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']", {
+
+                                                                onclick: (e) => {
+                                                                    StatusPedido.data[_i]['tipoInsumo'] = e.target.value;
+                                                                }
+                                                            }),
                                                             m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_1']",
                                                                 "Tubo Lila"
                                                             )
@@ -500,7 +547,7 @@ const VerPedido = {
         if (StatusPedido.data.length == _t && StatusPedido.data.length == _r) {
             DetallePedido.checkedAll = true;
             VerPedido.classPedido = "tx-success"
-            VerPedido.descSstatusPedido = "Finalizado - Cancelado";
+            VerPedido.descSstatusPedido = "Finalizado - Gestionado";
         }
 
 
@@ -612,13 +659,13 @@ const Flebotomista = {
                     ),
 
                     m("p.mg-b-20.tx-14", {
-                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                        }, [
-                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                            "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
+                    }, [
+                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                        "Seleccione el piso asignado para la gestión de pedidos de Laboratorio.",
 
-                        ]
+                    ]
 
                     ),
 
@@ -857,88 +904,88 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
+            visible: false,
+            aTargets: [2],
+            orderable: false,
 
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
+            visible: true,
+            aTargets: [3],
+            width: "20%",
 
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
 
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
                         return [
                             m(m.route.Link, {
                                 id: "pedido_" + _i._aData.NUM_PEDIDO_MV,
@@ -973,12 +1020,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -989,7 +1036,7 @@ function loadFlebotomista() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function(e) {
+    $('#tipoPiso').change(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
 
@@ -998,20 +1045,20 @@ function loadFlebotomista() {
 
     });
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

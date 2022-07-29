@@ -59,16 +59,16 @@ const StatusPedido = {
         StatusPedido.data = [];
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
@@ -80,7 +80,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
 
             })
 
@@ -90,6 +90,17 @@ const StatusPedido = {
 };
 
 
+const Insumos = {
+    tuboLila: 1,
+    tuboRojo: 1,
+    tuboCeleste: 1,
+    tuboNegro: 1,
+    tuboVerde: 1,
+    gsav: 1,
+    hemocultivo: 1,
+    qtb: 1
+};
+
 const DetallePedido = {
     checkedAll: false,
     seleccionarTodos: (status) => {
@@ -98,7 +109,7 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusPedido.data.map(function (_val, _i, _contentData) {
+        return StatusPedido.data.map(function(_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
@@ -115,22 +126,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-                cod_exa_lab: cod_exa_lab,
-                sts: sts
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                    cod_exa_lab: cod_exa_lab,
+                    sts: sts
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 console.log(result)
                 VerPedido.validarStatus();
             })
-            .catch(function (e) { })
+            .catch(function(e) {})
     },
 
     view: () => {
@@ -224,11 +235,9 @@ const DetallePedido = {
                                     StatusPedido.error
                                 )
                             ] : StatusPedido.data !== undefined && StatusPedido.data.length !== 0 ? [
-                                m("p.mg-5", [
-                                    m("span.badge.badge-light.wd-100p.tx-14",
-                                        "Detalle Pedido"
-                                    ),
-                                ]),
+                                m("h6",
+                                    "Detalle Pedido:"
+                                ),
                                 m("div.table-responsive",
                                     m("table.table.table-dashboard.mg-b-0", [
                                         m("thead",
@@ -248,7 +257,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function (_val, _i, _contentData) {
+                                            StatusPedido.data.map(function(_val, _i, _contentData) {
                                                 return [
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
@@ -280,13 +289,12 @@ const DetallePedido = {
                             ]))
                         ]),
                         m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", [
-
                             m("p.mg-5", [
                                 m("span.badge.badge-light.wd-100p.tx-14",
                                     "Registro de Toma de Muestras"
                                 ),
                             ]),
-                            m("div.table-responsive",
+                            m("div.table-responsive.mg-b-10.mg-t-10",
                                 m("table.table.table-dashboard.table-hover.mg-b-0", [
                                     m("thead",
                                         m("tr", [
@@ -296,12 +304,7 @@ const DetallePedido = {
                                             m("th",
                                                 "FECHA DE TOMA DE MUESTRA"
                                             ),
-                                            m("th.text-left",
-                                                "CANTIDAD"
-                                            ),
-                                            m("th.text-left",
-                                                "INSUMOS"
-                                            ),
+
                                         ])
                                     ),
                                     m("tbody", [
@@ -311,7 +314,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function (e) {
+                                                        onclick: function(e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -322,14 +325,15 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right",),
+                                            m("td.tx-medium.text-right", ),
                                         ]),
 
-                                        StatusPedido.data.map(function (_val, _i, _contentData) {
+                                        StatusPedido.data.map(function(_val, _i, _contentData) {
 
 
                                             return [
                                                 m("tr", [
+
                                                     m("td.tx-18.tx-medium.text-left",
                                                         _val.NM_EXA_LAB
                                                     ),
@@ -338,21 +342,16 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox.tx-16", [
                                                             m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function (e) {
+                                                                onupdate: function(e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function (e) {
-
-
+                                                                onclick: function(e) {
 
                                                                     e.preventDefault();
 
                                                                     var p = this.checked;
 
-                                                                    if (StatusPedido.data[_i]['tipoInsumo'].length == 0) {
-                                                                        alert("Necesita seleccionar el insumo correspondiente.");
-                                                                        throw "Necesita seleccionar el insumo correspondiente."
-                                                                    }
+
 
                                                                     StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
 
@@ -383,91 +382,6 @@ const DetallePedido = {
                                                         ])
                                                     ),
 
-                                                    m("td.tx-16.tx-medium.text-left",
-                                                        [
-                                                            m(".btn-group.btn-group-sm.tx-16[role='group'][aria-label='Second group']",
-                                                                [
-                                                                    m("button.btn[type='button']",
-                                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5",
-                                                                            StatusPedido.data[_i]['cantidadInsumo']
-                                                                        )
-                                                                    ),
-                                                                    m("button.btn.btn[type='button']", {
-                                                                        onclick: () => {
-                                                                            StatusPedido.data[_i]['cantidadInsumo'] = (StatusPedido.data[_i]['cantidadInsumo'] + 1);
-                                                                        },
-
-                                                                    },
-                                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                                    ),
-                                                                    m("button.btn.btn[type='button']", {
-                                                                        onclick: () => {
-                                                                            StatusPedido.data[_i]['cantidadInsumo'] = (StatusPedido.data[_i]['cantidadInsumo'] - 1);
-                                                                        },
-
-                                                                    },
-                                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                                    ),
-
-                                                                ]
-                                                            )
-                                                        ]
-                                                    ),
-                                                    m("td.tx-16.tx-medium.text-left",
-                                                        m("div.tx-16.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_1'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']", {
-
-                                                                onclick: (e) => {
-                                                                    StatusPedido.data[_i]['tipoInsumo'] = e.target.value;
-                                                                }
-                                                            }),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_1']",
-                                                                "Tubo Lila"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_2'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_2']",
-                                                                "Tubo Rojo"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_3'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_3']",
-                                                                "Tubo Celeste"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_4'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_4']",
-                                                                "Tubo Negro"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_5'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_5']",
-                                                                "Tubo Verde"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_6'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_6']",
-                                                                "GSA V"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_7'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_7']",
-                                                                "HEMOCULTIVO"
-                                                            )
-                                                        ]),
-                                                        m("div.custom-control.custom-radio.d-inline.mg-l-5.mg-r-5", [
-                                                            m("input.custom-control-input[type='radio'][id='tipoInsumo_" + _val.CD_EXA_LAB + "_8'][name='tipoInsumo_" + _val.CD_EXA_LAB + "']"),
-                                                            m("label.custom-control-label[for='tipoInsumo_" + _val.CD_EXA_LAB + "_8']",
-                                                                "QTB"
-                                                            )
-                                                        ])
-                                                    ),
 
 
                                                 ]),
@@ -482,7 +396,439 @@ const DetallePedido = {
 
                                     ])
                                 ])
-                            )
+                            ),
+                            m("p.mg-5", [
+                                m("span.badge.badge-light.wd-100p.tx-14",
+                                    "Registro de Insumos"
+                                ),
+                            ]),
+                            m("div.table-responsive.mg-b-10.mg-t-10",
+                                m("table.table.table-dashboard.table-hover.mg-b-0", [
+                                    m("thead",
+                                        m("tr", [
+                                            m("th.text-left",
+                                                "INSUMOS"
+                                            ),
+                                            m("th.text-left",
+                                                "CANTIDAD"
+                                            ),
+                                        ])
+                                    ),
+                                    m("tbody", [
+
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboLila']"),
+                                                    m("label.tx-20.tx-semibold.custom-control-label[for='tuboLila']",
+                                                        "Tubo Lila"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboLila;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboLila;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboLila++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboLila--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboRojo']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboRojo']",
+                                                        "Tubo Rojo"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboRojo;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboRojo;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboRojo++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboRojo--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboCeleste']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboCeleste']",
+                                                        "Tubo Celeste"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboCeleste;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboCeleste;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboCeleste++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboCeleste--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboNegro']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboNegro']",
+                                                        "Tubo Negro"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboNegro;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboNegro;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboNegro++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboNegro--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboVerde']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboVerde']",
+                                                        "Tubo Verde"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboVerde;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.tuboVerde;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboVerde++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.tuboVerde--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='gsav']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='gsav']",
+                                                        "GSA V"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.gsav;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.gsav;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.gsav++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.gsav--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='hemocultivo']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='hemocultivo']",
+                                                        "Hemocultivo"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.hemocultivo;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.hemocultivo;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.hemocultivo++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.hemocultivo--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("td.tx-16.tx-normal",
+                                                m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='qtb']"),
+                                                    m("label.tx-20.tx-semibold..custom-control-label[for='qtb']",
+                                                        "QTB"
+                                                    )
+                                                ])
+                                            ),
+
+                                            m("td.tx-16.tx-medium.text-left", [
+                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                                }, [
+                                                    m("button.btn[type='button']",
+                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                            oncreate: (el) => {
+                                                                el.dom.innerText = Insumos.qtb;
+                                                            },
+                                                            onupdate: (el) => {
+                                                                el.dom.innerText = Insumos.qtb;
+                                                            }
+
+                                                        })
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.qtb++;
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                    ),
+                                                    m("button.btn.btn[type='button']", {
+                                                            onclick: () => {
+                                                                Insumos.qtb--;
+
+                                                            },
+
+                                                        },
+                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                    ),
+
+                                                ])
+                                            ]),
+
+
+
+
+                                        ]),
+                                    ])
+                                ])
+                            ),
                         ]),
 
                     ]),
@@ -504,7 +850,6 @@ const DetallePedido = {
     }
 
 };
-
 const VerPedido = {
     numeroPedido: "",
     numeroHistoriaClinica: "",
@@ -664,13 +1009,13 @@ const Flebotomista = {
                     ),
 
                     m("p.mg-b-20.tx-14", {
-                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                    }, [
-                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                        "Seleccione la ubicación para la gestión de pedidos de Laboratorio.",
+                        }, [
+                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                            "Seleccione la ubicación para la gestión de pedidos de Laboratorio.",
 
-                    ]
+                        ]
 
                     ),
 
@@ -909,88 +1254,88 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        },],
+        }, ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.HC_MV;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.PTE_MV;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
             },
-            visible: true,
-            aTargets: [3],
-            width: "20%",
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [3],
+                width: "20%",
 
-            orderable: false,
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [4],
-            width: "60%",
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+                width: "60%",
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [5],
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [5],
 
-            orderable: false,
+                orderable: false,
 
-        },
+            },
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function () {
+                    view: function() {
                         return [
                             m(m.route.Link, {
                                 id: "pedido_" + _i._aData.NUM_PEDIDO_MV,
@@ -1025,12 +1370,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -1041,7 +1386,7 @@ function loadFlebotomista() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function (e) {
+    $('#tipoPiso').change(function(e) {
         $('.table-loader').show();
         $('.table-content').hide();
 
@@ -1050,20 +1395,20 @@ function loadFlebotomista() {
 
     });
 
-    $('#button-buscar-t').click(function (e) {
+    $('#button-buscar-t').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function (e) {
+    $('#filtrar').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function (e) {
+    $('#resetTable').click(function(e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

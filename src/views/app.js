@@ -14,6 +14,37 @@ const App = {
         document.title = "Bienvenido | " + App.title;
 
     },
+    isShow: (modulo = "", idModulo = 0) => {
+
+
+        let _user = Encrypt.getDataUser();
+        Auth.user = _user.user;
+        Auth.rol = _user.user.rol;
+        Auth.modulesAccess = _user.modulesAccess;
+
+        if (idModulo !== 0) {
+            let _ac = 0;
+
+            Auth.modulesAccess[modulo].map(function (_v, _i, _contentData) {
+                if (_v.idModulo == idModulo) {
+                    _ac++;
+                }
+
+            });
+
+
+            if (_ac == 0) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+        return true;
+
+
+    },
     isAuth: (modulo = "", idModulo = 0) => {
         if (!Auth.isLogin()) {
             return m.route.set('/auth');
@@ -27,16 +58,19 @@ const App = {
 
         if (idModulo !== 0) {
             let _ac = 0;
-            return [
-                Auth.modulesAccess[modulo].map(function (_v, _i, _contentData) {
-                    if (_v.idModulo == idModulo) {
-                        _ac = (_ac + 1);
-                    }
 
-                }),
-                (_ac == 0) ? m.route.set('/inicio') : true,
-                (Auth.rol)
-            ]
+            Auth.modulesAccess[modulo].map(function (_v, _i, _contentData) {
+                if (_v.idModulo == idModulo) {
+                    _ac++;
+                }
+
+            });
+
+
+            if (_ac == 0) {
+                m.route.set('/inicio');
+            }
+
         }
 
     },

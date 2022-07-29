@@ -23,42 +23,39 @@ const MenuLaboratorio = {
 
                     m("div.row.tx-14", [
 
-                        m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='edit-3']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Pedidos de Laboratorio"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
-                                    "Ir a Pedidos de Laboratorio",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
-
-
-                            ])
-                        ),
-
-                        m("div.col-sm-6",
+                        (App.isShow('laboratorio', 1) ? [
+                            m("div.col-md-6.mg-b-20",
+                                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
+                                    m("div.mg-b-25",
+                                        m("i.tx-50.tx-gray-500.fas.fa-inbox",)
+                                    ),
+                                    m("h5.tx-inverse.mg-b-20",
+                                        "Caja Recepción"
+                                    ),
+                                    m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
+                                        "Ir a Caja Recepción",
+                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                    ]),
+                                ])
+                            )] : []),
+                        (App.isShow('laboratorio', 16) ? [m("div.col-md-6.mg-b-20",
 
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='book-open']")
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Bitácora Flebotomista"
+                                    "Flebotomista"
                                 ),
                                 m(m.route.Link, { href: "/laboratorio/flebotomista", class: "tx-medium" }, [
-                                    "Ir a Bitácora Flebotomista",
+                                    "Ir a Flebotomista",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
                                 ]),
 
 
                             ])
-                        ),
-
-                        m("div.col-sm-6",
+                        )] : []),
+                        (App.isShow('laboratorio', 6) ? [m("div.col-md-6.mg-b-20",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='file-text']")
@@ -73,9 +70,8 @@ const MenuLaboratorio = {
 
 
                             ])
-                        ),
-
-                        m("div.col-sm-6",
+                        )] : []),
+                        (App.isShow('laboratorio', 15) ? [m("div.col-md-6.mg-b-20",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='bell']")
@@ -90,7 +86,27 @@ const MenuLaboratorio = {
 
 
                             ])
-                        ),
+                        )] : []),
+                        (App.isShow('laboratorio', 17) ? [m("div.col-md-6.mg-b-20",
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                m("div.mg-b-25",
+                                    m("i.tx-50.tx-gray-500.fas.fa-ticket-alt",)
+
+                                ),
+                                m("h5.tx-inverse.mg-b-20",
+                                    "Liberación de Turnos"
+                                ),
+                                m(m.route.Link, { href: "/laboratorio/turnos", class: "tx-medium" }, [
+                                    "Ir a Liberación de Turnos",
+                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                ]),
+
+
+                            ])
+                        )] : []),
+
+
+
 
 
 

@@ -57,10 +57,14 @@ const SidebarRight = {
                         ]),
 
                         m("div.dropdown-divider"),
-                        m(m.route.Link, { href: "/salir", class: "dropdown-item" }, [
-                            m("i[data-feather='log-out']"),
-                            "Salir"
+                        m("p.mg-5.text-left", [
+                            m(m.route.Link, { href: "/salir", class: "dropdown-item" }, [
+                                m("span.badge.badge-light.wd-100p.tx-14",
+                                    "Cerrar Sesión"
+                                ),
+                            ]),
                         ]),
+
 
                     ])
                 ])

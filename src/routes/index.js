@@ -26,6 +26,7 @@ import Mantenimiento from '../views/mantenimiento/mantenimiento'
 import IntegracionHigienizacion from '../views/mantenimiento/higienizacion/higienizacion'
 import Hospitalizacion from '../views/hospitalizacion/hospitalizacion'
 import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
+import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
 
 
 
@@ -52,7 +53,8 @@ const Routes = {
     '/mantenimiento': Mantenimiento, //Mantenimiento
     '/mantenimiento/higienizacion': IntegracionHigienizacion, //IntegracionHigienizacion
     '/hospitalizacion': Hospitalizacion, //Hospitalizacion
-    '/hospitalizacion/pasaportes': Pasaportes, //HospitalizacionPB
+    '/hospitalizacion/pasaportes': Pasaportes, //Pasaportes
+    '/hospitalizacion/control-camas': ControlCamas, //Control Camas
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

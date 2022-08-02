@@ -27,17 +27,18 @@ const MenuLaboratorio = {
                             m("div.col-md-6.mg-b-20",
                                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
                                     m("div.mg-b-25",
-                                        m("i.tx-50.tx-gray-500.fas.fa-inbox",)
+                                        m("i.tx-50.tx-gray-500.fas.fa-inbox", )
                                     ),
                                     m("h5.tx-inverse.mg-b-20",
-                                        "Caja Recepción"
+                                        "Caja Recepción Turnos"
                                     ),
                                     m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
-                                        "Ir a Caja Recepción",
+                                        "Ir a Caja Recepción Turnos",
                                         m("i.icon.ion-md-arrow-forward.mg-l-5")
                                     ]),
                                 ])
-                            )] : []),
+                            )
+                        ] : []),
                         (App.isShow('laboratorio', 16) ? [m("div.col-md-6.mg-b-20",
 
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
@@ -81,23 +82,6 @@ const MenuLaboratorio = {
                                 ),
                                 m(m.route.Link, { href: "/laboratorio/notificaciones", class: "tx-medium" }, [
                                     "Ir a Notificaciones de Laboratorio",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
-
-
-                            ])
-                        )] : []),
-                        (App.isShow('laboratorio', 17) ? [m("div.col-md-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.tx-50.tx-gray-500.fas.fa-ticket-alt",)
-
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Liberación de Turnos"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/turnos", class: "tx-medium" }, [
-                                    "Ir a Liberación de Turnos",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
                                 ]),
 

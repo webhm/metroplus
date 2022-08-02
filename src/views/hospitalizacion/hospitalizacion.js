@@ -23,7 +23,26 @@ const MenuHospitalizacion = {
 
                     m("div.row.tx-14", [
 
+
                         m("div.col-sm-6",
+                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                m("div.mg-b-25",
+                                    m("i.tx-50.tx-gray-500.fas.fa-procedures")
+                                ),
+                                m("h5.tx-inverse.mg-b-20",
+                                    "Control de Camas GEMA-MV"
+                                ),
+                                m(m.route.Link, { href: "/hospitalizacion/control-camas", class: "tx-medium" }, [
+                                    "Ir a Control de Camas GEMA-MV",
+                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                ]),
+
+
+                            ])
+                        ),
+
+
+                        m("div.col-sm-6.d-none",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
                                     m("i.tx-50.tx-gray-500.fas.fa-procedures")

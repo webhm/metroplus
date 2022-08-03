@@ -2,6 +2,8 @@ import HeaderPrivate from '../../layout/header-private';
 import Sidebarlab from '../sidebarLab';
 import App from '../../app';
 import m from 'mithril';
+import Notificaciones from '../../../models/notificaciones';
+
 
 const iPedido = {
 
@@ -850,6 +852,7 @@ const DetallePedido = {
     }
 
 };
+
 const VerPedido = {
     numeroPedido: "",
     numeroHistoriaClinica: "",
@@ -938,8 +941,6 @@ const VerPedido = {
 
 };
 
-
-
 const Flebotomista = {
     notificaciones: [],
     flebotomista: [],
@@ -959,6 +960,8 @@ const Flebotomista = {
 
     oncreate: (_data) => {
         document.title = "Flebotomista | " + App.title;
+        Notificaciones.suscribirCanal('MetroPlus-Flebotomista');
+
         if (isObjEmpty(_data.attrs)) {
             loadFlebotomista();
         } else {

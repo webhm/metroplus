@@ -7,10 +7,33 @@ const iCama = {
 
     view: (_data) => {
         return [
-            m("p.mg-0.d-none", [
-                m("div.tx-10.mg-r-5",
-                    m("i.tx-10.tx-primary.fas.fa-h-square.mg-r-5"),
-                    "NHC: " + _data.attrs.HC_MV,
+            console.log(_data),
+            m("p.mg-0", [
+                m("div.tx-12",
+                    m("span.wd-10p", {
+                        class: "badge badge-primary mg-l-5 mg-r-5",
+                    }, [
+                    ], _data.attrs.HABITACION_GEMA),
+                    m("span", {
+                        class: "badge badge-primary mg-l-5 mg-r-5",
+                    }, [
+                    ], "NHC"),
+                    _data.attrs.NHCL,
+                    m("span", {
+                        class: "badge badge-primary mg-l-5 mg-r-5",
+                    }, [
+                    ], "NOMBRE GEMA"),
+                    _data.attrs.NOMBRE_GEMA,
+                    m("span", {
+                        class: "badge badge-light mg-l-5 mg-r-5",
+                    }, [
+                    ], "ESTADO GEMA"),
+                    _data.attrs.ESTADO_GEMA,
+                    m("span", {
+                        class: "badge badge-success mg-l-5 mg-r-5",
+                    }, [
+                    ], "ESTADO MV"),
+                    _data.attrs.ESTADO_MV,
                 )
             ]),
 
@@ -45,16 +68,16 @@ const StatusPedido = {
         StatusPedido.data = [];
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
@@ -66,7 +89,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -94,7 +117,7 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusPedido.data.map(function(_val, _i, _contentData) {
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
@@ -111,22 +134,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                    cod_exa_lab: cod_exa_lab,
-                    sts: sts
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+                cod_exa_lab: cod_exa_lab,
+                sts: sts
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 console.log(result)
                 VerPedido.validarStatus();
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -242,7 +265,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function(_val, _i, _contentData) {
+                                            StatusPedido.data.map(function (_val, _i, _contentData) {
                                                 return [
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
@@ -299,7 +322,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
+                                                        onclick: function (e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -310,10 +333,10 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right", ),
+                                            m("td.tx-medium.text-right",),
                                         ]),
 
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
+                                        StatusPedido.data.map(function (_val, _i, _contentData) {
 
 
                                             return [
@@ -327,10 +350,10 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox.tx-16", [
                                                             m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
+                                                                onupdate: function (e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function(e) {
+                                                                onclick: function (e) {
 
                                                                     e.preventDefault();
 
@@ -428,20 +451,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboLila++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboLila--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -480,20 +503,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboRojo++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboRojo--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -531,20 +554,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboCeleste++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboCeleste--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -582,20 +605,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboNegro++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboNegro--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -631,20 +654,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboVerde++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboVerde--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -682,20 +705,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.gsav++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.gsav--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -734,20 +757,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.hemocultivo++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.hemocultivo--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -785,20 +808,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.qtb++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.qtb--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -923,10 +946,10 @@ const VerPedido = {
 };
 
 const ControlCamas = {
-    notificaciones: [],
-    ControlCamas: [],
+    dataPendientesAlta: [],
     showBitacora: "",
     soloGema: 0,
+    soloMV: 0,
     pendienteAlta: 0,
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
@@ -995,13 +1018,13 @@ const ControlCamas = {
                     ),
 
                     m("p.mg-b-20.tx-14", {
-                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                        }, [
-                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                            "Buscar por apellidos y nombres de paciente, historia clínica y número de pedido.",
+                    }, [
+                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                        "Buscar por apellidos y nombres de paciente, historia clínica y número de pedido.",
 
-                        ]
+                    ]
 
                     ),
 
@@ -1058,7 +1081,9 @@ const ControlCamas = {
 
                                     ])
                                 ]),
-                                m("table.table.table-xs[id='table-control-camas'][width='100%']"),
+                                m("table.table.table-xs.d-none[id='table-control-camas'][width='100%']"),
+                                m("table.table.table-xs[id='table-pendientes-alta'][width='100%']"),
+
 
 
                             ])
@@ -1085,14 +1110,14 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
                                             el.dom.innerText = ControlCamas.pendienteAlta + " Pacientes";
                                         },
                                         onupdate: (el) => {
                                             el.dom.innerText = ControlCamas.pendienteAlta + " Pacientes";
                                         }
-                                    }), ]
+                                    }),]
                                 ]),
                                 (ControlCamas.pendienteAlta == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-danger.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1112,19 +1137,45 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.soloGema == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.soloGema == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
                                             el.dom.innerText = ControlCamas.soloGema + " Pacientes";
                                         },
                                         onupdate: (el) => {
                                             el.dom.innerText = ControlCamas.soloGema + " Pacientes";
                                         }
-                                    }), ]
+                                    }),]
                                 ]),
                                 (ControlCamas.soloGema == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-danger.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
                                 )] : [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-teal.wd-100p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
+                                )],
+                            ]),
+                            m("div.col-sm-6.col-lg-12.mg-t-30.mg-b-20.mg-sm-t-0.mg-lg-t-30", [
+
+                                m("div.d-flex.align-items-center.justify-content-between.mg-b-5", [
+                                    m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
+                                        "Solo MV"
+                                    ),
+                                    m("span.tx-10.tx-color-04",
+                                        "Hoy, " + _fechaHoy_
+                                    )
+                                ]),
+                                m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
+                                    (ControlCamas.soloMV == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                        oncreate: (el) => {
+                                            el.dom.innerText = ControlCamas.soloMV + " Pacientes";
+                                        },
+                                        onupdate: (el) => {
+                                            el.dom.innerText = ControlCamas.soloMV + " Pacientes";
+                                        }
+                                    }),]
+                                ]),
+                                (ControlCamas.soloMV == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
+                                    m(".progress-bar.bg-teal.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
+                                )] : [m("div.progress.ht-4.mg-b-0.op-5",
+                                    m(".progress-bar.bg-success.wd-100p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
                                 )],
                             ]),
 
@@ -1199,78 +1250,74 @@ function loadControlCamas() {
         order: false,
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
+            },
+            visible: false,
+            aTargets: [1],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
+            visible: false,
+            aTargets: [2],
+            orderable: false,
 
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "100%",
-                orderable: false,
+            visible: true,
+            aTargets: [3],
+            width: "100%",
+            orderable: false,
 
-            },
+        },
 
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
                 if (_i._aData.TIPO == 'SOLO GEMA') {
                     ControlCamas.soloGema++;
+                    ControlCamas.dataPendientesAlta.push(_i._aData)
                 }
 
-                m.mount(_i.anCells[3], {
-                    view: function() {
-                        return [
-                            ControlCamas.soloGema == 1 ? m(iSeccionCama, _i._aData) : "",
-                            m(iCama, _i._aData)
-                        ]
-                    }
-                });
-
-                // m.mount(_i.anCells[3], { view: function() { return m(iCama, _i._aData) } });
+                if (_i._aData.TIPO == 'SOLO MV') {
+                    ControlCamas.soloMV++;
+                }
 
             })
 
             m.redraw.sync();
 
+            loadPendientesAlta();
+
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -1280,7 +1327,7 @@ function loadControlCamas() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#searchField').change(function(e) {
+    $('#searchField').change(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchField').val()).draw();
@@ -1311,9 +1358,9 @@ function loadPendientesAlta() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-notificaciones").DataTable({
+    var table = $("#table-pendientes-alta").DataTable({
         data: ControlCamas.dataPendientesAlta,
-        dom: 't',
+        dom: 'tp',
         language: {
             searchPlaceholder: "Buscar...",
             sSearch: "",
@@ -1345,58 +1392,24 @@ function loadPendientesAlta() {
 
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function() {
-                        if (_v._aData.title == 'Nuevo Mensaje') {
-                            return m("div.demo-static-toast",
-                                m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
-                                    "style": { "max-width": "none" }
-                                }, [
-                                    m("div.toast-header.bg-primary", [
-                                        m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
-                                            _v._aData.title
-                                        ),
-                                        m("small.tx-white",
-                                            moment.unix(_v._aData.timestamp).format("HH:mm")
-                                        ),
-                                    ]),
-                                    m("div.toast-body.small",
-                                        _v._aData.message
-                                    )
-                                ])
-                            )
-                        } else {
-                            return m("div.demo-static-toast",
-                                m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
-                                    "style": { "max-width": "none" }
-                                }, [
-                                    m("div.toast-header.bg-danger", [
-                                        m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
-                                            _v._aData.title
-                                        ),
-                                        m("small.tx-white",
-                                            moment.unix(_v._aData.timestamp).format("HH:mm")
-                                        ),
-                                    ]),
-                                    m("div.toast-body.small",
-                                        _v._aData.message
-                                    )
-                                ])
-                            )
-                        }
+                    view: function () {
+
+                        return m(iCama, _v._aData)
+
 
                     }
                 });

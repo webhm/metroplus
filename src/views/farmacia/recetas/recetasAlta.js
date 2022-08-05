@@ -7,39 +7,38 @@ import Notificaciones from '../../../models/notificaciones';
 
 
 
-const StatusPedido = {
+const StatusReceta = {
     error: "",
     data: [],
     dataMuestras: [],
     fetch: () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        StatusPedido.error = "";
-        StatusPedido.data = [];
+        StatusReceta.error = "";
+        StatusReceta.data = [];
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-receta",
-                body: {
-                    numeroReceta: VerReceta.numeroReceta,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-receta",
+            body: {
+                numeroReceta: VerReceta.numeroReceta,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
-                    StatusPedido.data = result.data;
+                    StatusReceta.data = result.data;
                     VerReceta.data = result.data[0];
-                    VerReceta.validarStatus();
 
                 } else {
-                    StatusPedido.error = result.message;
+                    StatusReceta.error = result.message;
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -68,16 +67,16 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusPedido.data.map(function(_val, _i, _contentData) {
+        return StatusReceta.data.map(function (_val, _i, _contentData) {
             if (status) {
-                StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
-                StatusPedido.data[_i]['customCheked'] = true;
-                DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 1);
+                StatusReceta.data[_i]['STATUS_TOMA'] = _fechaToma;
+                StatusReceta.data[_i]['customCheked'] = true;
+                DetallePedido.udpateStatusTomaMuestra(StatusReceta.data[_i]['CD_EXA_LAB'], 1);
 
             } else {
-                StatusPedido.data[_i]['STATUS_TOMA'] = "";
-                StatusPedido.data[_i]['customCheked'] = false;
-                DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 2);
+                StatusReceta.data[_i]['STATUS_TOMA'] = "";
+                StatusReceta.data[_i]['customCheked'] = false;
+                DetallePedido.udpateStatusTomaMuestra(StatusReceta.data[_i]['CD_EXA_LAB'], 2);
 
 
             }
@@ -85,22 +84,21 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-                body: {
-                    numeroReceta: VerReceta.numeroReceta,
-                    cod_exa_lab: cod_exa_lab,
-                    sts: sts
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                numeroReceta: VerReceta.numeroReceta,
+                cod_exa_lab: cod_exa_lab,
+                sts: sts
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 console.log(result)
-                VerReceta.validarStatus();
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -108,51 +106,35 @@ const DetallePedido = {
 
 
 
-        if (StatusPedido.error) {
+        if (StatusReceta.error) {
             return [
                 m("p.mg-0",
-                    StatusPedido.error
+                    StatusReceta.error
                 )
             ]
-        } else if (StatusPedido.data.length !== 0) {
+        } else if (StatusReceta.data.length !== 0) {
             return [
                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+
                     m("div.mg-b-30",
-                        m("i.tx-60.fas.fa-file." + VerReceta.classPedido)
+                        m("i.tx-60.fas.fa-file.tx-primary")
                     ),
 
                     m("h5.tx-inverse.mg-b-10",
-                        "Detalle de Pedido N°: " + VerReceta.numeroReceta + " - Status: " + VerReceta.descSstatusPedido
+                        "Receta de Alta N°: " + VerReceta.numeroReceta
                     ),
-                    ((VerReceta.data.TIPO_PEDIDO == 'R') ? [
-                        m("span.pd-6.wd-100p.wd-md-20p", {
-                            class: "badge badge-primary mg-b-2 mg-r-2",
-                        }, [
-                            m("i.fas.fa-file-alt.mg-r-5"),
-                        ], "Pedido Normal"),
 
-                    ] : [
-                        m("span.pd-6.wd-100p.wd-md-20p", {
-                            class: "badge badge-danger mg-b-2 mg-r-2 ",
-                        }, [
-                            m("i.fas.fa-file-alt.mg-r-5"),
-                        ], "Pedido Urgente"),
-                    ]),
                     m("p.mg-5.tx-20.mg-t-10", [
                         m("i.fas.fa-user.mg-r-8.text-secondary"),
-                        VerReceta.data.PTE_MV
+                        VerReceta.data.NM_PACIENTE
 
                     ]),
                     m("p.mg-5.tx-15", [
                         "Fecha Pedido: ",
-                        VerReceta.data.FECHA_TOMA
+                        VerReceta.data.DT_ATENDIMENTO
 
                     ]),
-                    m("p.mg-5.tx-15", [
-                        "Médico: ",
-                        VerReceta.data.MED_MV,
 
-                    ]),
                     m("p.mg-5.tx-15", [
                         "Ubicaciòn: ",
                         VerReceta.data.SECTOR,
@@ -168,78 +150,106 @@ const DetallePedido = {
                     ]),
                     m("p.mg-5", [
                         m("span.badge.badge-primary.mg-r-5.tx-14",
-                            "GEMA: " + VerReceta.data.HC_MV + "01",
+                            "GEMA: " + VerReceta.data.CD_PACIENTE + "01",
                         ),
                         m("span.badge.badge-success.mg-r-5.tx-14",
-                            "MV: " + VerReceta.data.HC_MV
+                            "MV: " + VerReceta.data.CD_PACIENTE + " N° Atención MV: " + VerReceta.data.CD_ATENDIMENTO
                         ),
                     ]),
                     m("ul.nav.nav-tabs.mg-t-15[id='myTab'][role='tablist']", [
                         m("li.nav-item",
                             m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']",
-                                "Detalle Pedido"
+                                "Detalle Receta"
                             )
                         ),
-                        m("li.nav-item",
-                            m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#profile'][role='tab'][aria-controls='profile'][aria-selected='false']",
-                                "Toma de Muestras"
-                            )
-                        ),
+
 
                     ]),
                     m(".tab-content.bd.bd-gray-300.bd-t-0.pd-20.mg-t-10[id='myTabContent']", [
                         m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
-                            (StatusPedido.error ? [
+                            (StatusReceta.error ? [
                                 m("p.mg-0",
-                                    StatusPedido.error
+                                    StatusReceta.error
                                 )
-                            ] : StatusPedido.data !== undefined && StatusPedido.data.length !== 0 ? [
+                            ] : StatusReceta.data !== undefined && StatusReceta.data.length !== 0 ? [
                                 m("h6",
-                                    "Detalle Pedido:"
+                                    "Detalle Receta:"
                                 ),
                                 m("div.table-responsive",
                                     m("table.table.table-dashboard.mg-b-0", [
                                         m("thead",
                                             m("tr", [
                                                 m("th",
-                                                    "FECHA PROGRAMADA"
+                                                    "MEDICACIÓN"
                                                 ),
                                                 m("th",
-                                                    "FECHA TOMA MUESTRA"
+                                                    "CANT:"
                                                 ),
                                                 m("th",
-                                                    "FECHA RECEP. LAB."
+                                                    "DESP:"
                                                 ),
-                                                m("th.text-right",
-                                                    "EXAMEN"
+                                                m("th",
+                                                    "OBS:"
                                                 ),
+
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function(_val, _i, _contentData) {
-                                                return [
-                                                    m("tr", [
-                                                        m("td.tx-color-03.tx-normal",
-                                                            _val.FECHA_TOMA + " " + _val.HORA_TOMA
-                                                        ),
-                                                        m("td.tx-color-03.tx-normal",
-                                                            (_val.STATUS_TOMA.length !== 0) ? _val.STATUS_TOMA : "Pendiente"
-                                                        ),
-                                                        m("td.tx-color-03.tx-normal",
-                                                            (_val.STATUS_TOMA.length !== 0) ? _val.STATUS_TOMA : "Pendiente"
-                                                        ),
-                                                        m("td.tx-medium.text-right",
-                                                            _val.NM_EXA_LAB
-                                                        ),
+                                            VerReceta.data.DATA.map(function (_val, _i, _contentData) {
+
+                                                if (_val.DESP.includes('SI')) {
+                                                    return [
+                                                        m("tr", [
+                                                            m("td.tx-semibold.tx-normal",
+                                                                _val.MEDICACION),
+                                                            m("td.tx-semibold.tx-normal",
+                                                                _val.CANT),
+                                                            m("td.tx-semibold.tx-normal",
+                                                                _val.DESP),
+                                                            m("td.tx-semibold.tx-normal",
+                                                                _val.OBS),
 
 
 
-                                                    ]),
-                                                ]
+
+                                                        ]),
+                                                    ]
+
+                                                } else {
+                                                    return [
+                                                        m("tr", [
+                                                            m("td.tx-color-03.tx-normal",
+                                                                _val.MEDICACION),
+                                                            m("td.tx-color-03.tx-normal",
+                                                                _val.CANT),
+                                                            m("td.tx-color-03.tx-normal",
+                                                                _val.DESP),
+                                                            m("td.tx-color-03.tx-normal",
+                                                                _val.OBS),
+
+
+
+
+                                                        ]),
+                                                    ]
+                                                }
+
+
                                             })
                                         ])
                                     ])
-                                )
+                                ),
+
+                                m("div.pd-5.mg-t-20.mg-b-30", [
+                                    m("a.btn.btn-xs.btn-block.btn-primary", {
+                                        href: VerReceta.data.URL,
+                                        target: "_blank"
+                                    }, "Abrir Receta")
+                                ]),
+
+
+
+
 
 
                             ] : m("div.placeholder-paragraph.wd-100p", [
@@ -247,542 +257,7 @@ const DetallePedido = {
                                 m("div.line")
                             ]))
                         ]),
-                        m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", [
-                            m("p.mg-5", [
-                                m("span.badge.badge-light.wd-100p.tx-14",
-                                    "Registro de Toma de Muestras"
-                                ),
-                            ]),
-                            m("div.table-responsive.mg-b-10.mg-t-10",
-                                m("table.table.table-dashboard.table-hover.mg-b-0", [
-                                    m("thead",
-                                        m("tr", [
-                                            m("th.text-left",
-                                                "EXAMEN"
-                                            ),
-                                            m("th",
-                                                "FECHA DE TOMA DE MUESTRA"
-                                            ),
 
-                                        ])
-                                    ),
-                                    m("tbody", [
-                                        m("tr.d-none", [
-                                            m("td.tx-normal",
-                                                m("div.custom-control.custom-checkbox", [
-                                                    m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
-
-                                                        checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
-                                                            DetallePedido.seleccionarTodos(this.checked);
-                                                        }
-
-
-                                                    }),
-                                                    m("label.custom-control-label[for='selectTomaTodos']",
-                                                        'Seleccionar Todos'
-                                                    )
-                                                ])
-                                            ),
-                                            m("td.tx-medium.text-right", ),
-                                        ]),
-
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
-
-
-                                            return [
-                                                m("tr", [
-
-                                                    m("td.tx-18.tx-medium.text-left",
-                                                        _val.NM_EXA_LAB
-                                                    ),
-
-                                                    m("td.tx-16.tx-normal",
-                                                        m("div.custom-control.custom-checkbox.tx-16", [
-                                                            m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
-                                                                checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
-                                                                    this.checked = StatusPedido.data[_i]['customCheked'];
-                                                                },
-                                                                onclick: function(e) {
-
-                                                                    e.preventDefault();
-
-                                                                    var p = this.checked;
-                                                                    StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
-
-                                                                    if (p) {
-                                                                        this.checked = true;
-                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
-
-                                                                    } else {
-                                                                        this.checked = false;;
-                                                                        DetallePedido.checkedAll = false;
-                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = "";
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
-                                                                    }
-
-                                                                },
-
-
-
-                                                            }),
-                                                            m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
-                                                                (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['STATUS_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
-
-                                                            )
-                                                        ])
-                                                    ),
-
-
-
-                                                ]),
-                                            ]
-
-
-
-
-
-                                        })
-
-
-                                    ])
-                                ])
-                            ),
-                            m("p.mg-5", [
-                                m("span.badge.badge-light.wd-100p.tx-14",
-                                    "Registro de Insumos"
-                                ),
-                            ]),
-                            m("div.table-responsive.mg-b-10.mg-t-10",
-                                m("table.table.table-dashboard.table-hover.mg-b-0", [
-                                    m("thead",
-                                        m("tr", [
-                                            m("th.text-left",
-                                                "INSUMOS"
-                                            ),
-                                            m("th.text-left",
-                                                "CANTIDAD"
-                                            ),
-                                        ])
-                                    ),
-                                    m("tbody", [
-
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboLila']"),
-                                                    m("label.tx-20.tx-semibold.custom-control-label[for='tuboLila']",
-                                                        "Tubo Lila"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboLila;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboLila;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboRojo']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboRojo']",
-                                                        "Tubo Rojo"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboRojo;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboRojo;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboCeleste']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboCeleste']",
-                                                        "Tubo Celeste"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboCeleste;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboCeleste;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboNegro']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboNegro']",
-                                                        "Tubo Negro"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboNegro;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboNegro;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboVerde']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboVerde']",
-                                                        "Tubo Verde"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboVerde;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboVerde;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='gsav']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='gsav']",
-                                                        "GSA V"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.gsav;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.gsav;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='hemocultivo']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='hemocultivo']",
-                                                        "Hemocultivo"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.hemocultivo;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.hemocultivo;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='qtb']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='qtb']",
-                                                        "QTB"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.qtb;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.qtb;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                    ])
-                                ])
-                            ),
-                        ]),
 
                     ]),
 
@@ -810,72 +285,8 @@ const VerReceta = {
     track: "",
     data: [],
     classPedido: "",
-    descSstatusPedido: "",
-    validarStatus: () => {
+    descSStatusReceta: "",
 
-
-        for (var i = 0; i < StatusPedido.data.length; i++) {
-            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
-                StatusPedido.data[i]['customCheked'] = true;
-            }
-        }
-
-        var _r = 0;
-        var _t = 0;
-
-        for (var i = 0; i < StatusPedido.data.length; i++) {
-
-            if (StatusPedido.data[i]['STATUS_RESULTADO'].length !== 0) {
-                _r++;
-            }
-
-            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
-                _t++;
-            }
-
-        }
-
-        // Set State
-
-        if (StatusPedido.data.length !== _t && StatusPedido.data.length !== _r) {
-            VerReceta.classPedido = "tx-warning"
-            VerReceta.descSstatusPedido = "Muestras Pendientes";
-        }
-
-        if (StatusPedido.data.length == _t && StatusPedido.data.length !== _r) {
-            DetallePedido.checkedAll = true;
-            VerReceta.classPedido = "tx-orange"
-            VerReceta.descSstatusPedido = "Pendiente Resultado";
-        }
-
-        if (StatusPedido.data.length == _t && StatusPedido.data.length == _r) {
-            DetallePedido.checkedAll = true;
-            VerReceta.classPedido = "tx-success"
-            VerReceta.descSstatusPedido = "Finalizado - Gestionado";
-        }
-
-
-        /*
-
-        if (_t == StatusPedido.data.length) {
-            DetallePedido.checkedAll = true;
-            VerReceta.classPedido = "tx-orange";
-            VerReceta.descSstatusPedido = "Pendiente Resultado";
-            $("#pedido_" + VerReceta.numeroReceta).parent().parent().remove();
-
-        }
-
-
-        */
-
-
-
-
-
-
-
-
-    },
     view: () => {
 
         return [
@@ -941,7 +352,7 @@ const RecetasAlta = {
         if (isObjEmpty(_data.attrs)) {
             loadRecetasAlta();
         } else {
-            StatusPedido.fetch();
+            StatusReceta.fetch();
         }
 
     },
@@ -983,7 +394,7 @@ const RecetasAlta = {
                         ),
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        (_data.attrs.numeroReceta == undefined) ? "Recetas de Alta:" : "Detalle de Pedido N°: " + VerReceta.numeroReceta
+                        (_data.attrs.numeroReceta == undefined) ? "Recetas de Alta:" : "Receta de Alta N°: " + VerReceta.numeroReceta
                     ),
 
                     m("p.mg-b-20.tx-14", {
@@ -1047,80 +458,7 @@ const RecetasAlta = {
                 m("label.nav-label",
                     ""
                 ),
-                m("div.mg-t-10.bg-white.d-none",
-                    m("div.col-12.mg-t-30.mg-lg-t-0",
-                        m("div.row", [
-                            m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30", [
-                                m("div.d-flex.align-items-center.justify-content-between.mg-b-5", [
-                                    m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
-                                        "Pendientes"
-                                    ),
-                                    m("span.tx-10.tx-color-04",
-                                        "65% goal reached"
-                                    )
-                                ]),
-                                m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    m("h5.tx-normal.tx-rubik.lh-2.mg-b-0",
-                                        "13,596"
-                                    ),
-                                    m("h6.tx-normal.tx-rubik.tx-color-03.lh-2.mg-b-0",
-                                        "20,000"
-                                    )
-                                ]),
-                                m("div.progress.ht-4.mg-b-0.op-5",
-                                    m(".progress-bar.bg-teal.wd-65p[role='progressbar'][aria-valuenow='65'][aria-valuemin='0'][aria-valuemax='100']")
-                                )
-                            ]),
-                            m("div.col-sm-6.col-lg-12.mg-t-30.mg-sm-t-0.mg-lg-t-30", [
-                                m("div.d-flex.align-items-center.justify-content-between.mg-b-5", [
-                                    m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
-                                        "Recibidas"
-                                    ),
-                                    m("span.tx-10.tx-color-04",
-                                        "45% goal reached"
-                                    )
-                                ]),
-                                m("div.d-flex.justify-content-between.mg-b-5", [
-                                    m("h5.tx-normal.tx-rubik.mg-b-0",
-                                        "83,123"
-                                    ),
-                                    m("h5.tx-normal.tx-rubik.tx-color-03.mg-b-0",
-                                        m("small",
-                                            "250,000"
-                                        )
-                                    )
-                                ]),
-                                m("div.progress.ht-4.mg-b-0.op-5",
-                                    m(".progress-bar.bg-orange.wd-45p[role='progressbar'][aria-valuenow='45'][aria-valuemin='0'][aria-valuemax='100']")
-                                )
-                            ]),
-                            m("div.col-sm-6.col-lg-12.mg-t-30.mg-b-30", [
-                                m("div.d-flex.align-items-center.justify-content-between.mg-b-5", [
-                                    m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
-                                        "Procesadas"
-                                    ),
-                                    m("span.tx-10.tx-color-04",
-                                        "20% goal reached"
-                                    )
-                                ]),
-                                m("div.d-flex.justify-content-between.mg-b-5", [
-                                    m("h5.tx-normal.tx-rubik.mg-b-0",
-                                        "16,869"
-                                    ),
-                                    m("h5.tx-normal.tx-rubik.tx-color-03.mg-b-0",
-                                        m("small",
-                                            "85,000"
-                                        )
-                                    )
-                                ]),
-                                m("div.progress.ht-4.mg-b-0.op-5",
-                                    m(".progress-bar.bg-pink.wd-20p[role='progressbar'][aria-valuenow='20'][aria-valuemin='0'][aria-valuemax='100']")
-                                )
-                            ]),
 
-                        ])
-                    )
-                )
             ])
         ];
     },
@@ -1198,86 +536,86 @@ function loadRecetasAlta() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
+            visible: false,
+            aTargets: [2],
+            orderable: false,
 
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
+            visible: true,
+            aTargets: [3],
+            width: "20%",
 
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
 
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.DT_ATENDIMENTO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
 
 
 
@@ -1296,7 +634,7 @@ function loadRecetasAlta() {
                                     RecetasAlta.showBitacora = "d-none";
                                     VerReceta.numeroReceta = _i._aData.CD_DOCUMENTO_CLINICO;
                                     VerReceta.data = _i._aData;
-                                    StatusPedido.fetch();
+                                    StatusReceta.fetch();
                                 }
 
 
@@ -1318,12 +656,12 @@ function loadRecetasAlta() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -1334,21 +672,13 @@ function loadRecetasAlta() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function(e) {
+    $('#tipoPiso').change(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
-
-        table.search('tipoFiltro-' + $('#tipoPiso').val()).draw();
-
-
+        table.search($('#tipoPiso').val()).draw();
     });
 
-    $('#button-buscar-t').click(function(e) {
-        e.preventDefault();
-        $('.table-loader').show();
-        $('.table-content').hide();
-        table.search($('#_dt_search_text').val()).draw();
-    });
+
 
     return table;
 

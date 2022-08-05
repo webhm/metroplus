@@ -4,6 +4,7 @@ import Salir from '../views/salir'
 import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
 import NotificacionesLab from '../views/laboratorio/notificaciones/notificaciones'
+import SubscribirCanal from '../models/subscribirCanal'
 import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
@@ -33,6 +34,7 @@ import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
 // Routes here
 const Routes = {
     '/': App,
+    '/subscribir/notificaciones': SubscribirCanal, //SubscribirCanal
     '/inicio': Inicio,
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab

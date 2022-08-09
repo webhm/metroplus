@@ -52,14 +52,15 @@ const iPedido = {
 
 const StatusPedido = {
     error: "",
+    documento: [],
     data: [],
     dataMuestras: [],
+
     fetch: () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
         StatusPedido.error = "";
         StatusPedido.data = [];
-
+        StatusPedido.documento = [];
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
@@ -72,11 +73,10 @@ const StatusPedido = {
             })
             .then(function(result) {
                 if (result.status) {
-
+                    StatusPedido.documento = result.data;
                     StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
                     VerPedido.data = result.data.pedidoLaboratorio.dataPedido;
                     VerPedido.validarStatus();
-
                 } else {
                     StatusPedido.error = result.message;
                 }
@@ -93,54 +93,51 @@ const StatusPedido = {
 
 
 const Insumos = {
-    tuboLila: 1,
-    tuboRojo: 1,
-    tuboCeleste: 1,
-    tuboNegro: 1,
-    tuboVerde: 1,
-    gsav: 1,
-    hemocultivo: 1,
-    qtb: 1
+    tuboLila: 0,
+    tuboRojo: 0,
+    tuboCeleste: 0,
+    tuboNegro: 0,
+    tuboVerde: 0,
+    gsav: 0,
+    hemocultivo: 0,
+    qtb: 0,
+
 };
 
 const DetallePedido = {
     checkedAll: false,
+    disabledToma: false,
+    disabledInsumos: false,
     seleccionarTodos: (status) => {
-
         DetallePedido.checkedAll = status;
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
-
-
         return StatusPedido.data.map(function(_val, _i, _contentData) {
             if (status) {
-                StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
+                StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                StatusPedido.data[_i]['FECHA_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
-                DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 1);
-
             } else {
                 StatusPedido.data[_i]['STATUS_TOMA'] = "";
+                StatusPedido.data[_i]['FECHA_TOMA'] = "";
                 StatusPedido.data[_i]['customCheked'] = false;
-                DetallePedido.udpateStatusTomaMuestra(StatusPedido.data[_i]['CD_EXA_LAB'], 2);
-
-
             }
         })
     },
-    udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
+    udpateStatusTomaMuestra: () => {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
                 body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                    cod_exa_lab: cod_exa_lab,
-                    sts: sts
+                    documento: JSON.stringify(StatusPedido.documento),
                 },
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
-                console.log(result)
+                StatusPedido.documento = result.data;
+                StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
+                VerPedido.data = result.data.pedidoLaboratorio.dataPedido;
                 VerPedido.validarStatus();
             })
             .catch(function(e) {})
@@ -310,17 +307,14 @@ const DetallePedido = {
                                         ])
                                     ),
                                     m("tbody", [
-                                        m("tr.d-none", [
+                                        m("tr", [
                                             m("td.tx-normal",
                                                 m("div.custom-control.custom-checkbox", [
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
-
                                                         checked: DetallePedido.checkedAll,
                                                         onclick: function(e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
-
-
                                                     }),
                                                     m("label.custom-control-label[for='selectTomaTodos']",
                                                         'Seleccionar Todos'
@@ -331,7 +325,6 @@ const DetallePedido = {
                                         ]),
 
                                         StatusPedido.data.map(function(_val, _i, _contentData) {
-                                            StatusPedido.data[_i]['customCheked'] = false;
 
                                             return [
                                                 m("tr", [
@@ -350,23 +343,18 @@ const DetallePedido = {
                                                                 onclick: function(e) {
 
                                                                     e.preventDefault();
-
                                                                     var p = this.checked;
-
                                                                     StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
                                                                     if (p) {
                                                                         this.checked = true;
-                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
-
+                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                                                                        StatusPedido.data[_i]['FECHA_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
                                                                     } else {
                                                                         this.checked = false;;
                                                                         DetallePedido.checkedAll = false;
                                                                         StatusPedido.data[_i]['STATUS_TOMA'] = "";
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
+                                                                        StatusPedido.data[_i]['FECHA_TOMA'] = "";
                                                                     }
-
-
 
                                                                 },
 
@@ -374,7 +362,7 @@ const DetallePedido = {
 
                                                             }),
                                                             m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
-                                                                (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['STATUS_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
+                                                                (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['FECHA_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
 
                                                             )
                                                         ])
@@ -395,11 +383,17 @@ const DetallePedido = {
                                     ])
                                 ])
                             ),
-                            m("div.pd-5", [
-                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']",
+                            ((!DetallePedido.disabledToma) ? [m("div.pd-5", [
+                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
+                                        disabled: DetallePedido.disabledToma,
+                                        onclick: () => {
+                                            DetallePedido.disabledToma = true;
+                                            DetallePedido.udpateStatusTomaMuestra();
+                                        }
+                                    },
                                     "Guardar"
                                 )
-                            ]),
+                            ])] : []),
                             m("p.mg-5", [
                                 m("span.badge.badge-light.wd-100p.tx-14",
                                     "Registro de Insumos"
@@ -447,6 +441,8 @@ const DetallePedido = {
                                                     ),
                                                     m("button.btn.btn[type='button']", {
                                                             onclick: () => {
+
+
                                                                 Insumos.tuboLila++;
                                                             },
 
@@ -857,90 +853,7 @@ const DetallePedido = {
 
                                         ])
                                     ),
-                                    m("tbody", [
-                                        m("tr.d-none", [
-                                            m("td.tx-normal",
-                                                m("div.custom-control.custom-checkbox", [
-                                                    m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
-                                                        checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
-                                                            DetallePedido.seleccionarTodos(this.checked);
-                                                        }
-
-
-                                                    }),
-                                                    m("label.custom-control-label[for='selectTomaTodos']",
-                                                        'Seleccionar Todos'
-                                                    )
-                                                ])
-                                            ),
-                                            m("td.tx-medium.text-right", ),
-                                        ]),
-
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
-                                            StatusPedido.data[_i]['customCheked'] = false;
-
-                                            return [
-                                                m("tr", [
-
-                                                    m("td.tx-18.tx-medium.text-left",
-                                                        _val.NM_EXA_LAB
-                                                    ),
-
-                                                    m("td.tx-16.tx-normal",
-                                                        m("div.custom-control.custom-checkbox.tx-16", [
-                                                            m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
-                                                                checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
-                                                                    this.checked = StatusPedido.data[_i]['customCheked'];
-                                                                },
-                                                                onclick: function(e) {
-
-                                                                    e.preventDefault();
-
-                                                                    var p = this.checked;
-
-                                                                    StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
-                                                                    if (p) {
-                                                                        this.checked = true;
-                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 1);
-
-                                                                    } else {
-                                                                        this.checked = false;;
-                                                                        DetallePedido.checkedAll = false;
-                                                                        StatusPedido.data[_i]['STATUS_TOMA'] = "";
-                                                                        DetallePedido.udpateStatusTomaMuestra(_val.CD_EXA_LAB, 2);
-                                                                    }
-
-
-
-                                                                },
-
-
-
-                                                            }),
-                                                            m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
-                                                                (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['STATUS_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
-
-                                                            )
-                                                        ])
-                                                    ),
-
-
-
-                                                ]),
-                                            ]
-
-
-
-
-
-                                        })
-
-
-                                    ])
                                 ])
                             ),
                             m("div.pd-5", [
@@ -948,443 +861,7 @@ const DetallePedido = {
                                     "Guardar"
                                 )
                             ]),
-                            m("p.mg-5", [
-                                m("span.badge.badge-light.wd-100p.tx-14",
-                                    "Registro de Insumos"
-                                ),
-                            ]),
-                            m("div.table-responsive.mg-b-10.mg-t-10",
-                                m("table.table.table-dashboard.table-hover.mg-b-0", [
-                                    m("thead",
-                                        m("tr", [
-                                            m("th.text-left",
-                                                "INSUMOS"
-                                            ),
-                                            m("th.text-left",
-                                                "CANTIDAD"
-                                            ),
-                                        ])
-                                    ),
-                                    m("tbody", [
 
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboLila']"),
-                                                    m("label.tx-20.tx-semibold.custom-control-label[for='tuboLila']",
-                                                        "Tubo Lila"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboLila;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboLila;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboRojo']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboRojo']",
-                                                        "Tubo Rojo"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboRojo;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboRojo;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboCeleste']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboCeleste']",
-                                                        "Tubo Celeste"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboCeleste;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboCeleste;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboNegro']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboNegro']",
-                                                        "Tubo Negro"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboNegro;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboNegro;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboVerde']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='tuboVerde']",
-                                                        "Tubo Verde"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboVerde;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboVerde;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='gsav']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='gsav']",
-                                                        "GSA V"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.gsav;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.gsav;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='hemocultivo']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='hemocultivo']",
-                                                        "Hemocultivo"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.hemocultivo;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.hemocultivo;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                        m("tr", [
-
-                                            m("td.tx-16.tx-normal",
-                                                m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='qtb']"),
-                                                    m("label.tx-20.tx-semibold..custom-control-label[for='qtb']",
-                                                        "QTB"
-                                                    )
-                                                ])
-                                            ),
-
-                                            m("td.tx-16.tx-medium.text-left", [
-                                                m(".btn-group.btn-group-sm.tx-16[role='group']", {
-
-                                                }, [
-                                                    m("button.btn[type='button']",
-                                                        m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
-                                                            oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.qtb;
-                                                            },
-                                                            onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.qtb;
-                                                            }
-
-                                                        })
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb++;
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-plus-circle.tx-22.tx-success")
-                                                    ),
-                                                    m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb--;
-
-                                                            },
-
-                                                        },
-                                                        m("i.fas.fa-minus-circle.tx-22.tx-danger")
-                                                    ),
-
-                                                ])
-                                            ]),
-
-
-
-
-                                        ]),
-                                    ])
-                                ])
-                            ),
-                            m("div.pd-5", [
-                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']",
-                                    "Guardar"
-                                )
-                            ]),
                         ]),
 
                     ]),
@@ -1449,6 +926,9 @@ const VerPedido = {
         }
 
         if (StatusPedido.data.length == _t && StatusPedido.data.length !== _r) {
+            DetallePedido.disabledToma = true;
+            DetallePedido.disabledInsumos = true;
+
             DetallePedido.checkedAll = true;
             VerPedido.classPedido = "tx-orange"
             VerPedido.descStatusPedido = "Pendiente Resultado";

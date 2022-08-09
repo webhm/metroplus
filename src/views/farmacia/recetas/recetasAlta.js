@@ -18,16 +18,16 @@ const StatusReceta = {
         StatusReceta.data = [];
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-receta",
-            body: {
-                numeroReceta: VerReceta.numeroReceta,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/status-receta",
+                body: {
+                    numeroReceta: VerReceta.numeroReceta,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
 
                     StatusReceta.data = result.data;
@@ -38,7 +38,7 @@ const StatusReceta = {
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
 
             })
 
@@ -67,7 +67,7 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusReceta.data.map(function (_val, _i, _contentData) {
+        return StatusReceta.data.map(function(_val, _i, _contentData) {
             if (status) {
                 StatusReceta.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusReceta.data[_i]['customCheked'] = true;
@@ -84,21 +84,21 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-            body: {
-                numeroReceta: VerReceta.numeroReceta,
-                cod_exa_lab: cod_exa_lab,
-                sts: sts
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+                body: {
+                    numeroReceta: VerReceta.numeroReceta,
+                    cod_exa_lab: cod_exa_lab,
+                    sts: sts
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 console.log(result)
             })
-            .catch(function (e) { })
+            .catch(function(e) {})
     },
 
     view: () => {
@@ -137,9 +137,8 @@ const DetallePedido = {
 
                     m("p.mg-5.tx-15", [
                         "Ubicaciòn: ",
-                        VerReceta.data.SECTOR,
-                        ": ",
-                        VerReceta.data.CAMA,
+                        VerReceta.data.UBICACION,
+
 
                     ]),
                     m("p.mg-5", [
@@ -195,7 +194,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            VerReceta.data.DATA.map(function (_val, _i, _contentData) {
+                                            VerReceta.data.DATA.map(function(_val, _i, _contentData) {
 
                                                 if (_val.DESP.includes('SI')) {
                                                     return [
@@ -319,6 +318,11 @@ const iPedido = {
             m("p.mg-0", [
                 m("div.tx-15.text-secondary.mg-r-5",
                     "N° Atención MV: " + _data.attrs.CD_ATENDIMENTO
+                )
+            ]),
+            m("p.mg-0", [
+                m("div.tx-15.text-secondary.mg-r-5",
+                    "Ubicación: " + _data.attrs.UBICACION
                 )
             ]),
         ];
@@ -536,86 +540,86 @@ function loadRecetasAlta() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        },],
+        }, ],
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.HC_MV;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.PTE_MV;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
             },
-            visible: true,
-            aTargets: [3],
-            width: "20%",
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [3],
+                width: "20%",
 
-            orderable: false,
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [4],
-            width: "60%",
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [4],
+                width: "60%",
+                orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
             },
-            visible: true,
-            aTargets: [5],
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                aTargets: [5],
 
-            orderable: false,
+                orderable: false,
 
-        },
+            },
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.DT_ATENDIMENTO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function () {
+                    view: function() {
 
 
 
@@ -656,12 +660,12 @@ function loadRecetasAlta() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -672,7 +676,7 @@ function loadRecetasAlta() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function (e) {
+    $('#tipoPiso').change(function(e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#tipoPiso').val()).draw();

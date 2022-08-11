@@ -124,6 +124,7 @@ const DetallePedido = {
         })
     },
     udpateStatusTomaMuestra: () => {
+        console.log(Insumos)
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
@@ -184,6 +185,16 @@ const DetallePedido = {
 
                     ]),
                     m("p.mg-5.tx-15", [
+                        "Edad: ",
+                        VerPedido.data.edadPaciente
+
+                    ]),
+                    m("p.mg-5.tx-15", [
+                        "Dg: ",
+                        VerPedido.data.dgPedido
+
+                    ]),
+                    m("p.mg-5.tx-15", [
                         "Fecha Pedido: ",
                         VerPedido.data.fechaPedido + " " + VerPedido.data.horaPedido
 
@@ -199,8 +210,6 @@ const DetallePedido = {
                     ]),
                     m("p.mg-5", [
                         "Historía Clínica: ",
-
-
 
                     ]),
                     m("p.mg-5", [
@@ -220,11 +229,6 @@ const DetallePedido = {
                         m("li.nav-item",
                             m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#profile'][role='tab'][aria-controls='profile'][aria-selected='false']",
                                 "Toma de Muestras"
-                            )
-                        ),
-                        m("li.nav-item",
-                            m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#obs'][role='tab'][aria-controls='obs'][aria-selected='false']",
-                                "Observaciones"
                             )
                         ),
 
@@ -834,35 +838,6 @@ const DetallePedido = {
                                 )
                             ]),
                         ]),
-                        m(".tab-pane.fade[id='obs'][role='tabpanel'][aria-labelledby='profile-tab']", [
-                            m("p.mg-5", [
-                                m("span.badge.badge-light.wd-100p.tx-14",
-                                    "Observaciones"
-                                ),
-                            ]),
-                            m("div.table-responsive.mg-b-10.mg-t-10",
-                                m("table.table.table-dashboard.table-hover.mg-b-0", [
-                                    m("thead",
-                                        m("tr", [
-                                            m("th.text-left",
-                                                "EXAMEN"
-                                            ),
-                                            m("th",
-                                                "FECHA DE TOMA DE MUESTRA"
-                                            ),
-
-                                        ])
-                                    ),
-
-                                ])
-                            ),
-                            m("div.pd-5", [
-                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']",
-                                    "Guardar"
-                                )
-                            ]),
-
-                        ]),
 
                     ]),
 
@@ -1463,11 +1438,14 @@ function loadFlebotomista() {
 
 
 function isObjEmpty(obj) {
+
     for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) return false;
     }
 
     return true;
+
+
 }
 
 

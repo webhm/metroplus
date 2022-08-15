@@ -4,6 +4,132 @@ import App from '../../app';
 import m from 'mithril';
 import Notificaciones from '../../../models/notificaciones';
 
+function stopwatchModel() {
+    return {
+        interval: null,
+        seconds: 39,
+        isPaused: false
+    };
+}
+
+const actions = {
+    increment(model) {
+        model.seconds--;
+        if (model.seconds == 0) {
+            model.seconds = 39;
+            if (Flebotomista.showBitacora.length == 0) {
+                $.fn.dataTable.ext.errMode = "none";
+
+                var table = $("#table-flebotomista").DataTable();
+                table.ajax.reload();
+            }
+
+        }
+        m.redraw();
+    },
+    start(model) {
+        model.interval = setInterval(actions.increment, 1000, model);
+    },
+    stop(model) {
+        model.interval = clearInterval(model.interval);
+    },
+    reset(model) {
+        model.seconds = 0;
+    },
+    toggle(model) {
+        if (model.isPaused) {
+            actions.start(model);
+        }
+        else {
+            actions.stop(model);
+        }
+        model.isPaused = !model.isPaused;
+    }
+};
+
+function Stopwatch() {
+    const model = stopwatchModel();
+    actions.start(model);
+    return {
+        view() {
+            return [
+                m("div.mg-b-20",
+                    [
+                        m("div.d-flex.align-items-center.justify-content-between.mg-b-5",
+                            [
+                                m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
+                                    "Actualización automaticamente en:"
+                                ),
+
+                            ]
+                        ),
+                        m("div.d-flex.justify-content-between.mg-b-5",
+                            [
+                                m("h5.tx-normal.tx-rubik.mg-b-0",
+                                    model.seconds + "s."
+                                ),
+                                m("h5.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                                    m("small.pd-2.tx-15",
+                                        (model.isPaused ? [m("i.fas.fa-play.pd-2",
+                                            {
+                                                title: "Start",
+                                                onclick() {
+                                                    actions.toggle(model);
+                                                }
+                                            }
+                                        )
+                                        ] : [m("i.fas.fa-pause.pd-2",
+                                            {
+                                                title: "Pause",
+                                                onclick() {
+                                                    actions.toggle(model);
+                                                }
+                                            }
+                                        )]),
+
+
+                                    ),
+                                    m("small.pd-2.tx-15",
+                                        m("i.fas.fa-redo.pd-2",
+                                            {
+                                                title: "Actualizar",
+                                                onclick() {
+                                                    $.fn.dataTable.ext.errMode = "none";
+
+                                                    var table = $("#table-flebotomista").DataTable();
+                                                    table.ajax.reload();
+                                                }
+                                            }
+                                        )
+
+                                    )
+                                ),
+
+                            ]
+                        ),
+                        m("div.progress.ht-4.mg-b-0.op-5",
+                            m(".progress-bar.bg-primary.[role='progressbar'][aria-valuenow='" + model.seconds + "'][aria-valuemin='0'][aria-valuemax='60']", {
+                                oncreate: (el) => {
+                                    el.dom.style.width = "100%";
+
+                                },
+                                onupdate: (el) => {
+                                    el.dom.style.width = model.seconds + "%";
+
+                                },
+
+                            })
+                        )
+                    ]
+                ),
+
+            ];
+        },
+        onremove() {
+            actions.stop(model);
+        }
+    };
+};
 
 const iPedido = {
 
@@ -57,21 +183,20 @@ const StatusPedido = {
     dataMuestras: [],
 
     fetch: () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         StatusPedido.error = "";
         StatusPedido.data = [];
         StatusPedido.documento = [];
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
                     StatusPedido.documento = result.data;
                     StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
@@ -82,7 +207,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -111,7 +236,7 @@ const DetallePedido = {
     seleccionarTodos: (status) => {
         DetallePedido.checkedAll = status;
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
-        return StatusPedido.data.map(function(_val, _i, _contentData) {
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_TOMA'] = "1";
                 StatusPedido.data[_i]['FECHA_TOMA'] = _fechaToma;
@@ -126,27 +251,28 @@ const DetallePedido = {
     udpateStatusTomaMuestra: () => {
         console.log(Insumos)
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-                body: {
-                    documento: JSON.stringify(StatusPedido.documento),
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                documento: JSON.stringify(StatusPedido.documento),
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 StatusPedido.documento = result.data;
                 StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
                 VerPedido.data = result.data.pedidoLaboratorio.dataPedido;
                 VerPedido.validarStatus();
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
 
 
+        console.log("Insumos", Insumos)
 
 
         if (StatusPedido.error) {
@@ -158,6 +284,27 @@ const DetallePedido = {
         } else if (StatusPedido.data.length !== 0) {
             return [
                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                    m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                        m("small.pd-2.tx-20",
+                            m("i.fas.fa-times-circle.pd-2", {
+                                title: "Cerrar",
+                                onclick: () => {
+                                    $.fn.dataTable.ext.errMode = "none";
+
+                                    var table = $("#table-flebotomista").DataTable();
+                                    table.ajax.reload();
+                                    m.route.set("/laboratorio/flebotomista");
+
+                                }
+                            }
+
+                            )
+
+
+                        ),
+
+                    ),
+
                     m("div.mg-b-30",
                         m("i.tx-60.fas.fa-file." + VerPedido.classPedido)
                     ),
@@ -262,7 +409,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function(_val, _i, _contentData) {
+                                            StatusPedido.data.map(function (_val, _i, _contentData) {
                                                 return [
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
@@ -291,7 +438,9 @@ const DetallePedido = {
                                 m("div.line")
                             ]))
                         ]),
-                        m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", [
+                        m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", {
+                            "style": { "pointer-events": (DetallePedido.disabledToma ? "none" : "auto") }
+                        }, [
                             m("p.mg-5", [
                                 m("span.badge.badge-light.wd-100p.tx-14",
                                     "Registro de Toma de Muestras"
@@ -316,7 +465,7 @@ const DetallePedido = {
                                                 m("div.custom-control.custom-checkbox", [
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
+                                                        onclick: function (e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
                                                     }),
@@ -325,10 +474,10 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right", ),
+                                            m("td.tx-medium.text-right",),
                                         ]),
 
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
+                                        StatusPedido.data.map(function (_val, _i, _contentData) {
 
                                             return [
                                                 m("tr", [
@@ -341,10 +490,10 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox.tx-16", [
                                                             m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
+                                                                onupdate: function (e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function(e) {
+                                                                onclick: function (e) {
 
                                                                     e.preventDefault();
                                                                     var p = this.checked;
@@ -387,17 +536,7 @@ const DetallePedido = {
                                     ])
                                 ])
                             ),
-                            ((!DetallePedido.disabledToma) ? [m("div.pd-5", [
-                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
-                                        disabled: DetallePedido.disabledToma,
-                                        onclick: () => {
-                                            DetallePedido.disabledToma = true;
-                                            DetallePedido.udpateStatusTomaMuestra();
-                                        }
-                                    },
-                                    "Guardar"
-                                )
-                            ])] : []),
+
                             m("p.mg-5", [
                                 m("span.badge.badge-light.wd-100p.tx-14",
                                     "Registro de Insumos"
@@ -444,22 +583,22 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
+                                                        onclick: () => {
 
 
-                                                                Insumos.tuboLila++;
-                                                            },
-
+                                                            Insumos.tuboLila++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboLila--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -498,20 +637,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboRojo++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboRojo--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -549,20 +688,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboCeleste++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboCeleste--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -600,20 +739,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboNegro++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboNegro--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -651,20 +790,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboVerde++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboVerde--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -702,20 +841,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.gsav++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.gsav--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -754,20 +893,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.hemocultivo++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.hemocultivo--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -805,20 +944,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.qtb++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.qtb--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -832,11 +971,23 @@ const DetallePedido = {
                                     ])
                                 ])
                             ),
-                            m("div.pd-5", [
-                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']",
+                            ((!DetallePedido.disabledToma) ? [m("div.pd-5", [
+                                m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
+                                    disabled: DetallePedido.disabledToma,
+                                    onclick: () => {
+                                        DetallePedido.disabledToma = true;
+                                        DetallePedido.udpateStatusTomaMuestra();
+                                    }
+                                },
                                     "Guardar"
                                 )
-                            ]),
+                            ])] : [m("p.mg-5.", [
+                                m("span.badge.badge-light.tx-right.wd-100p.tx-14",
+                                    "Toma de Muestra: MCHANG 12-12-2022 12:12",
+                                    m("br"),
+                                    "Recepción Laboratorio: MCHANG 12-12-2022 12:12",
+                                ),
+                            ])]),
                         ]),
 
                     ]),
@@ -982,7 +1133,6 @@ const Flebotomista = {
     onupdate: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             Flebotomista.showBitacora = "";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             Flebotomista.showBitacora = "d-none";
         }
@@ -1023,13 +1173,13 @@ const Flebotomista = {
                     ),
 
                     m("p.mg-b-20.tx-14", {
-                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                        }, [
-                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                            "Seleccione la ubicación para la gestión de pedidos de Laboratorio.",
+                    }, [
+                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                        "Seleccione la ubicación para la gestión de pedidos de Laboratorio.",
 
-                        ]
+                    ]
 
                     ),
 
@@ -1041,6 +1191,10 @@ const Flebotomista = {
                         m("div.col-12.mg-b-5.wd-100p[data-label='Filtrar'][id='filterTable']",
 
                             m("div.row", [
+                                m("div.col-sm-12.pd-b-10", [
+                                    m(Stopwatch)
+                                ]),
+
 
                                 m("div.col-sm-12.pd-b-10",
                                     m("div.input-group", [
@@ -1268,88 +1422,88 @@ function loadFlebotomista() {
             title: "PACIENTE:"
         }, {
             title: "OPCIONES:"
-        }, ],
+        },],
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.HC_MV;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.PTE_MV;
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
-                },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [3],
-                width: "20%",
+            visible: false,
+            aTargets: [2],
+            orderable: false,
 
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [4],
-                width: "60%",
-                orderable: false,
+            visible: true,
+            aTargets: [3],
+            width: "20%",
 
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                aTargets: [5],
+            visible: true,
+            aTargets: [4],
+            width: "60%",
+            orderable: false,
 
-                orderable: false,
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
             },
+            visible: true,
+            aTargets: [5],
+
+            orderable: false,
+
+        },
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
 
-            settings.aoData.map(function(_i) {
+            settings.aoData.map(function (_i) {
 
 
                 m.mount(_i.anCells[3], {
-                    view: function() {
+                    view: function () {
                         return m("p.mg-0.tx-12", [
                             m("i.fas.fa-calendar.mg-r-5.text-secondary"),
                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                         ])
                     }
                 });
-                m.mount(_i.anCells[4], { view: function() { return m(iPedido, _i._aData) } });
+                m.mount(_i.anCells[4], { view: function () { return m(iPedido, _i._aData) } });
                 m.mount(_i.anCells[5], {
-                    view: function() {
+                    view: function () {
                         return [
                             m(m.route.Link, {
                                 id: "pedido_" + _i._aData.NUM_PEDIDO_MV,
@@ -1384,12 +1538,12 @@ function loadFlebotomista() {
 
 
         },
-    }).on('xhr.dt', function(e, settings, json, xhr) {
+    }).on('xhr.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function(e, settings, json, xhr) {
+    }).on('page.dt', function (e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -1400,7 +1554,7 @@ function loadFlebotomista() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function(e) {
+    $('#tipoPiso').change(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
 
@@ -1409,20 +1563,20 @@ function loadFlebotomista() {
 
     });
 
-    $('#button-buscar-t').click(function(e) {
+    $('#button-buscar-t').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function(e) {
+    $('#filtrar').click(function (e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function(e) {
+    $('#resetTable').click(function (e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');

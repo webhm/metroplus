@@ -123,22 +123,21 @@ const StatusPedido = {
     data: [],
     dataMuestras: [],
     fetch: () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         StatusPedido.error = "";
         StatusPedido.data = [];
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
@@ -150,7 +149,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -178,7 +177,7 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusPedido.data.map(function(_val, _i, _contentData) {
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
@@ -195,22 +194,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-                body: {
-                    numeroPedido: VerPedido.numeroPedido,
-                    cod_exa_lab: cod_exa_lab,
-                    sts: sts
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                numeroPedido: VerPedido.numeroPedido,
+                cod_exa_lab: cod_exa_lab,
+                sts: sts
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 console.log(result)
                 VerPedido.validarStatus();
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     view: () => {
@@ -326,7 +325,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function(_val, _i, _contentData) {
+                                            StatusPedido.data.map(function (_val, _i, _contentData) {
                                                 return [
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
@@ -383,7 +382,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function(e) {
+                                                        onclick: function (e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -394,10 +393,10 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right", ),
+                                            m("td.tx-medium.text-right",),
                                         ]),
 
-                                        StatusPedido.data.map(function(_val, _i, _contentData) {
+                                        StatusPedido.data.map(function (_val, _i, _contentData) {
 
 
                                             return [
@@ -411,10 +410,10 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox.tx-16", [
                                                             m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function(e) {
+                                                                onupdate: function (e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function(e) {
+                                                                onclick: function (e) {
 
                                                                     e.preventDefault();
 
@@ -512,20 +511,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboLila++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboLila--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboLila--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -564,20 +563,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboRojo++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboRojo--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboRojo--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -615,20 +614,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboCeleste++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboCeleste--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboCeleste--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -666,20 +665,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboNegro++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboNegro--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboNegro--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -715,20 +714,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.tuboVerde++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.tuboVerde--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.tuboVerde--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -766,20 +765,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.gsav++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.gsav--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.gsav--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -818,20 +817,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.hemocultivo++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.hemocultivo--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.hemocultivo--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -869,20 +868,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb++;
-                                                            },
-
+                                                        onclick: () => {
+                                                            Insumos.qtb++;
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                            onclick: () => {
-                                                                Insumos.qtb--;
-
-                                                            },
+                                                        onclick: () => {
+                                                            Insumos.qtb--;
 
                                                         },
+
+                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -1006,6 +1005,110 @@ const VerPedido = {
 
 };
 
+function stopwatchModel() {
+    return {
+        interval: null,
+        seconds: 89,
+        isPaused: false
+    };
+}
+
+const actions = {
+    increment(model) {
+        model.seconds--;
+        if (model.seconds == 0) {
+            window.location.reload();
+        }
+        m.redraw();
+    },
+    start(model) {
+        model.interval = setInterval(actions.increment, 1000, model);
+    },
+    stop(model) {
+        model.interval = clearInterval(model.interval);
+    },
+    reset(model) {
+        model.seconds = 0;
+    },
+    toggle(model) {
+        if (model.isPaused) {
+            actions.start(model);
+        }
+        else {
+            actions.stop(model);
+        }
+        model.isPaused = !model.isPaused;
+    }
+};
+
+function Stopwatch() {
+    const model = stopwatchModel();
+    actions.start(model);
+    return {
+        view() {
+            return [
+                m("div.mg-t-30.mg-b-20",
+                    [
+                        m("div.d-flex.align-items-center.justify-content-between.mg-b-5",
+                            [
+                                m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
+                                    "Este reporte se actualiza automaticamente en:"
+                                ),
+
+                            ]
+                        ),
+                        m("div.d-flex.justify-content-between.mg-b-5",
+                            [
+                                m("h5.tx-normal.tx-rubik.mg-b-0",
+                                    model.seconds + "s."
+                                ),
+                                m("h5.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                                    m("small.pd-2.tx-15",
+                                        (model.isPaused ? [m("i.fas.fa-play",
+                                            {
+                                                onclick() {
+                                                    actions.toggle(model);
+                                                }
+                                            }
+                                        )
+                                        ] : [m("i.fas.fa-pause",
+                                            {
+                                                onclick() {
+                                                    actions.toggle(model);
+                                                }
+                                            }
+                                        )])
+
+                                    )
+                                )
+                            ]
+                        ),
+                        m("div.progress.ht-4.mg-b-0.op-5",
+                            m(".progress-bar.bg-primary.[role='progressbar'][aria-valuenow='" + model.seconds + "'][aria-valuemin='0'][aria-valuemax='60']", {
+                                oncreate: (el) => {
+                                    el.dom.style.width = "100%";
+
+                                },
+                                onupdate: (el) => {
+                                    el.dom.style.width = model.seconds + "%";
+
+                                },
+
+                            })
+                        )
+                    ]
+                ),
+
+            ];
+        },
+        onremove() {
+            actions.stop(model);
+        }
+    };
+}
+
+
+
 const ControlCamas = {
     dataPendientesAlta: [],
     dataSoloGema: [],
@@ -1017,6 +1120,7 @@ const ControlCamas = {
     soloGema: 0,
     soloMV: 0,
     pendienteAlta: 0,
+    timerUpdate: 0,
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             ControlCamas.showBitacora = "";
@@ -1046,7 +1150,6 @@ const ControlCamas = {
     onupdate: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             ControlCamas.showBitacora = "";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
 
         } else {
             ControlCamas.showBitacora = "d-none";
@@ -1087,13 +1190,13 @@ const ControlCamas = {
                         "Control de Camas GEMA-MV:"
                     ),
                     m("p.mg-b-20.tx-14.d-none", {
-                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                        }, [
-                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                            "Buscar por apellidos y nombres de paciente, historia clínica y número de pedido.",
+                    }, [
+                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                        "Buscar por apellidos y nombres de paciente, historia clínica y número de pedido.",
 
-                        ]
+                    ]
 
                     ),
                     m("div.d-lg-none.d-md-block.mg-t-10.mg-b-10.bg-white",
@@ -1110,14 +1213,14 @@ const ControlCamas = {
                                         )
                                     ]),
                                     m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                        (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                        (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                             oncreate: (el) => {
-                                                el.dom.innerText = ControlCamas.pendienteAlta + " Pacientes";
+                                                el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                             },
                                             onupdate: (el) => {
-                                                el.dom.innerText = ControlCamas.pendienteAlta + " Pacientes";
+                                                el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                             }
-                                        }), ]
+                                        }),]
                                     ]),
                                     (ControlCamas.pendienteAlta == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                         m(".progress-bar.bg-danger.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1137,14 +1240,14 @@ const ControlCamas = {
                                         )
                                     ]),
                                     m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                        (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                        (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                             oncreate: (el) => {
-                                                el.dom.innerText = ControlCamas.camasTotales + " Pacientes";
+                                                el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                             },
                                             onupdate: (el) => {
-                                                el.dom.innerText = ControlCamas.camasTotales + " Pacientes";
+                                                el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                             }
-                                        }), ]
+                                        }),]
                                     ]),
                                     (ControlCamas.camasTotales == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                         m(".progress-bar.bg-teal.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1164,6 +1267,7 @@ const ControlCamas = {
                         m("div.col-12.mg-b-5.wd-100p.d-none[data-label='Filtrar'][id='filterTable']",
 
                             m("div.row", [
+
 
                                 m("div.col-sm-12.pd-b-10",
                                     m("div.input-group", [
@@ -1197,6 +1301,7 @@ const ControlCamas = {
                                 ])
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
+                                m(Stopwatch),
                                 m("table.table.table-xs.d-none[id='table-control-camas'][width='100%']"),
                                 m("div.mg-b-10.d-flex.align-items-center.justify-content-between", [
                                     m("h5.mg-b-0",
@@ -1253,14 +1358,14 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
-                                            el.dom.innerText = ControlCamas.pendienteAlta + " Pacientes";
+                                            el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                         },
                                         onupdate: (el) => {
-                                            el.dom.innerText = ControlCamas.pendienteAlta + " Pacientes";
+                                            el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                         }
-                                    }), ]
+                                    }),]
                                 ]),
                                 (ControlCamas.pendienteAlta == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-danger.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1281,14 +1386,14 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Pacientes"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
-                                            el.dom.innerText = ControlCamas.camasTotales + " Pacientes";
+                                            el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                         },
                                         onupdate: (el) => {
-                                            el.dom.innerText = ControlCamas.camasTotales + " Pacientes";
+                                            el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                         }
-                                    }), ]
+                                    }),]
                                 ]),
                                 (ControlCamas.camasTotales == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-teal.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1301,7 +1406,8 @@ const ControlCamas = {
 
                         ])
                     )
-                )
+                ),
+
             ])
 
         ];
@@ -1331,297 +1437,297 @@ function loadControlCamas() {
 
     $.fn.dataTable.ext.errMode = "none";
     var table = $("#table-control-camas").DataTable({
-            "ajax": {
-                url: "https://api.hospitalmetropolitano.org/t/v1/adm-control-camas",
-                dataSrc: "data",
-                serverSide: true,
-            },
-            processing: true,
+        "ajax": {
+            url: "https://api.hospitalmetropolitano.org/t/v1/adm-control-camas",
+            dataSrc: "data",
             serverSide: true,
-            responsive: false,
-            dom: 't',
-            language: {
-                searchPlaceholder: "Buscar...",
-                sSearch: "",
-                lengthMenu: "Mostrar _MENU_ registros por página",
-                sProcessing: "Procesando...",
-                sZeroRecords: "Todavía no tienes resultados disponibles.",
-                sEmptyTable: "Ningún dato disponible en esta tabla",
-                sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
-                sInfoPostFix: "",
-                sUrl: "",
-                sInfoThousands: ",",
-                sLoadingRecords: "Cargando...",
-                oPaginate: {
-                    sFirst: "Primero",
-                    sLast: "Último",
-                    sNext: "Siguiente",
-                    sPrevious: "Anterior",
-                },
-                oAria: {
-                    sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-                    sSortDescending: ": Activar para ordenar la columna de manera descendente",
-                },
+        },
+        processing: true,
+        serverSide: true,
+        responsive: false,
+        dom: 't',
+        language: {
+            searchPlaceholder: "Buscar...",
+            sSearch: "",
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            sProcessing: "Procesando...",
+            sZeroRecords: "Todavía no tienes resultados disponibles.",
+            sEmptyTable: "Ningún dato disponible en esta tabla",
+            sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+            sInfoPostFix: "",
+            sUrl: "",
+            sInfoThousands: ",",
+            sLoadingRecords: "Cargando...",
+            oPaginate: {
+                sFirst: "Primero",
+                sLast: "Último",
+                sNext: "Siguiente",
+                sPrevious: "Anterior",
             },
-            cache: false,
-            order: false,
-            columns: false,
-            aoColumnDefs: [{
-                    mRender: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    },
-                    visible: false,
-                    aTargets: [0],
-                    orderable: false,
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return full.HC_MV;
-                    },
-                    visible: false,
-                    aTargets: [1],
-                    orderable: false,
+            oAria: {
+                sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                sSortDescending: ": Activar para ordenar la columna de manera descendente",
+            },
+        },
+        cache: false,
+        order: false,
+        columns: false,
+        aoColumnDefs: [{
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            },
+            visible: false,
+            aTargets: [0],
+            orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.HC_MV;
+            },
+            visible: false,
+            aTargets: [1],
+            orderable: false,
 
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return full.PTE_MV;
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.PTE_MV;
 
-                    },
-                    visible: false,
-                    aTargets: [2],
-                    orderable: false,
+            },
+            visible: false,
+            aTargets: [2],
+            orderable: false,
 
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return "";
-                    },
-                    visible: true,
-                    aTargets: [3],
-                    width: "100%",
-                    orderable: false,
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            aTargets: [3],
+            width: "100%",
+            orderable: false,
 
-                },
-
-
-            ],
-            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-            drawCallback: function(settings) {
-
-                $(".table-content").show();
-                $(".table-loader").hide();
+        },
 
 
-                settings.aoData.map(function(_i) {
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
 
-                    if (_i._aData.TIPO == 'CAMAS TOTAL') {
-                        if (_i._aData.DIFERENCIA == 1) {
-                            ControlCamas.camasTotales++;
-                        }
-                        ControlCamas.dataCamaTotales.push(_i._aData)
+            $(".table-content").show();
+            $(".table-loader").hide();
+
+
+            settings.aoData.map(function (_i) {
+
+                if (_i._aData.TIPO == 'CAMAS TOTAL') {
+                    if (_i._aData.DIFERENCIA == 1) {
+                        ControlCamas.camasTotales++;
                     }
+                    ControlCamas.dataCamaTotales.push(_i._aData)
+                }
 
-                    if (_i._aData.TIPO == 'SIN ALTA EN MV') {
-                        ControlCamas.pendienteAlta++;
-                        ControlCamas.dataPendientesAlta.push(_i._aData)
-                    }
+                if (_i._aData.TIPO == 'SIN ALTA EN MV') {
+                    ControlCamas.pendienteAlta++;
+                    ControlCamas.dataPendientesAlta.push(_i._aData)
+                }
 
-                })
+            })
 
-                m.redraw.sync();
-                loadPendientesAlta();
-                loadCamasTotales();
+            m.redraw.sync();
+            loadPendientesAlta();
+            loadCamasTotales();
 
-            },
-            rowId: "NUM",
-            liveAjax: {
-                // 2 second interval
-                interval: 25000,
-                // Do _not_ fire the DT callbacks for every XHR request made by liveAjax
-                dtCallbacks: false,
-                // Abort the XHR polling if one of the below errors were encountered
-                abortOn: ["error", "timeout", "parsererror"],
-                // Disable pagination resetting on updates ("true" will send the viewer
-                // to the first page every update)
-                resetPaging: false,
-            },
-        }).on('xhr.dt', function(e, settings, json, xhr) {
-            // Do some staff here...
-            $('.table-loader').hide();
-            $('.table-content').show();
-        }).on('page.dt', function(e, settings, json, xhr) {
-            // Do some staff here...
-            $('.table-loader').show();
-            $('.table-content').hide();
+        },
+        rowId: "NUM",
+        liveAjax: {
+            // 2 second interval
+            interval: 25000,
+            // Do _not_ fire the DT callbacks for every XHR request made by liveAjax
+            dtCallbacks: false,
+            // Abort the XHR polling if one of the below errors were encountered
+            abortOn: ["error", "timeout", "parsererror"],
+            // Disable pagination resetting on updates ("true" will send the viewer
+            // to the first page every update)
+            resetPaging: false,
+        },
+    }).on('xhr.dt', function (e, settings, json, xhr) {
+        // Do some staff here...
+        $('.table-loader').hide();
+        $('.table-content').show();
+    }).on('page.dt', function (e, settings, json, xhr) {
+        // Do some staff here...
+        $('.table-loader').show();
+        $('.table-content').hide();
 
-        })
+    })
         /**
          * Event:       xhrErr.liveAjax
          * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
          *              all of the xhrErr*.liveAjax events below)
          * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
          */
-        .on("xhrErr.liveAjax", function(e, settings, xhr, thrown) {
+        .on("xhrErr.liveAjax", function (e, settings, xhr, thrown) {
             console.log("xhrErr", "General XHR Error: " + thrown);
         })
 
-    /**
-     * Event:       xhrErrTimeout.liveAjax
-     * Description: Triggered when a 'timeout' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrTimeout.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrTimeout", "XHR Error: Timeout");
-    })
+        /**
+         * Event:       xhrErrTimeout.liveAjax
+         * Description: Triggered when a 'timeout' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrTimeout.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrTimeout", "XHR Error: Timeout");
+        })
 
-    /**
-     * Event:       xhrErrError.liveAjax
-     * Description: Triggered when a 'error' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrError.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("XHR Error: Error");
-    })
+        /**
+         * Event:       xhrErrError.liveAjax
+         * Description: Triggered when a 'error' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrError.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("XHR Error: Error");
+        })
 
-    /**
-     * Event:       xhrErrAbort.liveAjax
-     * Description: Triggered when an 'abort' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrAbort.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrAbort", "XHR Error: Abort");
-    })
+        /**
+         * Event:       xhrErrAbort.liveAjax
+         * Description: Triggered when an 'abort' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrAbort.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrAbort", "XHR Error: Abort");
+        })
 
-    /**
-     * Event:       xhrErrParseerror.liveAjax
-     * Description: Triggered when a 'parsererror' error was thrown from an XHR request
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrParseerror.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrParseerror", "XHR Error: Parse Error");
-    })
+        /**
+         * Event:       xhrErrParseerror.liveAjax
+         * Description: Triggered when a 'parsererror' error was thrown from an XHR request
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrParseerror.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrParseerror", "XHR Error: Parse Error");
+        })
 
-    /**
-     * Event:       xhrErrUnknown.liveAjax
-     * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
-     *              happen actually, seeing as how all the textStatus values from
-     *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
-     *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
-     *              updated
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-     */
-    .on("xhrErrUnknown.liveAjax", function(e, settings, xhr, thrown) {
-        console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
-    })
+        /**
+         * Event:       xhrErrUnknown.liveAjax
+         * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
+         *              happen actually, seeing as how all the textStatus values from
+         *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
+         *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
+         *              updated
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+         */
+        .on("xhrErrUnknown.liveAjax", function (e, settings, xhr, thrown) {
+            console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
+        })
 
-    /**
-     * Event:       xhrSkipped.liveAjax
-     * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
-     */
-    .on("xhrSkipped.liveAjax", function(e, settings, reason) {
-        console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
-    })
+        /**
+         * Event:       xhrSkipped.liveAjax
+         * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
+         */
+        .on("xhrSkipped.liveAjax", function (e, settings, reason) {
+            console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
+        })
 
-    /**
-     * Event:       setInterval.liveAjax
-     * Description: Triggered when the setTimeout interval has been changed
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("setInterval.liveAjax", function(e, settings, interval) {
-        console.log("setInterval", "XHR polling interval set to " + interval);
-    })
+        /**
+         * Event:       setInterval.liveAjax
+         * Description: Triggered when the setTimeout interval has been changed
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("setInterval.liveAjax", function (e, settings, interval) {
+            console.log("setInterval", "XHR polling interval set to " + interval);
+        })
 
-    /**
-     * Event:       init.liveAjax
-     * Description: Triggered when the liveAjax plugin has been initialized
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("init.liveAjax", function(e, settings, xhr) {
-        console.log("init", "liveAjax initiated");
-    })
+        /**
+         * Event:       init.liveAjax
+         * Description: Triggered when the liveAjax plugin has been initialized
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("init.liveAjax", function (e, settings, xhr) {
+            console.log("init", "liveAjax initiated");
+        })
 
-    /**
-     * Event:       clearTimeout.liveAjax
-     * Description: Triggered when the timeout has been cleared, killing the XHR polling
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("clearTimeout.liveAjax", function(e, settings, xhr) {
-        console.log("clearTimeout", "liveAjax timeout cleared");
-    })
+        /**
+         * Event:       clearTimeout.liveAjax
+         * Description: Triggered when the timeout has been cleared, killing the XHR polling
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("clearTimeout.liveAjax", function (e, settings, xhr) {
+            console.log("clearTimeout", "liveAjax timeout cleared");
+        })
 
-    /**
-     * Event:       abortXhr.liveAjax
-     * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("abortXhr.liveAjax", function(e, settings, xhr) {
-        console.log("abortXhr", "liveAjax XHR request was aborted");
-    })
+        /**
+         * Event:       abortXhr.liveAjax
+         * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("abortXhr.liveAjax", function (e, settings, xhr) {
+            console.log("abortXhr", "liveAjax XHR request was aborted");
+        })
 
-    /**
-     * Event:       setPause.liveAjax
-     * Description: Triggered when the liveAjax XHR polling was paused or un-paused
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-     */
-    .on("setPause.liveAjax", function(e, settings, paused) {
-        console.log(
-            "setPause",
-            "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
-        );
-    })
+        /**
+         * Event:       setPause.liveAjax
+         * Description: Triggered when the liveAjax XHR polling was paused or un-paused
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+         */
+        .on("setPause.liveAjax", function (e, settings, paused) {
+            console.log(
+                "setPause",
+                "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
+            );
+        })
 
-    /**
-     * Event:       onUpdate.liveAjax
-     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
-     */
-    .on("onUpdate.liveAjax", function(e, settings, updates, json, xhr) {
+        /**
+         * Event:       onUpdate.liveAjax
+         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
+         */
+        .on("onUpdate.liveAjax", function (e, settings, updates, json, xhr) {
 
 
-        ControlCamas.dataPendientesAlta = [];
-        ControlCamas.camasTotales = [];
-        ControlCamas.camasTotales = 0;
-        ControlCamas.pendienteAlta = 0;
+            ControlCamas.dataPendientesAlta = [];
+            ControlCamas.camasTotales = [];
+            ControlCamas.camasTotales = 0;
+            ControlCamas.pendienteAlta = 0;
 
-        if (updates !== undefined && updates.delete.length !== 0) {
-            reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
-            reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
-        }
+            if (updates !== undefined && updates.delete.length !== 0) {
+                reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
+                reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
+            }
 
-        if (updates !== undefined && updates.create.length !== 0) {
+            if (updates !== undefined && updates.create.length !== 0) {
 
-            reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
-            reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
-        }
+                reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
+                reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
+            }
 
-        if (updates !== undefined && Object.keys(updates.update).length !== 0) {
+            if (updates !== undefined && Object.keys(updates.update).length !== 0) {
 
-            reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
-            reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
-        }
-    })
+                reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
+                reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
+            }
+        })
 
-    /**
-     * Event:       noUpdate.liveAjax
-     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
-     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
-     */
-    .on("noUpdate.liveAjax", function(e, settings, json, xhr) {
-        console.log(
-            "noUpdate",
-            "JSON Processed - Table not updated, no new data"
-        );
-    });
+        /**
+         * Event:       noUpdate.liveAjax
+         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
+         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
+         */
+        .on("noUpdate.liveAjax", function (e, settings, json, xhr) {
+            console.log(
+                "noUpdate",
+                "JSON Processed - Table not updated, no new data"
+            );
+        });
 
     $('.dataTables_length select').select2({
         minimumResultsForSearch: Infinity
     });
 
-    $('#searchField').change(function(e) {
+    $('#searchField').change(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchField').val()).draw();
@@ -1691,21 +1797,21 @@ function loadPendientesAlta() {
         pageLength: 20,
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function() {
+                    view: function () {
 
                         return m(iPendienteAlta, _v._aData)
 
@@ -1776,21 +1882,21 @@ function loadSoloGEMA() {
 
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function() {
+                    view: function () {
 
                         return m(iCama, _v._aData)
 
@@ -1861,21 +1967,21 @@ function loadGEMA_MV() {
 
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [0],
-                orderable: false,
+            mRender: function (data, type, row, meta) {
+                return "";
             },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function() {
+                    view: function () {
 
                         return m(iCama, _v._aData)
 
@@ -1948,30 +2054,30 @@ function loadCamasTotales() {
         pageLength: 20,
         columns: false,
         aoColumnDefs: [{
-                mRender: function(data, type, full) {
-                    return full.DIFERENCIA;
-                },
-                visible: false,
-                aTargets: [0],
-                orderable: true,
+            mRender: function (data, type, full) {
+                return full.DIFERENCIA;
             },
-            {
-                mRender: function(data, type, full) {
-                    return "";
-                },
-                visible: true,
-                width: "100%",
-                aTargets: [1],
-                orderable: false,
+            visible: false,
+            aTargets: [0],
+            orderable: true,
+        },
+        {
+            mRender: function (data, type, full) {
+                return "";
+            },
+            visible: true,
+            width: "100%",
+            aTargets: [1],
+            orderable: false,
 
-            },
+        },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
-        drawCallback: function(settings) {
-            settings.aoData.map(function(_v, _i) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
                 m.mount(_v.anCells[1], {
-                    view: function() {
+                    view: function () {
                         return m(iCamasTotales, _v._aData)
                     }
                 });

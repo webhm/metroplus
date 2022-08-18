@@ -19,7 +19,6 @@ const actions = {
             model.seconds = 39;
             if (Flebotomista.showBitacora.length == 0) {
                 $.fn.dataTable.ext.errMode = "none";
-
                 var table = $("#table-flebotomista").DataTable();
                 table.ajax.reload();
             }
@@ -248,8 +247,68 @@ const DetallePedido = {
             }
         })
     },
+    validarUpdateMuestras: () => {
+
+
+
+        var _t = 0;
+
+        for (var i = 0; i < StatusPedido.data.length; i++) {
+
+            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
+                _t++;
+            }
+
+        }
+
+        // Set State
+
+        if (_t == 0) {
+            alert("El regisro de Toma de (Muestra) e Insumos en necesario.");
+            throw "El regisro de Toma de (Muestra) e Insumos en necesario.";
+        }
+
+        var _r = 0;
+
+        if (Insumos.tuboLila !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboRojo !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboCeleste !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboNegro !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboVerde !== 0) {
+            _r++;
+        }
+        if (Insumos.gsav !== 0) {
+            _r++;
+        }
+        if (Insumos.hemocultivo !== 0) {
+            _r++;
+        }
+        if (Insumos.qtb !== 0) {
+            _r++;
+        }
+
+        if (_r === 0) {
+            console.log(_r)
+            alert("El regisro de Toma de Muestra e (Insumos) en necesario.");
+            throw "El regisro de Toma de Muestra e (Insumos) en necesario.";
+        }
+
+
+
+
+
+
+    },
     udpateStatusTomaMuestra: () => {
-        console.log(Insumos)
+        StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.insumosToma = Insumos;
         m.request({
             method: "POST",
             url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
@@ -272,7 +331,6 @@ const DetallePedido = {
     view: () => {
 
 
-        console.log("Insumos", Insumos)
 
 
         if (StatusPedido.error) {
@@ -287,13 +345,23 @@ const DetallePedido = {
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                         m("small.pd-2.tx-20",
                             m("i.fas.fa-times-circle.pd-2", {
+                                "style": { "cursor": "pointer" },
                                 title: "Cerrar",
                                 onclick: () => {
-                                    $.fn.dataTable.ext.errMode = "none";
 
-                                    var table = $("#table-flebotomista").DataTable();
-                                    table.ajax.reload();
-                                    m.route.set("/laboratorio/flebotomista");
+                                    Flebotomista.showBitacora = "";
+                                    m.route.set('/laboratorio/flebotomista');
+
+                                    try {
+
+                                        $.fn.dataTable.ext.errMode = "none";
+                                        var table = $("#table-flebotomista").DataTable();
+                                        table.ajax.reload();
+
+                                    } catch (e) {
+                                        window.location.reload();
+
+                                    }
 
                                 }
                             }
@@ -367,6 +435,21 @@ const DetallePedido = {
                             "MV: " + VerPedido.data.numeroHistoriaClinica
                         ),
                     ]),
+                    (DetallePedido.disabledToma ? [m("p.mg-5.tx-right", [
+                        m("button.btn.btn-xs.btn-outline-secondary[type='button']", {
+                            onclick: () => {
+                                DetallePedido.disabledToma = false;
+                                DetallePedido.disabledInsumos = false;
+                                VerPedido.classPedido = "tx-warning"
+                                VerPedido.descStatusPedido = "Muestras Pendientes";
+                                VerPedido.statusPedido = "Muestras Pendientes";
+                            }
+                        },
+                            m("i.fas.fa-edit.mg-r-5"),
+                            " EDITAR"
+
+                        )
+                    ])] : []),
                     m("ul.nav.nav-tabs.mg-t-15[id='myTab'][role='tablist']", [
                         m("li.nav-item",
                             m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']",
@@ -441,6 +524,7 @@ const DetallePedido = {
                         m(".tab-pane.fade[id='profile'][role='tabpanel'][aria-labelledby='profile-tab']", {
                             "style": { "pointer-events": (DetallePedido.disabledToma ? "none" : "auto") }
                         }, [
+
                             m("p.mg-5", [
                                 m("span.badge.badge-light.wd-100p.tx-14",
                                     "Registro de Toma de Muestras"
@@ -560,7 +644,31 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboLila']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboLila']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.tuboLila = 1;
+                                                            } else {
+                                                                Insumos.tuboLila = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                                if (Insumos.tuboLila == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold.custom-control-label[for='tuboLila']",
                                                         "Tubo Lila"
                                                     )
@@ -574,10 +682,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboLila;
+                                                                if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboLila;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboLila;
+                                                                if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboLila;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -595,6 +713,9 @@ const DetallePedido = {
                                                     m("button.btn.btn[type='button']", {
                                                         onclick: () => {
                                                             Insumos.tuboLila--;
+                                                            if (Insumos.tuboLila < 0) {
+                                                                Insumos.tuboLila = 0;
+                                                            }
 
                                                         },
 
@@ -614,7 +735,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboRojo']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboRojo']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.tuboRojo = 1;
+                                                            } else {
+                                                                Insumos.tuboRojo = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboRojo']",
                                                         "Tubo Rojo"
                                                     )
@@ -628,10 +763,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboRojo;
+                                                                if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboRojo;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboRojo;
+                                                                if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboRojo;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -665,7 +810,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboCeleste']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboCeleste']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.tuboCeleste = 1;
+                                                            } else {
+                                                                Insumos.tuboCeleste = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboCeleste']",
                                                         "Tubo Celeste"
                                                     )
@@ -679,10 +838,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboCeleste;
+                                                                if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboCeleste;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboCeleste;
+                                                                if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboCeleste;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -716,7 +885,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboNegro']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboNegro']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.tuboNegro = 1;
+                                                            } else {
+                                                                Insumos.tuboNegro = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboNegro']",
                                                         "Tubo Negro"
                                                     )
@@ -730,10 +913,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboNegro;
+                                                                if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboNegro;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboNegro;
+                                                                if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboNegro;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -767,7 +960,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboVerde']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='tuboVerde']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.tuboVerde = 1;
+                                                            } else {
+                                                                Insumos.tuboVerde = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboVerde']",
                                                         "Tubo Verde"
                                                     )
@@ -781,10 +988,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboVerde;
+                                                                if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboVerde;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.tuboVerde;
+                                                                if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                                    el.dom.innerText = Insumos.tuboVerde;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -818,7 +1035,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='gsav']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='gsav']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.gsav = 1;
+                                                            } else {
+                                                                Insumos.gsav = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='gsav']",
                                                         "GSA V"
                                                     )
@@ -832,10 +1063,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.gsav;
+                                                                if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                                    el.dom.innerText = Insumos.gsav;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.gsav;
+                                                                if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                                    el.dom.innerText = Insumos.gsav;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -870,7 +1111,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='hemocultivo']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='hemocultivo']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.hemocultivo = 1;
+                                                            } else {
+                                                                Insumos.hemocultivo = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='hemocultivo']",
                                                         "Hemocultivo"
                                                     )
@@ -884,12 +1139,21 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.hemocultivo;
+                                                                if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                                    el.dom.innerText = Insumos.hemocultivo;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.hemocultivo;
-                                                            }
+                                                                if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                                    el.dom.innerText = Insumos.hemocultivo;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
 
+                                                                }
+                                                            }
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
@@ -921,7 +1185,21 @@ const DetallePedido = {
 
                                             m("td.tx-16.tx-normal",
                                                 m("div.custom-control.custom-checkbox.tx-16", [
-                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='qtb']"),
+                                                    m("input.tx-20.custom-control-input[type='checkbox'][id='qtb']", {
+                                                        onclick: (el) => {
+                                                            if (el.target.checked) {
+                                                                Insumos.qtb = 1;
+                                                            } else {
+                                                                Insumos.qtb = 0;
+                                                            }
+
+                                                        },
+                                                        oncreate: (el) => {
+                                                            if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                                el.dom.checked = true;
+                                                            }
+                                                        }
+                                                    }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='qtb']",
                                                         "QTB"
                                                     )
@@ -935,10 +1213,20 @@ const DetallePedido = {
                                                     m("button.btn[type='button']",
                                                         m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
                                                             oncreate: (el) => {
-                                                                el.dom.innerText = Insumos.qtb;
+                                                                if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                                    el.dom.innerText = Insumos.qtb;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             },
                                                             onupdate: (el) => {
-                                                                el.dom.innerText = Insumos.qtb;
+                                                                if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                                    el.dom.innerText = Insumos.qtb;
+                                                                } else {
+                                                                    el.dom.innerText = 0;
+
+                                                                }
                                                             }
 
                                                         })
@@ -975,6 +1263,12 @@ const DetallePedido = {
                                 m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
                                     disabled: DetallePedido.disabledToma,
                                     onclick: () => {
+
+
+                                        DetallePedido.validarUpdateMuestras();
+                                        var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+                                        StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.usuarioToma = "flebot1";
+                                        StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.fechaToma = _fechaToma;
                                         DetallePedido.disabledToma = true;
                                         DetallePedido.udpateStatusTomaMuestra();
                                     }
@@ -983,9 +1277,8 @@ const DetallePedido = {
                                 )
                             ])] : [m("p.mg-5.", [
                                 m("span.badge.badge-light.tx-right.wd-100p.tx-14",
-                                    "Toma de Muestra: MCHANG 12-12-2022 12:12",
-                                    m("br"),
-                                    "Recepción Laboratorio: MCHANG 12-12-2022 12:12",
+                                    "Toma de Muestra: FLEBOT1 " + StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.fechaToma,
+
                                 ),
                             ])]),
                         ]),
@@ -1042,6 +1335,9 @@ const VerPedido = {
 
         }
 
+
+
+
         // Set State
 
         if (StatusPedido.data.length !== _t && StatusPedido.data.length !== _r) {
@@ -1064,6 +1360,18 @@ const VerPedido = {
             DetallePedido.checkedAll = true;
             VerPedido.classPedido = "tx-success"
             VerPedido.descStatusPedido = "Finalizado - Gestionado";
+        }
+
+        var _insumos = StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.insumosToma;
+        if (Object.keys(_insumos).length !== 0) {
+            Insumos.tuboLila = _insumos.tuboLila;
+            Insumos.tuboRojo = _insumos.tuboRojo;
+            Insumos.tuboCeleste = _insumos.tuboCeleste;
+            Insumos.tuboNegro = _insumos.tuboNegro;
+            Insumos.tuboVerde = _insumos.tuboVerde;
+            Insumos.gsav = _insumos.gsav;
+            Insumos.hemocultivo = _insumos.hemocultivo;
+            Insumos.qtb = _insumos.qtb;
         }
 
 
@@ -1200,8 +1508,8 @@ const Flebotomista = {
                                     m("div.input-group", [
                                         m(".df-example.demo-forms.wd-100p[data-label='Ubicaciones, Sectores, Pisos:']", [
                                             m("input.form-control[type='text'][id='tipoPiso'][data-role='tagsinput']", {
+                                                value: "HOSPITALIZACION PB,HOSPITALIZACION H1,HOSPITALIZACION H2,HOSPITALIZACION C2",
                                                 oncreate: () => {
-
 
                                                     var citynames = new Bloodhound({
                                                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),

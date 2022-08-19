@@ -104,6 +104,7 @@ function Stopwatch() {
                                     )
                                 ),
 
+
                             ]
                         ),
                         m("div.progress.ht-4.mg-b-0.op-5",
@@ -225,6 +226,13 @@ const Insumos = {
     gsav: 0,
     hemocultivo: 0,
     qtb: 0,
+
+};
+
+const Observaciones = {
+    dataObservaciones: [],
+    obs: "",
+    show: false,
 
 };
 
@@ -459,6 +467,11 @@ const DetallePedido = {
                         m("li.nav-item",
                             m("a.nav-link[id='profile-tab'][data-toggle='tab'][href='#profile'][role='tab'][aria-controls='profile'][aria-selected='false']",
                                 "Toma de Muestras"
+                            )
+                        ),
+                        m("li.nav-item",
+                            m("a.nav-link[id='obs-tab'][data-toggle='tab'][href='#obs'][role='tab'][aria-controls='obs'][aria-selected='false']",
+                                "Observaciones"
                             )
                         ),
 
@@ -1282,6 +1295,64 @@ const DetallePedido = {
                                 ),
                             ])]),
                         ]),
+                        m(".tab-pane.fade[id='obs'][role='tabpanel'][aria-labelledby='obs-tab']", {
+                        }, [
+                            m("p.mg-5.tx-right", {
+                            }, [
+                                m("button.btn.btn-xs.btn-secondary[type='button']", {
+                                    onclick: () => {
+                                        Observaciones.show = !Observaciones.show;
+                                    }
+                                },
+                                    m("i.fas.fa-edit.mg-r-5"),
+                                    " Nueva Observacion"
+
+                                )
+                            ]),
+                            m("p.mg-5", [
+                                m("span.badge.badge-light.wd-100p.tx-14",
+                                    "Observaciones"
+                                ),
+                            ]),
+
+                            m("div", {
+                                class: (Observaciones.show ? "" : "d-none"),
+
+                            }, [
+                                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Nueva Observación']", {
+                                    oninput: function (e) { Observaciones.obs = e.target.value; },
+                                    value: Observaciones.obs,
+                                }),
+                                m("div.mg-0.mg-t-5.mg-b-5.text-right", [
+
+                                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                        onclick: function () {
+                                            Observaciones.dataObservaciones.push({
+                                                title: "Nueva Observación",
+                                                timestamp: moment().unix(),
+                                                message: Observaciones.obs
+                                            });
+                                            StatusPedido.documento.pedidoLaboratorio.dataObservaciones = Observaciones.dataObservaciones;
+                                            Observaciones.obs = "";
+                                            reloadObservaciones();
+
+                                        },
+                                    }, [
+                                        m("i.fas.fa-save.mg-r-5",)
+                                    ], "Guardar"),
+
+
+                                ]),
+
+
+                            ]),
+                            m("table.table.table-sm[id='table-observaciones'][width='100%']", {
+                                oncreate: () => {
+                                    loadObservaciones();
+                                }
+                            })
+
+                        ]),
 
                     ]),
 
@@ -1374,22 +1445,7 @@ const VerPedido = {
             Insumos.qtb = _insumos.qtb;
         }
 
-
-        /*
-
-        if (_t == StatusPedido.data.length) {
-            DetallePedido.checkedAll = true;
-            VerPedido.classPedido = "tx-orange";
-            VerPedido.descStatusPedido = "Pendiente Resultado";
-            $("#pedido_" + VerPedido.numeroPedido).parent().parent().remove();
-
-        }
-
-
-        */
-
-
-
+        reloadNotificacion();
 
 
 
@@ -1416,6 +1472,7 @@ const Flebotomista = {
     notificaciones: [],
     flebotomista: [],
     showBitacora: "",
+    typeFilter: "",
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             Flebotomista.showBitacora = "";
@@ -1509,7 +1566,9 @@ const Flebotomista = {
                                         m(".df-example.demo-forms.wd-100p[data-label='Ubicaciones, Sectores, Pisos:']", [
                                             m("input.form-control[type='text'][id='tipoPiso'][data-role='tagsinput']", {
                                                 value: "HOSPITALIZACION PB,HOSPITALIZACION H1,HOSPITALIZACION H2,HOSPITALIZACION C2",
-                                                oncreate: () => {
+                                                oncreate: (el) => {
+
+                                                    console.log(el)
 
                                                     var citynames = new Bloodhound({
                                                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -1909,6 +1968,115 @@ function isObjEmpty(obj) {
 
 
 }
+
+
+function loadObservaciones() {
+
+    console.log('StatusPedido', StatusPedido)
+
+
+    // MOMMENT
+    moment.lang("es", {
+        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+            "_"
+        ),
+        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+            "_"
+        ),
+        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+            "_"
+        ),
+        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+    });
+
+    $.fn.dataTable.ext.errMode = "none";
+    var table = $("#table-observaciones").DataTable({
+        data: (StatusPedido.documento.pedidoLaboratorio.dataObservaciones !== undefined ? StatusPedido.documento.pedidoLaboratorio.dataObservaciones : []),
+        dom: 'tp',
+        language: {
+            searchPlaceholder: "Buscar...",
+            sSearch: "",
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            sProcessing: "Procesando...",
+            sZeroRecords: "Sin Observaciones",
+            sEmptyTable: "Sin Observaciones",
+            sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+            sInfoPostFix: "",
+            sUrl: "",
+            sInfoThousands: ",",
+            sLoadingRecords: "Cargando...",
+            oPaginate: {
+                sFirst: "Primero",
+                sLast: "Último",
+                sNext: "Siguiente",
+                sPrevious: "Anterior",
+            },
+            oAria: {
+                sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                sSortDescending: ": Activar para ordenar la columna de manera descendente",
+            },
+        },
+        cache: false,
+        order: false,
+        destroy: true,
+
+        columns: false,
+        aoColumnDefs: [{
+            mRender: function (data, type, row, meta) {
+                return "";
+            },
+            visible: true,
+            width: "100%",
+            aTargets: [0],
+            orderable: false,
+        },
+
+        ],
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+        drawCallback: function (settings) {
+            settings.aoData.map(function (_v, _i) {
+                m.mount(_v.anCells[0], {
+                    view: function () {
+                        return m("div.demo-static-toast",
+                            m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
+                                "style": { "max-width": "none" }
+                            }, [
+                                m("div.toast-header.bg-primary", [
+                                    m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                        _v._aData.title
+                                    ),
+                                    m("small.tx-white",
+                                        moment.unix(_v._aData.timestamp).format("HH:mm")
+                                    ),
+                                ]),
+                                m("div.toast-body.small",
+                                    _v._aData.message
+                                )
+                            ])
+                        )
+
+                    }
+                });
+
+
+            })
+        },
+    });
+
+
+    return table;
+
+};
+
+function reloadObservaciones() {
+    var table = $('#table-observaciones').DataTable();
+    table.clear();
+    table.rows.add((StatusPedido.documento.pedidoLaboratorio.dataObservaciones !== undefined ? StatusPedido.documento.pedidoLaboratorio.dataObservaciones : [])).draw();
+}
+
 
 
 

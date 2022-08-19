@@ -27,13 +27,13 @@ const MenuLaboratorio = {
                             m("div.col-md-6.mg-b-20",
                                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
                                     m("div.mg-b-25",
-                                        m("i.tx-50.tx-gray-500.fas.fa-inbox", )
+                                        m("i.tx-50.tx-gray-500.fas.fa-inbox",)
                                     ),
                                     m("h5.tx-inverse.mg-b-20",
-                                        "Caja Recepción Turnos"
+                                        "Recepción de Pedidos"
                                     ),
                                     m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
-                                        "Ir a Caja Recepción Turnos",
+                                        "Ir a Recepción de Pedidos",
                                         m("i.icon.ion-md-arrow-forward.mg-l-5")
                                     ]),
                                 ])
@@ -56,6 +56,7 @@ const MenuLaboratorio = {
 
                             ])
                         )] : []),
+
                         (App.isShow('laboratorio', 6) ? [m("div.col-md-6.mg-b-20",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
                                 m("div.mg-b-25",

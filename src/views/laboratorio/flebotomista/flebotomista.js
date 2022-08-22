@@ -761,6 +761,16 @@ const DetallePedido = {
                                                             if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
                                                                 el.dom.checked = true;
                                                             }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                                if (Insumos.tuboRojo == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
+                                                            }
                                                         }
                                                     }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboRojo']",
@@ -805,6 +815,9 @@ const DetallePedido = {
                                                     m("button.btn.btn[type='button']", {
                                                         onclick: () => {
                                                             Insumos.tuboRojo--;
+                                                            if (Insumos.tuboRojo < 0) {
+                                                                Insumos.tuboRojo = 0;
+                                                            }
 
                                                         },
 
@@ -835,6 +848,16 @@ const DetallePedido = {
                                                         oncreate: (el) => {
                                                             if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
                                                                 el.dom.checked = true;
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                                if (Insumos.tuboCeleste == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
                                                             }
                                                         }
                                                     }),
@@ -911,6 +934,16 @@ const DetallePedido = {
                                                             if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
                                                                 el.dom.checked = true;
                                                             }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                                if (Insumos.tuboNegro == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
+                                                            }
                                                         }
                                                     }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboNegro']",
@@ -986,6 +1019,16 @@ const DetallePedido = {
                                                             if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
                                                                 el.dom.checked = true;
                                                             }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                                if (Insumos.tuboVerde == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
+                                                            }
                                                         }
                                                     }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='tuboVerde']",
@@ -1015,7 +1058,8 @@ const DetallePedido = {
                                                                     el.dom.innerText = 0;
 
                                                                 }
-                                                            }
+                                                            },
+
 
                                                         })
                                                     ),
@@ -1060,6 +1104,16 @@ const DetallePedido = {
                                                         oncreate: (el) => {
                                                             if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
                                                                 el.dom.checked = true;
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                                if (Insumos.gsav == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
                                                             }
                                                         }
                                                     }),
@@ -1137,6 +1191,16 @@ const DetallePedido = {
                                                             if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
                                                                 el.dom.checked = true;
                                                             }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                                if (Insumos.hemocultivo == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
+                                                            }
                                                         }
                                                     }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='hemocultivo']",
@@ -1211,6 +1275,16 @@ const DetallePedido = {
                                                             if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
                                                                 el.dom.checked = true;
                                                             }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                                if (Insumos.qtb == 1) {
+                                                                    el.dom.checked = true;
+
+                                                                }
+                                                            } else {
+                                                                el.dom.checked = false;
+                                                            }
                                                         }
                                                     }),
                                                     m("label.tx-20.tx-semibold..custom-control-label[for='qtb']",
@@ -1276,7 +1350,6 @@ const DetallePedido = {
                                 m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
                                     disabled: DetallePedido.disabledToma,
                                     onclick: () => {
-
 
                                         DetallePedido.validarUpdateMuestras();
                                         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');

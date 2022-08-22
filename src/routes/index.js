@@ -1,5 +1,6 @@
 // Pages here
 import App from '../views/app'
+import RedirMV from '../views/redir'
 import Salir from '../views/salir'
 import Login from '../views/login/login'
 import Laboratorio from '../views/laboratorio/laboratorio'
@@ -30,11 +31,11 @@ import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
 import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
 
 
-
 // Routes here
 const Routes = {
     '/': App,
     '/subscribir/notificaciones': SubscribirCanal, //SubscribirCanal
+    '/redir/mv/:idAtencion': RedirMV, //RedirMV
     '/inicio': Inicio,
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab

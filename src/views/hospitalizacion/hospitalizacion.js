@@ -10,7 +10,7 @@ const MenuHospitalizacion = {
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                "Metrovirtual"
+                                "MetroPlus"
                             ])
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
@@ -22,9 +22,7 @@ const MenuHospitalizacion = {
                     ),
 
                     m("div.row.tx-14", [
-
-
-                        m("div.col-sm-6",
+                        (App.isShow('hospitalizacion', 17) ? [m("div.col-sm-6",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
                                     m("i.tx-50.tx-gray-500.fas.fa-procedures")
@@ -39,13 +37,14 @@ const MenuHospitalizacion = {
 
 
                             ])
-                        ),
+                        )] : []),
 
 
-                        m("div.col-sm-6.d-none",
+
+                        (App.isShow('hospitalizacion', 9) ? [m("div.col-sm-6",
                             m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                 m("div.mg-b-25",
-                                    m("i.tx-50.tx-gray-500.fas.fa-procedures")
+                                    m("i.tx-50.tx-gray-500.fas.fa-file-alt")
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
                                     "Pasaportes de Pacientes"
@@ -57,7 +56,8 @@ const MenuHospitalizacion = {
 
 
                             ])
-                        ),
+                        )] : []),
+
 
 
 

@@ -30,7 +30,7 @@ const NotificacionesLab = {
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                " Metrovirtual "
+                                " MetroPlus "
                             ])
                         ),
                         m("li.breadcrumb-item",
@@ -44,25 +44,17 @@ const NotificacionesLab = {
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10", [
-                        "Notificaciones de Laboratorio:"
+                            "Notificaciones de Laboratorio:"
 
-                    ]
+                        ]
 
                     ),
 
                     m("div.row.tx-14", [
                         m("div.col-12.mg-b-10.wd-100p",
                             m("div.row.mg-t-10", [
-                                m("div.col-sm-12.pd-b-10.mg-b-10", [
 
-                                    m("hr"),
-
-
-                                ]
-
-
-                                ),
-                                m("div.col-sm-6",
+                                m("div.col-sm-6.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                         m("div.mg-b-25",
                                             m("i.fas.fa-filter.tx-50.tx-gray-500")
@@ -77,7 +69,7 @@ const NotificacionesLab = {
 
                                     ])
                                 ),
-                                m("div.col-sm-6",
+                                m("div.col-sm-6.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                         m("div.mg-b-25",
                                             m("i.fas.fa-mail-bulk.tx-50.tx-gray-500")
@@ -85,14 +77,14 @@ const NotificacionesLab = {
                                         m("h5.tx-inverse.mg-b-20",
                                             "Notificaciones Enviadas"
                                         ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/enviadas", class: "tx-medium" }, [
                                             "Ir a Notificaciones Enviadas",
                                         ]),
 
 
                                     ])
                                 ),
-                                m("div.col-sm-6",
+                                m("div.col-sm-6.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                         m("div.mg-b-25",
                                             m("i.fas.fa-exclamation-triangle.tx-50.tx-gray-500")
@@ -100,14 +92,14 @@ const NotificacionesLab = {
                                         m("h5.tx-inverse.mg-b-20",
                                             "Notificaciones con Error"
                                         ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/error", class: "tx-medium" }, [
                                             "Ir a Notificaciones con Error",
                                         ]),
 
 
                                     ])
                                 ),
-                                m("div.col-sm-6",
+                                m("div.col-sm-6.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                         m("div.mg-b-25",
                                             m("i.fas.fa-hourglass.tx-50.tx-gray-500")
@@ -115,7 +107,7 @@ const NotificacionesLab = {
                                         m("h5.tx-inverse.mg-b-20",
                                             "Notificaciones Pendientes"
                                         ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/pendientes", class: "tx-medium" }, [
                                             "Ir a Notificaciones Pendientes",
                                         ]),
 
@@ -125,8 +117,8 @@ const NotificacionesLab = {
                             ])
                         ),
                         m("div.table-loader.col-12.wd-100p", {
-                            class: NotificacionesLab.showProcess,
-                        },
+                                class: NotificacionesLab.showProcess,
+                            },
                             m("div.placeholder-paragraph", [
                                 m("div.line"),
                                 m("div.line")

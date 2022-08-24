@@ -7,6 +7,7 @@ import Laboratorio from '../views/laboratorio/laboratorio'
 import NotificacionesLab from '../views/laboratorio/notificaciones/notificaciones'
 import SubscribirCanal from '../models/subscribirCanal'
 import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
+import NotificacionesEnviadasLab from '../views/laboratorio/notificaciones/enviadas'
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
@@ -14,7 +15,6 @@ import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
 import Inicio from '../views/inicio/inicio';
 import ReloadNotification from '../views/layout/reload-notificacion';
-import VerPedido from '../views/laboratorio/pedidos/verPedido'
 import Emergencia from '../views/emergencia/emergencia'
 import EmergenciaAuxiliarPedidosLaboratorio from '../views/emergencia/auxiliar/pedidos'
 import VerPedidoAuxiliarEmergencia from '../views/emergencia/auxiliar/verPedido'
@@ -29,6 +29,9 @@ import IntegracionHigienizacion from '../views/mantenimiento/higienizacion/higie
 import Hospitalizacion from '../views/hospitalizacion/hospitalizacion'
 import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
 import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
+import NotificacionesPendientesLab from '../views/laboratorio/notificaciones/pendientes'
+import NotificacionesErroresEnviadosLab from '../views/laboratorio/notificaciones/erroresEnviadas'
+
 
 
 // Routes here
@@ -40,9 +43,11 @@ const Routes = {
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
+    '/laboratorio/notificaciones/enviadas': NotificacionesEnviadasLab, //NotificacionesEnviadasLab
+    '/laboratorio/notificaciones/pendientes': NotificacionesPendientesLab, //NotificacionesPendientesLab
+    '/laboratorio/notificaciones/error': NotificacionesErroresEnviadosLab, //NotificacionesErroresEnviadosLab
     '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista Hospitalizacion,
-    '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos
-    '/laboratorio/pedido/:idPedido': VerPedido, //verPedido
+    '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos Recepción Pedidos,
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos
     '/emergencia': Emergencia, //Emergencia
     '/emergencia/auxiliar/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio

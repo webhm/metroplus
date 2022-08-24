@@ -12,20 +12,20 @@ const iFiltro = {
                 m("div.tx-12",
                     m("span", {
                         class: "badge badge-primary mg-l-5 mg-r-5",
-                    }, [], m("i.fas.fa-filter")),
+                        style: { "cursor": "pointer" }
+                    }, [], [
+                        m("i.fas.fa-envelope.mg-r-2"),
+                        " Ver Notificación "
+                    ]),
                     m("span", {
                         class: "badge badge-light mg-l-5 mg-r-5",
-                    }, _data.attrs.nombre),
-                    (_data.attrs.ene == 1 ? [m("span", {
-                        class: "badge badge-success mg-l-5 mg-r-5",
-                    }, "Envio")] : [m("span", {
-                        class: "badge badge-danger mg-l-5 mg-r-5",
-                    }, "No Envio")]),
-                    (_data.attrs.tipo_validacion == 1 ? [m("span", {
-                        class: "badge badge-warning mg-l-5 mg-r-5",
-                    }, "Validación Completa")] : [m("span", {
-                        class: "badge badge-info mg-l-5 mg-r-5",
-                    }, "Validación Parcial")]),
+                    }, [], [
+                        _data.attrs.fechaExamen
+                    ]),
+                    m("span.mg-r-2", {}, "SC: " + _data.attrs.sc),
+                    m("span.mg-r-2", {}, "NHC: " + _data.attrs.numeroHistoriaClinica),
+                    m("span.mg-r-2", {}, "PTE: " + _data.attrs.apellidosPaciente + " " + _data.attrs.nombresPaciente),
+
 
 
 
@@ -39,7 +39,7 @@ const iFiltro = {
 };
 
 
-const FiltrosLab = {
+const NotificacionesErroresEnviadosLab = {
     dataPendientesAlta: [],
     dataSoloGema: [],
     dataGemaMV: [],
@@ -55,11 +55,11 @@ const FiltrosLab = {
     fetch: () => {
         m.request({
                 method: "GET",
-                url: "http://lisa.hospitalmetropolitano.org/apps/soa/laranotifs/public/api/v1/reglas",
+                url: "http://lisa.hospitalmetropolitano.org/apps/soa/laranotifs/public/api/v1/listar/ordenes?tipo=enviadas&errores=1&limit=10&withdata=1&page=1",
             })
             .then(function(result) {
-                FiltrosLab.dataFiltros = result.data;
-                loadFiltrosLab();
+                NotificacionesErroresEnviadosLab.dataFiltros = result.data;
+                loadNotificacionesErroresEnviadosLab();
 
             })
             .catch(function(e) {})
@@ -68,12 +68,12 @@ const FiltrosLab = {
     oninit: (_data) => {
         HeaderPrivate.page = "";
         SidebarLab.page = "";
-        FiltrosLab.dataPendientesAlta = [];
-        FiltrosLab.dataCamaTotales = [];
-        FiltrosLab.camasTotales = 0;
-        FiltrosLab.pendienteAlta = 0;
+        NotificacionesErroresEnviadosLab.dataPendientesAlta = [];
+        NotificacionesErroresEnviadosLab.dataCamaTotales = [];
+        NotificacionesErroresEnviadosLab.camasTotales = 0;
+        NotificacionesErroresEnviadosLab.pendienteAlta = 0;
         App.isAuth('laboratorio', 15);
-        FiltrosLab.fetch();
+        NotificacionesErroresEnviadosLab.fetch();
     },
     oncreate: (_data) => {
         document.title = "Reglas Filtros | " + App.title;
@@ -104,16 +104,16 @@ const FiltrosLab = {
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Reglas Filtros:"
+                            "Notificaciones Enviadas"
                         ),
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Reglas Filtros:"
+                        "Notificaciones con Error:"
                     ),
 
 
                     m("div.row.animated.fadeInUp", {
-                        class: FiltrosLab.showBitacora
+                        class: NotificacionesErroresEnviadosLab.showBitacora
                     }, [
                         m("div.col-12.mg-b-5.wd-100p.d-none[data-label='Filtrar'][id='filterTable']",
 
@@ -153,7 +153,7 @@ const FiltrosLab = {
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
-                                m("table.table.table-xs[id='table-filtroslab'][width='100%']"),
+                                m("table.table.table-xs[id='table-NotificacionesErroresEnviadosLab'][width='100%']"),
                             ])
                         ])
                     ]),
@@ -174,7 +174,7 @@ function reloadDataTables(_table_, _data_) {
     table.rows.add(_data_).draw();
 }
 
-function loadFiltrosLab() {
+function loadNotificacionesErroresEnviadosLab() {
 
     $(".table-content").hide();
     $(".table-loader").show();
@@ -195,8 +195,8 @@ function loadFiltrosLab() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-filtroslab").DataTable({
-        data: FiltrosLab.dataFiltros,
+    var table = $("#table-NotificacionesErroresEnviadosLab").DataTable({
+        data: NotificacionesErroresEnviadosLab.dataFiltros,
         dom: 'tp',
         language: {
             searchPlaceholder: "Buscar...",
@@ -278,4 +278,4 @@ function isObjEmpty(obj) {
 }
 
 
-export default FiltrosLab;
+export default NotificacionesErroresEnviadosLab;

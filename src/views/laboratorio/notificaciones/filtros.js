@@ -12,7 +12,8 @@ const iFiltro = {
                 m("div.tx-12",
                     m("span", {
                         class: "badge badge-primary mg-l-5 mg-r-5",
-                    }, [], m("i.fas.fa-filter")),
+                        style: { "cursor": "pointer" }
+                    }, [], [m("i.fas.fa-filter"), " Ver Filtro "]),
                     m("span", {
                         class: "badge badge-light mg-l-5 mg-r-5",
                     }, _data.attrs.nombre),
@@ -21,11 +22,7 @@ const iFiltro = {
                     }, "Envio")] : [m("span", {
                         class: "badge badge-danger mg-l-5 mg-r-5",
                     }, "No Envio")]),
-                    (_data.attrs.tipo_validacion == 1 ? [m("span", {
-                        class: "badge badge-warning mg-l-5 mg-r-5",
-                    }, "Validación Completa")] : [m("span", {
-                        class: "badge badge-info mg-l-5 mg-r-5",
-                    }, "Validación Parcial")]),
+
 
 
 
@@ -35,6 +32,135 @@ const iFiltro = {
 
         ];
     },
+
+};
+
+const DetalleFiltro = {
+    data: [],
+    fetch: () => {
+
+        DetalleFiltro.data = []
+        for (var i = 0; i < FiltrosLab.dataFiltros.length; i++) {
+            if (FiltrosLab.dataFiltros[i].id == FiltrosLab.idFiltro) {
+                DetalleFiltro.data = FiltrosLab.dataFiltros[i];
+            }
+        }
+
+    },
+    view: () => {
+
+        if (FiltrosLab.showBitacora.length !== 0 && DetalleFiltro.data.length !== 0) {
+            return [
+                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                    m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                        m("small.pd-2.tx-20",
+                            m("i.fas.fa-times-circle.pd-2", {
+                                    "style": { "cursor": "pointer" },
+                                    title: "Cerrar",
+                                    onclick: () => {
+
+                                        FiltrosLab.showBitacora = "";
+                                        DetalleFiltro.data = [];
+                                        m.route.set("/laboratorio/notificaciones/filtros", {});
+
+
+                                    }
+                                }
+
+                            )
+
+
+                        ),
+
+                    ),
+
+                    m("div.mg-b-30",
+                        m("i.tx-40.fas.fa-filter.")
+                    ),
+                    m("p.mg-5.tx-right", [
+                        m("button.btn.btn-xs.btn-secondary.mg-l-2[type='button']", {
+                                onclick: () => {
+
+                                }
+                            },
+                            m("i.fas.fa-edit.mg-r-5"),
+                            " Editar "
+
+                        ),
+
+                        m("button.btn.btn-xs.btn-danger.mg-l-2[type='button']", {
+                                onclick: () => {
+
+                                }
+                            },
+                            m("i.fas.fa-times-circle.mg-r-5"),
+                            " Eliminar "
+
+                        )
+                    ]),
+                    m("h5.tx-inverse.mg-b-10",
+                        "Filtro: " + DetalleFiltro.data.nombre
+                    ),
+
+                    (DetalleFiltro.data.ene == 0 ? [
+                        m("h5.tx-inverse.mg-b-10.tx-danger",
+                            "Regla para: NO ENVIAR"
+                        ),
+                    ] : [
+                        m("h5.tx-inverse.mg-b-10.tx-primary",
+                            "Regla para: ENVIAR"
+                        )
+                    ]),
+
+                    (DetalleFiltro.data.x_servicio !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Servicio: " + DetalleFiltro.data.x_servicio
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_origen !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Origen: " + DetalleFiltro.data.x_origen
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_motivo !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Motivo: " + DetalleFiltro.data.x_motivo
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_especialidad !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Especialidad: " + DetalleFiltro.data.x_especialidad
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_medico !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Médico: " + DetalleFiltro.data.x_medico
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_idprueba !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Id Prueba: " + DetalleFiltro.data.x_idprueba
+                        )
+                    ] : []),
+                ])
+            ]
+        } else {
+
+            if (FiltrosLab.showBitacora.length !== 0) {
+                return [
+                    m("div.pd-t-10", [
+                        m("div.placeholder-paragraph.wd-100p", [
+                            m("div.line"),
+                            m("div.line")
+                        ])
+                    ])
+
+                ]
+            }
+
+        }
+
+    }
 
 };
 
@@ -52,6 +178,7 @@ const FiltrosLab = {
     soloMV: 0,
     pendienteAlta: 0,
     timerUpdate: 0,
+    idFiltro: "",
     fetch: () => {
         m.request({
                 method: "GET",
@@ -78,13 +205,31 @@ const FiltrosLab = {
     oncreate: (_data) => {
         document.title = "Reglas Filtros | " + App.title;
     },
+
     view: (_data) => {
+
+        if (_data.attrs !== undefined && _data.attrs.idFiltro !== undefined) {
+
+            FiltrosLab.idFiltro = _data.attrs.idFiltro;
+            FiltrosLab.showBitacora = "d-none";
+            DetalleFiltro.fetch();
+            console.log(DetalleFiltro.data)
+
+        } else {
+            FiltrosLab.idFiltro = "";
+            FiltrosLab.showBitacora = "";
+        }
+
 
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
-                m("div.container", [
+            m("div.content.content-components", {
+                    style: { "margin-right": "0px" }
+                },
+                m("div.container", {
+                    style: { "max-width": "none" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -115,36 +260,49 @@ const FiltrosLab = {
                     m("div.row.animated.fadeInUp", {
                         class: FiltrosLab.showBitacora
                     }, [
-                        m("div.col-12.mg-b-5.wd-100p.d-none[data-label='Filtrar'][id='filterTable']",
 
-                            m("div.row", [
+                        m("div.col-12", [
+                            m("p.mb-b-5.tx-right", [
+                                m("button.btn.btn-xs.btn-primary.mg-l-2[type='button']", {
+                                        onclick: () => {
 
+                                        }
+                                    },
+                                    m("i.fas.fa-plus.mg-r-5"),
+                                    " Nueva Regla "
 
-                                m("div.col-sm-12.pd-b-10",
-                                    m("div.input-group", [
-                                        m(".df-example.demo-forms.wd-100p[data-label='Buscar']", [
-                                            m("input.form-control[type='text'][id='searchField'][data-role='tagsinput']", {
-                                                oncreate: () => {
-
-
-                                                    var citynames = new Bloodhound({
-                                                        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
-                                                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                                    });
-
-
-                                                },
-
-                                            }),
-                                        ])
-                                    ])
                                 ),
 
 
-                            ])
-                        ),
-                        m("div.col-12", [
+                            ]),
+                            m("div.col-12.mg-b-5.wd-100p[data-label='Filtrar'][id='filterTable']",
 
+                                m("div.row", [
+
+                                    m("div.wd-100p.pd-b-10",
+                                        m("div.input-group", [
+                                            m(".df-example.demo-forms.wd-100p[data-label='Buscar:']", [
+                                                m("input.form-control[type='text'][id='searchField'][data-role='tagsinput']", {
+                                                    oncreate: () => {
+
+
+                                                        new Bloodhound({
+                                                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+                                                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                                        });
+
+
+                                                    },
+
+
+                                                }),
+                                            ])
+                                        ])
+                                    ),
+
+
+                                ])
+                            ),
                             m("div.table-loader.wd-100p",
                                 m("div.placeholder-paragraph", [
                                     m("div.line"),
@@ -153,10 +311,11 @@ const FiltrosLab = {
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
-                                m("table.table.table-xs[id='table-filtroslab'][width='100%']"),
+                                m("table.table.table-sm.tx-12[id='table-filtroslab'][width='100%']"),
                             ])
                         ])
                     ]),
+                    m(DetalleFiltro)
                 ])
             ),
 
@@ -197,7 +356,7 @@ function loadFiltrosLab() {
     $.fn.dataTable.ext.errMode = "none";
     var table = $("#table-filtroslab").DataTable({
         data: FiltrosLab.dataFiltros,
-        dom: 'tp',
+        dom: 'ltp',
         language: {
             searchPlaceholder: "Buscar...",
             sSearch: "",
@@ -224,26 +383,158 @@ function loadFiltrosLab() {
             },
         },
         cache: false,
-        order: false,
         destroy: true,
-        pageLength: 20,
-        columns: false,
+        responsive: true,
+        columns: [{
+            title: "N°:"
+        }, {
+            title: "REGLA:"
+        }, {
+            title: "TIPO:"
+        }, {
+            title: "FECHA:"
+        }, {
+            title: "SERVICIO:"
+        }, {
+            title: "ORIGEN:"
+        }, {
+            title: "MOTIVO:"
+        }, {
+            title: "ESPECIALIDAD:"
+        }, {
+            title: "MÉDICO:"
+        }, {
+            title: "ID PRUEBA:"
+        }, ],
+
         aoColumnDefs: [{
                 mRender: function(data, type, row, meta) {
-                    return "";
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 },
                 visible: true,
-                width: "100%",
                 aTargets: [0],
-                orderable: false,
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.nombre;
+                },
+                visible: true,
+                aTargets: [1],
+
+            },
+            {
+                mRender: function(data, type, full) {
+
+                    if (full.ene == 0) {
+                        return " NO ENVIAR ";
+                    } else {
+                        return " ENVIAR ";
+                    }
+
+                },
+                visible: true,
+                aTargets: [2],
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return moment.utc(moment(full.created_at)).format('DD-MM-YYYY');
+                },
+                visible: true,
+                aTargets: [3],
+
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.x_servicio;
+                },
+                visible: true,
+                aTargets: [4],
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.x_origen;
+                },
+                visible: true,
+                aTargets: [5],
+
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.x_motivo;
+                },
+                visible: true,
+                aTargets: [6],
+
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.x_especialidad;
+                },
+                visible: true,
+                aTargets: [7],
+
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.x_medico;
+                },
+                visible: true,
+                aTargets: [8],
+
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.x_idprueba;
+                },
+                visible: true,
+                aTargets: [9],
+
+
             },
 
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+
+
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+            $(nRow).attr('id', aData.id);
+            if (aData.ene == 0) {
+                $(nRow).addClass("tx-danger");
+            } else {
+                $(nRow).addClass("tx-primary");
+            }
+            $(nRow).css("cursor", "pointer");
+            $(nRow).addClass("verRegla");
+
+        },
         drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
+
+            $('.verRegla').click(function(e) {
+
+                e.preventDefault();
+                var $this = this;
+                FiltrosLab.showBitacora = "d-none";
+                m.route.set("/laboratorio/notificaciones/filtros/", {
+                    idFiltro: $this.id,
+                });
+
+
+
+
+
+            });
+
+            /*
 
             settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[0], {
@@ -257,7 +548,21 @@ function loadFiltrosLab() {
 
 
             })
+
+            */
         },
+    });
+
+
+    $('.dataTables_length select').select2({
+        minimumResultsForSearch: Infinity
+    });
+
+
+    $('#searchField').change(function(e) {
+        $('.table-loader').show();
+        $('.table-content').hide();
+        table.search($('#searchField').val()).draw();
     });
 
 

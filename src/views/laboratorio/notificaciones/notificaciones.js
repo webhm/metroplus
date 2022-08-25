@@ -54,12 +54,12 @@ const NotificacionesLab = {
                         m("div.col-12.mg-b-10.wd-100p",
                             m("div.row.mg-t-10", [
 
-                                m("div.col-sm-6.mg-b-10",
+                                m("div.col-sm-12.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-25",
-                                            m("i.fas.fa-filter.tx-50.tx-gray-500")
+                                        m("div.mg-b-5.tx-right",
+                                            m("i.fas.fa-filter.tx-20.tx-gray-500")
                                         ),
-                                        m("h5.tx-inverse.mg-b-20",
+                                        m("h5.tx-inverse.",
                                             "Filtros"
                                         ),
                                         m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
@@ -69,12 +69,12 @@ const NotificacionesLab = {
 
                                     ])
                                 ),
-                                m("div.col-sm-6.mg-b-10",
+                                m("div.col-sm-12.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-25",
-                                            m("i.fas.fa-mail-bulk.tx-50.tx-gray-500")
+                                        m("div.mg-b-5.tx-right",
+                                            m("i.fas.fa-mail-bulk.tx-20.tx-gray-500")
                                         ),
-                                        m("h5.tx-inverse.mg-b-20",
+                                        m("h5.tx-inverse",
                                             "Notificaciones Enviadas"
                                         ),
                                         m(m.route.Link, { href: "/laboratorio/notificaciones/enviadas", class: "tx-medium" }, [
@@ -84,12 +84,12 @@ const NotificacionesLab = {
 
                                     ])
                                 ),
-                                m("div.col-sm-6.mg-b-10",
+                                m("div.col-sm-12.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-25",
-                                            m("i.fas.fa-exclamation-triangle.tx-50.tx-gray-500")
+                                        m("div.mg-b-5.tx-right",
+                                            m("i.fas.fa-exclamation-triangle.tx-20.tx-gray-500")
                                         ),
-                                        m("h5.tx-inverse.mg-b-20",
+                                        m("h5.tx-inverse",
                                             "Notificaciones con Error"
                                         ),
                                         m(m.route.Link, { href: "/laboratorio/notificaciones/error", class: "tx-medium" }, [
@@ -99,12 +99,12 @@ const NotificacionesLab = {
 
                                     ])
                                 ),
-                                m("div.col-sm-6.mg-b-10",
+                                m("div.col-sm-12.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-25",
-                                            m("i.fas.fa-hourglass.tx-50.tx-gray-500")
+                                        m("div.mg-b-5.tx-right",
+                                            m("i.fas.fa-hourglass.tx-20.tx-gray-500")
                                         ),
-                                        m("h5.tx-inverse.mg-b-20",
+                                        m("h5.tx-inverse",
                                             "Notificaciones Pendientes"
                                         ),
                                         m(m.route.Link, { href: "/laboratorio/notificaciones/pendientes", class: "tx-medium" }, [

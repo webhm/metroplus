@@ -4,25 +4,52 @@ import App from '../../app';
 import m from 'mithril';
 
 
+const iFiltro = {
 
-const DetalleNotificacion = {
+    view: (_data) => {
+        return [
+            m("p.mg-0", [
+                m("div.tx-12",
+                    m("span", {
+                        class: "badge badge-primary mg-l-5 mg-r-5",
+                        style: { "cursor": "pointer" }
+                    }, [], [m("i.fas.fa-filter"), " Ver Filtro "]),
+                    m("span", {
+                        class: "badge badge-light mg-l-5 mg-r-5",
+                    }, _data.attrs.nombre),
+                    (_data.attrs.ene == 1 ? [m("span", {
+                        class: "badge badge-success mg-l-5 mg-r-5",
+                    }, "Envio")] : [m("span", {
+                        class: "badge badge-danger mg-l-5 mg-r-5",
+                    }, "No Envio")]),
+
+
+
+
+
+                )
+            ]),
+
+        ];
+    },
+
+};
+
+const DetalleFiltro = {
     data: [],
     fetch: () => {
 
-        DetalleNotificacion.data = []
-        for (var i = 0; i < NotificacionesEnviadasLab.dataNotificaciones.length; i++) {
-            if (NotificacionesEnviadasLab.dataNotificaciones[i].id == NotificacionesEnviadasLab.idFiltro) {
-                DetalleNotificacion.data = NotificacionesEnviadasLab.dataNotificaciones[i];
+        DetalleFiltro.data = []
+        for (var i = 0; i < NotificacionesEnviadasLab.dataFiltros.length; i++) {
+            if (NotificacionesEnviadasLab.dataFiltros[i].id == NotificacionesEnviadasLab.idFiltro) {
+                DetalleFiltro.data = NotificacionesEnviadasLab.dataFiltros[i];
             }
         }
 
     },
     view: () => {
 
-        if (NotificacionesEnviadasLab.showBitacora.length !== 0 && DetalleNotificacion.data.length !== 0) {
-
-            console.log(1, DetalleNotificacion.data)
-
+        if (NotificacionesEnviadasLab.showBitacora.length !== 0 && DetalleFiltro.data.length !== 0) {
             return [
                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
@@ -33,8 +60,8 @@ const DetalleNotificacion = {
                                     onclick: () => {
 
                                         NotificacionesEnviadasLab.showBitacora = "";
-                                        DetalleNotificacion.data = [];
-                                        m.route.set("/laboratorio/notificaciones/enviadas", {});
+                                        DetalleFiltro.data = [];
+                                        m.route.set("/laboratorio/notificaciones/filtros", {});
 
 
                                     }
@@ -72,10 +99,10 @@ const DetalleNotificacion = {
                         )
                     ]),
                     m("h5.tx-inverse.mg-b-10",
-                        "Filtro: " + DetalleNotificacion.data.nombre
+                        "Filtro: " + DetalleFiltro.data.nombre
                     ),
 
-                    (DetalleNotificacion.data.ene == 0 ? [
+                    (DetalleFiltro.data.ene == 0 ? [
                         m("h5.tx-inverse.mg-b-10.tx-danger",
                             "Regla para: NO ENVIAR"
                         ),
@@ -85,34 +112,34 @@ const DetalleNotificacion = {
                         )
                     ]),
 
-                    (DetalleNotificacion.data.x_servicio !== null ? [
+                    (DetalleFiltro.data.x_servicio !== null ? [
                         m("h5.tx-inverse.mg-b-10",
-                            "Por Servicio: " + DetalleNotificacion.data.x_servicio
+                            "Por Servicio: " + DetalleFiltro.data.x_servicio
                         )
                     ] : []),
-                    (DetalleNotificacion.data.x_origen !== null ? [
+                    (DetalleFiltro.data.x_origen !== null ? [
                         m("h5.tx-inverse.mg-b-10",
-                            "Por Origen: " + DetalleNotificacion.data.x_origen
+                            "Por Origen: " + DetalleFiltro.data.x_origen
                         )
                     ] : []),
-                    (DetalleNotificacion.data.x_motivo !== null ? [
+                    (DetalleFiltro.data.x_motivo !== null ? [
                         m("h5.tx-inverse.mg-b-10",
-                            "Por Motivo: " + DetalleNotificacion.data.x_motivo
+                            "Por Motivo: " + DetalleFiltro.data.x_motivo
                         )
                     ] : []),
-                    (DetalleNotificacion.data.x_especialidad !== null ? [
+                    (DetalleFiltro.data.x_especialidad !== null ? [
                         m("h5.tx-inverse.mg-b-10",
-                            "Por Especialidad: " + DetalleNotificacion.data.x_especialidad
+                            "Por Especialidad: " + DetalleFiltro.data.x_especialidad
                         )
                     ] : []),
-                    (DetalleNotificacion.data.x_medico !== null ? [
+                    (DetalleFiltro.data.x_medico !== null ? [
                         m("h5.tx-inverse.mg-b-10",
-                            "Por Médico: " + DetalleNotificacion.data.x_medico
+                            "Por Médico: " + DetalleFiltro.data.x_medico
                         )
                     ] : []),
-                    (DetalleNotificacion.data.x_idprueba !== null ? [
+                    (DetalleFiltro.data.x_idprueba !== null ? [
                         m("h5.tx-inverse.mg-b-10",
-                            "Por Id Prueba: " + DetalleNotificacion.data.x_idprueba
+                            "Por Id Prueba: " + DetalleFiltro.data.x_idprueba
                         )
                     ] : []),
                 ])
@@ -139,17 +166,26 @@ const DetalleNotificacion = {
 
 
 const NotificacionesEnviadasLab = {
-    dataNotificaciones: [],
+    dataPendientesAlta: [],
+    dataSoloGema: [],
+    dataGemaMV: [],
+    dataFiltros: [],
+    dataCamaTotales: [],
+    camasTotales: 0,
     showBitacora: "",
-    sc: "",
-    fechaExamen: "",
+    gemaMV: 0,
+    soloGema: 0,
+    soloMV: 0,
+    pendienteAlta: 0,
+    timerUpdate: 0,
+    idFiltro: "",
     fetch: () => {
         m.request({
                 method: "GET",
-                url: "http://lisa.hospitalmetropolitano.org/apps/soa/laranotifs/public/api/v1/listar/ordenes?tipo=enviadas&errores=0&limit=100000&withdata=1&page=1",
+                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas",
             })
             .then(function(result) {
-                NotificacionesEnviadasLab.dataNotificaciones = result.data;
+                NotificacionesEnviadasLab.dataFiltros = result.data;
                 loadNotificacionesEnviadasLab();
 
             })
@@ -159,24 +195,31 @@ const NotificacionesEnviadasLab = {
     oninit: (_data) => {
         HeaderPrivate.page = "";
         SidebarLab.page = "";
+        NotificacionesEnviadasLab.dataPendientesAlta = [];
+        NotificacionesEnviadasLab.dataCamaTotales = [];
+        NotificacionesEnviadasLab.camasTotales = 0;
+        NotificacionesEnviadasLab.pendienteAlta = 0;
         App.isAuth('laboratorio', 15);
         NotificacionesEnviadasLab.fetch();
     },
     oncreate: (_data) => {
-        document.title = "Reglas Filtros | " + App.title;
+        document.title = "Notificaciones Enviadas | " + App.title;
     },
+
     view: (_data) => {
 
-        if (_data.attrs !== undefined && _data.attrs.sc !== undefined) {
-            NotificacionesEnviadasLab.sc = _data.attrs.sc;
-            NotificacionesEnviadasLab.fechaExamen = _data.attrs.fechaExamen;
+        if (_data.attrs !== undefined && _data.attrs.idFiltro !== undefined) {
+
+            NotificacionesEnviadasLab.idFiltro = _data.attrs.idFiltro;
             NotificacionesEnviadasLab.showBitacora = "d-none";
-            DetalleNotificacion.fetch();
+            DetalleFiltro.fetch();
+            console.log(DetalleFiltro.data)
+
         } else {
-            NotificacionesEnviadasLab.sc = _data.attrs.sc;
-            NotificacionesEnviadasLab.fechaExamen = _data.attrs.fechaExamen;
+            NotificacionesEnviadasLab.idFiltro = "";
             NotificacionesEnviadasLab.showBitacora = "";
         }
+
 
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
@@ -206,7 +249,7 @@ const NotificacionesEnviadasLab = {
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Notificaciones Enviadas"
+                            "Notificaciones Enviadas:"
                         ),
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
@@ -256,11 +299,11 @@ const NotificacionesEnviadasLab = {
                             ),
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
-                                m("table.table.table-sm.tx-12[id='table-notificaciones'][width='100%']"),
+                                m("table.table.table-sm.tx-12[id='table-NotificacionesEnviadasLab'][width='100%']"),
                             ])
                         ])
                     ]),
-                    m(DetalleNotificacion)
+                    m(DetalleFiltro)
                 ])
             ),
 
@@ -299,8 +342,8 @@ function loadNotificacionesEnviadasLab() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-notificaciones").DataTable({
-        data: NotificacionesEnviadasLab.dataNotificaciones,
+    var table = $("#table-NotificacionesEnviadasLab").DataTable({
+        data: NotificacionesEnviadasLab.dataFiltros,
         dom: 'ltp',
         language: {
             searchPlaceholder: "Buscar...",
@@ -331,22 +374,20 @@ function loadNotificacionesEnviadasLab() {
         destroy: true,
         responsive: true,
         columns: [{
-            title: "N°:"
-        }, {
-            title: "SC:"
-        }, {
-            title: "FECHA:"
-        }, {
-            title: "NHC:"
-        }, {
-            title: "PACIENTE:"
-        }, {
-            title: "FILTROS REGLAS:"
-        }, {
-            title: "EMAILS ENVÍO:"
-        }, {
-            title: "OPCIONES:"
-        }, ],
+                title: "N°:"
+            }, {
+                title: "SC:"
+            }, {
+                title: "FECHA:"
+            }, {
+                title: "NHC:"
+            }, {
+                title: "PACIENTE:"
+            },
+            {
+                title: "STATUS:"
+            },
+        ],
 
         aoColumnDefs: [{
                 mRender: function(data, type, row, meta) {
@@ -365,9 +406,7 @@ function loadNotificacionesEnviadasLab() {
             },
             {
                 mRender: function(data, type, full) {
-
-                    return full.fechaExamen + " " + full.horaExamen;
-
+                    return full.fechaExamen;
 
                 },
                 visible: true,
@@ -381,11 +420,10 @@ function loadNotificacionesEnviadasLab() {
                 visible: true,
                 aTargets: [3],
 
-
             },
             {
                 mRender: function(data, type, full) {
-                    return full.apellidosPaciente + " " + full.nombresPaciente;
+                    return full.apellidosPaciente + ' ' + full.nombresPaciente;
                 },
                 visible: true,
                 aTargets: [4],
@@ -393,76 +431,19 @@ function loadNotificacionesEnviadasLab() {
             },
             {
                 mRender: function(data, type, full) {
-
-                    var _reglas_envio = [];
-                    var _reglas_no_envio = [];
-
-                    for (var i = 0; i < full.reglasFiltros.length; i++) {
-
-                        if (full.reglasFiltros[i].tipoRegla == "E") {
-                            _reglas_envio.push(full.reglasFiltros[i].nombreRegla);
-                        }
-
-                        if (full.reglasFiltros[i].tipoRegla == "NE") {
-                            _reglas_no_envio.push(full.reglasFiltros[i].nombreRegla);
-                        }
-
-                    }
-
-                    return 'Envío: <div class="tx-primary d-inline">' + _reglas_envio.length + '</div><br/>No Envío: <div class="tx-danger d-inline">' + _reglas_no_envio.length + '</div>';
-
-
+                    return full.statusEnvio;
                 },
                 visible: true,
                 aTargets: [5],
 
-
-            },
-            {
-                mRender: function(data, type, full) {
-
-
-                    var _emails_success = [];
-                    var _emails_error = [];
-
-                    for (var t = 0; t < full.logsEnvio.length; t++) {
-
-                        if (full.logsEnvio[t].log.ErrorCode == 0) {
-                            _emails_success.push(full.logsEnvio[t].log.To);
-                        }
-
-                        if (full.logsEnvio[t].log.ErrorCode !== 0) {
-                            _emails_error.push(full.logsEnvio[t].log.To);
-                        }
-
-                    }
-
-                    return 'Envíados: <div class="tx-primary d-inline">' + _emails_success.length + '</div><br/>Con Error: <div class="tx-danger d-inline">' + _emails_error.length + '</div>';
-
-                },
-                visible: true,
-                aTargets: [6],
-
-            },
-            {
-                mRender: function(data, type, full) {
-
-                    return '';
-
-                },
-                visible: true,
-                aTargets: [7],
-
             },
 
 
-        ],
-        order: [
-            [0, "Desc"]
         ],
 
 
         fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
 
 
         },
@@ -471,38 +452,6 @@ function loadNotificacionesEnviadasLab() {
             $(".table-content").show();
             $(".table-loader").hide();
 
-
-
-            settings.aoData.map(function(_i) {
-
-
-
-                m.mount(_i.anCells[7], {
-                    view: function() {
-                        return [
-
-                            m(m.route.Link, {
-                                id: "sc_" + _i._aData.sc,
-                                class: "btn btn-xs btn-block btn-primary mg-b-2",
-                                href: "/laboratorio/notificaciones/enviadas/",
-                                params: {
-                                    sc: _i._aData.sc,
-                                    fechaExamen: _i._aData.fechaExamen,
-                                    track: "view",
-                                },
-
-
-
-                            }, [
-                                m("i.fas.fa-envelope.mg-r-5"),
-                            ], "Ver Detalle"),
-
-
-
-                        ]
-                    }
-                });
-            })
 
             /*
 
@@ -521,6 +470,7 @@ function loadNotificacionesEnviadasLab() {
 
             */
         },
+
     });
 
 

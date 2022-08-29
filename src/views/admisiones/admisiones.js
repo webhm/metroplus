@@ -10,7 +10,7 @@ const MenuAdmisiones = {
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                "Metrovirtual"
+                                "Metroplus"
                             ])
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
@@ -29,10 +29,10 @@ const MenuAdmisiones = {
                                     m("i.wd-50.ht-50.tx-gray-500[data-feather='users']")
                                 ),
                                 m("h5.tx-inverse.mg-b-20",
-                                    "Pacientes de Admisiones"
+                                    "Pre Admisiones"
                                 ),
-                                m(m.route.Link, { href: "/admisiones/pacientes", class: "tx-medium" }, [
-                                    "Ir a Pacientes de Admisiones",
+                                m(m.route.Link, { href: "/admisiones/pre", class: "tx-medium" }, [
+                                    "Ir a Pre Admisiones",
                                     m("i.icon.ion-md-arrow-forward.mg-l-5")
                                 ]),
 

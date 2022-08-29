@@ -23,7 +23,7 @@ import VerPedidoEnfermeriaEmergencia from '../views/emergencia/enfermeria/verPed
 import Farmacia from '../views/farmacia//farmacia'
 import FarmaciaRecetasAlta from '../views/farmacia//recetas/recetasAlta'
 import Admisiones from '../views/admisiones/admisiones'
-import PacientesAdmisiones from '../views/admisiones/pacientes/pacientes'
+import PreAdmisiones from '../views/admisiones/pacientes/preadmisiones'
 import Mantenimiento from '../views/mantenimiento/mantenimiento'
 import IntegracionHigienizacion from '../views/mantenimiento/higienizacion/higienizacion'
 import Hospitalizacion from '../views/hospitalizacion/hospitalizacion'
@@ -57,7 +57,7 @@ const Routes = {
     '/farmacia': Farmacia, //Farmacia
     '/farmacia/recetas': FarmaciaRecetasAlta, //FarmaciaRecetasAlta
     '/admisiones': Admisiones, //Admisiones
-    '/admisiones/pacientes': PacientesAdmisiones, //PacientesAdmisiones
+    '/admisiones/pre': PreAdmisiones, //PreAdmisiones
     '/mantenimiento': Mantenimiento, //Mantenimiento
     '/mantenimiento/higienizacion': IntegracionHigienizacion, //IntegracionHigienizacion
     '/hospitalizacion': Hospitalizacion, //Hospitalizacion

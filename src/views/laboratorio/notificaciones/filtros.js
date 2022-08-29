@@ -182,7 +182,7 @@ const FiltrosLab = {
     fetch: () => {
         m.request({
                 method: "GET",
-                url: "http://lisa.hospitalmetropolitano.org/apps/soa/laranotifs/public/api/v1/reglas",
+                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=reglas",
             })
             .then(function(result) {
                 FiltrosLab.dataFiltros = result.data;
@@ -405,6 +405,8 @@ function loadFiltrosLab() {
             title: "MÉDICO:"
         }, {
             title: "ID PRUEBA:"
+        }, {
+            title: "QR:"
         }, ],
 
         aoColumnDefs: [{
@@ -416,7 +418,7 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.nombre;
+                    return full.nombreFiltro;
                 },
                 visible: true,
                 aTargets: [1],
@@ -425,7 +427,7 @@ function loadFiltrosLab() {
             {
                 mRender: function(data, type, full) {
 
-                    if (full.ene == 0) {
+                    if (full.eNe == 0) {
                         return " NO ENVIAR ";
                     } else {
                         return " ENVIAR ";
@@ -438,7 +440,7 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return moment.utc(moment(full.created_at)).format('DD-MM-YYYY');
+                    return moment.utc(moment()).format('DD-MM-YYYY');
                 },
                 visible: true,
                 aTargets: [3],
@@ -447,7 +449,7 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.x_servicio;
+                    return full.xServicio;
                 },
                 visible: true,
                 aTargets: [4],
@@ -455,7 +457,7 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.x_origen;
+                    return full.xOrigen;
                 },
                 visible: true,
                 aTargets: [5],
@@ -464,7 +466,7 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.x_motivo;
+                    return full.xMotivo;
                 },
                 visible: true,
                 aTargets: [6],
@@ -473,7 +475,7 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.x_especialidad;
+                    return full.xMedico;
                 },
                 visible: true,
                 aTargets: [7],
@@ -491,10 +493,19 @@ function loadFiltrosLab() {
             },
             {
                 mRender: function(data, type, full) {
-                    return full.x_idprueba;
+                    return full.xIdPrueba;
                 },
                 visible: true,
                 aTargets: [9],
+
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.xQR;
+                },
+                visible: true,
+                aTargets: [10],
 
 
             },
@@ -505,7 +516,7 @@ function loadFiltrosLab() {
         fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             $(nRow).attr('id', aData.id);
-            if (aData.ene == 0) {
+            if (aData.eNe == 0) {
                 $(nRow).addClass("tx-danger");
             } else {
                 $(nRow).addClass("tx-primary");
@@ -527,10 +538,6 @@ function loadFiltrosLab() {
                 m.route.set("/laboratorio/notificaciones/filtros/", {
                     idFiltro: $this.id,
                 });
-
-
-
-
 
             });
 

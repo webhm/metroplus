@@ -87,21 +87,6 @@ const NotificacionesLab = {
                                 m("div.col-sm-12.mg-b-10",
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
                                         m("div.mg-b-5.tx-right",
-                                            m("i.fas.fa-exclamation-triangle.tx-20.tx-gray-500")
-                                        ),
-                                        m("h5.tx-inverse",
-                                            "Notificaciones con Error"
-                                        ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/error", class: "tx-medium" }, [
-                                            "Ir a Notificaciones con Error",
-                                        ]),
-
-
-                                    ])
-                                ),
-                                m("div.col-sm-12.mg-b-10",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-5.tx-right",
                                             m("i.fas.fa-hourglass.tx-20.tx-gray-500")
                                         ),
                                         m("h5.tx-inverse",
@@ -114,6 +99,22 @@ const NotificacionesLab = {
 
                                     ])
                                 ),
+                                m("div.col-sm-12.mg-b-10",
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
+                                        m("div.mg-b-5.tx-right",
+                                            m("i.fas.fa-exclamation-triangle.tx-20.tx-gray-500")
+                                        ),
+                                        m("h5.tx-inverse",
+                                            "Notificaciones con Error"
+                                        ),
+                                        m(m.route.Link, { href: "/laboratorio/notificaciones/error", class: "tx-medium" }, [
+                                            "Ir a Notificaciones con Error",
+                                        ]),
+
+
+                                    ])
+                                ),
+
                             ])
                         ),
                         m("div.table-loader.col-12.wd-100p", {

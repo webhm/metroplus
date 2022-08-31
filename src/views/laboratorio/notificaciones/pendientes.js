@@ -13,18 +13,15 @@ const iFiltro = {
                     m("span", {
                         class: "badge badge-primary mg-l-5 mg-r-5",
                         style: { "cursor": "pointer" }
-                    }, [], [
-                        m("i.fas.fa-envelope.mg-r-2"),
-                        " Ver Notificación "
-                    ]),
+                    }, [], [m("i.fas.fa-filter"), " Ver Filtro "]),
                     m("span", {
                         class: "badge badge-light mg-l-5 mg-r-5",
-                    }, [], [
-                        _data.attrs.fechaExamen
-                    ]),
-                    m("span.mg-r-2", {}, "SC: " + _data.attrs.sc),
-                    m("span.mg-r-2", {}, "NHC: " + _data.attrs.numeroHistoriaClinica),
-                    m("span.mg-r-2", {}, "PTE: " + _data.attrs.apellidosPaciente + " " + _data.attrs.nombresPaciente),
+                    }, _data.attrs.nombre),
+                    (_data.attrs.ene == 1 ? [m("span", {
+                        class: "badge badge-success mg-l-5 mg-r-5",
+                    }, "Envio")] : [m("span", {
+                        class: "badge badge-danger mg-l-5 mg-r-5",
+                    }, "No Envio")]),
 
 
 
@@ -35,6 +32,135 @@ const iFiltro = {
 
         ];
     },
+
+};
+
+const DetalleFiltro = {
+    data: [],
+    fetch: () => {
+
+        DetalleFiltro.data = []
+        for (var i = 0; i < NotificacionesPendientesLab.dataFiltros.length; i++) {
+            if (NotificacionesPendientesLab.dataFiltros[i].id == NotificacionesPendientesLab.idFiltro) {
+                DetalleFiltro.data = NotificacionesPendientesLab.dataFiltros[i];
+            }
+        }
+
+    },
+    view: () => {
+
+        if (NotificacionesPendientesLab.showBitacora.length !== 0 && DetalleFiltro.data.length !== 0) {
+            return [
+                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                    m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
+                        m("small.pd-2.tx-20",
+                            m("i.fas.fa-times-circle.pd-2", {
+                                    "style": { "cursor": "pointer" },
+                                    title: "Cerrar",
+                                    onclick: () => {
+
+                                        NotificacionesPendientesLab.showBitacora = "";
+                                        DetalleFiltro.data = [];
+                                        m.route.set("/laboratorio/notificaciones/filtros", {});
+
+
+                                    }
+                                }
+
+                            )
+
+
+                        ),
+
+                    ),
+
+                    m("div.mg-b-30",
+                        m("i.tx-40.fas.fa-filter.")
+                    ),
+                    m("p.mg-5.tx-right", [
+                        m("button.btn.btn-xs.btn-secondary.mg-l-2[type='button']", {
+                                onclick: () => {
+
+                                }
+                            },
+                            m("i.fas.fa-edit.mg-r-5"),
+                            " Editar "
+
+                        ),
+
+                        m("button.btn.btn-xs.btn-danger.mg-l-2[type='button']", {
+                                onclick: () => {
+
+                                }
+                            },
+                            m("i.fas.fa-times-circle.mg-r-5"),
+                            " Eliminar "
+
+                        )
+                    ]),
+                    m("h5.tx-inverse.mg-b-10",
+                        "Filtro: " + DetalleFiltro.data.nombre
+                    ),
+
+                    (DetalleFiltro.data.ene == 0 ? [
+                        m("h5.tx-inverse.mg-b-10.tx-danger",
+                            "Regla para: NO ENVIAR"
+                        ),
+                    ] : [
+                        m("h5.tx-inverse.mg-b-10.tx-primary",
+                            "Regla para: ENVIAR"
+                        )
+                    ]),
+
+                    (DetalleFiltro.data.x_servicio !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Servicio: " + DetalleFiltro.data.x_servicio
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_origen !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Origen: " + DetalleFiltro.data.x_origen
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_motivo !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Motivo: " + DetalleFiltro.data.x_motivo
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_especialidad !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Especialidad: " + DetalleFiltro.data.x_especialidad
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_medico !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Médico: " + DetalleFiltro.data.x_medico
+                        )
+                    ] : []),
+                    (DetalleFiltro.data.x_idprueba !== null ? [
+                        m("h5.tx-inverse.mg-b-10",
+                            "Por Id Prueba: " + DetalleFiltro.data.x_idprueba
+                        )
+                    ] : []),
+                ])
+            ]
+        } else {
+
+            if (NotificacionesPendientesLab.showBitacora.length !== 0) {
+                return [
+                    m("div.pd-t-10", [
+                        m("div.placeholder-paragraph.wd-100p", [
+                            m("div.line"),
+                            m("div.line")
+                        ])
+                    ])
+
+                ]
+            }
+
+        }
+
+    }
 
 };
 
@@ -52,10 +178,12 @@ const NotificacionesPendientesLab = {
     soloMV: 0,
     pendienteAlta: 0,
     timerUpdate: 0,
+    idFiltro: "",
+    searchField: "",
     fetch: () => {
         m.request({
                 method: "GET",
-                url: "http://lisa.hospitalmetropolitano.org/apps/soa/laranotifs/public/api/v1/listar/ordenes?tipo=revalidando&errores=0&limit=10&withdata=1&page=1",
+                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=filtradas",
             })
             .then(function(result) {
                 NotificacionesPendientesLab.dataFiltros = result.data;
@@ -76,15 +204,33 @@ const NotificacionesPendientesLab = {
         NotificacionesPendientesLab.fetch();
     },
     oncreate: (_data) => {
-        document.title = "Reglas Filtros | " + App.title;
+        document.title = "Notificaciones Enviadas | " + App.title;
     },
+
     view: (_data) => {
+
+        if (_data.attrs !== undefined && _data.attrs.idFiltro !== undefined) {
+
+            NotificacionesPendientesLab.idFiltro = _data.attrs.idFiltro;
+            NotificacionesPendientesLab.showBitacora = "d-none";
+            DetalleFiltro.fetch();
+            console.log(DetalleFiltro.data)
+
+        } else {
+            NotificacionesPendientesLab.idFiltro = "";
+            NotificacionesPendientesLab.showBitacora = "";
+        }
+
 
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
-                m("div.container", [
+            m("div.content.content-components", {
+                    style: { "margin-right": "0px" }
+                },
+                m("div.container", {
+                    style: { "max-width": "none" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -110,53 +256,32 @@ const NotificacionesPendientesLab = {
                     m("h1.df-title.mg-t-20.mg-b-10",
                         "Notificaciones Pendientes:"
                     ),
-
-
                     m("div.row.animated.fadeInUp", {
                         class: NotificacionesPendientesLab.showBitacora
                     }, [
-                        m("div.col-12.mg-b-5.wd-100p.d-none[data-label='Filtrar'][id='filterTable']",
-
-                            m("div.row", [
-
-
-                                m("div.col-sm-12.pd-b-10",
-                                    m("div.input-group", [
-                                        m(".df-example.demo-forms.wd-100p[data-label='Buscar']", [
-                                            m("input.form-control[type='text'][id='searchField'][data-role='tagsinput']", {
-                                                oncreate: () => {
-
-
-                                                    var citynames = new Bloodhound({
-                                                        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
-                                                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                                    });
-
-
-                                                },
-
-                                            }),
-                                        ])
-                                    ])
-                                ),
-
-
-                            ])
-                        ),
                         m("div.col-12", [
 
-                            m("div.table-loader.wd-100p",
-                                m("div.placeholder-paragraph", [
+                            m("div.filemgr-content-header.", [
+                                m("i[data-feather='search']"),
+                                m("div.search-form",
+                                    m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']")
+                                ),
+
+                            ]),
+
+                            m("div.mg-t-20.table-loader.wd-100p",
+                                m("div.placeholder-paragraph.", [
                                     m("div.line"),
                                     m("div.line")
                                 ])
                             ),
-                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
+                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.mg-t-70", [
 
-                                m("table.table.table-xs[id='table-NotificacionesPendientesLab'][width='100%']"),
+                                m("table.table.table-sm.tx-12[id='table-NotificacionesPendientesLab'][width='100%']"),
                             ])
                         ])
                     ]),
+                    m(DetalleFiltro)
                 ])
             ),
 
@@ -197,7 +322,7 @@ function loadNotificacionesPendientesLab() {
     $.fn.dataTable.ext.errMode = "none";
     var table = $("#table-NotificacionesPendientesLab").DataTable({
         data: NotificacionesPendientesLab.dataFiltros,
-        dom: 'tp',
+        dom: 'ltp',
         language: {
             searchPlaceholder: "Buscar...",
             sSearch: "",
@@ -224,26 +349,89 @@ function loadNotificacionesPendientesLab() {
             },
         },
         cache: false,
-        order: false,
         destroy: true,
-        pageLength: 20,
-        columns: false,
+        responsive: true,
+        columns: [{
+                title: "N°:"
+            }, {
+                title: "SC:"
+            }, {
+                title: "FECHA:"
+            }, {
+                title: "NHC:"
+            }, {
+                title: "PACIENTE:"
+            },
+            {
+                title: "STATUS:"
+            },
+        ],
+
         aoColumnDefs: [{
                 mRender: function(data, type, row, meta) {
-                    return "";
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 },
                 visible: true,
-                width: "100%",
                 aTargets: [0],
-                orderable: false,
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.sc;
+                },
+                visible: true,
+                aTargets: [1],
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.fechaExamen;
+
+                },
+                visible: true,
+                aTargets: [2],
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.numeroHistoriaClinica;
+                },
+                visible: true,
+                aTargets: [3],
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.apellidosPaciente + ' ' + full.nombresPaciente;
+                },
+                visible: true,
+                aTargets: [4],
+
+            },
+            {
+                mRender: function(data, type, full) {
+                    return full.statusEnvio;
+                },
+                visible: true,
+                aTargets: [5],
+
             },
 
+
         ],
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+
+
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+
+
+        },
         drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
+
+
+            /*
 
             settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[0], {
@@ -257,7 +445,22 @@ function loadNotificacionesPendientesLab() {
 
 
             })
+
+            */
         },
+
+    });
+
+
+    $('.dataTables_length select').select2({
+        minimumResultsForSearch: Infinity
+    });
+
+
+    $('#searchField').keyup(function(e) {
+        $('.table-loader').show();
+        $('.table-content').hide();
+        table.search($('#searchField').val()).draw();
     });
 
 

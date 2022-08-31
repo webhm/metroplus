@@ -30,7 +30,7 @@ import Hospitalizacion from '../views/hospitalizacion/hospitalizacion'
 import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
 import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
 import NotificacionesPendientesLab from '../views/laboratorio/notificaciones/pendientes'
-import NotificacionesErroresEnviadosLab from '../views/laboratorio/notificaciones/erroresEnviadas'
+import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errores'
 
 
 
@@ -45,7 +45,7 @@ const Routes = {
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
     '/laboratorio/notificaciones/enviadas': NotificacionesEnviadasLab, //NotificacionesEnviadasLab
     '/laboratorio/notificaciones/pendientes': NotificacionesPendientesLab, //NotificacionesPendientesLab
-    '/laboratorio/notificaciones/error': NotificacionesErroresEnviadosLab, //NotificacionesErroresEnviadosLab
+    '/laboratorio/notificaciones/error': NotificacionesErroresLab, //NotificacionesErroresLab
     '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista Hospitalizacion,
     '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos Recepción Pedidos,
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos

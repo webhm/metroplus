@@ -55,17 +55,17 @@ const DetalleFiltro = {
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                         m("small.pd-2.tx-20",
                             m("i.fas.fa-times-circle.pd-2", {
-                                "style": { "cursor": "pointer" },
-                                title: "Cerrar",
-                                onclick: () => {
+                                    "style": { "cursor": "pointer" },
+                                    title: "Cerrar",
+                                    onclick: () => {
 
-                                    NSGPedidos.showBitacora = "";
-                                    DetalleFiltro.data = [];
-                                    m.route.set("/laboratorio/notificaciones/filtros", {});
+                                        NSGPedidos.showBitacora = "";
+                                        DetalleFiltro.data = [];
+                                        m.route.set("/laboratorio/notificaciones/filtros", {});
 
 
+                                    }
                                 }
-                            }
 
                             )
 
@@ -79,20 +79,20 @@ const DetalleFiltro = {
                     ),
                     m("p.mg-5.tx-right", [
                         m("button.btn.btn-xs.btn-secondary.mg-l-2[type='button']", {
-                            onclick: () => {
+                                onclick: () => {
 
-                            }
-                        },
+                                }
+                            },
                             m("i.fas.fa-edit.mg-r-5"),
                             " Editar "
 
                         ),
 
                         m("button.btn.btn-xs.btn-danger.mg-l-2[type='button']", {
-                            onclick: () => {
+                                onclick: () => {
 
-                            }
-                        },
+                                }
+                            },
                             m("i.fas.fa-times-circle.mg-r-5"),
                             " Eliminar "
 
@@ -182,15 +182,15 @@ const NSGPedidos = {
     searchField: "",
     fetch: () => {
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/tr/pedidos",
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/tr/pedidos",
+            })
+            .then(function(result) {
                 NSGPedidos.dataFiltros = result.data;
                 loadNSGPedidos();
 
             })
-            .catch(function (e) { })
+            .catch(function(e) {})
     },
 
     oninit: (_data) => {
@@ -224,12 +224,8 @@ const NSGPedidos = {
 
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
-                m("div.container", {
-                    style: { "max-width": "none" }
-                }, [
+            m("div.content.content-components", {},
+                m("div.container", {}, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -355,61 +351,60 @@ function loadNSGPedidos() {
             title: "PACIENTE:"
         }, {
             title: "N° ATENCION:"
-        }
-        ],
+        }],
 
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+                mRender: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: true,
+                aTargets: [0],
             },
-            visible: true,
-            aTargets: [0],
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HR_PRE_MED;
-            },
-            visible: true,
-            aTargets: [1],
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.CD_PACIENTE;
+            {
+                mRender: function(data, type, full) {
+                    return full.HR_PRE_MED;
+                },
+                visible: true,
+                aTargets: [1],
 
             },
-            visible: true,
-            aTargets: [2],
+            {
+                mRender: function(data, type, full) {
+                    return full.CD_PACIENTE;
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.NM_PACIENTE;
+                },
+                visible: true,
+                aTargets: [2],
+
             },
-            visible: true,
-            aTargets: [3],
+            {
+                mRender: function(data, type, full) {
+                    return full.NM_PACIENTE;
+                },
+                visible: true,
+                aTargets: [3],
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.CD_ATENDIMENTO;
             },
-            visible: true,
-            aTargets: [4],
+            {
+                mRender: function(data, type, full) {
+                    return full.CD_ATENDIMENTO;
+                },
+                visible: true,
+                aTargets: [4],
 
-        },
+            },
 
 
 
         ],
 
 
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
 
 
         },
-        drawCallback: function (settings) {
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
@@ -441,7 +436,7 @@ function loadNSGPedidos() {
     });
 
 
-    $('#searchField').keyup(function (e) {
+    $('#searchField').keyup(function(e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchField').val()).draw();

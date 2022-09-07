@@ -16,20 +16,73 @@ const MenuHeader = {
                         " Inicio "
                     ])
                 ),
-                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
-                        return [
-                            m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
-
-                                m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
-                                    m("i[data-feather='layout']"),
-                                    _v.charAt(0).toUpperCase() + _v.slice(1)
-                                ]),
 
 
-                            ),
-                        ]
+
+                        if (_v == 'terapia-respiratoria') {
+
+                            return [
+                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+
+                                    m(m.route.Link, { href: "/terapia-respiratoria/pedidos", class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Terapia Respiratoria"
+                                    ]),
+
+
+                                ),
+                            ]
+
+                        } else if (_v == 'bco-sangre') {
+
+                            return [
+                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+
+                                    m(m.route.Link, { href: "/bco-sangre/pedidos", class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Bco. de Sangre"
+                                    ]),
+
+
+                                ),
+                            ]
+
+                        } else if (_v == 'neurofisiologia') {
+
+                            return [
+                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+
+                                    m(m.route.Link, { href: "/neurofisiologia/pedidos", class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Neurofisiología"
+                                    ]),
+
+
+                                ),
+                            ]
+
+                        } else {
+                            return [
+                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+
+                                    m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        _v.charAt(0).toUpperCase() + _v.slice(1)
+                                    ]),
+
+
+                                ),
+                            ]
+                        }
+
+
+
+
+
+
                     }
 
 
@@ -124,7 +177,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function () {
+    $(window).resize(function() {
         showNavbarActiveSub()
     })
 
@@ -133,7 +186,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -144,7 +197,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -156,24 +209,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function (e) {
+    $('#mainMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function (e) {
+    $('#sidebarMenuOpen').on('click', function(e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function (e) {
+    $('#navbarSearch').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function (e) {
+    $('#navbarSearchClose').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -191,7 +244,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function (e) {
+        $('.sidebar-nav .with-sub').on('click', function(e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -200,18 +253,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function (e) {
+    $('#mainMenuOpen').on('click touchstart', function(e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function (e) {
+    $('#sidebarMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

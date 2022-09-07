@@ -55,17 +55,17 @@ const DetalleFiltro = {
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                         m("small.pd-2.tx-20",
                             m("i.fas.fa-times-circle.pd-2", {
-                                    "style": { "cursor": "pointer" },
-                                    title: "Cerrar",
-                                    onclick: () => {
+                                "style": { "cursor": "pointer" },
+                                title: "Cerrar",
+                                onclick: () => {
 
-                                        NotificacionesEnviadasLab.showBitacora = "";
-                                        DetalleFiltro.data = [];
-                                        m.route.set("/laboratorio/notificaciones/filtros", {});
+                                    NotificacionesEnviadasLab.showBitacora = "";
+                                    DetalleFiltro.data = [];
+                                    m.route.set("/laboratorio/notificaciones/filtros", {});
 
 
-                                    }
                                 }
+                            }
 
                             )
 
@@ -79,20 +79,20 @@ const DetalleFiltro = {
                     ),
                     m("p.mg-5.tx-right", [
                         m("button.btn.btn-xs.btn-secondary.mg-l-2[type='button']", {
-                                onclick: () => {
+                            onclick: () => {
 
-                                }
-                            },
+                            }
+                        },
                             m("i.fas.fa-edit.mg-r-5"),
                             " Editar "
 
                         ),
 
                         m("button.btn.btn-xs.btn-danger.mg-l-2[type='button']", {
-                                onclick: () => {
+                            onclick: () => {
 
-                                }
-                            },
+                            }
+                        },
                             m("i.fas.fa-times-circle.mg-r-5"),
                             " Eliminar "
 
@@ -182,15 +182,15 @@ const NotificacionesEnviadasLab = {
     searchField: "",
     fetch: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas",
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas",
+        })
+            .then(function (result) {
                 NotificacionesEnviadasLab.dataFiltros = result.data;
                 loadNotificacionesEnviadasLab();
 
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     oninit: (_data) => {
@@ -201,13 +201,16 @@ const NotificacionesEnviadasLab = {
         NotificacionesEnviadasLab.camasTotales = 0;
         NotificacionesEnviadasLab.pendienteAlta = 0;
         App.isAuth('laboratorio', 15);
-        NotificacionesEnviadasLab.fetch();
     },
     oncreate: (_data) => {
         document.title = "Notificaciones Enviadas | " + App.title;
+        NotificacionesEnviadasLab.fetch();
     },
 
     view: (_data) => {
+
+
+
 
         if (_data.attrs !== undefined && _data.attrs.idFiltro !== undefined) {
 
@@ -225,8 +228,8 @@ const NotificacionesEnviadasLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
-                    style: { "margin-right": "0px" }
-                },
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "none" }
                 }, [
@@ -271,7 +274,7 @@ const NotificacionesEnviadasLab = {
 
                             ]),
 
-                            m("div.mg-t-20.table-loader.wd-100p",
+                            m("div.mg-t-90.table-loader.wd-100p",
                                 m("div.placeholder-paragraph.", [
                                     m("div.line"),
                                     m("div.line")
@@ -353,81 +356,84 @@ function loadNotificacionesEnviadasLab() {
         cache: false,
         destroy: true,
         responsive: true,
+        order: [
+            [0, "Desc"]
+        ],
         columns: [{
-                title: "N°:"
-            }, {
-                title: "SC:"
-            }, {
-                title: "FECHA:"
-            }, {
-                title: "NHC:"
-            }, {
-                title: "PACIENTE:"
-            },
-            {
-                title: "STATUS:"
-            },
+            title: "N°:"
+        }, {
+            title: "SC:"
+        }, {
+            title: "FECHA:"
+        }, {
+            title: "NHC:"
+        }, {
+            title: "PACIENTE:"
+        },
+        {
+            title: "STATUS:"
+        },
         ],
 
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: true,
-                aTargets: [0],
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.sc;
-                },
-                visible: true,
-                aTargets: [1],
+            visible: true,
+            aTargets: [0],
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.sc;
+            },
+            visible: true,
+            aTargets: [1],
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.fechaExamen;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.fechaExamen;
+            visible: true,
+            aTargets: [2],
 
-                },
-                visible: true,
-                aTargets: [2],
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.numeroHistoriaClinica;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.numeroHistoriaClinica;
-                },
-                visible: true,
-                aTargets: [3],
+            visible: true,
+            aTargets: [3],
 
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.apellidosPaciente + ' ' + full.nombresPaciente;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.apellidosPaciente + ' ' + full.nombresPaciente;
-                },
-                visible: true,
-                aTargets: [4],
+            visible: true,
+            aTargets: [4],
 
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.statusEnvio;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.statusEnvio;
-                },
-                visible: true,
-                aTargets: [5],
+            visible: true,
+            aTargets: [5],
 
-            },
+        },
 
 
         ],
 
 
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
 
 
         },
-        drawCallback: function(settings) {
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
@@ -459,7 +465,7 @@ function loadNotificacionesEnviadasLab() {
     });
 
 
-    $('#searchField').keyup(function(e) {
+    $('#searchField').keyup(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchField').val()).draw();

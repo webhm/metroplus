@@ -31,6 +31,14 @@ import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
 import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
 import NotificacionesPendientesLab from '../views/laboratorio/notificaciones/pendientes'
 import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errores'
+import TRPedidos from '../views/laboratorio/notificaciones/tr'
+import BSPedidos from '../views/laboratorio/notificaciones/bs'
+import NSGPedidos from '../views/laboratorio/notificaciones/nsg'
+
+
+
+
+
 
 
 
@@ -63,6 +71,12 @@ const Routes = {
     '/hospitalizacion': Hospitalizacion, //Hospitalizacion
     '/hospitalizacion/pasaportes': Pasaportes, //Pasaportes
     '/hospitalizacion/control-camas': ControlCamas, //Control Camas
+    '/terapia-respiratoria/pedidos': TRPedidos, //TRPedidos
+    '/bco-sangre/pedidos': BSPedidos, //BSPedidos
+    '/neurofisiologia/pedidos': NSGPedidos, //NSGPedidos
+
+
+
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

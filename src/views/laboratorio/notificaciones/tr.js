@@ -40,16 +40,16 @@ const DetalleFiltro = {
     fetch: () => {
 
         DetalleFiltro.data = []
-        for (var i = 0; i < FiltrosLab.dataFiltros.length; i++) {
-            if (FiltrosLab.dataFiltros[i].id == FiltrosLab.idFiltro) {
-                DetalleFiltro.data = FiltrosLab.dataFiltros[i];
+        for (var i = 0; i < TRPedidos.dataFiltros.length; i++) {
+            if (TRPedidos.dataFiltros[i].id == TRPedidos.idFiltro) {
+                DetalleFiltro.data = TRPedidos.dataFiltros[i];
             }
         }
 
     },
     view: () => {
 
-        if (FiltrosLab.showBitacora.length !== 0 && DetalleFiltro.data.length !== 0) {
+        if (TRPedidos.showBitacora.length !== 0 && DetalleFiltro.data.length !== 0) {
             return [
                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
@@ -59,7 +59,7 @@ const DetalleFiltro = {
                                 title: "Cerrar",
                                 onclick: () => {
 
-                                    FiltrosLab.showBitacora = "";
+                                    TRPedidos.showBitacora = "";
                                     DetalleFiltro.data = [];
                                     m.route.set("/laboratorio/notificaciones/filtros", {});
 
@@ -146,7 +146,7 @@ const DetalleFiltro = {
             ]
         } else {
 
-            if (FiltrosLab.showBitacora.length !== 0) {
+            if (TRPedidos.showBitacora.length !== 0) {
                 return [
                     m("div.pd-t-10", [
                         m("div.placeholder-paragraph.wd-100p", [
@@ -165,7 +165,7 @@ const DetalleFiltro = {
 };
 
 
-const FiltrosLab = {
+const TRPedidos = {
     dataPendientesAlta: [],
     dataSoloGema: [],
     dataGemaMV: [],
@@ -179,14 +179,15 @@ const FiltrosLab = {
     pendienteAlta: 0,
     timerUpdate: 0,
     idFiltro: "",
+    searchField: "",
     fetch: () => {
         m.request({
             method: "GET",
-            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=reglas",
+            url: "https://api.hospitalmetropolitano.org/t/v1/tr/pedidos",
         })
             .then(function (result) {
-                FiltrosLab.dataFiltros = result.data;
-                loadFiltrosLab();
+                TRPedidos.dataFiltros = result.data;
+                loadTRPedidos();
 
             })
             .catch(function (e) { })
@@ -195,36 +196,34 @@ const FiltrosLab = {
     oninit: (_data) => {
         HeaderPrivate.page = "";
         SidebarLab.page = "";
-        FiltrosLab.dataPendientesAlta = [];
-        FiltrosLab.dataCamaTotales = [];
-        FiltrosLab.camasTotales = 0;
-        FiltrosLab.pendienteAlta = 0;
+        TRPedidos.dataPendientesAlta = [];
+        TRPedidos.dataCamaTotales = [];
+        TRPedidos.camasTotales = 0;
+        TRPedidos.pendienteAlta = 0;
         App.isAuth('laboratorio', 15);
     },
     oncreate: (_data) => {
-        document.title = "Reglas Filtros | " + App.title;
-        FiltrosLab.fetch();
-
+        document.title = "Pedidos de Terapia Respiratoria | " + App.title;
+        TRPedidos.fetch();
     },
 
     view: (_data) => {
 
+
         if (_data.attrs !== undefined && _data.attrs.idFiltro !== undefined) {
 
-            FiltrosLab.idFiltro = _data.attrs.idFiltro;
-            FiltrosLab.showBitacora = "d-none";
+            TRPedidos.idFiltro = _data.attrs.idFiltro;
+            TRPedidos.showBitacora = "d-none";
             DetalleFiltro.fetch();
-            console.log(DetalleFiltro.data)
 
         } else {
-            FiltrosLab.idFiltro = "";
-            FiltrosLab.showBitacora = "";
+            TRPedidos.idFiltro = "";
+            TRPedidos.showBitacora = "";
         }
 
 
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
                 style: { "margin-right": "0px" }
             },
@@ -237,45 +236,22 @@ const FiltrosLab = {
                                 " MetroPlus "
                             ])
                         ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
-                            ])
 
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
-                                " Notificaciones de Laboratorio "
-                            ])
-
-                        ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Reglas Filtros:"
+                            "Pedidos de Terapia Respiratoria:"
                         ),
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Reglas Filtros:"
+                        "Pedidos de Terapia Respiratoria:"
                     ),
 
 
                     m("div.row.animated.fadeInUp", {
-                        class: FiltrosLab.showBitacora
+                        class: TRPedidos.showBitacora
                     }, [
 
                         m("div.col-12", [
-                            m("p.mg-b-20.tx-right", [
-                                m("button.btn.btn-xs.btn-primary.mg-l-2[type='button']", {
-                                    onclick: () => {
 
-                                    }
-                                },
-                                    m("i.fas.fa-plus.mg-r-5"),
-                                    " Nueva Regla "
-
-                                ),
-
-
-                            ]),
                             m("div.filemgr-content-header.", [
                                 m("i[data-feather='search']"),
                                 m("div.search-form",
@@ -283,15 +259,16 @@ const FiltrosLab = {
                                 ),
 
                             ]),
-                            m("div.mg-t-50.table-loader.wd-100p",
-                                m("div.placeholder-paragraph", [
+
+                            m("div.mg-t-90.table-loader.wd-100p",
+                                m("div.placeholder-paragraph.", [
                                     m("div.line"),
                                     m("div.line")
                                 ])
                             ),
-                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20..mg-t-40", [
+                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.mg-t-70", [
 
-                                m("table.table.table-sm.tx-12[id='table-filtroslab'][width='100%']"),
+                                m("table.table.table-sm.tx-12[id='table-TRPedidos'][width='100%']"),
                             ])
                         ])
                     ]),
@@ -313,7 +290,7 @@ function reloadDataTables(_table_, _data_) {
     table.rows.add(_data_).draw();
 }
 
-function loadFiltrosLab() {
+function loadTRPedidos() {
 
     $(".table-content").hide();
     $(".table-loader").show();
@@ -334,8 +311,8 @@ function loadFiltrosLab() {
     });
 
     $.fn.dataTable.ext.errMode = "none";
-    var table = $("#table-filtroslab").DataTable({
-        data: FiltrosLab.dataFiltros,
+    var table = $("#table-TRPedidos").DataTable({
+        data: TRPedidos.dataFiltros,
         dom: 'ltp',
         language: {
             searchPlaceholder: "Buscar...",
@@ -365,29 +342,21 @@ function loadFiltrosLab() {
         cache: false,
         destroy: true,
         responsive: true,
+        order: [
+            [0, "Desc"]
+        ],
         columns: [{
             title: "N°:"
         }, {
-            title: "REGLA:"
-        }, {
-            title: "TIPO:"
-        }, {
             title: "FECHA:"
         }, {
-            title: "SERVICIO:"
+            title: "NHC:"
         }, {
-            title: "ORIGEN:"
+            title: "PACIENTE:"
         }, {
-            title: "MOTIVO:"
-        }, {
-            title: "ESPECIALIDAD:"
-        }, {
-            title: "MÉDICO:"
-        }, {
-            title: "ID PRUEBA:"
-        }, {
-            title: "QR:"
-        },],
+            title: "N° ATENCION:"
+        }
+        ],
 
         aoColumnDefs: [{
             mRender: function (data, type, row, meta) {
@@ -398,7 +367,7 @@ function loadFiltrosLab() {
         },
         {
             mRender: function (data, type, full) {
-                return full.nombreFiltro;
+                return full.HR_PRE_MED;
             },
             visible: true,
             aTargets: [1],
@@ -406,12 +375,7 @@ function loadFiltrosLab() {
         },
         {
             mRender: function (data, type, full) {
-
-                if (full.eNe == 0) {
-                    return " NO ENVIAR ";
-                } else {
-                    return " ENVIAR ";
-                }
+                return full.CD_PACIENTE;
 
             },
             visible: true,
@@ -420,89 +384,29 @@ function loadFiltrosLab() {
         },
         {
             mRender: function (data, type, full) {
-                return moment.utc(moment()).format('DD-MM-YYYY');
+                return full.NM_PACIENTE;
             },
             visible: true,
             aTargets: [3],
 
-
         },
         {
             mRender: function (data, type, full) {
-                return full.xServicio;
+                return full.CD_ATENDIMENTO;
             },
             visible: true,
             aTargets: [4],
 
         },
-        {
-            mRender: function (data, type, full) {
-                return full.xOrigen;
-            },
-            visible: true,
-            aTargets: [5],
 
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.xMotivo;
-            },
-            visible: true,
-            aTargets: [6],
-
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.xMedico;
-            },
-            visible: true,
-            aTargets: [7],
-
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.x_medico;
-            },
-            visible: true,
-            aTargets: [8],
-
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.xIdPrueba;
-            },
-            visible: true,
-            aTargets: [9],
-
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.xQR;
-            },
-            visible: true,
-            aTargets: [10],
-
-
-        },
 
         ],
 
 
         fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
-            $(nRow).attr('id', aData.id);
-            if (aData.eNe == 0) {
-                $(nRow).addClass("tx-danger");
-            } else {
-                $(nRow).addClass("tx-primary");
-            }
-            $(nRow).css("cursor", "pointer");
-            $(nRow).addClass("verRegla");
+
 
         },
         drawCallback: function (settings) {
@@ -510,16 +414,6 @@ function loadFiltrosLab() {
             $(".table-content").show();
             $(".table-loader").hide();
 
-            $('.verRegla').click(function (e) {
-
-                e.preventDefault();
-                var $this = this;
-                FiltrosLab.showBitacora = "d-none";
-                m.route.set("/laboratorio/notificaciones/filtros/", {
-                    idFiltro: $this.id,
-                });
-
-            });
 
             /*
 
@@ -538,18 +432,20 @@ function loadFiltrosLab() {
 
             */
         },
+
     });
 
 
     $('.dataTables_length select').select2({
         minimumResultsForSearch: Infinity
     });
+
+
     $('#searchField').keyup(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchField').val()).draw();
     });
-
 
 
     return table;
@@ -569,4 +465,4 @@ function isObjEmpty(obj) {
 }
 
 
-export default FiltrosLab;
+export default TRPedidos;

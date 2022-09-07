@@ -38,6 +38,42 @@ const MenuInicio = {
                                 ),
                             ]
 
+                        } else if (_v == 'terapia-respiratoria') {
+
+                            return [
+                                m("li.nav-item",
+                                    m(m.route.Link, { href: "/terapia-respiratoria/pedidos", class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Terapia Respiratoria"
+                                    ])
+
+                                ),
+                            ]
+
+                        } else if (_v == 'bco-sangre') {
+
+                            return [
+                                m("li.nav-item",
+                                    m(m.route.Link, { href: "/bco-sangre/pedidos", class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Banco de Sangre"
+                                    ])
+
+                                ),
+                            ]
+
+                        } else if (_v == 'neurofisiologia') {
+
+                            return [
+                                m("li.nav-item",
+                                    m(m.route.Link, { href: "/neurofisiologia/pedidos", class: "nav-link" }, [
+                                        m("i[data-feather='layout']"),
+                                        "Neurofisiología"
+                                    ])
+
+                                ),
+                            ]
+
                         } else {
 
                             return [

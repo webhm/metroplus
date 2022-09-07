@@ -35,17 +35,17 @@ const DetalleNotificacion = {
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                         m("small.pd-2.tx-20",
                             m("i.fas.fa-times-circle.pd-2", {
-                                    "style": { "cursor": "pointer" },
-                                    title: "Cerrar",
-                                    onclick: () => {
+                                "style": { "cursor": "pointer" },
+                                title: "Cerrar",
+                                onclick: () => {
 
-                                        NotificacionesErroresLab.showBitacora = "";
-                                        DetalleNotificacion.data = [];
-                                        m.route.set("/laboratorio/notificaciones/error", {});
+                                    NotificacionesErroresLab.showBitacora = "";
+                                    DetalleNotificacion.data = [];
+                                    m.route.set("/laboratorio/notificaciones/error", {});
 
 
-                                    }
                                 }
+                            }
 
                             )
 
@@ -59,20 +59,20 @@ const DetalleNotificacion = {
                     ),
                     m("p.mg-5.tx-right", [
                         m("button.btn.btn-xs.btn-secondary.mg-l-2[type='button']", {
-                                onclick: () => {
+                            onclick: () => {
 
-                                }
-                            },
+                            }
+                        },
                             m("i.fas.fa-edit.mg-r-5"),
                             " Reenviar "
 
                         ),
 
                         m("button.btn.btn-xs.btn-danger.mg-l-2[type='button']", {
-                                onclick: () => {
+                            onclick: () => {
 
-                                }
-                            },
+                            }
+                        },
                             m("i.fas.fa-times-circle.mg-r-5"),
                             " Reprocesar "
 
@@ -116,38 +116,39 @@ const NotificacionesErroresLab = {
     searchField: "",
     fetch: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=errorEnviadas",
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=errorEnviadas",
+        })
+            .then(function (result) {
                 NotificacionesErroresLab.dataErroresEnvio = result.data;
                 loadNotificacionesErroresLab();
 
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
     fetchErrorFiltro: () => {
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=errorFiltradas",
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=errorFiltradas",
+        })
+            .then(function (result) {
                 NotificacionesErroresLab.dataErroresFiltro = result.data;
                 loadNotificacionesErroresFiltroLab();
 
             })
-            .catch(function(e) {})
+            .catch(function (e) { })
     },
 
     oninit: (_data) => {
         HeaderPrivate.page = "";
         SidebarLab.page = "";
         App.isAuth('laboratorio', 15);
-        NotificacionesErroresLab.fetch();
-        NotificacionesErroresLab.fetchErrorFiltro();
+
     },
     oncreate: (_data) => {
         document.title = "Notificaciones con Error | " + App.title;
+        NotificacionesErroresLab.fetch();
+        NotificacionesErroresLab.fetchErrorFiltro();
     },
 
     view: (_data) => {
@@ -171,8 +172,8 @@ const NotificacionesErroresLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
-                    style: { "margin-right": "0px" }
-                },
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "none" }
                 }, [
@@ -208,11 +209,11 @@ const NotificacionesErroresLab = {
                         m("div.col-12.wd-100p",
                             m("div.row.mg-t-10", [
                                 m("div.col-sm-12", [
-                                        m("label.nav-label.tx-semibold",
-                                            "Errores en Envío:"
-                                        ),
+                                    m("label.nav-label.tx-semibold",
+                                        "Errores en Envío:"
+                                    ),
 
-                                    ]
+                                ]
 
 
                                 ),
@@ -223,13 +224,12 @@ const NotificacionesErroresLab = {
                             m("div.filemgr-content-header.", [
                                 m("i[data-feather='search']"),
                                 m("div.search-form",
-                                    m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']"),
+                                    m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']")
                                 ),
-
 
                             ]),
 
-                            m("div.mg-t-20.table-loader.wd-100p",
+                            m("div.mg-t-90.table-loader.wd-100p",
                                 m("div.placeholder-paragraph.", [
                                     m("div.line"),
                                     m("div.line")
@@ -244,11 +244,11 @@ const NotificacionesErroresLab = {
                         m("div.col-12.wd-100p",
                             m("div.row.mg-t-10", [
                                 m("div.col-sm-12", [
-                                        m("label.nav-label.tx-semibold",
-                                            "Errores en Filtro:"
-                                        ),
+                                    m("label.nav-label.tx-semibold",
+                                        "Errores en Filtro:"
+                                    ),
 
-                                    ]
+                                ]
 
 
                                 ),
@@ -259,11 +259,11 @@ const NotificacionesErroresLab = {
                             m("div.filemgr-content-header.", [
                                 m("i[data-feather='search']"),
                                 m("div.search-form",
-                                    m("input.form-control[type='search'][placeholder='Buscar'][id='searchFieldFiltro']"),
+                                    m("input.form-control[type='search'][placeholder='Buscar'][id='searchFieldFiltro']")
                                 ),
 
-
                             ]),
+
 
 
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.mg-t-70", [
@@ -343,89 +343,92 @@ function loadNotificacionesErroresLab() {
         cache: false,
         destroy: true,
         responsive: true,
+        order: [
+            [0, "Desc"]
+        ],
         columns: [{
-                title: "N°:"
-            }, {
-                title: "SC:"
-            }, {
-                title: "FECHA:"
-            }, {
-                title: "NHC:"
-            }, {
-                title: "PACIENTE:"
-            },
-            {
-                title: "STATUS:"
-            },
+            title: "N°:"
+        }, {
+            title: "SC:"
+        }, {
+            title: "FECHA:"
+        }, {
+            title: "NHC:"
+        }, {
+            title: "PACIENTE:"
+        },
+        {
+            title: "STATUS:"
+        },
         ],
 
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: true,
-                aTargets: [0],
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.sc;
-                },
-                visible: true,
-                aTargets: [1],
+            visible: true,
+            aTargets: [0],
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.sc;
+            },
+            visible: true,
+            aTargets: [1],
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.fechaExamen;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.fechaExamen;
+            visible: true,
+            aTargets: [2],
 
-                },
-                visible: true,
-                aTargets: [2],
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.numeroHistoriaClinica;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.numeroHistoriaClinica;
-                },
-                visible: true,
-                aTargets: [3],
+            visible: true,
+            aTargets: [3],
 
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.apellidosPaciente + ' ' + full.nombresPaciente;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.apellidosPaciente + ' ' + full.nombresPaciente;
-                },
-                visible: true,
-                aTargets: [4],
+            visible: true,
+            aTargets: [4],
 
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.statusEnvio;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.statusEnvio;
-                },
-                visible: true,
-                aTargets: [5],
+            visible: true,
+            aTargets: [5],
 
-            },
+        },
 
 
         ],
 
 
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
 
             $(nRow).attr('id', aData.sc).css('cursor', "pointer");
             $(nRow).addClass("verNotificacion");
 
         },
-        drawCallback: function(settings) {
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
 
-            $('.verNotificacion').click(function(e) {
+            $('.verNotificacion').click(function (e) {
                 e.preventDefault();
                 var $this = this;
                 NotificacionesErroresLab.showBitacora = "d-none";
@@ -447,7 +450,7 @@ function loadNotificacionesErroresLab() {
     });
 
 
-    $('#searchField').keyup(function(e) {
+    $('#searchField').keyup(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchField').val()).draw();
@@ -510,87 +513,90 @@ function loadNotificacionesErroresFiltroLab() {
         cache: false,
         destroy: true,
         responsive: true,
+        order: [
+            [0, "Desc"]
+        ],
         columns: [{
-                title: "N°:"
-            }, {
-                title: "SC:"
-            }, {
-                title: "FECHA:"
-            }, {
-                title: "NHC:"
-            }, {
-                title: "PACIENTE:"
-            },
-            {
-                title: "STATUS:"
-            },
+            title: "N°:"
+        }, {
+            title: "SC:"
+        }, {
+            title: "FECHA:"
+        }, {
+            title: "NHC:"
+        }, {
+            title: "PACIENTE:"
+        },
+        {
+            title: "STATUS:"
+        },
         ],
 
         aoColumnDefs: [{
-                mRender: function(data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: true,
-                aTargets: [0],
+            mRender: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.sc;
-                },
-                visible: true,
-                aTargets: [1],
+            visible: true,
+            aTargets: [0],
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.sc;
+            },
+            visible: true,
+            aTargets: [1],
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.fechaExamen;
 
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.fechaExamen;
+            visible: true,
+            aTargets: [2],
 
-                },
-                visible: true,
-                aTargets: [2],
-
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.numeroHistoriaClinica;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.numeroHistoriaClinica;
-                },
-                visible: true,
-                aTargets: [3],
+            visible: true,
+            aTargets: [3],
 
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.apellidosPaciente + ' ' + full.nombresPaciente;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.apellidosPaciente + ' ' + full.nombresPaciente;
-                },
-                visible: true,
-                aTargets: [4],
+            visible: true,
+            aTargets: [4],
 
+        },
+        {
+            mRender: function (data, type, full) {
+                return full.statusEnvio;
             },
-            {
-                mRender: function(data, type, full) {
-                    return full.statusEnvio;
-                },
-                visible: true,
-                aTargets: [5],
+            visible: true,
+            aTargets: [5],
 
-            },
+        },
 
 
         ],
 
 
-        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             $(nRow).attr('id', aData.sc).css('cursor', "pointer");
             $(nRow).addClass("verNotificacionFiltro");
 
         },
-        drawCallback: function(settings) {
+        drawCallback: function (settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            $('.verNotificacionFiltro').click(function(e) {
+            $('.verNotificacionFiltro').click(function (e) {
                 e.preventDefault();
                 var $this = this;
                 NotificacionesErroresLab.showBitacora = "d-none";
@@ -611,7 +617,7 @@ function loadNotificacionesErroresFiltroLab() {
     });
 
 
-    $('#searchFieldFiltro').keyup(function(e) {
+    $('#searchFieldFiltro').keyup(function (e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#searchFieldFiltro').val()).draw();

@@ -13,7 +13,7 @@ const MenuInicio = {
 
         if (_data !== null && _data.length !== 0) {
             return [
-                m("li.nav-item.active",
+                m("li.bg-primary.wd-100p.nav-item.d-none",
 
                     m(m.route.Link, { href: "/inicio", class: "nav-link" }, [
                         m("i[data-feather='layout']"),
@@ -22,77 +22,7 @@ const MenuInicio = {
 
 
                 ),
-                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
 
-                    if (_data.modulesAccess[_v].length !== 0) {
-
-                        if (_v == 'hospitalizacion') {
-
-                            return [
-                                m("li.nav-item",
-                                    m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
-                                        m("i[data-feather='layout']"),
-                                        "Hospitalizacion"
-                                    ])
-
-                                ),
-                            ]
-
-                        } else if (_v == 'terapia-respiratoria') {
-
-                            return [
-                                m("li.nav-item",
-                                    m(m.route.Link, { href: "/terapia-respiratoria/pedidos", class: "nav-link" }, [
-                                        m("i[data-feather='layout']"),
-                                        "Terapia Respiratoria"
-                                    ])
-
-                                ),
-                            ]
-
-                        } else if (_v == 'bco-sangre') {
-
-                            return [
-                                m("li.nav-item",
-                                    m(m.route.Link, { href: "/bco-sangre/pedidos", class: "nav-link" }, [
-                                        m("i[data-feather='layout']"),
-                                        "Banco de Sangre"
-                                    ])
-
-                                ),
-                            ]
-
-                        } else if (_v == 'neurofisiologia') {
-
-                            return [
-                                m("li.nav-item",
-                                    m(m.route.Link, { href: "/neurofisiologia/pedidos", class: "nav-link" }, [
-                                        m("i[data-feather='layout']"),
-                                        "Neurofisiología"
-                                    ])
-
-                                ),
-                            ]
-
-                        } else {
-
-                            return [
-                                m("li.nav-item",
-                                    m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
-                                        m("i[data-feather='layout']"),
-                                        _v.charAt(0).toUpperCase() + _v.slice(1)
-                                    ])
-
-                                ),
-                            ]
-
-                        }
-
-
-
-                    }
-
-                })
             ]
         }
 
@@ -113,97 +43,56 @@ const ModulesAccess = {
 
 
         if (_data !== null && _data.length !== 0) {
+            if (_data.modulesAccess['laboratorio'].length !== 0) {
+
+                return [
+                    m("li", {
+                        "class": "list-item bg-white wd-100p",
+                        "style": { "cursor": "pointer" }
+                    },
+                        [
+                            m("div", { "class": "media" },
+                                [
+                                    m("div", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-first-aid tx-30 tx-white" })
+                                    ),
+                                    m("div", { "class": "media-body mg-l-15" },
+                                        [
+                                            m("p", { "class": "tx-18 mg-b-0" },
+                                                "Emergencia"
+                                            ),
+                                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                "Ir a Emergencia"
+                                            )
+                                        ]
+                                    )
+                                ]
+                            ),
+                            m("div", { "class": "text-right" },
+                                [
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Administrador"
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+
+                ]
+
+
+
+
+
+            }
 
             return [
 
-                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
 
                         MenuInicio.isContent = true;
-
-                        if (_v === 'hospitalizacion') {
-
-                            return [
-                                m("div.col-sm-2.mg-b-20",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                        m("h5.tx-inverse.mg-b-20",
-                                            "Hospitalización"
-                                        ),
-                                        m(m.route.Link, { href: "/" + _v, class: "tx-medium tx-primary" }, [
-                                            "Ir a Hospitalización",
-                                            m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                        ])
-                                    ])
-                                ),
-
-                            ]
-
-                        } else if (_v === 'terapia-respiratoria') {
-
-                            return [
-                                m("div.col-sm-2.mg-b-20",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                        m("h5.tx-inverse.mg-b-20",
-                                            "T. Respiratoria"
-                                        ),
-                                        m(m.route.Link, { href: "/terapia-respiratoria/pedidos", class: "tx-medium tx-primary" }, [
-                                            "Ir a T. Respiratoria",
-                                            m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                        ])
-                                    ])
-                                ),
-
-                            ]
-
-                        } else if (_v === 'bco-sangre') {
-
-                            return [
-                                m("div.col-sm-2.mg-b-20",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                        m("h5.tx-inverse.mg-b-20",
-                                            "Bco. de Sangre"
-                                        ),
-                                        m(m.route.Link, { href: "/bco-sangre/pedidos", class: "tx-medium tx-primary" }, [
-                                            "Ir a Bco. de Sangre",
-                                            m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                        ])
-
-
-
-
-                                    ])
-                                ),
-
-                            ]
-
-                        } else {
-
-                            return [
-                                m("div.col-sm-2.mg-b-20",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
-
-                                        m("h5.tx-inverse.mg-b-20",
-                                            _v.charAt(0).toUpperCase() + _v.slice(1)
-                                        ),
-                                        m(m.route.Link, { href: "/" + _v, class: "tx-medium tx-primary" }, [
-                                            "Ir a " + _v.charAt(0).toUpperCase() + _v.slice(1),
-                                            m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                        ])
-
-
-
-
-                                    ])
-                                ),
-
-                            ]
-
-                        }
-
 
 
                     }
@@ -284,11 +173,9 @@ const Inicio = {
                 m(SidebarRight)
             ]),
             m("div.content.content-components", {
-                    style: { "margin-right": "0px", "margin-left": "0px" }
 
-                },
+            },
                 m("div.container", {
-                    style: { "max-width": "none" }
 
                 }, [
                     m("ol.breadcrumb.df-breadcrumbs", [
@@ -345,7 +232,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function() {
+    $(window).resize(function () {
         showNavbarActiveSub()
     })
 
@@ -354,7 +241,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -365,7 +252,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -377,24 +264,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function(e) {
+    $('#mainMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function(e) {
+    $('#sidebarMenuOpen').on('click', function (e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
+    $('#navbarSearch').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function(e) {
+    $('#navbarSearchClose').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -412,7 +299,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
+        $('.sidebar-nav .with-sub').on('click', function (e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -421,18 +308,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function(e) {
+    $('#mainMenuOpen').on('click touchstart', function (e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function(e) {
+    $('#sidebarMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

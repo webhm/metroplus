@@ -77,41 +77,30 @@ const iMdodule = {
                 onclick: () => {
                     m.route.set(_data.children[0].modulo.toLowerCase(), {});
                 }
-            },
-                [
-                    m("div", { "class": "media" },
-                        [
-                            m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                m("i", { "class": _data.children[0].icon + " tx-30 tx-white" })
-                            ),
-                            m("div", { "class": "media-body mg-l-15" },
-                                [
-                                    m("p", { "class": "tx-18 mg-b-0" },
-                                        _data.children[0].modulo
-                                    ),
-                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                        "Ir a "
-                                    )
-                                ]
-                            )
-                        ]
+            }, [
+                m("div", { "class": "media" }, [
+                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                        m("i", { "class": _data.children[0].icon + " tx-30 tx-white" })
                     ),
-                    m("div", { "class": "text-right" },
-                        [
-                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                "Administrador"
-                            )
-                        ]
+                    m("div", { "class": "media-body mg-l-15" }, [
+                        m("p", { "class": "tx-18 mg-b-0" },
+                            _data.children[0].modulo
+                        ),
+                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                            "Ir a " + _data.children[0].modulo
+                        )
+                    ])
+                ]),
+                m("div", { "class": "text-right" }, [
+                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                        "Administrador"
                     )
-                ]
-            )
+                ])
+            ])
 
         ]
     }
 };
-
-const sortObject = o => Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {})
-
 
 
 const ModulesAccess = {
@@ -128,7 +117,7 @@ const ModulesAccess = {
 
             return [
 
-                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
 
@@ -215,7 +204,7 @@ const Inicio = {
             ]),
             m("div.content.content-components", {
 
-            },
+                },
                 m("div.container", {
 
                 }, [
@@ -273,7 +262,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function () {
+    $(window).resize(function() {
         showNavbarActiveSub()
     })
 
@@ -282,7 +271,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -293,7 +282,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -305,24 +294,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function (e) {
+    $('#mainMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function (e) {
+    $('#sidebarMenuOpen').on('click', function(e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function (e) {
+    $('#navbarSearch').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function (e) {
+    $('#navbarSearchClose').on('click', function(e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -340,7 +329,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function (e) {
+        $('.sidebar-nav .with-sub').on('click', function(e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -349,18 +338,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function (e) {
+    $('#mainMenuOpen').on('click touchstart', function(e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function (e) {
+    $('#sidebarMenuClose').on('click', function(e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function (e) {
+    $(document).on('click touchstart', function(e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

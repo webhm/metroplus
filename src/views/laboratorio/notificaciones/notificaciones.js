@@ -54,66 +54,99 @@ const NotificacionesLab = {
                         m("div.col-12.mg-b-10.wd-100p",
                             m("div.row.mg-t-10", [
 
-                                m("div.col-sm-12.mg-b-10",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-5.tx-right",
-                                            m("i.fas.fa-filter.tx-20.tx-gray-500")
+                                m("li", {
+                                    "class": "list-item bg-white wd-100p",
+                                    "style": { "cursor": "pointer" },
+                                    onclick: () => {
+                                        m.route.set("/laboratorio/notificaciones/filtros", {});
+                                    }
+                                }, [
+                                    m("div", { "class": "media" }, [
+                                        m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                            m("i", { "class": "fas fa-filter tx-30 tx-white" })
                                         ),
-                                        m("h5.tx-inverse.",
-                                            "Filtros"
+                                        m("div", { "class": "media-body mg-l-15" }, [
+                                            m("p", { "class": "tx-18 mg-b-0" },
+                                                'Filtros'
+                                            ),
+                                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                "Ir a Filtros"
+                                            )
+                                        ])
+                                    ]),
+
+                                ]),
+                                m("li", {
+                                    "class": "list-item bg-white wd-100p",
+                                    "style": { "cursor": "pointer" },
+                                    onclick: () => {
+                                        m.route.set("/laboratorio/notificaciones/enviadas", {});
+                                    }
+                                }, [
+                                    m("div", { "class": "media" }, [
+                                        m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                            m("i", { "class": "fas fa-mail-bulk tx-30 tx-white" })
                                         ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/filtros", class: "tx-medium" }, [
-                                            "Ir a Filtros",
-                                        ]),
+                                        m("div", { "class": "media-body mg-l-15" }, [
+                                            m("p", { "class": "tx-18 mg-b-0" },
+                                                'Notificaciones Enviadas'
+                                            ),
+                                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                "Ir a Notificaciones Enviadas"
+                                            )
+                                        ])
+                                    ]),
+
+                                ]),
+                                m("li", {
+                                    "class": "list-item bg-white wd-100p",
+                                    "style": { "cursor": "pointer" },
+                                    onclick: () => {
+                                        m.route.set("/laboratorio/notificaciones/pendientes", {});
+                                    }
+                                }, [
+                                    m("div", { "class": "media" }, [
+                                        m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                            m("i", { "class": "fas fa-hourglass tx-30 tx-white" })
+                                        ),
+                                        m("div", { "class": "media-body mg-l-15" }, [
+                                            m("p", { "class": "tx-18 mg-b-0" },
+                                                'Notificaciones Pendientes'
+                                            ),
+                                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                "Ir a Notificaciones Pendientes"
+                                            )
+                                        ])
+                                    ]),
+
+                                ]),
+
+                                m("li", {
+                                    "class": "list-item bg-white wd-100p",
+                                    "style": { "cursor": "pointer" },
+                                    onclick: () => {
+                                        m.route.set("/laboratorio/notificaciones/error", {});
+                                    }
+                                }, [
+                                    m("div", { "class": "media" }, [
+                                        m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                            m("i", { "class": "fas fa-exclamation-triangle tx-30 tx-white" })
+                                        ),
+                                        m("div", { "class": "media-body mg-l-15" }, [
+                                            m("p", { "class": "tx-18 mg-b-0" },
+                                                'Notificaciones con Error'
+                                            ),
+                                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                "Ir a Notificaciones con Error"
+                                            )
+                                        ])
+                                    ]),
+
+                                ]),
 
 
-                                    ])
-                                ),
-                                m("div.col-sm-12.mg-b-10",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-5.tx-right",
-                                            m("i.fas.fa-mail-bulk.tx-20.tx-gray-500")
-                                        ),
-                                        m("h5.tx-inverse",
-                                            "Notificaciones Enviadas"
-                                        ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/enviadas", class: "tx-medium" }, [
-                                            "Ir a Notificaciones Enviadas",
-                                        ]),
 
 
-                                    ])
-                                ),
-                                m("div.col-sm-12.mg-b-10",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-5.tx-right",
-                                            m("i.fas.fa-hourglass.tx-20.tx-gray-500")
-                                        ),
-                                        m("h5.tx-inverse",
-                                            "Notificaciones Pendientes"
-                                        ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/pendientes", class: "tx-medium" }, [
-                                            "Ir a Notificaciones Pendientes",
-                                        ]),
-
-
-                                    ])
-                                ),
-                                m("div.col-sm-12.mg-b-10",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                        m("div.mg-b-5.tx-right",
-                                            m("i.fas.fa-exclamation-triangle.tx-20.tx-gray-500")
-                                        ),
-                                        m("h5.tx-inverse",
-                                            "Notificaciones con Error"
-                                        ),
-                                        m(m.route.Link, { href: "/laboratorio/notificaciones/error", class: "tx-medium" }, [
-                                            "Ir a Notificaciones con Error",
-                                        ]),
-
-
-                                    ])
-                                ),
 
                             ])
                         ),

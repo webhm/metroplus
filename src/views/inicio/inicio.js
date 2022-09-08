@@ -31,6 +31,88 @@ const MenuInicio = {
 
 };
 
+const iMdodule = {
+    view: (_data) => {
+
+        console.log(_data);
+
+        if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'farmacia') {
+            _data.children[0].modulo = 'Farmacia';
+            _data.children[0].icon = "fas fa-pills";
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'laboratorio') {
+            _data.children[0].modulo = 'Laboratorio';
+            _data.children[0].icon = "fas fa-microscope";
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'emergencia') {
+            _data.children[0].modulo = 'Emergencia';
+            _data.children[0].icon = "fas fa-first-aid";
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'bco-sangre') {
+            _data.children[0].icon = "fas fa-hospital";
+            _data.children[0].modulo = 'Bco. de Sangre';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'terapia-respiratoria') {
+            _data.children[0].icon = "fas fa-hospital";
+
+            _data.children[0].modulo = 'Terapia Respiratoria';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'neurofisiologia') {
+            _data.children[0].icon = "fas fa-hospital";
+
+            _data.children[0].modulo = 'Neurofisiología';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'hospitalizacion') {
+            _data.children[0].icon = "fas fa-procedures";
+
+            _data.children[0].modulo = 'Hospitalización';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'mantenimiento') {
+            _data.children[0].icon = "fas fa-server";
+            _data.children[0].modulo = 'Mantenimiento';
+        } else {
+            _data.children[0].icon = "fas fa-hospital";
+
+            _data.children[0].modulo = _data.children[0].modulo.charAt(0).toUpperCase() + _data.children[0].modulo.slice(1)
+        }
+
+
+        return [
+            m("li", {
+                "class": "list-item bg-white wd-100p",
+                "style": { "cursor": "pointer" },
+                onclick: () => {
+                    m.route.set(_data.children[0].modulo.toLowerCase(), {});
+                }
+            },
+                [
+                    m("div", { "class": "media" },
+                        [
+                            m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                m("i", { "class": _data.children[0].icon + " tx-30 tx-white" })
+                            ),
+                            m("div", { "class": "media-body mg-l-15" },
+                                [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        _data.children[0].modulo
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir a "
+                                    )
+                                ]
+                            )
+                        ]
+                    ),
+                    m("div", { "class": "text-right" },
+                        [
+                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                "Administrador"
+                            )
+                        ]
+                    )
+                ]
+            )
+
+        ]
+    }
+};
+
+const sortObject = o => Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {})
+
+
 
 const ModulesAccess = {
     isContent: false,
@@ -41,50 +123,8 @@ const ModulesAccess = {
         let _data = Encrypt.getDataUser();
 
 
-
         if (_data !== null && _data.length !== 0) {
-            if (_data.modulesAccess['laboratorio'].length !== 0) {
 
-                return [
-                    m("li", {
-                        "class": "list-item bg-white wd-100p",
-                        "style": { "cursor": "pointer" }
-                    },
-                        [
-                            m("div", { "class": "media" },
-                                [
-                                    m("div", { "class": "pd-10 bg-litecoin" },
-                                        m("i", { "class": "fas fa-first-aid tx-30 tx-white" })
-                                    ),
-                                    m("div", { "class": "media-body mg-l-15" },
-                                        [
-                                            m("p", { "class": "tx-18 mg-b-0" },
-                                                "Emergencia"
-                                            ),
-                                            m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                                "Ir a Emergencia"
-                                            )
-                                        ]
-                                    )
-                                ]
-                            ),
-                            m("div", { "class": "text-right" },
-                                [
-                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                        "Administrador"
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-
-                ]
-
-
-
-
-
-            }
 
             return [
 
@@ -94,6 +134,7 @@ const ModulesAccess = {
 
                         MenuInicio.isContent = true;
 
+                        return m(iMdodule, _data.modulesAccess[_v]);
 
                     }
 

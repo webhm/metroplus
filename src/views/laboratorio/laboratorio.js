@@ -10,7 +10,7 @@ const MenuLaboratorio = {
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                "Metrovirtual"
+                                "MetroPlus"
                             ])
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
@@ -24,74 +24,128 @@ const MenuLaboratorio = {
                     m("div.row.tx-14", [
 
                         (App.isShow('laboratorio', 1) ? [
-                            m("div.col-md-6.mg-b-20",
-                                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
-                                    m("div.mg-b-25",
-                                        m("i.tx-50.tx-gray-500.fas.fa-inbox",)
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/laboratorio/pedidos")
+                                }
+                            },
+                                [
+                                    m("div", { "class": "media" },
+                                        [
+                                            m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                                m("i", { "class": "fas fa-inbox tx-30 tx-white" })
+                                            ),
+                                            m("div", { "class": "media-body mg-l-15" },
+                                                [
+                                                    m("p", { "class": "tx-18 mg-b-0" },
+                                                        "Recepción de Pedidos",
+                                                    ),
+                                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                        "Ir a Recepción de Pedidos",
+                                                    )
+                                                ]
+                                            )
+                                        ]
                                     ),
-                                    m("h5.tx-inverse.mg-b-20",
-                                        "Recepción de Pedidos"
-                                    ),
-                                    m(m.route.Link, { href: "/laboratorio/pedidos", class: "tx-medium" }, [
-                                        "Ir a Recepción de Pedidos",
-                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                    ]),
-                                ])
+
+                                ]
                             )
                         ] : []),
-                        (App.isShow('laboratorio', 16) ? [m("div.col-md-6.mg-b-20",
+                        (App.isShow('laboratorio', 16) ? [
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/laboratorio/flebotomista")
+                                }
+                            },
+                                [
+                                    m("div", { "class": "media" },
+                                        [
+                                            m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                                m("i", { "class": "fas fa-flask tx-30 tx-white" })
+                                            ),
+                                            m("div", { "class": "media-body mg-l-15" },
+                                                [
+                                                    m("p", { "class": "tx-18 mg-b-0" },
+                                                        "Flebotomista",
+                                                    ),
+                                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                        "Ir a Flebotomista",
+                                                    )
+                                                ]
+                                            )
+                                        ]
+                                    ),
 
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='book-open']")
+                                ]
+                            )
+                        ] : []),
+
+                        (App.isShow('laboratorio', 6) ?
+                            [
+                                m("li", {
+                                    "class": "list-item bg-white wd-100p",
+                                    "style": { "cursor": "pointer" },
+                                    onclick: () => {
+                                        m.route.set("/laboratorio/formularios")
+                                    }
+                                },
+                                    [
+                                        m("div", { "class": "media" },
+                                            [
+                                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                                    m("i", { "class": "fas fa-file-alt tx-30 tx-white" })
+                                                ),
+                                                m("div", { "class": "media-body mg-l-15" },
+                                                    [
+                                                        m("p", { "class": "tx-18 mg-b-0" },
+                                                            "Formularios Epidemiológicos",
+                                                        ),
+                                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                            "Ir a Formularios Epidemiológicos",
+                                                        )
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+
+                                    ]
+                                )
+                            ] : []),
+                        (App.isShow('laboratorio', 15) ? [] : []),
+
+
+                        m("li", {
+                            "class": "list-item bg-white wd-100p",
+                            "style": { "cursor": "pointer" },
+                            onclick: () => {
+                                m.route.set("/laboratorio/notificaciones")
+                            }
+                        },
+                            [
+                                m("div", { "class": "media" },
+                                    [
+                                        m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                            m("i", { "class": "fas fa-bell tx-30 tx-white" })
+                                        ),
+                                        m("div", { "class": "media-body mg-l-15" },
+                                            [
+                                                m("p", { "class": "tx-18 mg-b-0" },
+                                                    "Notificaciones de Laboratorio",
+                                                ),
+                                                m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                                    "Ir a Notificaciones de Laboratorio",
+                                                )
+                                            ]
+                                        )
+                                    ]
                                 ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Flebotomista"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/flebotomista", class: "tx-medium" }, [
-                                    "Ir a Flebotomista",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
 
-
-                            ])
-                        )] : []),
-
-                        (App.isShow('laboratorio', 6) ? [m("div.col-md-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-20", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='file-text']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Formularios Epidemiológicos"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/formularios", class: "tx-medium" }, [
-                                    "Ir a Formularios Epidemiológicos",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
-
-
-                            ])
-                        )] : []),
-                        (App.isShow('laboratorio', 15) ? [m("div.col-md-6.mg-b-20",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='bell']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Notificaciones de Laboratorio"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/notificaciones", class: "tx-medium" }, [
-                                    "Ir a Notificaciones de Laboratorio",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                ]),
-
-
-                            ])
-                        )] : []),
-
-
-
+                            ]
+                        )
 
 
 

@@ -34,11 +34,8 @@ import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errore
 import TRPedidos from '../views/laboratorio/notificaciones/tr'
 import BSPedidos from '../views/laboratorio/notificaciones/bs'
 import NSGPedidos from '../views/laboratorio/notificaciones/nsg'
-
-
-
-
-
+import ImagenPedidos from '../views/imagen/pedidos/pedidos'
+import Imagen from '../views/imagen/imagen'
 
 
 
@@ -74,9 +71,8 @@ const Routes = {
     '/terapia-respiratoria/pedidos': TRPedidos, //TRPedidos
     '/bco-sangre/pedidos': BSPedidos, //BSPedidos
     '/neurofisiologia/pedidos': NSGPedidos, //NSGPedidos
-
-
-
+    '/imagen': Imagen, // Imagen
+    '/imagen/pedidos': ImagenPedidos, // ImagenPedidos
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

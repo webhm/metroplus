@@ -30,28 +30,22 @@ const MenuLaboratorio = {
                                 onclick: () => {
                                     m.route.set("/laboratorio/pedidos")
                                 }
-                            },
-                                [
-                                    m("div", { "class": "media" },
-                                        [
-                                            m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                                m("i", { "class": "fas fa-inbox tx-30 tx-white" })
-                                            ),
-                                            m("div", { "class": "media-body mg-l-15" },
-                                                [
-                                                    m("p", { "class": "tx-18 mg-b-0" },
-                                                        "Recepción de Pedidos",
-                                                    ),
-                                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                                        "Ir a Recepción de Pedidos",
-                                                    )
-                                                ]
-                                            )
-                                        ]
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-inbox tx-30 tx-white" })
                                     ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Recepción de Pedidos",
+                                        ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Recepción de Pedidos",
+                                        )
+                                    ])
+                                ]),
 
-                                ]
-                            )
+                            ])
                         ] : []),
                         (App.isShow('laboratorio', 16) ? [
                             m("li", {
@@ -60,61 +54,48 @@ const MenuLaboratorio = {
                                 onclick: () => {
                                     m.route.set("/laboratorio/flebotomista")
                                 }
-                            },
-                                [
-                                    m("div", { "class": "media" },
-                                        [
-                                            m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                                m("i", { "class": "fas fa-flask tx-30 tx-white" })
-                                            ),
-                                            m("div", { "class": "media-body mg-l-15" },
-                                                [
-                                                    m("p", { "class": "tx-18 mg-b-0" },
-                                                        "Flebotomista",
-                                                    ),
-                                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                                        "Ir a Flebotomista",
-                                                    )
-                                                ]
-                                            )
-                                        ]
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-flask tx-30 tx-white" })
                                     ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Flebotomista",
+                                        ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Flebotomista",
+                                        )
+                                    ])
+                                ]),
 
-                                ]
-                            )
+                            ])
                         ] : []),
 
-                        (App.isShow('laboratorio', 6) ?
-                            [
-                                m("li", {
-                                    "class": "list-item bg-white wd-100p",
-                                    "style": { "cursor": "pointer" },
-                                    onclick: () => {
-                                        m.route.set("/laboratorio/formularios")
-                                    }
-                                },
-                                    [
-                                        m("div", { "class": "media" },
-                                            [
-                                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                                    m("i", { "class": "fas fa-file-alt tx-30 tx-white" })
-                                                ),
-                                                m("div", { "class": "media-body mg-l-15" },
-                                                    [
-                                                        m("p", { "class": "tx-18 mg-b-0" },
-                                                            "Formularios Epidemiológicos",
-                                                        ),
-                                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                                            "Ir a Formularios Epidemiológicos",
-                                                        )
-                                                    ]
-                                                )
-                                            ]
+                        (App.isShow('laboratorio', 6) ? [
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/laboratorio/formularios")
+                                }
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-file-alt tx-30 tx-white" })
+                                    ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Formularios Epidemiológicos",
                                         ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Formularios Epidemiológicos",
+                                        )
+                                    ])
+                                ]),
 
-                                    ]
-                                )
-                            ] : []),
+                            ])
+                        ] : []),
                         (App.isShow('laboratorio', 15) ? [] : []),
 
 
@@ -124,28 +105,22 @@ const MenuLaboratorio = {
                             onclick: () => {
                                 m.route.set("/laboratorio/notificaciones")
                             }
-                        },
-                            [
-                                m("div", { "class": "media" },
-                                    [
-                                        m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                            m("i", { "class": "fas fa-bell tx-30 tx-white" })
-                                        ),
-                                        m("div", { "class": "media-body mg-l-15" },
-                                            [
-                                                m("p", { "class": "tx-18 mg-b-0" },
-                                                    "Notificaciones de Laboratorio",
-                                                ),
-                                                m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                                    "Ir a Notificaciones de Laboratorio",
-                                                )
-                                            ]
-                                        )
-                                    ]
+                        }, [
+                            m("div", { "class": "media" }, [
+                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                    m("i", { "class": "fas fa-bell tx-30 tx-white" })
                                 ),
+                                m("div", { "class": "media-body mg-l-15" }, [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        "Notificaciones de Laboratorio",
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir a Notificaciones de Laboratorio",
+                                    )
+                                ])
+                            ]),
 
-                            ]
-                        )
+                        ])
 
 
 

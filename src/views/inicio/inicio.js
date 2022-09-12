@@ -34,7 +34,6 @@ const MenuInicio = {
 const iMdodule = {
     view: (_data) => {
 
-        console.log(_data);
 
         if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'farmacia') {
             _data.children[0].modulo = 'Farmacia';
@@ -42,6 +41,9 @@ const iMdodule = {
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'laboratorio') {
             _data.children[0].modulo = 'Laboratorio';
             _data.children[0].icon = "fas fa-microscope";
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'imagen') {
+            _data.children[0].modulo = 'Imagen';
+            _data.children[0].icon = "fas fa-file-prescription";
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'emergencia') {
             _data.children[0].modulo = 'Emergencia';
             _data.children[0].icon = "fas fa-first-aid";
@@ -59,13 +61,12 @@ const iMdodule = {
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'hospitalizacion') {
             _data.children[0].icon = "fas fa-procedures";
 
-            _data.children[0].modulo = 'Hospitalización';
+            _data.children[0].modulo = 'Hospitalizacion';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'mantenimiento') {
             _data.children[0].icon = "fas fa-server";
             _data.children[0].modulo = 'Mantenimiento';
         } else {
             _data.children[0].icon = "fas fa-hospital";
-
             _data.children[0].modulo = _data.children[0].modulo.charAt(0).toUpperCase() + _data.children[0].modulo.slice(1)
         }
 

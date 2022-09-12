@@ -43,27 +43,27 @@ const SidebarRight = {
                         )
                     ),
                     m("div.dropdown-menu.dropdown-menu-right.tx-13", [
-
-                        m("h6.tx-semibold.mg-b-5",
+                        m("div.tx-18.tx-semibold.mg-b-0",
                             (Auth.user.user !== undefined) ? Auth.user.user.toUpperCase() : ""
-
                         ),
                         m("p.mg-b-25.tx-12.tx-color-03", [
                             m(vRol)
                         ]),
-                        m(m.route.Link, { href: "/", class: "dropdown-item d-none" }, [
+                        m(m.route.Link, { href: "/", class: "dropdown-item tx-16 " }, [
                             m("i[data-feather='user']"),
                             " Mi Perfil "
                         ]),
+                        m(m.route.Link, { href: "/", class: "dropdown-item tx-16 " }, [
+                            m("i[data-feather='help-circle']"),
+                            " Soporte CONCAS "
+                        ]),
 
                         m("div.dropdown-divider"),
-                        m("p.mg-5.text-left", [
-                            m(m.route.Link, { href: "/salir", class: "dropdown-item" }, [
-                                m("span.badge.badge-light.wd-100p.tx-14",
-                                    "Cerrar Sesión"
-                                ),
-                            ]),
+                        m(m.route.Link, { href: "/salir", class: "dropdown-item tx-16 " }, [
+                            m("i[data-feather='log-out']"),
+                            "Salir"
                         ]),
+
 
 
                     ])

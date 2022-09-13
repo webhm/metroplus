@@ -3,6 +3,7 @@ import SidebarImagen from '../sidebarImagen';
 import App from '../../app';
 import m from 'mithril';
 import Notificaciones from '../../../models/notificaciones';
+import Loader from '../../loader';
 
 function stopwatchModel() {
     return {
@@ -180,9 +181,9 @@ const StatusPedido = {
         StatusPedido.error = "";
         StatusPedido.data = [];
         StatusPedido.documento = [];
-                method: "POST",
+        method: "POST",
 
-        StatusPedido.documento = VerPedido.data;
+            StatusPedido.documento = VerPedido.data;
         StatusPedido.data = VerPedido.data;
         VerPedido.data = VerPedido.data;
         VerPedido.validarStatus();
@@ -217,14 +218,14 @@ const FOR005 = {
     nombres: "",
     parseDoc: (_data) => {
 
-        return Object.keys(_data.data).map(function (_v, _i, _contentData) {
+        return Object.keys(_data.data).map(function(_v, _i, _contentData) {
             FOR005.secs.push(_data.data[_v])
         })
 
     },
     oncreate: () => {
         FOR005.secs = [];
-        return Formulario.data.map(function (_v, _i, _contentData) {
+        return Formulario.data.map(function(_v, _i, _contentData) {
             FOR005.parseDoc(Formulario.data[_i])
         })
 
@@ -239,7 +240,11 @@ const FOR005 = {
 
 
         if (FOR005.secs.length !== 0) {
-            return FOR005.secs.map(function (_v, _i, _contentData) {
+            return FOR005.secs.map(function(_v, _i, _contentData) {
+
+                if (FOR005.secs.length == (_i + 1)) {
+                    Formulario.num = 1;
+                }
 
 
                 if (_v.name == 'nombres') {
@@ -335,7 +340,7 @@ const FOR005 = {
                 if (_v.name == 'Logotipo_archivo') {
 
 
-                    return m("table.table.table-bordered.mb-60.mt-4.p-2.w-100", {
+                    return m("table.table.table-bordered.wd-100p", {
                         "style": {
                             "zoom": Formulario.zoom,
                         }
@@ -509,10 +514,10 @@ const FOR005 = {
                                 ),
                                 m("th[colspan='1'][scope='row']", { "style": { "padding": "0", "background-color": "#eef9c8" } },
                                     m("div.m-0.p-0.tx-bold.text-center.", [
-                                        "FIRMAR AL PIE DE",
-                                        m("br"),
-                                        "CADA PRESCRIPCIÓN"
-                                    ]
+                                            "FIRMAR AL PIE DE",
+                                            m("br"),
+                                            "CADA PRESCRIPCIÓN"
+                                        ]
 
                                     )
                                 ),
@@ -538,21 +543,21 @@ const FOR005 = {
                                 ),
                                 m("th[colspan='4'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                     m("div.m-0.p-0.tx-bold.text-center.", [
-                                        "FARMACOTERAPIA E INDICACIONES",
-                                        m("br"),
-                                        "(PARA ENFERMERÍA Y OTRO PERSONAL)"
+                                            "FARMACOTERAPIA E INDICACIONES",
+                                            m("br"),
+                                            "(PARA ENFERMERÍA Y OTRO PERSONAL)"
 
-                                    ]
+                                        ]
 
                                     )
                                 ),
                                 m("th[colspan='2'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                     m("div.m-0.p-0.tx-bold.text-center.", [
-                                        "ADMINISTR.",
-                                        m("br"),
-                                        "FÁRMACOS INSUMOS"
+                                            "ADMINISTR.",
+                                            m("br"),
+                                            "FÁRMACOS INSUMOS"
 
-                                    ]
+                                        ]
 
                                     )
                                 ),
@@ -594,23 +599,24 @@ const FOR005 = {
 };
 
 const Formulario = {
-    zoom: 0.5,
+    zoom: 0,
     adm: 1,
     nhc: 1,
+    num: 0,
     data: [],
     error: "",
     fetch: () => {
         Formulario.data = [];
         Formulario.error = "";
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
 
-            headers: {
-                "Authorization": localStorage.accessToken,
-            },
-        })
-            .then(function (result) {
+                headers: {
+                    "Authorization": localStorage.accessToken,
+                },
+            })
+            .then(function(result) {
                 if (result.length !== 0) {
                     Formulario.data = result;
                 } else {
@@ -618,8 +624,8 @@ const Formulario = {
                 }
 
             })
-            .catch(function (e) {
-                setTimeout(function () { Formulario.fetch(); }, 5000);
+            .catch(function(e) {
+                setTimeout(function() { Formulario.fetch(); }, 5000);
 
             })
     },
@@ -628,20 +634,23 @@ const Formulario = {
     },
     view: () => {
 
+
         return Formulario.error ? [
             m(".alert.alert-danger[role='alert']",
                 Formulario.error
             ),
         ] : Formulario.data.length !== 0 ? [
-
+            (Formulario.num == 0 ? [m("div.d-inline.tx-secondary.tx-12", "Procesando " + Formulario.data.length + " formularios encontrados.")] : []),
             m(FOR005)
 
         ] : [
-            m("div.text-center", [
-                m("div.loader-content",
-                    m("span.icon-section-wave.d-inline-block.text-active.mt-10.mb-10.",)
-                )
-            ])
+            m("div.pd-10.wd-100p",
+                m("div.d-inline.tx-secondary.tx-12", "Buscando información... "),
+                m("div.placeholder-paragraph", [
+                    m("div.line"),
+                    m("div.line")
+                ])
+            ),
         ]
 
     },
@@ -656,16 +665,16 @@ const Evoluciones = {
         Evoluciones.data = [];
         Evoluciones.error = "";
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente-emergencia",
-            body: {
-                numeroHistoriaClinica: VerPedido.data.CD_PACIENTE + '01'
-            },
-            headers: {
-                "Authorization": localStorage.accessToken,
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente-emergencia",
+                body: {
+                    numeroHistoriaClinica: VerPedido.data.CD_PACIENTE + '01'
+                },
+                headers: {
+                    "Authorization": localStorage.accessToken,
+                },
+            })
+            .then(function(result) {
 
 
 
@@ -679,8 +688,8 @@ const Evoluciones = {
                 }
 
             })
-            .catch(function (e) {
-                setTimeout(function () { Evoluciones.fetch(); }, 5000);
+            .catch(function(e) {
+                setTimeout(function() { Evoluciones.fetch(); }, 5000);
 
             })
     },
@@ -689,55 +698,18 @@ const Evoluciones = {
 
 
         return Evoluciones.error ? [
-            m(".tab-pane.fade[id='v-pills-ev'][role='tabpanel']", [
-                m("h4.m-text-2.",
-                    m("i.icofont-prescription.mr-2"),
-
-                    "Evoluciones y Prescripciones:"
-                ),
-                m("h6.text-light-dark.ff-roboto.pb-40.mb-0",
-                    "Hospital Metropolitano"
-                ),
-                m(".alert.alert-danger[role='alert']",
-                    Evoluciones.error
-                )
-            ]),
+            m(".alert.alert-danger[role='alert']",
+                Evoluciones.error
+            )
         ] : Evoluciones.data.length !== 0 ? [
-            m(".tab-pane.fade[id='v-pills-ev'][role='tabpanel']", [
-                m("h4.m-text-2.",
-                    m("i.icofont-prescription.mr-2"),
-
-                    "Evoluciones y Prescripciones:"
-                ),
-                m("h6.text-light-dark.ff-roboto.pb-40.mb-0",
-                    "Hospital Metropolitano"
-                ),
-                m("h6.mb-5.d-flex", [
-                    "Última información disponible. HIS MV.",
-                ]),
-                m("div.row.p-1",
-                    m("div.col-12.bg-white.pd-r-0.pd-l-0.pd-b-20.",
-                        m(Formulario),
-                    ),
-
-                )
-            ]),
+            m(Formulario)
         ] : [
-            m(".tab-pane.fade[id='v-pills-ev'][role='tabpanel']", [
-                m("h4.m-text-2.",
-                    m("i.icofont-prescription.mr-2"),
-
-                    "Evoluciones y Prescripciones:"
-                ),
-                m("h6.text-light-dark.ff-roboto.pb-40.mb-0",
-                    "Hospital Metropolitano"
-                ),
-                m("div.text-center", [
-                    m("div.loader-content",
-                        m("span.icon-section-wave.d-inline-block.text-active.mt-3.",)
-                    )
+            m("div.pd-10.wd-100p",
+                m("div.placeholder-paragraph", [
+                    m("div.line"),
+                    m("div.line")
                 ])
-            ]),
+            ),
         ]
 
 
@@ -752,7 +724,7 @@ const DetallePedido = {
     seleccionarTodos: (status) => {
         DetallePedido.checkedAll = status;
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
-        return StatusPedido.data.map(function (_val, _i, _contentData) {
+        return StatusPedido.data.map(function(_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_RECEP'] = "1";
                 StatusPedido.data[_i]['FECHA_RECEP'] = _fechaToma;
@@ -820,22 +792,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: () => {
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-            body: {
-                documento: JSON.stringify(StatusPedido.documento),
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+                body: {
+                    documento: JSON.stringify(StatusPedido.documento),
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 StatusPedido.documento = result.data;
                 StatusPedido.data = result.data.pedidoLaboratorio.dataRecepcion.examenesRecep;
                 VerPedido.data = result.data.pedidoLaboratorio.dataPedido;
                 VerPedido.validarStatus();
             })
-            .catch(function (e) { })
+            .catch(function(e) {})
     },
 
     view: () => {
@@ -855,26 +827,26 @@ const DetallePedido = {
                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                         m("small.pd-2.tx-20",
                             m("i.fas.fa-times-circle.pd-2", {
-                                "style": { "cursor": "pointer" },
-                                title: "Cerrar",
-                                onclick: () => {
+                                    "style": { "cursor": "pointer" },
+                                    title: "Cerrar",
+                                    onclick: () => {
 
-                                    Pedidos.showBitacora = "";
-                                    m.route.set('/imagen/pedidos');
+                                        Pedidos.showBitacora = "";
+                                        m.route.set('/imagen/pedidos');
 
-                                    try {
+                                        try {
 
-                                        $.fn.dataTable.ext.errMode = "none";
-                                        var table = $("#table-pedidos").DataTable();
-                                        table.ajax.reload();
+                                            $.fn.dataTable.ext.errMode = "none";
+                                            var table = $("#table-pedidos").DataTable();
+                                            table.ajax.reload();
 
-                                    } catch (e) {
-                                        window.location.reload();
+                                        } catch (e) {
+                                            window.location.reload();
+
+                                        }
 
                                     }
-
                                 }
-                            }
 
                             )
 
@@ -901,214 +873,160 @@ const DetallePedido = {
 
 
 
-                    m("table.table.table-bordered.table-sm.tx-12",
-                        [
-                            m("thead",
+                    m("table.table.table-bordered.table-sm.tx-12", [
+                        m("thead",
 
-                                m("tr.bg-litecoin.op-9.tx-white",
-                                    [
-                                        m("th[scope='col'][colspan='6']",
-                                            "DATOS DEL PEDIDO:"
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th[scope='col'][colspan='6']",
+                                    "DATOS DEL PEDIDO:"
+                                ),
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "N° de Pedido:"
+                                ),
+                                m("td", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    StatusPedido.data.CD_PRE_MED
+                                ),
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "Fecha:"
+                                ),
+                                m("td", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    StatusPedido.data.CD_PRE_MED
+                                ),
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "Origen:"
+                                ),
+                                m("td", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    "EMERGENCIA"
+                                ),
+
+                            ]),
+
+                            m("tr", [
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "Médico Solicitante:"
+                                ),
+                                m("td[colspan='2']", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    StatusPedido.data.NM_PACIENTE
+                                ),
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "Especialidad:"
+                                ),
+                                m("td[colspan='2']", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    "MEDICIN AINTERNA"
+                                ),
+
+
+
+                            ]),
+                        ]),
+                        m("thead",
+
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th[scope='col'][colspan='6']",
+                                    "DATOS DEL PACIENTE:"
+                                ),
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "Apellidos y Nombres:"
+                                ),
+                                m("td[colspan='3']", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    StatusPedido.data.NM_PACIENTE
+                                ),
+                                m("th", {
+                                        style: { "background-color": "#a8bed6" }
+                                    },
+                                    "NHC:"
+                                ),
+                                m("td", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    StatusPedido.data.CD_PACIENTE
+                                ),
+
+                            ]),
+                            m("tr", [
+
+                                m("td[colspan='6']", {
+                                        style: { "background-color": "#eaeff5" }
+
+                                    },
+                                    m("ul.nav.nav-line[id='myTab'][role='tablist']", [
+                                        m("li.nav-item",
+                                            m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
+                                                    style: { "color": "#476ba3" }
+                                                },
+                                                m("i.fas.fa-file-alt.pd-1"),
+
+                                                " HOJA 005"
+                                            )
                                         ),
 
-                                    ]
-                                )
-                            ),
-                            m("tbody",
-                                [
-                                    m("tr",
-                                        [
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "N° de Pedido:"
-                                            ),
-                                            m("td", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                StatusPedido.data.CD_PRE_MED
-                                            ),
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "Fecha:"
-                                            ),
-                                            m("td", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                StatusPedido.data.CD_PRE_MED
-                                            ),
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "Origen:"
-                                            ),
-                                            m("td", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                "EMERGENCIA"
-                                            ),
-
-                                        ]
-                                    ),
-
-                                    m("tr",
-                                        [
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "Médico Solicitante:"
-                                            ),
-                                            m("td[colspan='2']", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                StatusPedido.data.NM_PACIENTE
-                                            ),
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "Especialidad:"
-                                            ),
-                                            m("td[colspan='2']", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                "MEDICIN AINTERNA"
-                                            ),
+                                    ]),
+                                ),
 
 
+                            ]),
+                            m("tr", [
 
-                                        ]
-                                    ),
-                                ]
-                            ),
-                            m("thead",
+                                m("td[colspan='6']", {
 
-                                m("tr.bg-litecoin.op-9.tx-white",
-                                    [
-                                        m("th[scope='col'][colspan='6']",
-                                            "DATOS DEL PACIENTE:"
-                                        ),
+                                    },
+                                    m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
+                                        m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
+                                            m(Evoluciones),
+                                        ]),
 
-                                    ]
-                                )
-                            ),
-                            m("tbody",
-                                [
-                                    m("tr",
-                                        [
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "Apellidos y Nombres:"
-                                            ),
-                                            m("td[colspan='3']", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                StatusPedido.data.NM_PACIENTE
-                                            ),
-                                            m("th", {
-                                                style: { "background-color": "#a8bed6" }
-                                            },
-                                                "NHC:"
-                                            ),
-                                            m("td", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                StatusPedido.data.CD_PACIENTE
-                                            ),
-
-                                        ]
-                                    ),
-                                    m("tr",
-                                        [
-
-                                            m("td[colspan='6']", {
-                                                style: { "background-color": "#eaeff5" }
-
-                                            },
-                                                m("ul.nav.nav-line[id='myTab'][role='tablist']", [
-                                                    m("li.nav-item",
-                                                        m("a.nav-link.active[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']",
-                                                            "Hoja 005"
-                                                        )
-                                                    ),
-
-                                                ]),
-                                            ),
+                                    ])
+                                ),
 
 
-                                        ]
-                                    ),
-                                    m("tr",
-                                        [
+                            ]),
+                            m("tr", [
 
-                                            m("td[colspan='6']", {
+                            ]),
 
-                                            },
-                                                m(".tab-content.bd.bd-gray-300.bd-t-0.pd-20[id='myTab']",
-                                                    [
-                                                        m(".tab-pane.fade.show.active[id='home'][role='tabpanel'][aria-labelledby='home-tab']",
-                                                            [
-                                                                m(Evoluciones),
-                                                            ]
-                                                        ),
-
-                                                    ]
-                                                )
-                                            ),
-
-
-                                        ]
-                                    ),
-                                    m("tr",
-                                        [
-                                            m("th[scope='row']",
-                                                "2"
-                                            ),
-                                            m("td",
-                                                "Socrates Itumay"
-                                            ),
-                                            m("td",
-                                                "Software Engineer"
-                                            ),
-                                            m("td",
-                                                "Computer Engineering"
-                                            ),
-                                            m("td",
-                                                "$150,000"
-                                            )
-                                        ]
-                                    ),
-                                    m("tr",
-                                        [
-                                            m("th[scope='row']",
-                                                "3"
-                                            ),
-                                            m("td",
-                                                "Reynante Labares"
-                                            ),
-                                            m("td",
-                                                "Product Manager"
-                                            ),
-                                            m("td",
-                                                "Business Management"
-                                            ),
-                                            m("td",
-                                                "$250,000"
-                                            )
-                                        ]
-                                    )
-                                ]
-                            )
-                        ]
-                    )
+                        ])
+                    ])
 
                 ])
             ]
@@ -1247,7 +1165,9 @@ const Pedidos = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("imagen") }),
             m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -1283,13 +1203,13 @@ const Pedidos = {
 
                                 m("div.col-sm-12.pd-b-10", {
 
-                                    oncreate: (el) => {
-                                        el.dom.hidden = actions.showFilter;
+                                        oncreate: (el) => {
+                                            el.dom.hidden = actions.showFilter;
+                                        },
+                                        onupdate: (el) => {
+                                            el.dom.hidden = actions.showFilter;
+                                        },
                                     },
-                                    onupdate: (el) => {
-                                        el.dom.hidden = actions.showFilter;
-                                    },
-                                },
                                     m("div.input-group", [
                                         m(".df-example.demo-forms.wd-100p[data-label='Filtrar:']", [
                                             m("input.form-control[type='text'][id='tipoPiso'][data-role='tagsinput']", {
@@ -1349,18 +1269,18 @@ const Pedidos = {
                                     ),
                                     m("div.d-flex.tx-14", [
                                         m("div.link-03.lh-0", {
-                                            style: { "cursor": "pointer" },
-                                            title: "Buscar"
-                                        },
+                                                style: { "cursor": "pointer" },
+                                                title: "Buscar"
+                                            },
                                             m("i.fas.fa-search.pd-5")
                                         ),
 
                                         m("div.dropdown.dropleft", [
 
                                             m("div.link-03.lh-0.mg-l-10[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                                style: { "cursor": "pointer" },
-                                                title: "Filtrar"
-                                            },
+                                                    style: { "cursor": "pointer" },
+                                                    title: "Filtrar"
+                                                },
                                                 m("i.fas.fa-filter.pd-5")
                                             ),
                                             m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -1475,59 +1395,59 @@ function loadPedidos() {
         order: false,
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, full) {
-                return "";
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HR_PRE_MED;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.CD_PACIENTE;
+            {
+                mRender: function(data, type, full) {
+                    return full.HR_PRE_MED;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
             },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return full.CD_PACIENTE;
 
-        }, {
-            mRender: function (data, type, full) {
-                return "";
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
+            }, {
+                mRender: function(data, type, full) {
+                    return "";
+
+                },
+                visible: true,
+                aTargets: [3],
+                orderable: false,
 
             },
-            visible: true,
-            aTargets: [3],
-            orderable: false,
-
-        },
 
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             console.log('nRow', nRow)
 
         },
-        drawCallback: function (settings) {
+        drawCallback: function(settings) {
 
             $(".table-content").show();
             $(".table-loader").hide();
 
-            settings.aoData.map(function (_i) {
+            settings.aoData.map(function(_i) {
 
                 $(_i.anCells[3]).css("padding", "0");
 
                 m.mount(_i.anCells[3], {
-                    view: function () {
+                    view: function() {
                         return ((_i._aData.TP_ATENDIMENTO == 'I') ? [
                             m("div.d-inline.list-group-item.d-flex.pd-sm", {
                                 title: "ss",
@@ -1545,35 +1465,29 @@ function loadPedidos() {
                                         track: "view",
                                     });
                                 }
-                            },
-                                [
-                                    m("div.avatar.tx-center",
-                                        m("i.fas.fa-file-alt.tx-30", {
-                                            style: { "color": "#325a98" }
-                                        })
+                            }, [
+                                m("div.avatar.tx-center",
+                                    m("i.fas.fa-file-alt.tx-30", {
+                                        style: { "color": "#325a98" }
+                                    })
+                                ),
+                                m("div.pd-sm-l-10", [
+                                    m("p.tx-medium.mg-b-2",
+                                        _i._aData.NM_PACIENTE
                                     ),
-                                    m("div.pd-sm-l-10",
-                                        [
-                                            m("p.tx-medium.mg-b-2",
-                                                _i._aData.NM_PACIENTE
-                                            ),
-                                            m("small.tx-12.tx-color-03.mg-b-0",
-                                                "Mar 21, 2019, 1:00pm"
-                                            )
-                                        ]
-                                    ),
-                                    m("div.mg-l-auto.text-right",
-                                        [
-                                            m("p.tx-medium.mg-b-2",
-                                                _i._aData.HR_PRE_MED
-                                            ),
-                                            m("small.tx-12.tx-primary.mg-b-0",
-                                                "Hospitalización"
-                                            )
-                                        ]
+                                    m("small.tx-12.tx-color-03.mg-b-0",
+                                        "Mar 21, 2019, 1:00pm"
                                     )
-                                ]
-                            )
+                                ]),
+                                m("div.mg-l-auto.text-right", [
+                                    m("p.tx-medium.mg-b-2",
+                                        _i._aData.HR_PRE_MED
+                                    ),
+                                    m("small.tx-12.tx-primary.mg-b-0",
+                                        "Hospitalización"
+                                    )
+                                ])
+                            ])
 
                         ] : [
                             m("div.d-inline.list-group-item.d-flex.pd-sm", {
@@ -1593,35 +1507,29 @@ function loadPedidos() {
                                         track: "view",
                                     });
                                 }
-                            },
-                                [
-                                    m("div.avatar.tx-center",
-                                        m("i.fas.fa-file-alt.tx-30", {
-                                            style: { "color": "#325a98" }
-                                        })
+                            }, [
+                                m("div.avatar.tx-center",
+                                    m("i.fas.fa-file-alt.tx-30", {
+                                        style: { "color": "#325a98" }
+                                    })
+                                ),
+                                m("div.pd-sm-l-10", [
+                                    m("p.tx-medium.mg-b-2",
+                                        _i._aData.NM_PACIENTE
                                     ),
-                                    m("div.pd-sm-l-10",
-                                        [
-                                            m("p.tx-medium.mg-b-2",
-                                                _i._aData.NM_PACIENTE
-                                            ),
-                                            m("small.tx-12.tx-color-03.mg-b-0",
-                                                "Mar 21, 2019, 1:00pm"
-                                            )
-                                        ]
-                                    ),
-                                    m("div.mg-l-auto.text-right",
-                                        [
-                                            m("p.tx-medium.mg-b-2",
-                                                _i._aData.HR_PRE_MED
-                                            ),
-                                            m("small.tx-12.tx-danger.mg-b-0",
-                                                "Emergencia"
-                                            )
-                                        ]
+                                    m("small.tx-12.tx-color-03.mg-b-0",
+                                        "Mar 21, 2019, 1:00pm"
                                     )
-                                ]
-                            )
+                                ]),
+                                m("div.mg-l-auto.text-right", [
+                                    m("p.tx-medium.mg-b-2",
+                                        _i._aData.HR_PRE_MED
+                                    ),
+                                    m("small.tx-12.tx-danger.mg-b-0",
+                                        "Emergencia"
+                                    )
+                                ])
+                            ])
                         ])
                     }
                 });
@@ -1680,12 +1588,12 @@ function loadPedidos() {
 
 
         },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
+    }).on('xhr.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').hide();
         $('.table-content').show();
         //   initDataPicker();
-    }).on('page.dt', function (e, settings, json, xhr) {
+    }).on('page.dt', function(e, settings, json, xhr) {
         // Do some staff here...
         $('.table-loader').show();
         $('.table-content').hide();
@@ -1696,26 +1604,26 @@ function loadPedidos() {
         minimumResultsForSearch: Infinity
     });
 
-    $('#tipoPiso').change(function (e) {
+    $('#tipoPiso').change(function(e) {
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('tipoFiltro-' + $('#tipoPiso').val()).draw();
     });
 
-    $('#button-buscar-t').click(function (e) {
+    $('#button-buscar-t').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search($('#_dt_search_text').val()).draw();
     });
-    $('#filtrar').click(function (e) {
+    $('#filtrar').click(function(e) {
         e.preventDefault();
         $('.table-loader').show();
         $('.table-content').hide();
         table.search('fechas-' + $('#desde').val() + '-' + $('#hasta').val()).draw();
     });
 
-    $('#resetTable').click(function (e) {
+    $('#resetTable').click(function(e) {
         e.preventDefault();
         $('#_dt_search_text').val('');
         $('#desde').val('');
@@ -1797,21 +1705,21 @@ function loadObservaciones() {
 
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return "";
+                mRender: function(data, type, row, meta) {
+                    return "";
+                },
+                visible: true,
+                width: "100%",
+                aTargets: [0],
+                orderable: false,
             },
-            visible: true,
-            width: "100%",
-            aTargets: [0],
-            orderable: false,
-        },
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-            settings.aoData.map(function (_v, _i) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
+            settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function () {
+                    view: function() {
                         return m("div.demo-static-toast",
                             m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
                                 "style": { "max-width": "none" }

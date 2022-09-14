@@ -266,128 +266,144 @@ const FOR005 = {
         let prescripciones_texto = "";
         let urlFor = "";
 
-        if (FOR005.secs.length !== 0) {
-
-            FOR005.secs.map(function(_v, _i, _contentData) {
+        FOR005.secs.map(function(_v, _i, _contentData) {
 
 
+            if (_i == 0) {
 
 
-                if (_i == 0) {
+                urlFor = "http://172.16.253.18/mvpep/api/clinical-documents/" + _v.answer + ".pdf?company=1&department=75";
+
+            }
 
 
-                    urlFor = "http://172.16.253.18/mvpep/api/clinical-documents/" + _v.answer + ".pdf?company=1&department=75";
-
-                }
-
-
-                if (_v.name == 'nombres') {
+            if (_v.name == 'nombres') {
 
 
 
-                    FOR005.nombres = _v.answer;
+                FOR005.nombres = _v.answer;
 
-                }
-
-
-                if (_v.name == 'apellidos_paciente') {
+            }
 
 
-
-                    FOR005.apellidos_paciente = _v.answer;
-
-                }
-
-                if (_v.name == 'sexo de paciente') {
-
-                    FOR005.sexo = _v.answer;
-
-                }
-
-                if (_v.name == 'nhcl') {
-
-                    FOR005.nhcl = _v.answer;
-
-                }
-
-                if (_v.name == 'numero_admision') {
-
-                    FOR005.numero_admision = _v.answer;
-
-                }
-
-                if (_v.name == 'edad') {
-
-                    FOR005.edad = _v.answer;
-
-                }
-
-                if (_v.name == 'edad_paciente') {
-
-                    FOR005.edad_paciente = _v.answer;
-
-                }
-
-                if (_v.name == 'identificacion_paciente') {
-
-                    FOR005.identificacion = _v.answer;
-
-                }
-
-                if (_v.name == 'fecha_admision') {
-
-                    FOR005.fecha_admision = _v.answer;
-
-                }
-
-                if (_v.name == 'ubicacion_atencion') {
-
-                    FOR005.ubicacion = _v.answer;
-
-                }
+            if (_v.name == 'apellidos_paciente') {
 
 
-                if (_v.name == 'fecha_alta') {
 
-                    FOR005.fecha_alta = (_v.answer == null) ? '' : _v.answer;
+                FOR005.apellidos_paciente = _v.answer;
 
-                }
+            }
 
-                if (_v.name == 'medico_tratante') {
+            if (_v.name == 'sexo de paciente') {
 
-                    FOR005.medico_tratante = _v.answer;
+                FOR005.sexo = _v.answer;
 
-                }
+            }
 
-                if (_v.name == 'prescripciones_texto') {
+            if (_v.name == 'nhcl') {
 
-                    prescripciones_texto = _v.answer;
+                FOR005.nhcl = _v.answer;
 
-                }
+            }
 
-                if (_v.name == 'evolucion_medica_texto') {
+            if (_v.name == 'numero_admision') {
 
-                    evolucion_medica_texto = _v.answer;
+                FOR005.numero_admision = _v.answer;
 
-                }
+            }
 
-                if (_v.name == 'cd_documento_clinico') {
+            if (_v.name == 'edad') {
+
+                FOR005.edad = _v.answer;
+
+            }
+
+            if (_v.name == 'edad_paciente') {
+
+                FOR005.edad_paciente = _v.answer;
+
+            }
+
+            if (_v.name == 'identificacion_paciente') {
+
+                FOR005.identificacion = _v.answer;
+
+            }
+
+            if (_v.name == 'fecha_admision') {
+
+                FOR005.fecha_admision = _v.answer;
+
+            }
+
+            if (_v.name == 'ubicacion_atencion') {
+
+                FOR005.ubicacion = _v.answer;
+
+            }
 
 
-                    urlFor = "http://172.16.253.18/mvpep/api/clinical-documents/" + _v.answer + ".pdf?company=1&department=75";
+            if (_v.name == 'fecha_alta') {
 
-                }
+                FOR005.fecha_alta = (_v.answer == null) ? '' : _v.answer;
 
-            });
+            }
+
+            if (_v.name == 'medico_tratante') {
+
+                FOR005.medico_tratante = _v.answer;
+
+            }
+
+            if (_v.name == 'prescripciones_texto') {
+
+                prescripciones_texto = _v.answer;
+
+            }
+
+            if (_v.name == 'evolucion_medica_texto') {
+
+                evolucion_medica_texto = _v.answer;
+
+            }
+
+            if (_v.name == 'cd_documento_clinico') {
+
+
+                urlFor = "http://172.16.253.18/mvpep/api/clinical-documents/" + _v.answer + ".pdf?company=1&department=75";
+
+            }
+
+        });
+
+        if (Formulario.num !== FOR005.secs.length) {
+
+            return [
+                m("div.pd-10.wd-100p",
+                    m("div.d-inline.tx-secondary.tx-12", {
+                        onupdate: (el) => {
+                            if (Formulario.num == Formulario.data.length) {
+                                el.dom.innerHTML = Formulario.data.length + " formularios encontrados.";
+                            } else {
+                                el.dom.innerHTML = "Procesando " + Formulario.data.length + " formularios encontrados...";
+                            }
+                        },
+                    }),
+                    m("div.placeholder-paragraph", [
+                        m("div.line"),
+                        m("div.line")
+                    ])
+                ),
+            ]
+
+        } else {
 
             return FOR005.secs.map(function(_v, _i, _contentData) {
 
-                Formulario.num + 1;
 
                 if (_v.name == 'Logotipo_archivo') {
 
                     Formulario.num++;
-
 
                     return m("table.table.table-bordered.wd-100p", {
                         "style": {
@@ -641,10 +657,8 @@ const FOR005 = {
 
 
             })
+
         }
-
-
-
 
 
 
@@ -694,17 +708,7 @@ const Formulario = {
                 Formulario.error
             ),
         ] : Formulario.data.length !== 0 ? [
-            m("div.d-inline.tx-secondary.tx-12", {
 
-                onupdate: (el) => {
-                    if (Formulario.num == Formulario.data.length) {
-                        el.dom.innerHTML = Formulario.data.length + " formularios encontrados.";
-                    } else {
-                        el.dom.innerHTML = "Procesando " + Formulario.data.length + " formularios encontrados...";
-                    }
-                },
-
-            }),
             m(FOR005)
 
         ] : [
@@ -1312,6 +1316,7 @@ const Pedidos = {
     oninit: (_data) => {
         if (isObjEmpty(_data.attrs)) {
             Pedidos.showBitacora = "";
+            Pedidos.pedidos = [];
         } else {
             Pedidos.showBitacora = "d-none";
             VerPedido.numeroPedido = _data.attrs.numeroPedido;

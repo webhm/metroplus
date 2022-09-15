@@ -34,7 +34,7 @@ import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errore
 import TRPedidos from '../views/laboratorio/notificaciones/tr'
 import BSPedidos from '../views/laboratorio/notificaciones/bs'
 import NSGPedidos from '../views/laboratorio/notificaciones/nsg'
-import ImagenPedidos from '../views/imagen/pedidos/pedidos'
+import ImagenPedidos from '../views/imagen/pedidos/i2'
 import Imagen from '../views/imagen/imagen'
 
 

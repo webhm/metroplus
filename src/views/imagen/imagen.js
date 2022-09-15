@@ -6,7 +6,9 @@ const MenuImagen = {
     view: () => {
         return [
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [

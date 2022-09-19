@@ -119,8 +119,7 @@ const tablePedidos = {
     },
 
     view: () => {
-        return m("div.row.animated.fadeInUp", {
-        }, [
+        return m("div.row.animated.fadeInUp", {}, [
 
             m("div.col-12", [
 
@@ -132,23 +131,23 @@ const tablePedidos = {
                         m("h5.mg-b-0",
                             "Pedidos de Imagen:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                oncreate: (el) => {
-                                    if (Pedidos.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Pedidos de Hoy';
-                                    }
-                                    if (Pedidos.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos entre Fechas';
-                                    }
-                                },
-                                onupdate: (el) => {
-                                    if (Pedidos.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Pedidos de Hoy';
-                                    }
-                                    if (Pedidos.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos entre Fechas';
+                                    oncreate: (el) => {
+                                        if (Pedidos.idFiltro == 1) {
+                                            el.dom.innerHTML = 'Pedidos de Hoy';
+                                        }
+                                        if (Pedidos.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        }
+                                    },
+                                    onupdate: (el) => {
+                                        if (Pedidos.idFiltro == 1) {
+                                            el.dom.innerHTML = 'Pedidos de Hoy';
+                                        }
+                                        if (Pedidos.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        }
                                     }
                                 }
-                            }
 
                             )
 
@@ -158,9 +157,9 @@ const tablePedidos = {
                             m("div.dropdown.dropleft", [
 
                                 m("div.link-03.lh-0.mg-l-10[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Filtrar"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Filtrar"
+                                    },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -278,75 +277,75 @@ const Pedidos = {
             destroy: true,
             columns: false,
             aoColumnDefs: [{
-                mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    orderable: true,
                 },
-                visible: false,
-                aTargets: [0],
-                orderable: true,
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.CD_PRE_MED;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.CD_PACIENTE;
+                {
+                    mRender: function(data, type, full) {
+                        return full.CD_PRE_MED;
+                    },
+                    visible: false,
+                    aTargets: [1],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return full.CD_PACIENTE;
 
-            }, {
-                mRender: function (data, type, full) {
-                    return full.NM_PACIENTE;
+                    },
+                    visible: false,
+                    aTargets: [2],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.NM_PACIENTE;
+
+                    },
+                    visible: false,
+                    aTargets: [3],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.MED_MV;
+
+                    },
+                    visible: false,
+                    aTargets: [4],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return "";
+
+                    },
+                    visible: true,
+                    aTargets: [5],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [3],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return full.MED_MV;
-
-                },
-                visible: false,
-                aTargets: [4],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return "";
-
-                },
-                visible: true,
-                aTargets: [5],
-                orderable: false,
-
-            },
 
 
             ],
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             },
-            drawCallback: function (settings) {
+            drawCallback: function(settings) {
 
                 Pedidos.loader = false;
 
-                settings.aoData.map(function (_i) {
+                settings.aoData.map(function(_i) {
 
                     $(_i.anCells[5]).css("padding", "0");
 
                     m.mount(_i.anCells[5], {
-                        view: function () {
+                        view: function() {
                             return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
                                 m("div.d-inline.list-group-item.d-flex.pd-sm", [
                                     m("div.avatar.tx-center",
@@ -452,7 +451,7 @@ const Pedidos = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function (e) {
+        $('#searchField').keyup(function(e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -462,18 +461,18 @@ const Pedidos = {
     fetchPedidos: () => {
 
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/imagen/pedidos",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/imagen/pedidos",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 Pedidos.loader = false;
                 Pedidos.pedidos = result.data;
             })
-            .catch(function (e) {
-                setTimeout(function () { Pedidos.fetchPedidos(); }, 2000);
+            .catch(function(e) {
+                setTimeout(function() { Pedidos.fetchPedidos(); }, 2000);
             });
 
 
@@ -486,38 +485,37 @@ const Pedidos = {
 
     view: (_data) => {
 
-        return Pedidos.loader ?
-            [
-                m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
-                m("div.content.content-components",
-                    m("div.container.mg-l-0.mg-r-0", {
-                        style: { "max-width": "100%" }
-                    }, [
-                        m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/" }, [
-                                    " MetroPlus "
-                                ])
-                            ),
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/imagen" }, [
-                                    " Imagen "
-                                ])
-
-                            ),
-                            m("li.breadcrumb-item.active[aria-current='page']",
-                                "Recepción de Pedidos"
-                            ),
-
-                        ]),
-                        m("h1.df-title.mg-t-20.mg-b-10",
-                            "Recepción de Pedidos:"
+        return Pedidos.loader ? [
+            m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
                         ),
-                        m("div.row.animated.fadeInUp", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/imagen" }, [
+                                " Imagen "
+                            ])
 
-                            m("div.col-12", [
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Recepción de Pedidos"
+                        ),
 
-                                m("div.table-loader.wd-100p", [
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Recepción de Pedidos:"
+                    ),
+                    m("div.row.animated.fadeInUp", [
+
+                        m("div.col-12", [
+
+                            m("div.table-loader.wd-100p", [
                                     m("div.placeholder-paragraph", [
                                         m("div.line"),
                                         m("div.line")
@@ -525,229 +523,219 @@ const Pedidos = {
                                 ]
 
 
-                                ),
+                            ),
 
 
+                        ])
+                    ]),
+
+
+
+
+
+
+                ])
+            ),
+
+        ] : Pedidos.error.length !== 0 ? [
+            m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
                             ])
-                        ]),
-
-
-
-
-
-
-                    ])
-                ),
-
-            ] : Pedidos.error.length !== 0 ? [
-                m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
-                m("div.content.content-components",
-                    m("div.container.mg-l-0.mg-r-0", {
-                        style: { "max-width": "100%" }
-                    }, [
-                        m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/" }, [
-                                    " MetroPlus "
-                                ])
-                            ),
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/imagen" }, [
-                                    " Imagen "
-                                ])
-
-                            ),
-                            m("li.breadcrumb-item.active[aria-current='page']",
-                                "Recepción de Pedidos"
-                            ),
-
-                        ]),
-                        m("h1.df-title.mg-t-20.mg-b-10",
-                            "Recepción de Pedidos:"
                         ),
-                        m("div.row.animated.fadeInUp", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/imagen" }, [
+                                " Imagen "
+                            ])
 
-                            m('p', 'No existe infrmac dd ncin')
-                        ]),
-
-
-
-
-
-                    ])
-                ),
-
-            ] : !Pedidos.loader && Pedidos.pedidos.length !== 0 ? [
-                m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
-                m("div.content.content-components",
-                    m("div.container.mg-l-0.mg-r-0", {
-                        style: { "max-width": "100%" }
-                    }, [
-                        m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/" }, [
-                                    " MetroPlus "
-                                ])
-                            ),
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/imagen" }, [
-                                    " Imagen "
-                                ])
-
-                            ),
-                            m("li.breadcrumb-item.active[aria-current='page']",
-                                "Recepción de Pedidos"
-                            ),
-
-                        ]),
-                        m("h1.df-title.mg-t-20.mg-b-10",
-                            "Recepción de Pedidos:"
                         ),
-                        m(tablePedidos)
-
-
-
-
-
-                    ])
-                ),
-                m("div.section-nav",
-                    [
-                        m("label.nav-label",
-                            "RECEPCIÓN DE PEDIDOS"
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Recepción de Pedidos"
                         ),
-                        m("div.mg-t-10.bg-white", {
 
-                        },
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Recepción de Pedidos:"
+                    ),
+                    m("div.row.animated.fadeInUp", [
 
-                            m("div.mg-t-10.bg-white",
-                                m("div.card-header.pd-t-20.pd-b-0.bd-b-0",
-                                    [
-                                        m("h6.lh-5.mg-b-5",
-                                            "N° de Pedidos:"
-                                        ),
+                        m('p', 'No existe infrmac dd ncin')
+                    ]),
 
-                                    ]
+
+
+
+
+                ])
+            ),
+
+        ] : !Pedidos.loader && Pedidos.pedidos.length !== 0 ? [
+            m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/imagen" }, [
+                                " Imagen "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Recepción de Pedidos"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Recepción de Pedidos:"
+                    ),
+                    m(tablePedidos)
+
+
+
+
+
+                ])
+            ),
+            m("div.section-nav", [
+                m("label.nav-label",
+                    "RECEPCIÓN DE PEDIDOS"
+                ),
+                m("div.mg-t-10.bg-white", {
+
+                    },
+
+                    m("div.mg-t-10.bg-white",
+                        m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                            m("h6.lh-5.mg-b-5",
+                                "N° de Pedidos:"
+                            ),
+
+                        ]),
+                        m("div.card-body.pd-0", [
+                            m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                    Pedidos.pedidos.length
                                 ),
-                                m("div.card-body.pd-0",
-                                    [
-                                        m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline",
-                                            [
-                                                m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
-                                                    Pedidos.pedidos.length
-                                                ),
-                                                m("div.tx-18",
-                                                    [
+                                m("div.tx-18", [
 
-                                                        m("divv.lh-0.tx-gray-300", 'Pedidos')
-                                                    ]
-                                                )
+                                    m("divv.lh-0.tx-gray-300", 'Pedidos')
+                                ])
 
-                                            ]
-                                        ),
+                            ]),
 
-                                    ]
-                                )
-                            ),
-                            m("div.pd-20",
-                                // m(Stopwatch)
+                        ])
+                    ),
+                    m("div.pd-20",
+                        // m(Stopwatch)
+                    )
+                ),
+
+            ])
+
+        ] : !Pedidos.loader && Pedidos.pedidos.length == 0 ? [
+            m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/imagen" }, [
+                                " Imagen "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Recepción de Pedidos"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Recepción de Pedidos:"
+                    ),
+                    m("div.row.animated.fadeInUp", [
+
+                        m("div.col-12", [
+
+                            m(".alert.alert-danger[role='alert']",
+                                "No existe información disponible."
                             )
-                        ),
-
-                    ]
-                )
-
-            ] : !Pedidos.loader && Pedidos.pedidos.length == 0 ? [
-                m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
-                m("div.content.content-components",
-                    m("div.container.mg-l-0.mg-r-0", {
-                        style: { "max-width": "100%" }
-                    }, [
-                        m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/" }, [
-                                    " MetroPlus "
-                                ])
-                            ),
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/imagen" }, [
-                                    " Imagen "
-                                ])
-
-                            ),
-                            m("li.breadcrumb-item.active[aria-current='page']",
-                                "Recepción de Pedidos"
-                            ),
-
-                        ]),
-                        m("h1.df-title.mg-t-20.mg-b-10",
-                            "Recepción de Pedidos:"
-                        ),
-                        m("div.row.animated.fadeInUp", [
-
-                            m("div.col-12", [
-
-                                m(".alert.alert-danger[role='alert']",
-                                    "No existe información disponible."
-                                )
 
 
+                        ])
+                    ]),
+
+
+
+
+
+
+                ])
+            ),
+        ] : [
+            m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
                             ])
-                        ]),
-
-
-
-
-
-
-                    ])
-                ),
-            ] : [
-                m(SidebarImagen, { oncreate: SidebarImagen.setPage(24) }),
-                m("div.content.content-components",
-                    m("div.container.mg-l-0.mg-r-0", {
-                        style: { "max-width": "100%" }
-                    }, [
-                        m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/" }, [
-                                    " MetroPlus "
-                                ])
-                            ),
-                            m("li.breadcrumb-item",
-                                m(m.route.Link, { href: "/imagen" }, [
-                                    " Imagen "
-                                ])
-
-                            ),
-                            m("li.breadcrumb-item.active[aria-current='page']",
-                                "Recepción de Pedidos"
-                            ),
-
-                        ]),
-                        m("h1.df-title.mg-t-20.mg-b-10",
-                            "Recepción de Pedidos:"
                         ),
-                        m("div.row.animated.fadeInUp", [
-
-                            m("div.col-12", [
-
-                                m("p", " Error interno."
-
-                                ),
-
-
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/imagen" }, [
+                                " Imagen "
                             ])
-                        ]),
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Recepción de Pedidos"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Recepción de Pedidos:"
+                    ),
+                    m("div.row.animated.fadeInUp", [
+
+                        m("div.col-12", [
+
+                            m("p", " Error interno."
+
+                            ),
+
+
+                        ])
+                    ]),
 
 
 
 
 
 
-                    ])
-                ),
-            ];
+                ])
+            ),
+        ];
 
 
     },

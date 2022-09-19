@@ -34,9 +34,10 @@ import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errore
 import TRPedidos from '../views/laboratorio/notificaciones/tr'
 import BSPedidos from '../views/laboratorio/notificaciones/bs'
 import NSGPedidos from '../views/laboratorio/notificaciones/nsg'
-import ImagenPedidos from '../views/imagen/pedidos/i2'
+import ImagenPedidos from '../views/imagen/pedidos/pedidos'
+import ImagenPedido from '../views/imagen/pedidos/pedido'
 import Imagen from '../views/imagen/imagen'
-
+import HeaderPrivate from '../views/layout/header-private';
 
 
 // Routes here
@@ -72,7 +73,45 @@ const Routes = {
     '/bco-sangre/pedidos': BSPedidos, //BSPedidos
     '/neurofisiologia/pedidos': NSGPedidos, //NSGPedidos
     '/imagen': Imagen, // Imagen
-    '/imagen/pedidos': ImagenPedidos, // ImagenPedidos
+    '/imagen/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('laboratorio', 16);
+            document.title = "Recepción de Pedidos | " + App.title;
+            if (_data.attrs.idFiltro !== undefined) {
+                ImagenPedidos.idFiltro = _data.attrs.idFiltro;
+                ImagenPedidos.loader = true;
+                ImagenPedidos.pedidos = [];
+                ImagenPedidos.fetchPedidos();
+            } else {
+                return m.route.set('/imagen/pedidos/', { idFiltro: 1 })
+            }
+        },
+        onupdate: (_data) => {
+            if (_data.attrs.idFiltro !== ImagenPedidos.idFiltro) {
+                ImagenPedidos.idFiltro = _data.attrs.idFiltro;
+                ImagenPedidos.loader = true;
+                ImagenPedidos.pedidos = [];
+                ImagenPedidos.fetchPedidos();
+                m.redraw();
+            }
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("imagen") }),
+                m(ImagenPedidos),
+            ];
+        },
+
+    }, // ImagenPedidos
+    '/imagen/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return ImagenPedido;
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // ImagenPedidos
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

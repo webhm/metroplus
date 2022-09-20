@@ -618,7 +618,7 @@ const Pedido = {
         Pedido.loader = true;
         m.request({
             method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-img",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-imagen",
             body: {
                 numeroPedido: Pedido.numeroPedido,
             },

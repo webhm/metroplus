@@ -116,6 +116,7 @@ function Stopwatch() {
 const tablePedidos = {
     oncreate: () => {
         Pedidos.loadPedidos();
+
     },
 
     view: () => {
@@ -127,39 +128,81 @@ const tablePedidos = {
 
                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
-                    m("div.d-flex.align-items-center.justify-content-between.mg-b-70.mg-t-10", [
+                    m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
                         m("h5.mg-b-0",
                             "Pedidos de Imagen:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                    oncreate: (el) => {
-                                        if (Pedidos.idFiltro == 1) {
-                                            el.dom.innerHTML = 'Pedidos de Hoy';
-                                        }
-                                        if (Pedidos.idFiltro == 2) {
-                                            el.dom.innerHTML = 'Pedidos entre Fechas';
-                                        }
-                                    },
-                                    onupdate: (el) => {
-                                        if (Pedidos.idFiltro == 1) {
-                                            el.dom.innerHTML = 'Pedidos de Hoy';
-                                        }
-                                        if (Pedidos.idFiltro == 2) {
-                                            el.dom.innerHTML = 'Pedidos entre Fechas';
-                                        }
+                                oncreate: (el) => {
+                                    if (Pedidos.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Pedidos de Hoy';
+                                    }
+                                    if (Pedidos.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Pedidos entre Fechas';
+                                    }
+                                },
+                                onupdate: (el) => {
+                                    if (Pedidos.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Pedidos de Hoy';
+                                    }
+                                    if (Pedidos.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Pedidos entre Fechas';
                                     }
                                 }
+                            }
 
                             )
 
                         ),
                         m("div.d-flex.tx-14", [
+                            m('.', {
+                                class: (Pedidos.idFiltro == 1 ? 'd-none' : 'd-flex')
+
+
+                            }, [
+                                m("div.link-03", {
+                                    title: "Desde"
+                                },
+                                    m(".tx-10.pd-r-0", {
+                                        style: { "padding-top": "10px" }
+                                    }, 'Desde:')
+                                ),
+                                m("div.link-03", {
+                                    style: { "cursor": "pointer" },
+                                    title: "Desde"
+                                },
+
+                                    m("input.tx-light.pd-4[type='date'][id='desde']", {
+                                        style: {
+                                            "border": "transparent"
+                                        }
+                                    })
+                                ),
+                                m("div.link-03", {
+                                    title: "Hasta"
+                                },
+                                    m(".tx-10.pd-r-0", {
+                                        style: { "padding-top": "10px" }
+                                    }, 'Hasta:')
+                                ),
+                                m("div.link-03", {
+                                    style: { "cursor": "pointer" },
+                                    title: "Hasta"
+                                },
+                                    m("input.tx-light.pd-4[type='date'][id='hasta']", {
+                                        style: {
+                                            "border": "transparent"
+                                        }
+                                    })
+                                )
+                            ]),
+
 
                             m("div.dropdown.dropleft", [
 
-                                m("div.link-03.lh-0.mg-l-10[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Filtrar"
-                                    },
+                                m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
+                                    style: { "cursor": "pointer" },
+                                    title: "Filtrar"
+                                },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -169,16 +212,16 @@ const tablePedidos = {
                                     m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=1" }, [
                                         "Pedidos de Hoy"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=2" }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=2&fechaDesde=" + Pedidos.fechaDesde + "&fechaHasta=" + Pedidos.fechaHasta }, [
                                         "Pedidos por Fechas"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=3" }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=3&fechaDesde=" + Pedidos.fechaDesde + "&fechaHasta=" + Pedidos.fechaHasta }, [
                                         "Pedidos de Emergencia"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=4" }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=4&fechaDesde=" + Pedidos.fechaDesde + "&fechaHasta=" + Pedidos.fechaHasta }, [
                                         "Pedidos de C. Externa"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=5" }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=5&fechaDesde=" + Pedidos.fechaDesde + "&fechaHasta=" + Pedidos.fechaHasta }, [
                                         "Pedidos de Hospitalización"
                                     ]),
 
@@ -186,7 +229,9 @@ const tablePedidos = {
                             ])
                         ])
                     ]),
-                    m("div.col-sm-12.mg-t-30.filemgr-content-header", [
+                    m("div.col-sm-12.filemgr-content-header", {
+                        class: (Pedidos.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
+                    }, [
                         m("i[data-feather='search']"),
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']")
@@ -209,23 +254,13 @@ const Pedidos = {
     pedidos: [],
     showBitacora: "",
     showPedido: "",
+    fechaDesde: "",
+    fechaHasta: "",
     idFiltro: 0,
     loader: false,
     error: "",
     oninit: (_data) => {
         SidebarImagen.page = "";
-
-
-    },
-
-    oncreate: (_data) => {
-
-
-        Notificaciones.suscribirCanal('MetroPlus-Pedidos');
-    },
-
-    loadPedidos: () => {
-
 
         moment.lang("es", {
             months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
@@ -240,6 +275,25 @@ const Pedidos = {
             weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
             weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
         });
+
+        Pedidos.fechaDesde = moment().subtract(15, 'days').format('DD-MM-YYYY');
+        Pedidos.fechaHasta = moment().format('DD-MM-YYYY');
+
+        console.log(Pedidos)
+
+
+    },
+
+    oncreate: (_data) => {
+
+
+        Notificaciones.suscribirCanal('MetroPlus-Pedidos');
+    },
+
+    loadPedidos: () => {
+
+
+
 
         $.fn.dataTable.ext.errMode = "none";
         var table = $("#table-pedidos").DataTable({
@@ -277,75 +331,75 @@ const Pedidos = {
             destroy: true,
             columns: false,
             aoColumnDefs: [{
-                    mRender: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    },
-                    visible: false,
-                    aTargets: [0],
-                    orderable: true,
+                mRender: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return full.CD_PRE_MED;
-                    },
-                    visible: false,
-                    aTargets: [1],
-                    orderable: false,
-
+                visible: false,
+                aTargets: [0],
+                orderable: true,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.CD_PRE_MED;
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return full.CD_PACIENTE;
+                visible: false,
+                aTargets: [1],
+                orderable: false,
 
-                    },
-                    visible: false,
-                    aTargets: [2],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.NM_PACIENTE;
-
-                    },
-                    visible: false,
-                    aTargets: [3],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.MED_MV;
-
-                    },
-                    visible: false,
-                    aTargets: [4],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return "";
-
-                    },
-                    visible: true,
-                    aTargets: [5],
-                    orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.CD_PACIENTE;
 
                 },
+                visible: false,
+                aTargets: [2],
+                orderable: false,
+
+            }, {
+                mRender: function (data, type, full) {
+                    return full.NM_PACIENTE;
+
+                },
+                visible: false,
+                aTargets: [3],
+                orderable: false,
+
+            }, {
+                mRender: function (data, type, full) {
+                    return full.MED_MV;
+
+                },
+                visible: false,
+                aTargets: [4],
+                orderable: false,
+
+            }, {
+                mRender: function (data, type, full) {
+                    return "";
+
+                },
+                visible: true,
+                aTargets: [5],
+                orderable: false,
+
+            },
 
 
             ],
-            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             },
-            drawCallback: function(settings) {
+            drawCallback: function (settings) {
 
                 Pedidos.loader = false;
 
-                settings.aoData.map(function(_i) {
+                settings.aoData.map(function (_i) {
 
                     $(_i.anCells[5]).css("padding", "0");
 
                     m.mount(_i.anCells[5], {
-                        view: function() {
+                        view: function () {
                             return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
                                 m("div.d-inline.list-group-item.d-flex.pd-sm", [
                                     m("div.avatar.tx-center",
@@ -451,7 +505,7 @@ const Pedidos = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function(e) {
+        $('#searchField').keyup(function (e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -461,18 +515,18 @@ const Pedidos = {
     fetchPedidos: () => {
 
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/imagen/pedidos",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/imagen/pedidos",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 Pedidos.loader = false;
                 Pedidos.pedidos = result.data;
             })
-            .catch(function(e) {
-                setTimeout(function() { Pedidos.fetchPedidos(); }, 2000);
+            .catch(function (e) {
+                setTimeout(function () { Pedidos.fetchPedidos(); }, 2000);
             });
 
 
@@ -516,11 +570,11 @@ const Pedidos = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", [
-                                    m("div.placeholder-paragraph", [
-                                        m("div.line"),
-                                        m("div.line")
-                                    ])
-                                ]
+                                m("div.placeholder-paragraph", [
+                                    m("div.line"),
+                                    m("div.line")
+                                ])
+                            ]
 
 
                             ),
@@ -615,7 +669,7 @@ const Pedidos = {
                 ),
                 m("div.mg-t-10.bg-white", {
 
-                    },
+                },
 
                     m("div.mg-t-10.bg-white",
                         m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
@@ -639,7 +693,7 @@ const Pedidos = {
                         ])
                     ),
                     m("div.pd-20",
-                        // m(Stopwatch)
+                        m(Stopwatch)
                     )
                 ),
 

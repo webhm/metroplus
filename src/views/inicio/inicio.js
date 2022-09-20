@@ -92,11 +92,7 @@ const iMdodule = {
                         )
                     ])
                 ]),
-                m("div", { "class": "text-right" }, [
-                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                        "Administrador"
-                    )
-                ])
+
             ])
 
         ]

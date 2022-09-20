@@ -77,23 +77,56 @@ const Routes = {
         oninit: (_data) => {
             App.isAuth('laboratorio', 16);
             document.title = "Recepción de Pedidos | " + App.title;
-            if (_data.attrs.idFiltro !== undefined) {
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/imagen/pedidos/', { idFiltro: 1 })
+            }
+
+            ImagenPedidos.idFiltro = _data.attrs.idFiltro;
+
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== ImagenPedidos.idFiltro && ImagenPedidos.idFiltro !== 1 && ImagenPedidos.fechaDesde !== undefined) {
                 ImagenPedidos.idFiltro = _data.attrs.idFiltro;
+                ImagenPedidos.fechaDesde = _data.attrs.fechaDesde;
+                ImagenPedidos.fechaHasta = _data.attrs.fechaHasta;
                 ImagenPedidos.loader = true;
                 ImagenPedidos.pedidos = [];
                 ImagenPedidos.fetchPedidos();
             } else {
-                return m.route.set('/imagen/pedidos/', { idFiltro: 1 })
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    ImagenPedidos.idFiltro = _data.attrs.idFiltro;
+                    ImagenPedidos.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+                    ImagenPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (ImagenPedidos.pedidos.length == 0) {
+                        ImagenPedidos.loader = true;
+                        ImagenPedidos.pedidos = [];
+                        ImagenPedidos.fetchPedidos();
+                    } else {
+                        ImagenPedidos.loader = false;
+                    }
+                }
             }
-        },
-        onupdate: (_data) => {
-            if (_data.attrs.idFiltro !== ImagenPedidos.idFiltro) {
-                ImagenPedidos.idFiltro = _data.attrs.idFiltro;
-                ImagenPedidos.loader = true;
-                ImagenPedidos.pedidos = [];
-                ImagenPedidos.fetchPedidos();
-                m.redraw();
-            }
+
+
         },
         view: (_data) => {
             return [

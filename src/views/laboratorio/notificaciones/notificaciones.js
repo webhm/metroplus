@@ -26,7 +26,9 @@ const NotificacionesLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -44,9 +46,9 @@ const NotificacionesLab = {
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10", [
-                            "Notificaciones de Laboratorio:"
+                        "Notificaciones de Laboratorio:"
 
-                        ]
+                    ]
 
                     ),
 
@@ -151,8 +153,8 @@ const NotificacionesLab = {
                             ])
                         ),
                         m("div.table-loader.col-12.wd-100p", {
-                                class: NotificacionesLab.showProcess,
-                            },
+                            class: NotificacionesLab.showProcess,
+                        },
                             m("div.placeholder-paragraph", [
                                 m("div.line"),
                                 m("div.line")

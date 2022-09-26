@@ -38,35 +38,50 @@ const iMdodule = {
         if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'farmacia') {
             _data.children[0].modulo = 'Farmacia';
             _data.children[0].icon = "fas fa-pills";
+            _data.children[0].href = 'farmacia';
+
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'laboratorio') {
             _data.children[0].modulo = 'Laboratorio';
             _data.children[0].icon = "fas fa-microscope";
+            _data.children[0].href = 'laboratorio';
+
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'imagen') {
             _data.children[0].modulo = 'Imagen';
             _data.children[0].icon = "fas fa-file-prescription";
+            _data.children[0].href = 'imagen';
+
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'emergencia') {
             _data.children[0].modulo = 'Emergencia';
             _data.children[0].icon = "fas fa-first-aid";
+            _data.children[0].href = 'emergencia';
+
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'bco-sangre') {
-            _data.children[0].icon = "fas fa-hospital";
+            _data.children[0].icon = "fas fa-burn";
             _data.children[0].modulo = 'Bco. de Sangre';
+            _data.children[0].href = 'bco-sangre';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'terapia-respiratoria') {
-            _data.children[0].icon = "fas fa-hospital";
-
+            _data.children[0].icon = "fas fa-user-md";
             _data.children[0].modulo = 'Terapia Respiratoria';
+            _data.children[0].href = 'terapia-respiratoria';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'neurofisiologia') {
-            _data.children[0].icon = "fas fa-hospital";
-
+            _data.children[0].icon = "fas fa-user-md";
             _data.children[0].modulo = 'Neurofisiología';
+            _data.children[0].href = 'neurofisiologia';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'hospitalizacion') {
             _data.children[0].icon = "fas fa-procedures";
-
             _data.children[0].modulo = 'Hospitalizacion';
+            _data.children[0].href = 'hospitalizacion';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'admisiones') {
+            _data.children[0].icon = "fas fa-folder-open";
+            _data.children[0].modulo = 'Adimisones';
+            _data.children[0].href = 'admisiones';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'mantenimiento') {
-            _data.children[0].icon = "fas fa-server";
-            _data.children[0].modulo = 'Mantenimiento';
+            _data.children[0].icon = "fas fa-h-square ";
+            _data.children[0].modulo = 'Mantenimento';
+            _data.children[0].href = 'mantenimento';
         } else {
             _data.children[0].icon = "fas fa-hospital";
+            _data.children[0].href = _data.children[0].modulo.charAt(0).toUpperCase();
             _data.children[0].modulo = _data.children[0].modulo.charAt(0).toUpperCase() + _data.children[0].modulo.slice(1)
         }
 
@@ -76,7 +91,10 @@ const iMdodule = {
                 "class": "list-item bg-white wd-50p",
                 "style": { "cursor": "pointer" },
                 onclick: () => {
-                    m.route.set(_data.children[0].modulo.toLowerCase(), {});
+
+                    m.route.set(_data.children[0].href, {});
+
+
                 }
             }, [
                 m("div", { "class": "media" }, [

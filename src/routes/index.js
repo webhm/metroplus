@@ -53,7 +53,69 @@ const Routes = {
     '/laboratorio/notificaciones/pendientes': NotificacionesPendientesLab, //NotificacionesPendientesLab
     '/laboratorio/notificaciones/error': NotificacionesErroresLab, //NotificacionesErroresLab
     '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista Hospitalizacion,
-    '/laboratorio/pedidos': LaboratorioPedidos, //LaboratorioPedidos Recepción Pedidos,
+    '/laboratorio/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('laboratorio', 16);
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/laboratorio/pedidos/', { idFiltro: 1 })
+            }
+
+            LaboratorioPedidos.idFiltro = _data.attrs.idFiltro;
+
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== LaboratorioPedidos.idFiltro && LaboratorioPedidos.idFiltro !== 1 && LaboratorioPedidos.fechaDesde !== undefined) {
+                LaboratorioPedidos.idFiltro = _data.attrs.idFiltro;
+                LaboratorioPedidos.fechaDesde = _data.attrs.fechaDesde;
+                LaboratorioPedidos.fechaHasta = _data.attrs.fechaHasta;
+                LaboratorioPedidos.loader = true;
+                LaboratorioPedidos.pedidos = [];
+                LaboratorioPedidos.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    LaboratorioPedidos.idFiltro = _data.attrs.idFiltro;
+                    LaboratorioPedidos.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+                    LaboratorioPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (LaboratorioPedidos.pedidos.length == 0) {
+                        LaboratorioPedidos.loader = true;
+                        LaboratorioPedidos.pedidos = [];
+                        LaboratorioPedidos.fetchPedidos();
+                    } else {
+                        LaboratorioPedidos.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+                m(LaboratorioPedidos),
+            ];
+        },
+
+    }, // LaboratorioPedidos
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos
     '/emergencia': Emergencia, //Emergencia
     '/emergencia/auxiliar/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio

@@ -141,7 +141,7 @@ const tablePedidosIngresados = {
                                         el.dom.innerHTML = 'Pedidos de Hoy';
                                     }
                                     if (PedidosIngresados.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        el.dom.innerHTML = 'Pedidos de Emergencia';
                                     }
 
                                 },
@@ -150,7 +150,7 @@ const tablePedidosIngresados = {
                                         el.dom.innerHTML = 'Pedidos de Hoy';
                                     }
                                     if (PedidosIngresados.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        el.dom.innerHTML = 'Pedidos de Emergencia';
                                     }
                                 }
                             }
@@ -183,7 +183,7 @@ const tablePedidosIngresados = {
                                             PedidosIngresados.loader = true;
                                             PedidosIngresados.pedidos = [];
                                             PedidosIngresados.fetchPedidosIngresados();
-                                            m.route.set("/imagen/PedidosIngresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
+                                            m.route.set("/laboratorio/lisa/pedidos/ingresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -210,7 +210,7 @@ const tablePedidosIngresados = {
                                             PedidosIngresados.loader = true;
                                             PedidosIngresados.pedidos = [];
                                             PedidosIngresados.fetchPedidosIngresados();
-                                            m.route.set("/imagen/PedidosIngresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
+                                            m.route.set("/laboratorio/lisa/pedidos/ingresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -235,10 +235,10 @@ const tablePedidosIngresados = {
                                     m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=2&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
                                         "Pedidos de Emergencia"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=3&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=3&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
                                         "Pedidos de Hospitalización"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=4&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=4&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
                                         "Pedidos de C. Externa"
                                     ]),
 
@@ -303,7 +303,7 @@ const PedidosIngresados = {
 
 
 
-            PedidosIngresados.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+            PedidosIngresados.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
             PedidosIngresados.fechaHasta = moment().format('DD-MM-YYYY');
             PedidosIngresados.loader = true;
             PedidosIngresados.pedidos = [];
@@ -425,42 +425,47 @@ const PedidosIngresados = {
                     m.mount(_i.anCells[5], {
                         view: function () {
                             return [
-                                m("td.wd.1p.tx-white", { "style": { "background-color": "#f10075" } },
-                                    "U"
+                                m("td.wd.1p", { "style": { "background-color": (_i._aData.tipoPedido == 'U' ? "#f10075" : "rgb(168, 190, 214)") } },
+                                    _i._aData.tipoPedido
                                 ),
                                 m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "FECHA:"
+                                    "FECHA:",
+
                                 ),
                                 m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    "12-02-2021 14:55"
+                                    _i._aData.fechaPedido
                                 ),
                                 m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                     "SC:"
                                 ),
                                 m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    "0018956455"
+                                    _i._aData.codigoPedido
                                 ),
                                 m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                     "NHC:"
                                 ),
                                 m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    "2697201"
+                                    _i._aData.numeroHistoriaClinica
                                 ),
 
                                 m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "PTE:"
+                                    "PTE:",
+
                                 ),
-                                m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    "MARTIN FRANCISCO CHANG CAVEZ"
+                                m("td.wd-30p", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                    _i._aData.paciente,
+                                    m('br'),
+                                    "MEDICO: " + _i._aData.descPrestadorSolicitante,
+
                                 ),
-                                m("td.wd.1p.tx-white", { "style": { "background-color": "#fd7e14" } },
-                                    "I"
+                                m("td.wd.1p.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
+                                    (_i._aData.enviadoInfinity == 0 ? "R" : "E")
                                 ),
                                 m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                     "SECTOR:"
                                 ),
                                 m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    "EMERGENCIA"
+                                    _i._aData.sector
                                 ),
                                 m("td.wd.1p.tx-center", { "style": { "background-color": "rgb(234, 239, 245)", "cursor": "pointer" } },
                                     m('i.fas.fa-file-alt.tx-15'),
@@ -495,14 +500,14 @@ const PedidosIngresados = {
         let _queryString = '';
 
         if (PedidosIngresados.idFiltro == 1) {
-            _queryString = '?idFiltro=' + PedidosIngresados.idFiltro;
+            _queryString = '?type=ingresadas&idFiltro=' + PedidosIngresados.idFiltro;
         } else {
-            _queryString = '?idFiltro=' + PedidosIngresados.idFiltro + '&fechaDesde=' + PedidosIngresados.fechaDesde + '&fechaHasta=' + PedidosIngresados.fechaHasta;
+            _queryString = '?type=ingresadas&idFiltro=' + PedidosIngresados.idFiltro + '&fechaDesde=' + PedidosIngresados.fechaDesde + '&fechaHasta=' + PedidosIngresados.fechaHasta;
         }
 
         m.request({
             method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/imagen/pedidos" + _queryString,
+            url: "https://lisa.hospitalmetropolitano.org/v1/listar" + _queryString,
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
             },

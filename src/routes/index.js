@@ -69,7 +69,7 @@ const Routes = {
                 LisaPedidosIngresados.fechaHasta = _data.attrs.fechaHasta;
                 LisaPedidosIngresados.loader = true;
                 LisaPedidosIngresados.pedidos = [];
-                LisaPedidosIngresados.fetchPedidos();
+                LisaPedidosIngresados.fetchPedidosIngresados();
             } else {
 
                 if (_data.attrs.idFiltro == 1) {
@@ -89,12 +89,12 @@ const Routes = {
                     });
 
                     LisaPedidosIngresados.idFiltro = _data.attrs.idFiltro;
-                    LisaPedidosIngresados.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+                    LisaPedidosIngresados.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
                     LisaPedidosIngresados.fechaHasta = moment().format('DD-MM-YYYY');
                     if (LisaPedidosIngresados.pedidos.length == 0) {
                         LisaPedidosIngresados.loader = true;
                         LisaPedidosIngresados.pedidos = [];
-                        LisaPedidosIngresados.fetchPedidos();
+                        LisaPedidosIngresados.fetchPedidosIngresados();
                     } else {
                         LisaPedidosIngresados.loader = false;
                     }

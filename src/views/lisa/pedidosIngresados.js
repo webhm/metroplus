@@ -468,8 +468,9 @@ const PedidosIngresados = {
                                     _i._aData.sector
                                 ),
                                 m("td.wd.1p.tx-center", { "style": { "background-color": "rgb(234, 239, 245)", "cursor": "pointer" } },
-                                    m('i.fas.fa-file-alt.tx-15'),
-                                    " Ver "
+                                    m('i.fas.fa-file-upload.tx-20.mg-t-5'),
+                                    (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
+
                                 ),
 
                             ]

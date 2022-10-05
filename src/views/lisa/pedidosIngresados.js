@@ -364,7 +364,7 @@ const PedidosIngresados = {
             },
             {
                 mRender: function (data, type, full) {
-                    return full.CD_PRE_MED;
+                    return full.codigoPedido;
                 },
                 visible: false,
                 aTargets: [1],
@@ -373,7 +373,7 @@ const PedidosIngresados = {
             },
             {
                 mRender: function (data, type, full) {
-                    return full.CD_PACIENTE;
+                    return full.paciente;
 
                 },
                 visible: false,
@@ -382,7 +382,7 @@ const PedidosIngresados = {
 
             }, {
                 mRender: function (data, type, full) {
-                    return full.NM_PACIENTE;
+                    return full.numeroHistoriaClinica;
 
                 },
                 visible: false,
@@ -391,7 +391,7 @@ const PedidosIngresados = {
 
             }, {
                 mRender: function (data, type, full) {
-                    return full.MED_MV;
+                    return full.descPrestadorSolicitante;
 
                 },
                 visible: false,
@@ -467,7 +467,14 @@ const PedidosIngresados = {
                                 m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
                                     _i._aData.sector
                                 ),
-                                m("td.wd.1p.tx-center", { "style": { "background-color": "rgb(234, 239, 245)", "cursor": "pointer" } },
+                                m("td.wd.1p.tx-center", {
+                                    onclick: () => {
+                                        if (confirm("Esta Ud. seguro de generar este envío.") == true) {
+                                            PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
+                                        }
+                                    },
+                                    "style": { "background-color": "rgb(234, 239, 245)", "cursor": "pointer" }
+                                },
                                     m('i.fas.fa-file-upload.tx-20.mg-t-5'),
                                     (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
 
@@ -519,6 +526,38 @@ const PedidosIngresados = {
             })
             .catch(function (e) {
                 setTimeout(function () { PedidosIngresados.fetchPedidosIngresados(); }, 2000);
+            });
+
+
+    },
+    reproesarMensajeXML: (codigoPedido) => {
+
+        PedidosIngresados.loader = true;
+
+
+        m.request({
+            method: "GET",
+            url: "http://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido?sc=" + codigoPedido,
+            extract: function (xhr) { return { status: xhr.status, body: xhr.responseText } },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (response) {
+                PedidosIngresados.loader = false;
+
+                if (response.status == 200) {
+                    alert('Preceso realizado con éxito.')
+                    setTimeout(function () { window.location.reload(); }, 900);
+                } else {
+                    alert('Error en envío de este mensaje. Reintente nuevamente.');
+
+                }
+
+
+            })
+            .catch(function (e) {
+                alert('Error en envío de este mensaje. Reintente nuevamente.');
             });
 
 

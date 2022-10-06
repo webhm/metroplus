@@ -323,7 +323,7 @@ const Pedidos = {
 
 
 
-            Pedidos.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+            Pedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
             Pedidos.fechaHasta = moment().format('DD-MM-YYYY');
             Pedidos.loader = true;
             Pedidos.pedidos = [];
@@ -443,57 +443,81 @@ const Pedidos = {
 
                 settings.aoData.map(function(_i) {
 
-                    $(_i.anCells[5]).css("padding", "0");
+                    $(_i.anCells[5]).css("padding", "0").css("background-color", "#f7fafe");
 
                     m.mount(_i.anCells[5], {
                         view: function() {
 
                             return [
-
-
                                 m("div.d-flex", {}, [
                                     m("div.pd-0.flex-grow-1",
-                                        m("td.wd-1p", { "style": { "background-color": (_i._aData.SECTOR == 'EMERGENCIA' ? "#f10075" : "#0168fa") } },
-
+                                        m("div.pd-2", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            m('i.fas.fa-file-alt.tx-semibold.tx-15.pd-2.mg-r-5'),
+                                            m('.d-inline.tx-15.mg-r-5', _i._aData.CD_PRE_MED),
+                                            m('i.fas.fa-hospital.tx-semibold.tx-12.pd-2'),
+                                            m('.tx-semibold.d-inline.tx-12', " SECTOR: "),
+                                            m('.d-inline.tx-12.mg-r-5', _i._aData.SECTOR + " " + _i._aData.UBICACION),
+                                            m('i.fas.fa-user-md.tx-semibold.tx-12.pd-2'),
+                                            m('.tx-semibold.d-inline.tx-12', " MED: "),
+                                            _i._aData.MED_MV
                                         ),
-                                        m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                    ),
+                                    m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                    )
+                                ]),
+                                m("div.d-flex.mg-b-20", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
+                                    m("div.pd-0.flex-grow-1",
+                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.SECTOR == 'EMERGENCIA' ? "#f10075" : "#0168fa") } },
+                                            (_i._aData.SECTOR == 'EMERGENCIA' ? "E" : "H")
+                                        ),
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "FECHA:"
                                         ),
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
                                             _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                                         ),
-                                        m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "NHC:"
                                         ),
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
                                             _i._aData.CD_PACIENTE
                                         ),
-                                        m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "AT:"
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "N° AT.: "
                                         ),
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
                                             _i._aData.AT_MV
                                         ),
 
-                                        m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "PTE:"
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "PTE: "
                                         ),
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
                                             _i._aData.NM_PACIENTE
                                         ),
-                                        m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "SECTOR:"
-                                        ),
-                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.SECTOR
-                                        ),
+
 
 
                                     ),
 
-                                    m("div.pd-0.mg-l-auto",
-                                        m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "SECTOR:"
+                                    m("div.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        m("td.tx-10", {
+                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" },
+                                                onclick: () => {
+                                                    m.route.set("/imagen/pedido/", {
+                                                        numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                        numeroAtencion: _i._aData.AT_MV,
+                                                        numeroPedido: _i._aData.CD_PRE_MED,
+                                                        track: "view",
+                                                    });
+                                                }
+                                            },
+                                            m(".tx-normal",
+                                                m("i.fas.fa-file-alt.pd-1.mg-r-2"),
+
+                                                "Ver Pedido"
+                                            )
                                         ),
                                     )
                                 ]),

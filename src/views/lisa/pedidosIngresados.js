@@ -117,7 +117,7 @@ const tablePedidosIngresados = {
     oncreate: () => {
         PedidosIngresados.loadPedidosIngresados();
         if (PedidosIngresados.searchField.length !== 0) {
-            var table = $('#table-PedidosIngresados').DataTable();
+            var table = $('#table-pedidosIngresados').DataTable();
             table.search(PedidosIngresados.searchField).draw();
         }
 
@@ -136,24 +136,24 @@ const tablePedidosIngresados = {
                         m("h5.mg-b-0",
                             "LISA:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                oncreate: (el) => {
-                                    if (PedidosIngresados.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Pedidos de Hoy';
-                                    }
-                                    if (PedidosIngresados.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos de Emergencia';
-                                    }
+                                    oncreate: (el) => {
+                                        if (PedidosIngresados.idFiltro == 1) {
+                                            el.dom.innerHTML = 'Pedidos de Hoy';
+                                        }
+                                        if (PedidosIngresados.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        }
 
-                                },
-                                onupdate: (el) => {
-                                    if (PedidosIngresados.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Pedidos de Hoy';
-                                    }
-                                    if (PedidosIngresados.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos de Emergencia';
+                                    },
+                                    onupdate: (el) => {
+                                        if (PedidosIngresados.idFiltro == 1) {
+                                            el.dom.innerHTML = 'Pedidos de Hoy';
+                                        }
+                                        if (PedidosIngresados.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        }
                                     }
                                 }
-                            }
 
                             )
 
@@ -163,17 +163,16 @@ const tablePedidosIngresados = {
                                 class: (PedidosIngresados.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
-                                    title: "Desde"
-                                },
+                                        title: "Desde"
+                                    },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Desde:')
                                 ),
                                 m("div.link-03", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Desde"
-                                },
-
+                                        style: { "cursor": "pointer" },
+                                        title: "Desde"
+                                    },
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
                                             el.dom.value = (PedidosIngresados.idFiltro !== 1 ? moment(moment(PedidosIngresados.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -191,16 +190,16 @@ const tablePedidosIngresados = {
                                     })
                                 ),
                                 m("div.link-03", {
-                                    title: "Hasta"
-                                },
+                                        title: "Hasta"
+                                    },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Hasta:')
                                 ),
                                 m("div.link-03", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Hasta"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Hasta"
+                                    },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
                                             el.dom.value = (PedidosIngresados.idFiltro !== 1 ? moment(moment(PedidosIngresados.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -220,9 +219,9 @@ const tablePedidosIngresados = {
                             ]),
                             m("div.dropdown.dropleft", [
                                 m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Filtrar"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Filtrar"
+                                    },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -253,7 +252,7 @@ const tablePedidosIngresados = {
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function (e) { PedidosIngresados.searchField = e.target.value; },
+                                oninput: function(e) { PedidosIngresados.searchField = e.target.value; },
                                 value: PedidosIngresados.searchField,
                             })
                         ),
@@ -261,7 +260,7 @@ const tablePedidosIngresados = {
                     ]),
 
 
-                    m("table.table.table-sm.tx-11[id='table-PedidosIngresados'][width='100%']"),
+                    m("table.table.table-sm.tx-11[id='table-pedidosIngresados'][width='100%']"),
 
 
                 ])
@@ -320,7 +319,7 @@ const PedidosIngresados = {
     loadPedidosIngresados: () => {
 
         $.fn.dataTable.ext.errMode = "none";
-        var table = $("#table-PedidosIngresados").DataTable({
+        var table = $("#table-pedidosIngresados").DataTable({
             data: PedidosIngresados.pedidos,
             dom: 'ltp',
             language: {
@@ -355,132 +354,165 @@ const PedidosIngresados = {
             destroy: true,
             columns: false,
             aoColumnDefs: [{
-                mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    orderable: true,
                 },
-                visible: false,
-                aTargets: [0],
-                orderable: true,
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.codigoPedido;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.paciente;
+                {
+                    mRender: function(data, type, full) {
+                        return full.codigoPedido;
+                    },
+                    visible: false,
+                    aTargets: [1],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return full.paciente;
 
-            }, {
-                mRender: function (data, type, full) {
-                    return full.numeroHistoriaClinica;
+                    },
+                    visible: false,
+                    aTargets: [2],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.numeroHistoriaClinica;
+
+                    },
+                    visible: false,
+                    aTargets: [3],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.descPrestadorSolicitante;
+
+                    },
+                    visible: false,
+                    aTargets: [4],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return "";
+
+                    },
+                    visible: true,
+                    aTargets: [5],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [3],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return full.descPrestadorSolicitante;
-
-                },
-                visible: false,
-                aTargets: [4],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return "";
-
-                },
-                visible: true,
-                aTargets: [5],
-                orderable: false,
-
-            },
 
 
             ],
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             },
-            drawCallback: function (settings) {
+            drawCallback: function(settings) {
 
                 PedidosIngresados.loader = false;
 
-                settings.aoData.map(function (_i) {
+                settings.aoData.map(function(_i) {
 
-                    $(_i.anCells[5]).css("padding", "0");
+                    $(_i.anCells[5]).css("padding", "0").css("background-color", "#f7fafe");
 
                     m.mount(_i.anCells[5], {
-                        view: function () {
+                        view: function() {
+
                             return [
-                                m("td.wd.1p", { "style": { "background-color": (_i._aData.tipoPedido == 'U' ? "#f10075" : "rgb(168, 190, 214)") } },
-                                    _i._aData.tipoPedido
-                                ),
-                                m("td.tx-10", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "FECHA:",
+                                m("div.d-flex", {}, [
+                                    m("div.flex-grow-1",
+                                        m("div.pd-2", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            m('i.fas.fa-file-upload.tx-semibold.tx-15.pd-2.mg-r-5'),
+                                            m('.d-inline.tx-15.mg-r-5', _i._aData.codigoPedido),
+                                            m('i.fas.fa-hospital.tx-semibold.tx-12.pd-2'),
+                                            m('.tx-semibold.d-inline.tx-12', " SECTOR: "),
+                                            m('.d-inline.tx-12.mg-r-5', _i._aData.sector),
+                                            m('i.fas.fa-user-md.tx-semibold.tx-12.pd-2'),
+                                            m('.tx-semibold.d-inline.tx-12', " MED: "),
+                                            _i._aData.descPrestadorSolicitante
+                                        ),
+                                    ),
 
-                                ),
-                                m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    _i._aData.fechaPedido
-                                ),
-                                m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "SC:"
-                                ),
-                                m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    _i._aData.codigoPedido
-                                ),
-                                m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "NHC:"
-                                ),
-                                m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    _i._aData.numeroHistoriaClinica
-                                ),
+                                ]),
+                                m("div.d-flex.mg-b-25", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
+                                    m("div.pd-0.flex-grow-1",
+                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.tipoPedido == 'U' ? "#f10075" : "#0168fa") } },
+                                            _i._aData.tipoPedido
+                                        ),
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "Fecha:"
+                                        ),
 
-                                m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "PTE:",
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.fechaPedido
+                                        ),
 
-                                ),
-                                m("td.wd-30p", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    _i._aData.paciente,
-                                    m('br'),
-                                    "MEDICO: " + _i._aData.descPrestadorSolicitante,
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "NHC:"
+                                        ),
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.numeroHistoriaClinica
 
-                                ),
-                                m("td.wd.1p.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
-                                    (_i._aData.enviadoInfinity == 0 ? "R" : "E")
-                                ),
-                                m("td", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                    "SECTOR:"
-                                ),
-                                m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                    _i._aData.sector
-                                ),
-                                m("td.wd.1p.tx-center", {
-                                    onclick: () => {
-                                        if (confirm("Esta Ud. seguro de generar este envío.") == true) {
-                                            PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
-                                        }
-                                    },
-                                    "style": { "background-color": "rgb(234, 239, 245)", "cursor": "pointer" }
-                                },
-                                    m('i.fas.fa-file-upload.tx-20.mg-t-5'),
-                                    (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
+                                        ),
 
-                                ),
+
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "PTE: "
+                                        ),
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.paciente
+                                        ),
+
+                                    ),
+
+                                    m("div.d-flex.wd-10p.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
+                                            (_i._aData.enviadoInfinity == 0 ? "R" : "E")
+                                        ),
+                                        m("td.tx-center.d-flex", {
+                                                onclick: () => {
+                                                    if (confirm("Esta Ud. seguro de generar este envío.") == true) {
+                                                        PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
+                                                    }
+                                                },
+                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                                            },
+                                            m('i.fas.fa-file-upload.mg-r-5'),
+                                            (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
+
+                                        ),
+
+                                    ),
+
+                                    m("div.wd-10p.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+
+                                        m("td.tx-center.d-flex", {
+                                                onclick: () => {
+                                                    if (confirm("Esta Ud. seguro de generar este envío.") == true) {
+                                                        PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
+                                                    }
+                                                },
+                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                                            },
+                                            m('i.fas.fa-file-upload.mg-r-5'),
+                                            " Ver Pedido "
+
+                                        ),
+                                    )
+                                ]),
+
 
                             ]
+
+
+
+
                         }
                     });
 
@@ -496,7 +528,7 @@ const PedidosIngresados = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function (e) {
+        $('#searchField').keyup(function(e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -514,18 +546,18 @@ const PedidosIngresados = {
         }
 
         m.request({
-            method: "GET",
-            url: "https://lisa.hospitalmetropolitano.org/v1/listar" + _queryString,
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://lisa.hospitalmetropolitano.org/v1/listar" + _queryString,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 PedidosIngresados.loader = false;
                 PedidosIngresados.pedidos = result.data;
             })
-            .catch(function (e) {
-                setTimeout(function () { PedidosIngresados.fetchPedidosIngresados(); }, 2000);
+            .catch(function(e) {
+                setTimeout(function() { PedidosIngresados.fetchPedidosIngresados(); }, 2000);
             });
 
 
@@ -536,19 +568,19 @@ const PedidosIngresados = {
 
 
         m.request({
-            method: "GET",
-            url: "http://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido?sc=" + codigoPedido,
-            extract: function (xhr) { return { status: xhr.status, body: xhr.responseText } },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (response) {
+                method: "GET",
+                url: "http://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido?sc=" + codigoPedido,
+                extract: function(xhr) { return { status: xhr.status, body: xhr.responseText } },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(response) {
                 PedidosIngresados.loader = false;
 
                 if (response.status == 200) {
                     alert('Preceso realizado con éxito.')
-                    setTimeout(function () { window.location.reload(); }, 900);
+                    setTimeout(function() { window.location.reload(); }, 900);
                 } else {
                     alert('Error en envío de este mensaje. Reintente nuevamente.');
 
@@ -556,14 +588,14 @@ const PedidosIngresados = {
 
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
                 alert('Error en envío de este mensaje. Reintente nuevamente.');
             });
 
 
     },
     reloadData: () => {
-        var table = $('#table-PedidosIngresados').DataTable();
+        var table = $('#table-pedidosIngresados').DataTable();
         table.clear();
         table.rows.add(PedidosIngresados.pedidos).draw();
     },
@@ -601,11 +633,11 @@ const PedidosIngresados = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", [
-                                m("div.placeholder-paragraph", [
-                                    m("div.line"),
-                                    m("div.line")
-                                ])
-                            ]
+                                    m("div.placeholder-paragraph", [
+                                        m("div.line"),
+                                        m("div.line")
+                                    ])
+                                ]
 
 
                             ),
@@ -700,7 +732,7 @@ const PedidosIngresados = {
                 ),
                 m("div.mg-t-10.bg-white", {
 
-                },
+                    },
 
                     m("div.mg-t-10.bg-white",
                         m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [

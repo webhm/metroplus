@@ -158,7 +158,7 @@ const Routes = {
                     });
 
                     LaboratorioPedidos.idFiltro = _data.attrs.idFiltro;
-                    LaboratorioPedidos.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+                    LaboratorioPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
                     LaboratorioPedidos.fechaHasta = moment().format('DD-MM-YYYY');
                     if (LaboratorioPedidos.pedidos.length == 0) {
                         LaboratorioPedidos.loader = true;
@@ -240,7 +240,7 @@ const Routes = {
                     });
 
                     ImagenPedidos.idFiltro = _data.attrs.idFiltro;
-                    ImagenPedidos.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
+                    ImagenPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
                     ImagenPedidos.fechaHasta = moment().format('DD-MM-YYYY');
                     if (ImagenPedidos.pedidos.length == 0) {
                         ImagenPedidos.loader = true;

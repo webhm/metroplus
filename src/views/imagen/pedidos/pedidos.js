@@ -463,7 +463,7 @@ const Pedidos = {
                                         ),
                                     ),
                                     m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                        _i._aData.EDAD + " - " + _i._aData.PESO + " - " + _i._aData.ALTURA
                                     )
                                 ]),
                                 m("div.d-flex.mg-b-20", { "style": { "background-color": "rgb(234, 239, 245)" } }, [

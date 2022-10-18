@@ -39,6 +39,8 @@ import ImagenPedidos from '../views/imagen/pedidos/pedidos'
 import ImagenPedido from '../views/imagen/pedidos/pedido'
 import Imagen from '../views/imagen/imagen'
 import TerapiaRespiratoria from '../views/tr/tr'
+import TRPedido from '../views/tr/pedidos/pedido'
+
 
 import HeaderPrivate from '../views/layout/header-private';
 
@@ -263,6 +265,15 @@ const Routes = {
     '/bco-sangre/pedidos': BSPedidos, //BSPedidos
     '/neurofisiologia/pedidos': NSGPedidos, //NSGPedidos
     '/terapia-respiratoria': TerapiaRespiratoria, // TerapiaRespiratoria
+    '/terapia-respiratoria/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return TRPedido;
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // TRPedido
     '/imagen': Imagen, // Imagen
     '/imagen/pedidos': {
         oninit: (_data) => {

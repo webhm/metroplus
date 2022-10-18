@@ -471,7 +471,7 @@ const PedidosIngresados = {
 
                                     ),
 
-                                    m("div.d-flex.wd-10p.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                    m("div.d-flex.wd-15p.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                         m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
                                             (_i._aData.enviadoInfinity == 0 ? "R" : "E")
                                         ),
@@ -490,7 +490,7 @@ const PedidosIngresados = {
 
                                     ),
 
-                                    m("div.wd-10p.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                    m("div.wd-10p.pd-0.mg-l-auto.d-none", { "style": { "background-color": "rgb(168, 190, 214)" } },
 
                                         m("td.tx-center.d-flex", {
                                                 onclick: () => {

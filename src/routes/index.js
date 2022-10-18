@@ -32,12 +32,14 @@ import Pasaportes from '../views/hospitalizacion/pasaportes/pasaportes'
 import ControlCamas from '../views/hospitalizacion/controlCamas/controlCamas'
 import NotificacionesPendientesLab from '../views/laboratorio/notificaciones/pendientes'
 import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errores'
-import TRPedidos from '../views/laboratorio/notificaciones/tr'
+import TRPedidos from '../views/tr/pedidos/pedidos'
 import BSPedidos from '../views/laboratorio/notificaciones/bs'
 import NSGPedidos from '../views/laboratorio/notificaciones/nsg'
 import ImagenPedidos from '../views/imagen/pedidos/pedidos'
 import ImagenPedido from '../views/imagen/pedidos/pedido'
 import Imagen from '../views/imagen/imagen'
+import TerapiaRespiratoria from '../views/tr/tr'
+
 import HeaderPrivate from '../views/layout/header-private';
 
 
@@ -195,9 +197,72 @@ const Routes = {
     '/hospitalizacion': Hospitalizacion, //Hospitalizacion
     '/hospitalizacion/pasaportes': Pasaportes, //Pasaportes
     '/hospitalizacion/control-camas': ControlCamas, //Control Camas
-    '/terapia-respiratoria/pedidos': TRPedidos, //TRPedidos
+    '/terapia-respiratoria/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('terapia-respiratoria', 18);
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/terapia-respiratoria/pedidos/', { idFiltro: 1 })
+            }
+
+            TRPedidos.idFiltro = _data.attrs.idFiltro;
+
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== TRPedidos.idFiltro && TRPedidos.idFiltro !== 1 && TRPedidos.fechaDesde !== undefined) {
+                TRPedidos.idFiltro = _data.attrs.idFiltro;
+                TRPedidos.fechaDesde = _data.attrs.fechaDesde;
+                TRPedidos.fechaHasta = _data.attrs.fechaHasta;
+                TRPedidos.loader = true;
+                TRPedidos.pedidos = [];
+                TRPedidos.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    TRPedidos.idFiltro = _data.attrs.idFiltro;
+                    TRPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    TRPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (TRPedidos.pedidos.length == 0) {
+                        TRPedidos.loader = true;
+                        TRPedidos.pedidos = [];
+                        TRPedidos.fetchPedidos();
+                    } else {
+                        TRPedidos.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("terapia-respiratoria") }),
+                m(TRPedidos),
+            ];
+        },
+
+    }, //TRPedidos
     '/bco-sangre/pedidos': BSPedidos, //BSPedidos
     '/neurofisiologia/pedidos': NSGPedidos, //NSGPedidos
+    '/terapia-respiratoria': TerapiaRespiratoria, // TerapiaRespiratoria
     '/imagen': Imagen, // Imagen
     '/imagen/pedidos': {
         oninit: (_data) => {

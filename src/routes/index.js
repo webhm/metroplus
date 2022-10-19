@@ -40,9 +40,12 @@ import ImagenPedido from '../views/imagen/pedidos/pedido'
 import Imagen from '../views/imagen/imagen'
 import TerapiaRespiratoria from '../views/tr/tr'
 import TRPedido from '../views/tr/pedidos/pedido'
-
-
 import HeaderPrivate from '../views/layout/header-private';
+import Endoscopia from '../views/endoscopia/endoscopia'
+import EndoscopiaPedidos from '../views/endoscopia/pedidos/pedidos'
+import EndoPedido from '../views/endoscopia/pedidos/pedido'
+
+
 
 
 // Routes here
@@ -346,7 +349,81 @@ const Routes = {
                 return m.route.SKIP;
             }
         }
-    }, // ImagenPedidos
+    }, // ImagenPedido
+    '/endoscopia': Endoscopia, // Endoscopia
+    '/endoscopia/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('endoscopia', 25);
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/endoscopia/pedidos/', { idFiltro: 1 })
+            }
+
+            EndoscopiaPedidos.idFiltro = _data.attrs.idFiltro;
+
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== EndoscopiaPedidos.idFiltro && EndoscopiaPedidos.idFiltro !== 1 && EndoscopiaPedidos.fechaDesde !== undefined) {
+                EndoscopiaPedidos.idFiltro = _data.attrs.idFiltro;
+                EndoscopiaPedidos.fechaDesde = _data.attrs.fechaDesde;
+                EndoscopiaPedidos.fechaHasta = _data.attrs.fechaHasta;
+                EndoscopiaPedidos.loader = true;
+                EndoscopiaPedidos.pedidos = [];
+                EndoscopiaPedidos.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    EndoscopiaPedidos.idFiltro = _data.attrs.idFiltro;
+                    EndoscopiaPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    EndoscopiaPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (EndoscopiaPedidos.pedidos.length == 0) {
+                        EndoscopiaPedidos.loader = true;
+                        EndoscopiaPedidos.pedidos = [];
+                        EndoscopiaPedidos.fetchPedidos();
+                    } else {
+                        EndoscopiaPedidos.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("endoscopia") }),
+                m(EndoscopiaPedidos),
+            ];
+        },
+
+    }, // EndoscopiaPedidos
+    '/endoscopia/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return EndoPedido;
+
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // EndoPedido
     '/auth': Login, // Login
     '/mi-perfil': MiPerfil, // MiPerfil
     '/salir': Salir, // Salir

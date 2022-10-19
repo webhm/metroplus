@@ -1,5 +1,5 @@
-import SidebarLab from '../laboratorio/sidebarLab';
-import Notificaciones from '../../models/notificaciones';
+import SidebarEndo from '../sidebarEndo';
+import Notificaciones from '../../../models/notificaciones';
 
 import m from 'mithril';
 
@@ -113,12 +113,12 @@ function Stopwatch() {
 };
 
 
-const tablePedidosIngresados = {
+const tablePedidos = {
     oncreate: () => {
-        PedidosIngresados.loadPedidosIngresados();
-        if (PedidosIngresados.searchField.length !== 0) {
-            var table = $('#table-pedidosIngresados').DataTable();
-            table.search(PedidosIngresados.searchField).draw();
+        EndoscopiaPedidos.loadPedidos();
+        if (EndoscopiaPedidos.searchField.length !== 0) {
+            var table = $('#table-pedidos').DataTable();
+            table.search(EndoscopiaPedidos.searchField).draw();
         }
 
     },
@@ -134,23 +134,40 @@ const tablePedidosIngresados = {
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
                         m("h5.mg-b-0",
-                            "LISA:",
+                            "Pedidos de Endoscopía:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
                                     oncreate: (el) => {
-                                        if (PedidosIngresados.idFiltro == 1) {
+                                        if (EndoscopiaPedidos.idFiltro == 1) {
                                             el.dom.innerHTML = 'Pedidos de Hoy';
                                         }
-                                        if (PedidosIngresados.idFiltro == 2) {
+                                        if (EndoscopiaPedidos.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        }
+                                        if (EndoscopiaPedidos.idFiltro == 3) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
                                         }
-
+                                        if (EndoscopiaPedidos.idFiltro == 4) {
+                                            el.dom.innerHTML = 'Pedidos de C. Externa';
+                                        }
+                                        if (EndoscopiaPedidos.idFiltro == 5) {
+                                            el.dom.innerHTML = 'Pedidos de Hospitalización';
+                                        }
                                     },
                                     onupdate: (el) => {
-                                        if (PedidosIngresados.idFiltro == 1) {
+                                        if (EndoscopiaPedidos.idFiltro == 1) {
                                             el.dom.innerHTML = 'Pedidos de Hoy';
                                         }
-                                        if (PedidosIngresados.idFiltro == 2) {
+                                        if (EndoscopiaPedidos.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        }
+                                        if (EndoscopiaPedidos.idFiltro == 3) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        }
+                                        if (EndoscopiaPedidos.idFiltro == 4) {
+                                            el.dom.innerHTML = 'Pedidos de C. Externa';
+                                        }
+                                        if (EndoscopiaPedidos.idFiltro == 5) {
+                                            el.dom.innerHTML = 'Pedidos de Hospitalización';
                                         }
                                     }
                                 }
@@ -160,7 +177,7 @@ const tablePedidosIngresados = {
                         ),
                         m("div.d-flex.tx-14", [
                             m('.', {
-                                class: (PedidosIngresados.idFiltro == 1 ? 'd-none' : 'd-flex')
+                                class: (EndoscopiaPedidos.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
                                         title: "Desde"
@@ -173,16 +190,17 @@ const tablePedidosIngresados = {
                                         style: { "cursor": "pointer" },
                                         title: "Desde"
                                     },
+
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
-                                            el.dom.value = (PedidosIngresados.idFiltro !== 1 ? moment(moment(PedidosIngresados.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                            el.dom.value = (EndoscopiaPedidos.idFiltro !== 1 ? moment(moment(EndoscopiaPedidos.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
                                         },
                                         onchange: (el) => {
-                                            PedidosIngresados.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            PedidosIngresados.loader = true;
-                                            PedidosIngresados.pedidos = [];
-                                            PedidosIngresados.fetchPedidosIngresados();
-                                            m.route.set("/laboratorio/lisa/pedidos/ingresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
+                                            EndoscopiaPedidos.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            EndoscopiaPedidos.loader = true;
+                                            EndoscopiaPedidos.pedidos = [];
+                                            EndoscopiaPedidos.fetchPedidos();
+                                            m.route.set("/endoscopia/pedidos?idFiltro=" + EndoscopiaPedidos.idFiltro + "&fechaDesde=" + EndoscopiaPedidos.fechaDesde + "&fechaHasta=" + EndoscopiaPedidos.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -202,14 +220,14 @@ const tablePedidosIngresados = {
                                     },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
-                                            el.dom.value = (PedidosIngresados.idFiltro !== 1 ? moment(moment(PedidosIngresados.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                            el.dom.value = (EndoscopiaPedidos.idFiltro !== 1 ? moment(moment(EndoscopiaPedidos.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
                                         },
                                         onchange: (el) => {
-                                            PedidosIngresados.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            PedidosIngresados.loader = true;
-                                            PedidosIngresados.pedidos = [];
-                                            PedidosIngresados.fetchPedidosIngresados();
-                                            m.route.set("/laboratorio/lisa/pedidos/ingresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
+                                            EndoscopiaPedidos.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            EndoscopiaPedidos.loader = true;
+                                            EndoscopiaPedidos.pedidos = [];
+                                            EndoscopiaPedidos.fetchPedidos();
+                                            m.route.set("/endoscopia/pedidos?idFiltro=" + EndoscopiaPedidos.idFiltro + "&fechaDesde=" + EndoscopiaPedidos.fechaDesde + "&fechaHasta=" + EndoscopiaPedidos.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -228,17 +246,20 @@ const tablePedidosIngresados = {
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
                                         "FILTROS:"
                                     ),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=1" }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=1" }, [
                                         "Pedidos de Hoy"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=2&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/pedidos/?idFiltro=2&fechaDesde=" + EndoscopiaPedidos.fechaDesde + "&fechaHasta=" + EndoscopiaPedidos.fechaHasta }, [
+                                        "Pedidos entre Fechas"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/pedidos/?idFiltro=3&fechaDesde=" + EndoscopiaPedidos.fechaDesde + "&fechaHasta=" + EndoscopiaPedidos.fechaHasta }, [
                                         "Pedidos de Emergencia"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=3&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
-                                        "Pedidos de Hospitalización"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=4&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/pedidos/?idFiltro=4&fechaDesde=" + EndoscopiaPedidos.fechaDesde + "&fechaHasta=" + EndoscopiaPedidos.fechaHasta }, [
                                         "Pedidos de C. Externa"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/pedidos/?idFiltro=5&fechaDesde=" + EndoscopiaPedidos.fechaDesde + "&fechaHasta=" + EndoscopiaPedidos.fechaHasta }, [
+                                        "Pedidos de Hospitalización"
                                     ]),
 
                                 ])
@@ -246,21 +267,21 @@ const tablePedidosIngresados = {
                         ])
                     ]),
                     m("div.col-sm-12.filemgr-content-header", {
-                        class: (PedidosIngresados.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
+                        class: (EndoscopiaPedidos.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
                     }, [
                         m("i[data-feather='search']"),
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function(e) { PedidosIngresados.searchField = e.target.value; },
-                                value: PedidosIngresados.searchField,
+                                oninput: function(e) { EndoscopiaPedidos.searchField = e.target.value; },
+                                value: EndoscopiaPedidos.searchField,
                             })
                         ),
 
                     ]),
 
 
-                    m("table.table.table-sm.tx-11[id='table-pedidosIngresados'][width='100%']"),
+                    m("table.table.table-sm.tx-11[id='table-pedidos'][width='100%']"),
 
 
                 ])
@@ -269,7 +290,7 @@ const tablePedidosIngresados = {
     }
 };
 
-const PedidosIngresados = {
+const EndoscopiaPedidos = {
     notificaciones: [],
     pedidos: [],
     showBitacora: "",
@@ -282,9 +303,9 @@ const PedidosIngresados = {
     error: "",
     oninit: (_data) => {
 
-        SidebarLab.page = "";
+        SidebarEndo.page = "";
 
-        if (PedidosIngresados.pedidos.length == 0) {
+        if (EndoscopiaPedidos.pedidos.length == 0) {
 
             moment.lang("es", {
                 months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
@@ -302,25 +323,28 @@ const PedidosIngresados = {
 
 
 
-            PedidosIngresados.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
-            PedidosIngresados.fechaHasta = moment().format('DD-MM-YYYY');
-            PedidosIngresados.loader = true;
-            PedidosIngresados.pedidos = [];
-            PedidosIngresados.fetchPedidosIngresados();
+            EndoscopiaPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+            EndoscopiaPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+            EndoscopiaPedidos.loader = true;
+            EndoscopiaPedidos.pedidos = [];
+            EndoscopiaPedidos.fetchPedidos();
 
         }
 
     },
 
     oncreate: (_data) => {
-        Notificaciones.suscribirCanal('MetroPlus-LisaPedidos');
+        Notificaciones.suscribirCanal('MetroPlus-Endoscopia');
     },
 
-    loadPedidosIngresados: () => {
+    loadPedidos: () => {
+
+
+
 
         $.fn.dataTable.ext.errMode = "none";
-        var table = $("#table-pedidosIngresados").DataTable({
-            data: PedidosIngresados.pedidos,
+        var table = $("#table-pedidos").DataTable({
+            data: EndoscopiaPedidos.pedidos,
             dom: 'ltp',
             language: {
                 searchPlaceholder: "Buscar...",
@@ -363,7 +387,7 @@ const PedidosIngresados = {
                 },
                 {
                     mRender: function(data, type, full) {
-                        return full.codigoPedido;
+                        return full.CD_PRE_MED;
                     },
                     visible: false,
                     aTargets: [1],
@@ -372,7 +396,7 @@ const PedidosIngresados = {
                 },
                 {
                     mRender: function(data, type, full) {
-                        return full.paciente;
+                        return full.CD_PACIENTE;
 
                     },
                     visible: false,
@@ -381,7 +405,7 @@ const PedidosIngresados = {
 
                 }, {
                     mRender: function(data, type, full) {
-                        return full.numeroHistoriaClinica;
+                        return full.NM_PACIENTE;
 
                     },
                     visible: false,
@@ -390,7 +414,7 @@ const PedidosIngresados = {
 
                 }, {
                     mRender: function(data, type, full) {
-                        return full.descPrestadorSolicitante;
+                        return full.MED_MV;
 
                     },
                     visible: false,
@@ -415,7 +439,7 @@ const PedidosIngresados = {
             },
             drawCallback: function(settings) {
 
-                PedidosIngresados.loader = false;
+                EndoscopiaPedidos.loader = false;
 
                 settings.aoData.map(function(_i) {
 
@@ -426,95 +450,175 @@ const PedidosIngresados = {
 
                             return [
                                 m("div.d-flex", {}, [
-                                    m("div.flex-grow-1",
+                                    m("div.pd-0.flex-grow-1",
                                         m("div.pd-2", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            m('i.fas.fa-file-upload.tx-semibold.tx-15.pd-2.mg-r-5'),
-                                            m('.d-inline.tx-15.mg-r-5', _i._aData.codigoPedido),
+                                            m('i.fas.fa-file-alt.tx-semibold.tx-15.pd-2.mg-r-5'),
+                                            m('.d-inline.tx-15.mg-r-5', _i._aData.CD_PRE_MED),
                                             m('i.fas.fa-hospital.tx-semibold.tx-12.pd-2'),
                                             m('.tx-semibold.d-inline.tx-12', " SECTOR: "),
-                                            m('.d-inline.tx-12.mg-r-5', _i._aData.sector),
+                                            m('.d-inline.tx-12.mg-r-5', _i._aData.SECTOR + " " + _i._aData.UBICACION),
                                             m('i.fas.fa-user-md.tx-semibold.tx-12.pd-2'),
                                             m('.tx-semibold.d-inline.tx-12', " MED: "),
-                                            _i._aData.descPrestadorSolicitante
+                                            _i._aData.MED_MV
                                         ),
                                     ),
-
+                                    m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        _i._aData.EDAD + " - " + _i._aData.PESO + " - " + _i._aData.ALTURA
+                                    )
                                 ]),
-                                m("div.d-flex.mg-b-25", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
+                                m("div.d-flex.mg-b-20", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
                                     m("div.pd-0.flex-grow-1",
-                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.tipoPedido == 'U' ? "#f10075" : "#0168fa") } },
-                                            _i._aData.tipoPedido
+                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.SECTOR == 'EMERGENCIA' ? "#f10075" : "#0168fa") } },
+                                            (_i._aData.SECTOR == 'EMERGENCIA' ? "E" : "H")
                                         ),
                                         m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "Fecha:"
+                                            "FECHA:"
                                         ),
-
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.fechaPedido
+                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                                         ),
-
                                         m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "NHC:"
                                         ),
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.numeroHistoriaClinica
-
+                                            _i._aData.CD_PACIENTE
                                         ),
-
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "N° AT.: "
+                                        ),
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.AT_MV
+                                        ),
 
                                         m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "PTE: "
                                         ),
                                         m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.paciente
+                                            _i._aData.NM_PACIENTE
                                         ),
+
+
 
                                     ),
 
-                                    m("div.d-flex.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
-                                            (_i._aData.enviadoInfinity == 0 ? "R" : "E")
-                                        ),
-                                        m("td.tx-center.d-flex", {
+                                    m("div.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        m("td.tx-10", {
+                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" },
                                                 onclick: () => {
-                                                    if (confirm("Esta Ud. seguro de generar este envío.") == true) {
-                                                        PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
-                                                    }
-                                                },
-                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                            },
-                                            m('i.fas.fa-file-upload.mg-r-5'),
-                                            (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
-
-                                        ),
-
-                                    ),
-                                    (_i._aData.sector !== 'SERVICIOS AMBULATORIOS' ? m("div.wd-10p.pd-0.mg-l-auto.", { "style": { "background-color": "rgb(168, 190, 214)" } },
-
-                                        m("td.tx-center.d-flex", {
-                                                onclick: () => {
-                                                    m.route.set("/laboratorio/flebotomista/", {
-                                                        numeroHistoriaClinica: _i._aData.numeroHistoriaClinica,
-                                                        numeroAtencion: _i._aData.at_mv,
-                                                        numeroPedido: _i._aData.codigoPedido,
+                                                    m.route.set("/endoscopia/pedido/", {
+                                                        numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                        numeroAtencion: _i._aData.AT_MV,
+                                                        numeroPedido: _i._aData.CD_PRE_MED,
                                                         track: "view",
                                                     });
-                                                },
-                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                                                }
                                             },
-                                            m('i.fas.fa-file-upload.mg-r-5'),
-                                            " Ver Pedido "
+                                            m(".tx-normal",
+                                                m("i.fas.fa-file-alt.pd-1.mg-r-2"),
 
+                                                "Ver Pedido"
+                                            )
                                         ),
-                                    ) : '')
-
-
+                                    )
                                 ]),
 
 
                             ]
 
+                            /*
 
+                            return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
+                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
+                                    m("div.avatar.tx-center",
+                                        m("i.fas.fa-file-alt.tx-30", {
+                                            title: "Ver Pedido",
+                                            style: { "color": "#325a98", "cursor": "pointer" },
+                                            onclick: () => {
+
+                                                m.route.set("/endoscopia/pedido/", {
+                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                    numeroAtencion: _i._aData.AT_MV,
+                                                    numeroPedido: _i._aData.CD_PRE_MED,
+                                                    track: "view",
+                                                });
+
+                                            }
+                                        })
+                                    ),
+                                    m("div.pd-sm-l-10", [
+                                        m("p.tx-medium.tx-13.mg-b-2",
+                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
+                                        ),
+                                        m("p.tx-medium.tx-14.mg-b-2",
+                                            "PTE: " + _i._aData.NM_PACIENTE
+                                        ),
+                                        m("p.tx-medium.mg-b-2",
+                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                        ),
+                                        m("small.tx-12.tx-light.mg-b-0",
+                                            "MEDICO: " + _i._aData.MED_MV
+                                        )
+                                    ]),
+                                    m("div.mg-l-auto.text-right", [
+                                        m("p.tx-medium.mg-b-2",
+                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
+                                        ),
+                                        m("small.tx-12.tx-danger.mg-b-0",
+                                            _i._aData.SECTOR
+                                        ),
+                                        m("p.tx-12.tx-danger.mg-b-0",
+                                            _i._aData.UBICACION
+                                        )
+                                    ])
+                                ])
+
+                            ] : [
+                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
+                                    m("div.avatar.tx-center",
+                                        m("i.fas.fa-file-alt.tx-30", {
+                                            title: "Ver Pedido",
+                                            style: { "color": "#325a98", "cursor": "pointer" },
+                                            onclick: () => {
+
+
+                                                m.route.set("/endoscopia/pedido/", {
+                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                    numeroAtencion: _i._aData.AT_MV,
+                                                    numeroPedido: _i._aData.CD_PRE_MED,
+                                                    track: "view",
+                                                });
+                                            }
+                                        })
+                                    ),
+                                    m("div.pd-sm-l-10", [
+                                        m("p.tx-medium.tx-13.mg-b-2",
+                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
+                                        ),
+                                        m("p.tx-medium.tx-14.mg-b-2",
+                                            "PTE: " + _i._aData.NM_PACIENTE
+                                        ),
+                                        m("p.tx-medium.mg-b-2",
+                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                        ),
+                                        m("small.tx-12.tx-light.mg-b-0",
+                                            "MEDICO: " + _i._aData.MED_MV
+                                        )
+                                    ]),
+                                    m("div.mg-l-auto.text-right", [
+                                        m("p.tx-medium.mg-b-2",
+                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
+                                        ),
+                                        m("small.tx-12.tx-primary.mg-b-0",
+                                            _i._aData.SECTOR
+                                        ),
+                                        m("p.tx-12.tx-primary.mg-b-0",
+                                            _i._aData.UBICACION
+                                        )
+                                    ])
+                                ])
+                            ])
+
+                            */
 
 
                         }
@@ -539,75 +643,43 @@ const PedidosIngresados = {
 
         return table;
     },
-    fetchPedidosIngresados: () => {
+    fetchPedidos: () => {
 
         let _queryString = '';
 
-        if (PedidosIngresados.idFiltro == 1) {
-            _queryString = '?type=ingresadas&idFiltro=' + PedidosIngresados.idFiltro;
+        if (EndoscopiaPedidos.idFiltro == 1) {
+            _queryString = '?idFiltro=' + EndoscopiaPedidos.idFiltro;
         } else {
-            _queryString = '?type=ingresadas&idFiltro=' + PedidosIngresados.idFiltro + '&fechaDesde=' + PedidosIngresados.fechaDesde + '&fechaHasta=' + PedidosIngresados.fechaHasta;
+            _queryString = '?idFiltro=' + EndoscopiaPedidos.idFiltro + '&fechaDesde=' + EndoscopiaPedidos.fechaDesde + '&fechaHasta=' + EndoscopiaPedidos.fechaHasta;
         }
 
         m.request({
                 method: "GET",
-                url: "https://lisa.hospitalmetropolitano.org/v1/listar" + _queryString,
+                url: "https://api.hospitalmetropolitano.org/t/v1/endoscopia/pedidos" + _queryString,
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
-                PedidosIngresados.loader = false;
-                PedidosIngresados.pedidos = result.data;
+                EndoscopiaPedidos.loader = false;
+                EndoscopiaPedidos.pedidos = result.data;
             })
             .catch(function(e) {
-                setTimeout(function() { PedidosIngresados.fetchPedidosIngresados(); }, 2000);
-            });
-
-
-    },
-    reproesarMensajeXML: (codigoPedido) => {
-
-        PedidosIngresados.loader = true;
-
-
-        m.request({
-                method: "GET",
-                url: "https://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido?sc=" + codigoPedido,
-                extract: function(xhr) { return { status: xhr.status, body: xhr.responseText } },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(response) {
-
-
-                if (response.status == 200) {
-                    alert('Preceso realizado con éxito.')
-                    setTimeout(function() { window.location.reload(); }, 300);
-                } else {
-                    alert('Error en envío de este mensaje. Reintente nuevamente.');
-
-                }
-
-
-            })
-            .catch(function(e) {
-                alert('Error en envío de este mensaje. Reintente nuevamente.');
+                setTimeout(function() { EndoscopiaPedidos.fetchPedidos(); }, 2000);
             });
 
 
     },
     reloadData: () => {
-        var table = $('#table-pedidosIngresados').DataTable();
+        var table = $('#table-pedidos').DataTable();
         table.clear();
-        table.rows.add(PedidosIngresados.pedidos).draw();
+        table.rows.add(EndoscopiaPedidos.pedidos).draw();
     },
 
     view: (_data) => {
 
-        return PedidosIngresados.loader ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        return EndoscopiaPedidos.loader ? [
+            m(SidebarEndo, { oncreate: SidebarEndo.setPage(25) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -619,18 +691,18 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/endoscopia" }, [
+                                " Endoscopía "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -658,8 +730,8 @@ const PedidosIngresados = {
                 ])
             ),
 
-        ] : PedidosIngresados.error.length !== 0 ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        ] : EndoscopiaPedidos.error.length !== 0 ? [
+            m(SidebarEndo, { oncreate: SidebarEndo.setPage(25) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -671,22 +743,22 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/endoscopia" }, [
+                                " Endoscopía "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
-                        m('p', 'No existe información.')
+                        m('p', 'No existe infrmac dd ncin')
                     ]),
 
 
@@ -696,8 +768,8 @@ const PedidosIngresados = {
                 ])
             ),
 
-        ] : !PedidosIngresados.loader && PedidosIngresados.pedidos.length !== 0 ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        ] : !EndoscopiaPedidos.loader && EndoscopiaPedidos.pedidos.length !== 0 ? [
+            m(SidebarEndo, { oncreate: SidebarEndo.setPage(25) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -709,20 +781,20 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/endoscopia" }, [
+                                " Endoscopía "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
-                    m(tablePedidosIngresados)
+                    m(tablePedidos)
 
 
 
@@ -732,7 +804,7 @@ const PedidosIngresados = {
             ),
             m("div.section-nav", [
                 m("label.nav-label",
-                    "Pedidos Ingresados"
+                    "RECEPCIÓN DE PEDIDOS"
                 ),
                 m("div.mg-t-10.bg-white", {
 
@@ -741,14 +813,14 @@ const PedidosIngresados = {
                     m("div.mg-t-10.bg-white",
                         m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
                             m("h6.lh-5.mg-b-5",
-                                "Pedidos Ingresados:"
+                                "N° de Pedidos:"
                             ),
 
                         ]),
                         m("div.card-body.pd-0", [
                             m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
                                 m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
-                                    PedidosIngresados.pedidos.length
+                                    EndoscopiaPedidos.pedidos.length
                                 ),
                                 m("div.tx-18", [
 
@@ -766,8 +838,8 @@ const PedidosIngresados = {
 
             ])
 
-        ] : !PedidosIngresados.loader && PedidosIngresados.pedidos.length == 0 ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        ] : !EndoscopiaPedidos.loader && EndoscopiaPedidos.pedidos.length == 0 ? [
+            m(SidebarEndo, { oncreate: SidebarEndo.setPage(25) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -779,18 +851,18 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/endoscopia" }, [
+                                " Endoscopía "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -812,7 +884,7 @@ const PedidosIngresados = {
                 ])
             ),
         ] : [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+            m(SidebarEndo, { oncreate: SidebarEndo.setPage(25) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -824,18 +896,18 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/endoscopia" }, [
+                                " Endoscopía "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -864,4 +936,4 @@ const PedidosIngresados = {
 };
 
 
-export default PedidosIngresados;
+export default EndoscopiaPedidos;

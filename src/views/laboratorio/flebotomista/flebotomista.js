@@ -340,7 +340,9 @@ const DetallePedido = {
                                     onclick: () => {
 
                                         Flebotomista.showBitacora = "";
-                                        m.route.set('/laboratorio/flebotomista');
+                                        m.route.set('/laboratorio/lisa/pedidos/ingresados');
+
+                                        /*
 
                                         try {
 
@@ -352,6 +354,8 @@ const DetallePedido = {
                                             window.location.reload();
 
                                         }
+
+                                        */
 
                                     }
                                 }

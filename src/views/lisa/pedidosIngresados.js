@@ -316,6 +316,7 @@ const PedidosIngresados = {
         Notificaciones.suscribirCanal('MetroPlus-LisaPedidos');
     },
 
+
     loadPedidosIngresados: () => {
 
         $.fn.dataTable.ext.errMode = "none";
@@ -370,13 +371,15 @@ const PedidosIngresados = {
                     {
                         title: "Médico:",
                     },
+                    {
+                        title: "Opciones:",
+                    },
 
 
                 ],
             aoColumnDefs: [{
                 mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1 + '<br/><span class="badge bg-litecoin"><i class=" fas fa-file-upload"></i></span>';
-                    ;
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 },
                 visible: true,
                 aTargets: [0],
@@ -401,7 +404,7 @@ const PedidosIngresados = {
             },
             {
                 mRender: function (data, type, full) {
-                    return (full.sector == 'EMERGENCIA' ? '<div class="d-inline tx-danger">' + full.sector + '</div>' : '<div class="d-inline tx-primary">' + full.sector + '</div>') + '<br/>' + full.numeroHistoriaClinica + ' <br/> ' + full.paciente;
+                    return full.paciente;
                 },
                 visible: true,
                 aTargets: [3],
@@ -415,10 +418,98 @@ const PedidosIngresados = {
                 aTargets: [4],
                 orderable: false,
             },
+            {
+                mRender: function (data, type, full) {
+                    return 'OPCIONES';
+
+                },
+                visible: true,
+                aTargets: [5],
+                orderable: false,
+            },
+
 
             ],
             fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
+                m.mount(nRow, {
+                    view: () => {
+                        return [
+                            m("td", { "style": { "background-color": "rgb(228, 233, 242)" } },
+                                [
+
+                                    (aData.sector == 'EMERGENCIA' ? m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
+                                        'E'
+                                    ) : m("span.badge.badge-pill.badge-primary.wd-100p.mg-b-1",
+                                        'H'
+                                    ))
+
+
+                                ]
+                            ),
+                            m("td", { "style": {} },
+                                aData.fechaPedido
+                            ),
+                            m("td", { "style": {} },
+                                m("span.badge.badge-pill.bg-litecoin.tx-white.wd-100p.mg-b-1",
+                                    aData.codigoPedido
+
+                                ),
+                            ),
+                            m("td", { "style": {} },
+                                [
+                                    m('.d-inline.mg-r-5', {
+                                        class: (aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
+                                    }, aData.sector),
+                                    m('br'),
+                                    aData.paciente,
+                                ]
+
+                            ),
+                            m("td", { "style": {} },
+                                aData.descPrestadorSolicitante
+
+                            ),
+                            m("td.tx-white.tx-semibold.tx-center", {
+                                title: (aData.enviadoInfinity == 0 ? " Retenido " : " Enviado "),
+
+                                style: { "background-color": (aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") }
+                            },
+                                (aData.enviadoInfinity == 0 ? "Retenido" : "Enviado")
+                            ),
+
+                            m("td.tx-center", {
+                                onclick: () => {
+                                    if (confirm("Esta Ud. seguro de generar este envío.") == true) {
+                                        PedidosIngresados.reproesarMensajeXML(Number(aData.codigoPedido));
+                                    }
+                                },
+                                title: (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar "),
+                                style: { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                            },
+                                m('i.fas.fa-file-upload.mg-r-5'),
+                                (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
+
+                            ),
+                            (aData.sector !== 'SERVICIOS AMBULATORIOS' ? m("td.tx-center", {
+                                onclick: () => {
+                                    m.route.set("/laboratorio/flebotomista/", {
+                                        numeroHistoriaClinica: aData.numeroHistoriaClinica,
+                                        numeroAtencion: aData.at_mv,
+                                        numeroPedido: aData.codigoPedido,
+                                        track: "view",
+                                    });
+                                },
+                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                            },
+                                " Ver Pedido "
+
+                            ) : '')
+
+
+                        ];
+                    },
+                });
             },
             drawCallback: function (settings) {
 

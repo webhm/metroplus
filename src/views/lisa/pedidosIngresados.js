@@ -451,7 +451,7 @@ const PedidosIngresados = {
                                 aData.fechaPedido
                             ),
                             m("td", { "style": {} },
-                                m("span.badge.badge-pill.bg-litecoin.tx-white.wd-100p.mg-b-1",
+                                m("span.badge.badge-pill.bg-litecoin.tx-white.tx-15.wd-100p.mg-b-1",
                                     aData.codigoPedido
 
                                 ),
@@ -470,15 +470,19 @@ const PedidosIngresados = {
                                 aData.descPrestadorSolicitante
 
                             ),
-                            m("td.tx-white.tx-semibold.tx-center", {
+                            (aData.tipoOperacion == 'I' ? m("td.tx-white.tx-semibold.tx-center", {
                                 title: (aData.enviadoInfinity == 0 ? " Retenido " : " Enviado "),
 
                                 style: { "background-color": (aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") }
                             },
                                 (aData.enviadoInfinity == 0 ? "Retenido" : "Enviado")
-                            ),
+                            ) : m("td.tx-white.tx-semibold.bg-danger.tx-center", {
+                                title: 'Cancelado',
+                            },
+                                'Cancelado'
+                            )),
 
-                            m("td.tx-center", {
+                            (aData.tipoOperacion == 'I' ? m("td.tx-center", {
                                 onclick: () => {
                                     if (confirm("Esta Ud. seguro de generar este envío.") == true) {
                                         PedidosIngresados.reproesarMensajeXML(Number(aData.codigoPedido));
@@ -490,8 +494,8 @@ const PedidosIngresados = {
                                 m('i.fas.fa-file-upload.mg-r-5'),
                                 (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
 
-                            ),
-                            (aData.sector !== 'SERVICIOS AMBULATORIOS' ? m("td.tx-center", {
+                            ) : ''),
+                            (aData.tipoOperacion == 'I' ? (aData.sector !== 'SERVICIOS AMBULATORIOS' ? m("td.tx-center", {
                                 onclick: () => {
                                     m.route.set("/laboratorio/flebotomista/", {
                                         numeroHistoriaClinica: aData.numeroHistoriaClinica,
@@ -504,7 +508,10 @@ const PedidosIngresados = {
                             },
                                 " Ver Pedido "
 
-                            ) : '')
+                            ) : '') : ''),
+
+
+
 
 
                         ];

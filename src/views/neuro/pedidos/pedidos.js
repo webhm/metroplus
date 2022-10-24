@@ -1,5 +1,5 @@
-import SidebarLab from '../laboratorio/sidebarLab';
-import Notificaciones from '../../models/notificaciones';
+import SidebarNeuro from '../sidebarNeuro';
+import Notificaciones from '../../../models/notificaciones';
 
 import m from 'mithril';
 
@@ -113,12 +113,12 @@ function Stopwatch() {
 };
 
 
-const tablePedidosIngresados = {
+const tableNeuroPedidos = {
     oncreate: () => {
-        PedidosIngresados.loadPedidosIngresados();
-        if (PedidosIngresados.searchField.length !== 0) {
-            var table = $('#table-pedidosIngresados').DataTable();
-            table.search(PedidosIngresados.searchField).draw();
+        NeuroPedidos.loadPedidos();
+        if (NeuroPedidos.searchField.length !== 0) {
+            var table = $('#table-pedidos').DataTable();
+            table.search(NeuroPedidos.searchField).draw();
         }
 
     },
@@ -134,23 +134,40 @@ const tablePedidosIngresados = {
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
                         m("h5.mg-b-0",
-                            "LISA:",
+                            "Pedidos de Neurofisiología:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
                                     oncreate: (el) => {
-                                        if (PedidosIngresados.idFiltro == 1) {
+                                        if (NeuroPedidos.idFiltro == 1) {
                                             el.dom.innerHTML = 'Pedidos de Hoy';
                                         }
-                                        if (PedidosIngresados.idFiltro == 2) {
+                                        if (NeuroPedidos.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        }
+                                        if (NeuroPedidos.idFiltro == 3) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
                                         }
-
+                                        if (NeuroPedidos.idFiltro == 4) {
+                                            el.dom.innerHTML = 'Pedidos de C. Externa';
+                                        }
+                                        if (NeuroPedidos.idFiltro == 5) {
+                                            el.dom.innerHTML = 'Pedidos de Hospitalización';
+                                        }
                                     },
                                     onupdate: (el) => {
-                                        if (PedidosIngresados.idFiltro == 1) {
+                                        if (NeuroPedidos.idFiltro == 1) {
                                             el.dom.innerHTML = 'Pedidos de Hoy';
                                         }
-                                        if (PedidosIngresados.idFiltro == 2) {
+                                        if (NeuroPedidos.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Pedidos entre Fechas';
+                                        }
+                                        if (NeuroPedidos.idFiltro == 3) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        }
+                                        if (NeuroPedidos.idFiltro == 4) {
+                                            el.dom.innerHTML = 'Pedidos de C. Externa';
+                                        }
+                                        if (NeuroPedidos.idFiltro == 5) {
+                                            el.dom.innerHTML = 'Pedidos de Hospitalización';
                                         }
                                     }
                                 }
@@ -160,7 +177,7 @@ const tablePedidosIngresados = {
                         ),
                         m("div.d-flex.tx-14", [
                             m('.', {
-                                class: (PedidosIngresados.idFiltro == 1 ? 'd-none' : 'd-flex')
+                                class: (NeuroPedidos.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
                                         title: "Desde"
@@ -173,16 +190,17 @@ const tablePedidosIngresados = {
                                         style: { "cursor": "pointer" },
                                         title: "Desde"
                                     },
+
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
-                                            el.dom.value = (PedidosIngresados.idFiltro !== 1 ? moment(moment(PedidosIngresados.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                            el.dom.value = (NeuroPedidos.idFiltro !== 1 ? moment(moment(NeuroPedidos.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
                                         },
                                         onchange: (el) => {
-                                            PedidosIngresados.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            PedidosIngresados.loader = true;
-                                            PedidosIngresados.pedidos = [];
-                                            PedidosIngresados.fetchPedidosIngresados();
-                                            m.route.set("/laboratorio/lisa/pedidos/ingresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
+                                            NeuroPedidos.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            NeuroPedidos.loader = true;
+                                            NeuroPedidos.pedidos = [];
+                                            NeuroPedidos.fetchPedidos();
+                                            m.route.set("/neurofisiologia/pedidos?idFiltro=" + NeuroPedidos.idFiltro + "&fechaDesde=" + NeuroPedidos.fechaDesde + "&fechaHasta=" + NeuroPedidos.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -202,14 +220,14 @@ const tablePedidosIngresados = {
                                     },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
-                                            el.dom.value = (PedidosIngresados.idFiltro !== 1 ? moment(moment(PedidosIngresados.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                            el.dom.value = (NeuroPedidos.idFiltro !== 1 ? moment(moment(NeuroPedidos.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
                                         },
                                         onchange: (el) => {
-                                            PedidosIngresados.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            PedidosIngresados.loader = true;
-                                            PedidosIngresados.pedidos = [];
-                                            PedidosIngresados.fetchPedidosIngresados();
-                                            m.route.set("/laboratorio/lisa/pedidos/ingresados?idFiltro=" + PedidosIngresados.idFiltro + "&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta);
+                                            NeuroPedidos.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            NeuroPedidos.loader = true;
+                                            NeuroPedidos.pedidos = [];
+                                            NeuroPedidos.fetchPedidos();
+                                            m.route.set("/neurofisiologia/pedidos?idFiltro=" + NeuroPedidos.idFiltro + "&fechaDesde=" + NeuroPedidos.fechaDesde + "&fechaHasta=" + NeuroPedidos.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -228,17 +246,20 @@ const tablePedidosIngresados = {
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
                                         "FILTROS:"
                                     ),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=1" }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/neurofisiologia/pedidos/?idFiltro=1" }, [
                                         "Pedidos de Hoy"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=2&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/neurofisiologia/pedidos/?idFiltro=2&fechaDesde=" + NeuroPedidos.fechaDesde + "&fechaHasta=" + NeuroPedidos.fechaHasta }, [
+                                        "Pedidos entre Fechas"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/neurofisiologia/pedidos/?idFiltro=3&fechaDesde=" + NeuroPedidos.fechaDesde + "&fechaHasta=" + NeuroPedidos.fechaHasta }, [
                                         "Pedidos de Emergencia"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=3&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
-                                        "Pedidos de Hospitalización"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/lisa/pedidos/ingresados/?idFiltro=4&fechaDesde=" + PedidosIngresados.fechaDesde + "&fechaHasta=" + PedidosIngresados.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/neurofisiologia/pedidos/?idFiltro=4&fechaDesde=" + NeuroPedidos.fechaDesde + "&fechaHasta=" + NeuroPedidos.fechaHasta }, [
                                         "Pedidos de C. Externa"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/neurofisiologia/pedidos/?idFiltro=5&fechaDesde=" + NeuroPedidos.fechaDesde + "&fechaHasta=" + NeuroPedidos.fechaHasta }, [
+                                        "Pedidos de Hospitalización"
                                     ]),
 
                                 ])
@@ -246,21 +267,21 @@ const tablePedidosIngresados = {
                         ])
                     ]),
                     m("div.col-sm-12.filemgr-content-header", {
-                        class: (PedidosIngresados.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
+                        class: (NeuroPedidos.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
                     }, [
                         m("i[data-feather='search']"),
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function(e) { PedidosIngresados.searchField = e.target.value; },
-                                value: PedidosIngresados.searchField,
+                                oninput: function(e) { NeuroPedidos.searchField = e.target.value; },
+                                value: NeuroPedidos.searchField,
                             })
                         ),
 
                     ]),
 
 
-                    m("table.table.table-sm.tx-11[id='table-pedidosIngresados'][width='100%']"),
+                    m("table.table.table-sm.tx-11[id='table-pedidos'][width='100%']"),
 
 
                 ])
@@ -269,7 +290,7 @@ const tablePedidosIngresados = {
     }
 };
 
-const PedidosIngresados = {
+const NeuroPedidos = {
     notificaciones: [],
     pedidos: [],
     showBitacora: "",
@@ -282,9 +303,9 @@ const PedidosIngresados = {
     error: "",
     oninit: (_data) => {
 
-        SidebarLab.page = "";
+        SidebarNeuro.page = "";
 
-        if (PedidosIngresados.pedidos.length == 0) {
+        if (NeuroPedidos.pedidos.length == 0) {
 
             moment.lang("es", {
                 months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
@@ -302,28 +323,29 @@ const PedidosIngresados = {
 
 
 
-            PedidosIngresados.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
-            PedidosIngresados.fechaHasta = moment().format('DD-MM-YYYY');
-            PedidosIngresados.loader = true;
-            PedidosIngresados.pedidos = [];
-            PedidosIngresados.fetchPedidosIngresados();
+            NeuroPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+            NeuroPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+            NeuroPedidos.loader = true;
+            NeuroPedidos.pedidos = [];
+            NeuroPedidos.fetchPedidos();
 
         }
 
     },
 
     oncreate: (_data) => {
-        Notificaciones.suscribirCanal('MetroPlus-LisaPedidos');
+        Notificaciones.suscribirCanal('MetroPlus-Imagen');
     },
 
+    loadPedidos: () => {
 
-    loadPedidosIngresados: () => {
+
+
 
         $.fn.dataTable.ext.errMode = "none";
-        var table = $("#table-pedidosIngresados").DataTable({
-            data: PedidosIngresados.pedidos,
+        var table = $("#table-pedidos").DataTable({
+            data: NeuroPedidos.pedidos,
             dom: 'ltp',
-            responsive: true,
             language: {
                 searchPlaceholder: "Buscar...",
                 sSearch: "",
@@ -354,286 +376,255 @@ const PedidosIngresados = {
                 [0, "Desc"]
             ],
             destroy: true,
-            columns: [{
-                    title: "N°:",
-                },
-                {
-                    title: "Fecha:",
-                },
-                {
-                    title: "SC:",
-                },
-                {
-                    title: "Paciente:",
-                },
-                {
-                    title: "Médico:",
-                },
-                {
-                    title: "Opciones:",
-                },
-
-
-            ],
+            columns: false,
             aoColumnDefs: [{
                     mRender: function(data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     },
-                    visible: true,
+                    visible: false,
                     aTargets: [0],
                     orderable: true,
                 },
                 {
                     mRender: function(data, type, full) {
-                        return full.fechaPedido;
+                        return full.CD_PRE_MED;
                     },
-                    visible: true,
+                    visible: false,
                     aTargets: [1],
                     orderable: false,
 
                 },
                 {
                     mRender: function(data, type, full) {
-                        return full.codigoPedido;
-                    },
-                    visible: true,
-                    aTargets: [2],
-                    orderable: false,
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return full.paciente;
-                    },
-                    visible: true,
-                    aTargets: [3],
-                    orderable: false,
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.descPrestadorSolicitante;
+                        return full.CD_PACIENTE;
 
                     },
-                    visible: true,
+                    visible: false,
+                    aTargets: [2],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.NM_PACIENTE;
+
+                    },
+                    visible: false,
+                    aTargets: [3],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.MED_MV;
+
+                    },
+                    visible: false,
                     aTargets: [4],
                     orderable: false,
-                },
-                {
+
+                }, {
                     mRender: function(data, type, full) {
-                        return 'OPCIONES';
+                        return "";
 
                     },
                     visible: true,
                     aTargets: [5],
                     orderable: false,
+
                 },
 
 
             ],
             fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
-                m.mount(nRow, {
-                    view: () => {
-                        return [
-                            m("td", { "style": { "background-color": "rgb(228, 233, 242)" } }, [
-
-                                (aData.sector == 'EMERGENCIA' ? m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
-                                    'E'
-                                ) : m("span.badge.badge-pill.badge-primary.wd-100p.mg-b-1",
-                                    'H'
-                                ))
-
-
-                            ]),
-                            m("td", { "style": {} },
-                                aData.fechaPedido
-                            ),
-                            m("td", { "style": {} },
-                                m("span.badge.badge-pill.bg-litecoin.tx-white.tx-15.wd-100p.mg-b-1",
-                                    aData.codigoPedido
-
-                                ),
-                            ),
-                            m("td", { "style": {} }, [
-                                    m('.d-inline.mg-r-5', {
-                                        class: (aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
-                                    }, aData.sector),
-                                    m('br'),
-                                    aData.paciente,
-                                ]
-
-                            ),
-                            m("td", { "style": {} },
-                                aData.descPrestadorSolicitante
-
-                            ),
-                            (aData.tipoOperacion == 'I' ? m("td.tx-white.tx-semibold.tx-center", {
-                                    title: (aData.enviadoInfinity == 0 ? " Retenido " : " Enviado "),
-
-                                    style: { "background-color": (aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") }
-                                },
-                                (aData.enviadoInfinity == 0 ? "Retenido" : "Enviado")
-                            ) : m("td.tx-white.tx-semibold.bg-danger.tx-center", {
-                                    title: 'Cancelado',
-                                },
-                                'Cancelado'
-                            )),
-
-                            (aData.tipoOperacion == 'I' ? m("td.tx-center", {
-                                    onclick: () => {
-                                        if (confirm("Esta Ud. seguro de generar este envío.") == true) {
-                                            PedidosIngresados.reproesarMensajeXML(Number(aData.codigoPedido));
-                                        }
-                                    },
-                                    title: (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar "),
-                                    style: { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                },
-                                m('i.fas.fa-file-upload.mg-r-5'),
-                                (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
-
-                            ) : ''),
-                            (aData.sector !== 'SERVICIOS AMBULATORIOS' ?
-                                m("td.tx-center", {
-                                        onclick: () => {
-                                            m.route.set("/laboratorio/flebotomista/", {
-                                                numeroHistoriaClinica: aData.numeroHistoriaClinica,
-                                                numeroAtencion: aData.at_mv,
-                                                numeroPedido: aData.codigoPedido,
-                                                track: "view",
-                                            });
-                                        },
-                                        "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                    },
-                                    " Ver Pedido "
-
-                                ) : ''),
-
-
-
-
-
-                        ];
-                    },
-                });
             },
             drawCallback: function(settings) {
 
-                PedidosIngresados.loader = false;
-                /*
-                settings.aoData.map(function (_i) {
-            
+                NeuroPedidos.loader = false;
+
+                settings.aoData.map(function(_i) {
+
                     $(_i.anCells[5]).css("padding", "0").css("background-color", "#f7fafe");
-            
+
                     m.mount(_i.anCells[5], {
-                        view: function () {
-            
+                        view: function() {
+
                             return [
-                                m("div.d-flex.mg-t-1", {}, [
-                                    m("div.flex-grow-1",
+                                m("div.d-flex", {}, [
+                                    m("div.pd-0.flex-grow-1",
                                         m("div.pd-2", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            m('i.fas.fa-file-upload.tx-semibold.tx-20.pd-2.mg-r-5'),
-                                            m('.d-inline.tx-20.mg-r-5', _i._aData.codigoPedido),
-                                            m('.tx-semibold.d-inline.tx-14', " SECTOR: "),
-                                            m('.d-inline.tx-14.mg-r-5', {
-                                                class: (_i._aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
-                                            }, _i._aData.sector),
-                                            m('.tx-semibold.d-inline.tx-14', " MED: "),
-                                            m('.d-inline.tx-14.mg-r-5', _i._aData.descPrestadorSolicitante),
-            
-            
+                                            m('i.fas.fa-file-alt.tx-semibold.tx-15.pd-2.mg-r-5'),
+                                            m('.d-inline.tx-15.mg-r-5', _i._aData.CD_PRE_MED),
+                                            m('i.fas.fa-hospital.tx-semibold.tx-12.pd-2'),
+                                            m('.tx-semibold.d-inline.tx-12', " SECTOR: "),
+                                            m('.d-inline.tx-12.mg-r-5', _i._aData.SECTOR + " " + _i._aData.UBICACION),
+                                            m('i.fas.fa-user-md.tx-semibold.tx-12.pd-2'),
+                                            m('.tx-semibold.d-inline.tx-12', " MED: "),
+                                            _i._aData.MED_MV
                                         ),
-            
                                     ),
                                     m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                        _i._aData.EDAD + " - " + _i._aData.PESO + " - " + _i._aData.ALTURA
                                     )
-            
                                 ]),
-                                m("div.d-flex.mg-b-0", { "style": { "background-color": "rgb(246, 250, 254)" } }, [
+                                m("div.d-flex.mg-b-20", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
                                     m("div.pd-0.flex-grow-1",
-                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.tipoPedido == 'U' ? "#f10075" : "#0168fa") } },
-                                            _i._aData.tipoPedido
+                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.SECTOR == 'EMERGENCIA' ? "#f10075" : "#0168fa") } },
+                                            (_i._aData.SECTOR == 'EMERGENCIA' ? "E" : "H")
                                         ),
-                                        m("td.tx-14.tx-semibold", { "style": { "background-color": "rgb(228, 233, 242)" } },
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "FECHA:"
                                         ),
-            
-                                        m("td.tx-12", { "style": { "background-color": "rgb(246, 250, 254)" } },
-                                            _i._aData.fechaPedido
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
                                         ),
-            
-                                        m("td.tx-14.tx-semibold", { "style": { "background-color": "rgb(228, 233, 242)" } },
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "NHC:"
                                         ),
-                                        m("td.tx-12", { "style": { "background-color": "rgb(246, 250, 254)" } },
-                                            _i._aData.numeroHistoriaClinica
-            
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.CD_PACIENTE
                                         ),
-            
-            
-                                        m("td.tx-14.tx-semibold", { "style": { "background-color": "rgb(228, 233, 242)" } },
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                            "N° AT.: "
+                                        ),
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.AT_MV
+                                        ),
+
+                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
                                             "PTE: "
                                         ),
-                                        m("td.tx-12", { "style": { "background-color": "rgb(246, 250, 254)" } },
-                                            _i._aData.paciente
+                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
+                                            _i._aData.NM_PACIENTE
                                         ),
-            
+
+
+
                                     ),
-            
-                                    m("div.d-flex.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
-                                            (_i._aData.enviadoInfinity == 0 ? "R" : "E")
-                                        ),
-                                        m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
-                                            (_i._aData.enviadoInfinity == 0 ? "M" : "M")
-                                        ),
-                                        m("td.tx-center.tx-12.d-flex", {
-                                            onclick: () => {
-                                                if (confirm("Esta Ud. seguro de generar este envío.") == true) {
-                                                    PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
+
+                                    m("div.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
+                                        m("td.tx-10", {
+                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" },
+                                                onclick: () => {
+                                                    m.route.set("/neurofisiologia/pedido/", {
+                                                        numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                        numeroAtencion: _i._aData.AT_MV,
+                                                        numeroPedido: _i._aData.CD_PRE_MED,
+                                                        track: "view",
+                                                    });
                                                 }
                                             },
-                                            "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                        },
-                                            m('i.fas.fa-file-upload.mg-r-5'),
-                                            (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
-            
+                                            m(".tx-normal",
+                                                m("i.fas.fa-file-alt.pd-1.mg-r-2"),
+
+                                                "Ver Pedido"
+                                            )
                                         ),
-            
-                                    ),
-            
-                                    (_i._aData.sector !== 'SERVICIOS AMBULATORIOS' ? m("div.wd-10p.pd-0.mg-l-auto.", { "style": { "background-color": "rgb(168, 190, 214)" } },
-            
-                                        m("td.tx-center.tx-12.d-flex", {
+                                    )
+                                ]),
+
+
+                            ]
+
+                            /*
+
+                            return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
+                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
+                                    m("div.avatar.tx-center",
+                                        m("i.fas.fa-file-alt.tx-30", {
+                                            title: "Ver Pedido",
+                                            style: { "color": "#325a98", "cursor": "pointer" },
                                             onclick: () => {
-                                                m.route.set("/laboratorio/flebotomista/", {
-                                                    numeroHistoriaClinica: _i._aData.numeroHistoriaClinica,
-                                                    numeroAtencion: _i._aData.at_mv,
-                                                    numeroPedido: _i._aData.codigoPedido,
+
+                                                m.route.set("/imagen/pedido/", {
+                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                    numeroAtencion: _i._aData.AT_MV,
+                                                    numeroPedido: _i._aData.CD_PRE_MED,
                                                     track: "view",
                                                 });
-                                            },
-                                            "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                        },
-                                            m('i.fas.fa-file-upload.mg-r-5'),
-                                            " Ver Pedido "
-            
+
+                                            }
+                                        })
+                                    ),
+                                    m("div.pd-sm-l-10", [
+                                        m("p.tx-medium.tx-13.mg-b-2",
+                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
                                         ),
-                                    ) : '')
-            
-            
-                                ]),
-            
-            
-                            ]
-            
-            
-            
-            
+                                        m("p.tx-medium.tx-14.mg-b-2",
+                                            "PTE: " + _i._aData.NM_PACIENTE
+                                        ),
+                                        m("p.tx-medium.mg-b-2",
+                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                        ),
+                                        m("small.tx-12.tx-light.mg-b-0",
+                                            "MEDICO: " + _i._aData.MED_MV
+                                        )
+                                    ]),
+                                    m("div.mg-l-auto.text-right", [
+                                        m("p.tx-medium.mg-b-2",
+                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
+                                        ),
+                                        m("small.tx-12.tx-danger.mg-b-0",
+                                            _i._aData.SECTOR
+                                        ),
+                                        m("p.tx-12.tx-danger.mg-b-0",
+                                            _i._aData.UBICACION
+                                        )
+                                    ])
+                                ])
+
+                            ] : [
+                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
+                                    m("div.avatar.tx-center",
+                                        m("i.fas.fa-file-alt.tx-30", {
+                                            title: "Ver Pedido",
+                                            style: { "color": "#325a98", "cursor": "pointer" },
+                                            onclick: () => {
+
+
+                                                m.route.set("/imagen/pedido/", {
+                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
+                                                    numeroAtencion: _i._aData.AT_MV,
+                                                    numeroPedido: _i._aData.CD_PRE_MED,
+                                                    track: "view",
+                                                });
+                                            }
+                                        })
+                                    ),
+                                    m("div.pd-sm-l-10", [
+                                        m("p.tx-medium.tx-13.mg-b-2",
+                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
+                                        ),
+                                        m("p.tx-medium.tx-14.mg-b-2",
+                                            "PTE: " + _i._aData.NM_PACIENTE
+                                        ),
+                                        m("p.tx-medium.mg-b-2",
+                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
+                                        ),
+                                        m("small.tx-12.tx-light.mg-b-0",
+                                            "MEDICO: " + _i._aData.MED_MV
+                                        )
+                                    ]),
+                                    m("div.mg-l-auto.text-right", [
+                                        m("p.tx-medium.mg-b-2",
+                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
+                                        ),
+                                        m("small.tx-12.tx-primary.mg-b-0",
+                                            _i._aData.SECTOR
+                                        ),
+                                        m("p.tx-12.tx-primary.mg-b-0",
+                                            _i._aData.UBICACION
+                                        )
+                                    ])
+                                ])
+                            ])
+
+                            */
+
+
                         }
                     });
-            
+
                 })
-            
-                */
 
 
 
@@ -652,75 +643,43 @@ const PedidosIngresados = {
 
         return table;
     },
-    fetchPedidosIngresados: () => {
+    fetchPedidos: () => {
 
         let _queryString = '';
 
-        if (PedidosIngresados.idFiltro == 1) {
-            _queryString = '?type=ingresadas&idFiltro=' + PedidosIngresados.idFiltro;
+        if (NeuroPedidos.idFiltro == 1) {
+            _queryString = '?idFiltro=' + NeuroPedidos.idFiltro;
         } else {
-            _queryString = '?type=ingresadas&idFiltro=' + PedidosIngresados.idFiltro + '&fechaDesde=' + PedidosIngresados.fechaDesde + '&fechaHasta=' + PedidosIngresados.fechaHasta;
+            _queryString = '?idFiltro=' + NeuroPedidos.idFiltro + '&fechaDesde=' + NeuroPedidos.fechaDesde + '&fechaHasta=' + NeuroPedidos.fechaHasta;
         }
 
         m.request({
                 method: "GET",
-                url: "https://lisa.hospitalmetropolitano.org/v1/listar" + _queryString,
+                url: "https://api.hospitalmetropolitano.org/t/v1/neuro/pedidos" + _queryString,
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
-                PedidosIngresados.loader = false;
-                PedidosIngresados.pedidos = result.data;
+                NeuroPedidos.loader = false;
+                NeuroPedidos.pedidos = result.data;
             })
             .catch(function(e) {
-                setTimeout(function() { PedidosIngresados.fetchPedidosIngresados(); }, 2000);
-            });
-
-
-    },
-    reproesarMensajeXML: (codigoPedido) => {
-
-        PedidosIngresados.loader = true;
-
-
-        m.request({
-                method: "GET",
-                url: "https://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido?sc=" + codigoPedido,
-                extract: function(xhr) { return { status: xhr.status, body: xhr.responseText } },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(response) {
-
-
-                if (response.status == 200) {
-                    alert('Preceso realizado con éxito.')
-                    setTimeout(function() { window.location.reload(); }, 300);
-                } else {
-                    alert('Error en envío de este mensaje. Reintente nuevamente.');
-
-                }
-
-
-            })
-            .catch(function(e) {
-                alert('Error en envío de este mensaje. Reintente nuevamente.');
+                setTimeout(function() { NeuroPedidos.fetchPedidos(); }, 2000);
             });
 
 
     },
     reloadData: () => {
-        var table = $('#table-pedidosIngresados').DataTable();
+        var table = $('#table-pedidos').DataTable();
         table.clear();
-        table.rows.add(PedidosIngresados.pedidos).draw();
+        table.rows.add(NeuroPedidos.pedidos).draw();
     },
 
     view: (_data) => {
 
-        return PedidosIngresados.loader ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        return NeuroPedidos.loader ? [
+            m(SidebarNeuro, { oncreate: SidebarNeuro.setPage(20) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -732,18 +691,18 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/neurofisiologia" }, [
+                                " Neurofisiología "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -771,8 +730,8 @@ const PedidosIngresados = {
                 ])
             ),
 
-        ] : PedidosIngresados.error.length !== 0 ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        ] : NeuroPedidos.error.length !== 0 ? [
+            m(SidebarNeuro, { oncreate: SidebarNeuro.setPage(20) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -784,22 +743,22 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/neurofisiologia" }, [
+                                " Neurofisiología "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
-                        m('p', 'No existe información.')
+                        m('p', 'No existe infrmac dd ncin')
                     ]),
 
 
@@ -809,8 +768,8 @@ const PedidosIngresados = {
                 ])
             ),
 
-        ] : !PedidosIngresados.loader && PedidosIngresados.pedidos.length !== 0 ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        ] : !NeuroPedidos.loader && NeuroPedidos.pedidos.length !== 0 ? [
+            m(SidebarNeuro, { oncreate: SidebarNeuro.setPage(20) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -822,20 +781,19 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/neurofisiologia" }, [
+                                " Neurofisiología "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
-
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
-                    m(tablePedidosIngresados)
+                    m(tableNeuroPedidos)
 
 
 
@@ -845,7 +803,7 @@ const PedidosIngresados = {
             ),
             m("div.section-nav", [
                 m("label.nav-label",
-                    "Pedidos Ingresados"
+                    "Recepción de Pedidos"
                 ),
                 m("div.mg-t-10.bg-white", {
 
@@ -854,14 +812,14 @@ const PedidosIngresados = {
                     m("div.mg-t-10.bg-white",
                         m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
                             m("h6.lh-5.mg-b-5",
-                                "Pedidos Ingresados:"
+                                "N° de NeuroPedidos:"
                             ),
 
                         ]),
                         m("div.card-body.pd-0", [
                             m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
                                 m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
-                                    PedidosIngresados.pedidos.length
+                                    NeuroPedidos.pedidos.length
                                 ),
                                 m("div.tx-18", [
 
@@ -879,8 +837,8 @@ const PedidosIngresados = {
 
             ])
 
-        ] : !PedidosIngresados.loader && PedidosIngresados.pedidos.length == 0 ? [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+        ] : !NeuroPedidos.loader && NeuroPedidos.pedidos.length == 0 ? [
+            m(SidebarNeuro, { oncreate: SidebarNeuro.setPage(20) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -892,18 +850,18 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/neurofisiologia" }, [
+                                " Neurofisiología "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -925,7 +883,7 @@ const PedidosIngresados = {
                 ])
             ),
         ] : [
-            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+            m(SidebarNeuro, { oncreate: SidebarNeuro.setPage(20) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -937,18 +895,18 @@ const PedidosIngresados = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/neurofisiologia" }, [
+                                " Neurofisiología "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Recepción de Pedidos"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Pedidos Ingresados:"
+                        "Recepción de Pedidos:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -977,4 +935,4 @@ const PedidosIngresados = {
 };
 
 
-export default PedidosIngresados;
+export default NeuroPedidos;

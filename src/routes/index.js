@@ -34,10 +34,12 @@ import NotificacionesPendientesLab from '../views/laboratorio/notificaciones/pen
 import NotificacionesErroresLab from '../views/laboratorio/notificaciones/errores'
 import TRPedidos from '../views/tr/pedidos/pedidos'
 import BSPedidos from '../views/laboratorio/notificaciones/bs'
-import NSGPedidos from '../views/laboratorio/notificaciones/nsg'
+import NeuroPedidos from '../views/neuro/pedidos/pedidos'
 import ImagenPedidos from '../views/imagen/pedidos/pedidos'
 import ImagenPedido from '../views/imagen/pedidos/pedido'
 import Imagen from '../views/imagen/imagen'
+import Neuro from '../views/neuro/neuro'
+import NeuroPedido from '../views/neuro/pedidos/pedido'
 import TerapiaRespiratoria from '../views/tr/tr'
 import TRPedido from '../views/tr/pedidos/pedido'
 import HeaderPrivate from '../views/layout/header-private';
@@ -266,7 +268,79 @@ const Routes = {
 
     }, //TRPedidos
     '/bco-sangre/pedidos': BSPedidos, //BSPedidos
-    '/neurofisiologia/pedidos': NSGPedidos, //NSGPedidos
+    '/neurofisiologia': Neuro, //Neuro
+    '/neurofisiologia/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('neurofisiologia', 20);
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/neurofisiologia/pedidos/', { idFiltro: 1 })
+            }
+
+            NeuroPedidos.idFiltro = _data.attrs.idFiltro;
+
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== NeuroPedidos.idFiltro && NeuroPedidos.idFiltro !== 1 && NeuroPedidos.fechaDesde !== undefined) {
+                NeuroPedidos.idFiltro = _data.attrs.idFiltro;
+                NeuroPedidos.fechaDesde = _data.attrs.fechaDesde;
+                NeuroPedidos.fechaHasta = _data.attrs.fechaHasta;
+                NeuroPedidos.loader = true;
+                NeuroPedidos.pedidos = [];
+                NeuroPedidos.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    NeuroPedidos.idFiltro = _data.attrs.idFiltro;
+                    NeuroPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    NeuroPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (NeuroPedidos.pedidos.length == 0) {
+                        NeuroPedidos.loader = true;
+                        NeuroPedidos.pedidos = [];
+                        NeuroPedidos.fetchPedidos();
+                    } else {
+                        NeuroPedidos.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("neurofisiologia") }),
+                m(NeuroPedidos),
+            ];
+        },
+
+    }, // NeuroPedidos,
+    '/neurofisiologia/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return NeuroPedido;
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // NeuroPedido
     '/terapia-respiratoria': TerapiaRespiratoria, // TerapiaRespiratoria
     '/terapia-respiratoria/pedido/': {
         onmatch: (_data) => {

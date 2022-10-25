@@ -1285,7 +1285,7 @@ const ControlCamas = {
                                 m(Stopwatch),
                                 m("div.mg-b-10.d-flex.align-items-center.justify-content-between", [
                                     m("h5.mg-b-0",
-                                        "Cámas Disponibles GEMA: "
+                                        "Camas Disponibles GEMA: "
                                     ),
 
                                 ]),
@@ -1501,6 +1501,15 @@ function loadControlStatusCamas() {
             },
             {
                 title: "TOTAL:"
+            },
+            {
+                title: "OCUPADAS:"
+            },
+            {
+                title: "LIMPIAS:"
+            },
+            {
+                title: "SUCIAS:"
             }
         ],
         aoColumnDefs: [{
@@ -1532,10 +1541,39 @@ function loadControlStatusCamas() {
         },
         {
             mRender: function (data, type, full) {
-                return (full.TOTAL < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.TOTAL + '</span></div>' : full.TOTAL);
+                return (full.TOTAL_CAMAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.TOTAL_CAMAS + '</span></div>' : full.TOTAL_CAMAS);
             },
             visible: true,
             aTargets: [3],
+            orderable: false,
+
+        },
+
+        {
+            mRender: function (data, type, full) {
+                return (full.OCUPADAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.OCUPADAS + '</span></div>' : full.OCUPADAS);
+            },
+            visible: true,
+            aTargets: [4],
+            orderable: false,
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return (full.LIMPIAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.LIMPIAS + '</span></div>' : full.LIMPIAS);
+            },
+            visible: true,
+            aTargets: [5],
+            orderable: false,
+
+
+        },
+        {
+            mRender: function (data, type, full) {
+                return (full.SUCIAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.SUCIAS + '</span></div>' : full.SUCIAS);
+            },
+            visible: true,
+            aTargets: [6],
             orderable: false,
 
         },

@@ -433,7 +433,7 @@ const PedidosIngresados = {
                 m.mount(nRow, {
                     view: () => {
                         return [
-                            m("td", { "style": { "background-color": "rgb(228, 233, 242)" } }, [
+                            m("td", { "style": { "background-color": "rgb(247, 250, 254)" } }, [
 
                                 (aData.sector == 'EMERGENCIA' ? m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
                                     'E'
@@ -447,9 +447,8 @@ const PedidosIngresados = {
                                 aData.fechaPedido
                             ),
                             m("td", { "style": {} },
-                                m("span.badge.badge-pill.bg-litecoin.tx-white.tx-15.wd-100p.mg-b-1",
+                                m("span.tx-semibold.tx-dark.tx-15.wd-100p.mg-b-1",
                                     aData.codigoPedido
-
                                 ),
                             ),
                             m("td", { "style": {} }, [
@@ -476,6 +475,13 @@ const PedidosIngresados = {
                                 },
                                 'Cancelado'
                             )),
+                            (aData.tipoOperacion == 'I' ? m("td.tx-white.tx-semibold.tx-center", {
+                                    title: 'Status Toma de Muestras',
+
+                                    style: { "background-color": (aData.enviadoInfinity == 0 ? "#ffc107" : "#0d9448") }
+                                },
+                                (aData.enviadoInfinity == 0 ? "Pendiente" : "Completo")
+                            ) : ''),
 
                             (aData.tipoOperacion == 'I' ? m("td.tx-center", {
                                     onclick: () => {
@@ -517,125 +523,6 @@ const PedidosIngresados = {
             drawCallback: function(settings) {
 
                 PedidosIngresados.loader = false;
-                /*
-                settings.aoData.map(function (_i) {
-            
-                    $(_i.anCells[5]).css("padding", "0").css("background-color", "#f7fafe");
-            
-                    m.mount(_i.anCells[5], {
-                        view: function () {
-            
-                            return [
-                                m("div.d-flex.mg-t-1", {}, [
-                                    m("div.flex-grow-1",
-                                        m("div.pd-2", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            m('i.fas.fa-file-upload.tx-semibold.tx-20.pd-2.mg-r-5'),
-                                            m('.d-inline.tx-20.mg-r-5', _i._aData.codigoPedido),
-                                            m('.tx-semibold.d-inline.tx-14', " SECTOR: "),
-                                            m('.d-inline.tx-14.mg-r-5', {
-                                                class: (_i._aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
-                                            }, _i._aData.sector),
-                                            m('.tx-semibold.d-inline.tx-14', " MED: "),
-                                            m('.d-inline.tx-14.mg-r-5', _i._aData.descPrestadorSolicitante),
-            
-            
-                                        ),
-            
-                                    ),
-                                    m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
-                                    )
-            
-                                ]),
-                                m("div.d-flex.mg-b-0", { "style": { "background-color": "rgb(246, 250, 254)" } }, [
-                                    m("div.pd-0.flex-grow-1",
-                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.tipoPedido == 'U' ? "#f10075" : "#0168fa") } },
-                                            _i._aData.tipoPedido
-                                        ),
-                                        m("td.tx-14.tx-semibold", { "style": { "background-color": "rgb(228, 233, 242)" } },
-                                            "FECHA:"
-                                        ),
-            
-                                        m("td.tx-12", { "style": { "background-color": "rgb(246, 250, 254)" } },
-                                            _i._aData.fechaPedido
-                                        ),
-            
-                                        m("td.tx-14.tx-semibold", { "style": { "background-color": "rgb(228, 233, 242)" } },
-                                            "NHC:"
-                                        ),
-                                        m("td.tx-12", { "style": { "background-color": "rgb(246, 250, 254)" } },
-                                            _i._aData.numeroHistoriaClinica
-            
-                                        ),
-            
-            
-                                        m("td.tx-14.tx-semibold", { "style": { "background-color": "rgb(228, 233, 242)" } },
-                                            "PTE: "
-                                        ),
-                                        m("td.tx-12", { "style": { "background-color": "rgb(246, 250, 254)" } },
-                                            _i._aData.paciente
-                                        ),
-            
-                                    ),
-            
-                                    m("div.d-flex.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
-                                            (_i._aData.enviadoInfinity == 0 ? "R" : "E")
-                                        ),
-                                        m("td.tx-white", { "style": { "background-color": (_i._aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") } },
-                                            (_i._aData.enviadoInfinity == 0 ? "M" : "M")
-                                        ),
-                                        m("td.tx-center.tx-12.d-flex", {
-                                            onclick: () => {
-                                                if (confirm("Esta Ud. seguro de generar este envío.") == true) {
-                                                    PedidosIngresados.reproesarMensajeXML(Number(_i._aData.codigoPedido));
-                                                }
-                                            },
-                                            "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                        },
-                                            m('i.fas.fa-file-upload.mg-r-5'),
-                                            (_i._aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
-            
-                                        ),
-            
-                                    ),
-            
-                                    (_i._aData.sector !== 'SERVICIOS AMBULATORIOS' ? m("div.wd-10p.pd-0.mg-l-auto.", { "style": { "background-color": "rgb(168, 190, 214)" } },
-            
-                                        m("td.tx-center.tx-12.d-flex", {
-                                            onclick: () => {
-                                                m.route.set("/laboratorio/flebotomista/", {
-                                                    numeroHistoriaClinica: _i._aData.numeroHistoriaClinica,
-                                                    numeroAtencion: _i._aData.at_mv,
-                                                    numeroPedido: _i._aData.codigoPedido,
-                                                    track: "view",
-                                                });
-                                            },
-                                            "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                        },
-                                            m('i.fas.fa-file-upload.mg-r-5'),
-                                            " Ver Pedido "
-            
-                                        ),
-                                    ) : '')
-            
-            
-                                ]),
-            
-            
-                            ]
-            
-            
-            
-            
-                        }
-                    });
-            
-                })
-            
-                */
-
-
 
 
             },

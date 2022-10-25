@@ -146,16 +146,16 @@ const StatusPedido = {
         StatusPedido.data = [];
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
 
                     StatusPedido.data = result.data;
@@ -167,7 +167,7 @@ const StatusPedido = {
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
 
             })
 
@@ -195,7 +195,7 @@ const DetallePedido = {
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
 
 
-        return StatusPedido.data.map(function (_val, _i, _contentData) {
+        return StatusPedido.data.map(function(_val, _i, _contentData) {
             if (status) {
                 StatusPedido.data[_i]['STATUS_TOMA'] = _fechaToma;
                 StatusPedido.data[_i]['customCheked'] = true;
@@ -212,22 +212,22 @@ const DetallePedido = {
     },
     udpateStatusTomaMuestra: (cod_exa_lab, sts) => {
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
-            body: {
-                numeroPedido: VerPedido.numeroPedido,
-                cod_exa_lab: cod_exa_lab,
-                sts: sts
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+                body: {
+                    numeroPedido: VerPedido.numeroPedido,
+                    cod_exa_lab: cod_exa_lab,
+                    sts: sts
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 console.log(result)
                 VerPedido.validarStatus();
             })
-            .catch(function (e) { })
+            .catch(function(e) {})
     },
 
     view: () => {
@@ -343,7 +343,7 @@ const DetallePedido = {
                                             ])
                                         ),
                                         m("tbody", [
-                                            StatusPedido.data.map(function (_val, _i, _contentData) {
+                                            StatusPedido.data.map(function(_val, _i, _contentData) {
                                                 return [
                                                     m("tr", [
                                                         m("td.tx-color-03.tx-normal",
@@ -400,7 +400,7 @@ const DetallePedido = {
                                                     m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
 
                                                         checked: DetallePedido.checkedAll,
-                                                        onclick: function (e) {
+                                                        onclick: function(e) {
                                                             DetallePedido.seleccionarTodos(this.checked);
                                                         }
 
@@ -411,10 +411,10 @@ const DetallePedido = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-right",),
+                                            m("td.tx-medium.text-right", ),
                                         ]),
 
-                                        StatusPedido.data.map(function (_val, _i, _contentData) {
+                                        StatusPedido.data.map(function(_val, _i, _contentData) {
 
 
                                             return [
@@ -428,10 +428,10 @@ const DetallePedido = {
                                                         m("div.custom-control.custom-checkbox.tx-16", [
                                                             m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
                                                                 checked: StatusPedido.data[_i]['customCheked'],
-                                                                onupdate: function (e) {
+                                                                onupdate: function(e) {
                                                                     this.checked = StatusPedido.data[_i]['customCheked'];
                                                                 },
-                                                                onclick: function (e) {
+                                                                onclick: function(e) {
 
                                                                     e.preventDefault();
 
@@ -529,20 +529,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboLila++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.tuboLila++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboLila--;
+                                                            onclick: () => {
+                                                                Insumos.tuboLila--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -581,20 +581,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboRojo++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.tuboRojo++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboRojo--;
+                                                            onclick: () => {
+                                                                Insumos.tuboRojo--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -632,20 +632,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboCeleste++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.tuboCeleste++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboCeleste--;
+                                                            onclick: () => {
+                                                                Insumos.tuboCeleste--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -683,20 +683,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboNegro++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.tuboNegro++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboNegro--;
+                                                            onclick: () => {
+                                                                Insumos.tuboNegro--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -732,20 +732,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboVerde++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.tuboVerde++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.tuboVerde--;
+                                                            onclick: () => {
+                                                                Insumos.tuboVerde--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -783,20 +783,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.gsav++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.gsav++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.gsav--;
+                                                            onclick: () => {
+                                                                Insumos.gsav--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -835,20 +835,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.hemocultivo++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.hemocultivo++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.hemocultivo--;
+                                                            onclick: () => {
+                                                                Insumos.hemocultivo--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -886,20 +886,20 @@ const DetallePedido = {
                                                         })
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.qtb++;
-                                                        },
+                                                            onclick: () => {
+                                                                Insumos.qtb++;
+                                                            },
 
-                                                    },
+                                                        },
                                                         m("i.fas.fa-plus-circle.tx-22.tx-success")
                                                     ),
                                                     m("button.btn.btn[type='button']", {
-                                                        onclick: () => {
-                                                            Insumos.qtb--;
+                                                            onclick: () => {
+                                                                Insumos.qtb--;
+
+                                                            },
 
                                                         },
-
-                                                    },
                                                         m("i.fas.fa-minus-circle.tx-22.tx-danger")
                                                     ),
 
@@ -1198,13 +1198,13 @@ const ControlCamas = {
                         "Control de Camas GEMA-MV:"
                     ),
                     m("p.mg-b-20.tx-14.d-none", {
-                        class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
+                            class: (_data.attrs.numeroPedido == undefined) ? "" : "d-none"
 
-                    }, [
-                        m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
-                        "Buscar por apellidos y nombres de paciente, historia clínica y número de pedido.",
+                        }, [
+                            m("i.fas.fa-info-circle.mg-r-5.text-secondary"),
+                            "Buscar por apellidos y nombres de paciente, historia clínica y número de pedido.",
 
-                    ]
+                        ]
 
                     ),
                     m("div.d-lg-none.d-md-block.mg-t-10.mg-b-10.bg-white",
@@ -1221,14 +1221,14 @@ const ControlCamas = {
                                         )
                                     ]),
                                     m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                        (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                        (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                             oncreate: (el) => {
                                                 el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                             },
                                             onupdate: (el) => {
                                                 el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                             }
-                                        }),]
+                                        }), ]
                                     ]),
                                     (ControlCamas.pendienteAlta == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                         m(".progress-bar.bg-danger.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1248,14 +1248,14 @@ const ControlCamas = {
                                         )
                                     ]),
                                     m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                        (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                        (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                             oncreate: (el) => {
                                                 el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                             },
                                             onupdate: (el) => {
                                                 el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                             }
-                                        }),]
+                                        }), ]
                                     ]),
                                     (ControlCamas.camasTotales == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                         m(".progress-bar.bg-teal.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1347,14 +1347,14 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.pendienteAlta == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
                                             el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                         },
                                         onupdate: (el) => {
                                             el.dom.innerText = ControlCamas.pendienteAlta + " Paciente(s)";
                                         }
-                                    }),]
+                                    }), ]
                                 ]),
                                 (ControlCamas.pendienteAlta == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-danger.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1375,14 +1375,14 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.camasTotales == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
                                             el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                         },
                                         onupdate: (el) => {
                                             el.dom.innerText = ControlCamas.camasTotales + " Paciente(s)";
                                         }
-                                    }),]
+                                    }), ]
                                 ]),
                                 (ControlCamas.camasTotales == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-teal.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1402,14 +1402,14 @@ const ControlCamas = {
                                     )
                                 ]),
                                 m("div.d-flex.align-items-end.justify-content-between.mg-b-5", [
-                                    (ControlCamas.gemaMV == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"),] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
+                                    (ControlCamas.gemaMV == 0) ? [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", "0 Paciente(s)"), ] : [m("h5.tx-normal.tx-rubik.lh-2.mg-b-0", {
                                         oncreate: (el) => {
                                             el.dom.innerText = ControlCamas.gemaMV + " Paciente(s)";
                                         },
                                         onupdate: (el) => {
                                             el.dom.innerText = ControlCamas.gemaMV + " Paciente(s)";
                                         }
-                                    }),]
+                                    }), ]
                                 ]),
                                 (ControlCamas.gemaMV == 0) ? [m("div.progress.ht-4.mg-b-0.op-5",
                                     m(".progress-bar.bg-teal.wd-0p[role='progressbar'][aria-valuenow='100'][aria-valuemin='0'][aria-valuemax='100']")
@@ -1453,287 +1453,285 @@ function loadControlStatusCamas() {
 
     $.fn.dataTable.ext.errMode = "none";
     var table = $("#table-status-camas").DataTable({
-        "ajax": {
-            url: "https://api.hospitalmetropolitano.org/t/v1/adm-status-camas",
-            dataSrc: "data",
+            "ajax": {
+                url: "https://api.hospitalmetropolitano.org/t/v1/adm-status-camas",
+                dataSrc: "data",
+                serverSide: true,
+            },
+            processing: true,
             serverSide: true,
-        },
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        dom: 't',
-        language: {
-            searchPlaceholder: "Buscar...",
-            sSearch: "",
-            lengthMenu: "Mostrar _MENU_ registros por página",
-            sProcessing: "Procesando...",
-            sZeroRecords: "Todavía no tienes resultados disponibles.",
-            sEmptyTable: "Ningún dato disponible en esta tabla",
-            sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-            sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
-            sInfoPostFix: "",
-            sUrl: "",
-            sInfoThousands: ",",
-            sLoadingRecords: "Cargando...",
-            oPaginate: {
-                sFirst: "Primero",
-                sLast: "Último",
-                sNext: "Siguiente",
-                sPrevious: "Anterior",
+            responsive: false,
+            dom: 't',
+            language: {
+                searchPlaceholder: "Buscar...",
+                sSearch: "",
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                sProcessing: "Procesando...",
+                sZeroRecords: "Todavía no tienes resultados disponibles.",
+                sEmptyTable: "Ningún dato disponible en esta tabla",
+                sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                sInfoPostFix: "",
+                sUrl: "",
+                sInfoThousands: ",",
+                sLoadingRecords: "Cargando...",
+                oPaginate: {
+                    sFirst: "Primero",
+                    sLast: "Último",
+                    sNext: "Siguiente",
+                    sPrevious: "Anterior",
+                },
+                oAria: {
+                    sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                    sSortDescending: ": Activar para ordenar la columna de manera descendente",
+                },
             },
-            oAria: {
-                sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-                sSortDescending: ": Activar para ordenar la columna de manera descendente",
-            },
-        },
-        cache: false,
-        order: false,
-        columns: [
-            {
-                title: "ÁREA:"
-            },
-            {
-                title: "ÁREA:"
-            },
-            {
-                title: "COVID:"
-            },
-            {
-                title: "TOTAL:"
-            },
-            {
-                title: "OCUPADAS:"
-            },
-            {
-                title: "LIMPIAS:"
-            },
-            {
-                title: "SUCIAS:"
-            }
-        ],
-        aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
-            },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.AREA;
-            },
-            visible: true,
-            aTargets: [1],
-            orderable: false,
+            cache: false,
+            order: false,
+            columns: [{
+                    title: "N°:"
+                },
+                {
+                    title: "ÁREA:"
+                },
+                {
+                    title: "COVID:"
+                },
+                {
+                    title: "DISPONIBLES:"
+                },
+                {
+                    title: "EN LIMPIEZA:"
+                },
+                {
+                    title: "OCUPADAS:"
+                },
+                {
+                    title: "TOTAL CAMAS:"
+                }
+            ],
+            aoColumnDefs: [{
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    orderable: false,
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return full.AREA;
+                    },
+                    visible: true,
+                    aTargets: [1],
+                    orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.COVID;
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return full.COVID;
 
-            },
-            visible: true,
-            aTargets: [2],
-            orderable: false,
+                    },
+                    visible: true,
+                    aTargets: [2],
+                    orderable: false,
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return (full.TOTAL_CAMAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.TOTAL_CAMAS + '</span></div>' : full.TOTAL_CAMAS);
-            },
-            visible: true,
-            aTargets: [3],
-            orderable: false,
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return (full.DISPONIBLES < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.DISPONIBLES + '</span></div>' : full.DISPONIBLES);
+                    },
+                    visible: true,
+                    aTargets: [3],
+                    orderable: false,
 
-        },
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return (full.EN_LIMPIEZA > full.DISPONIBLES ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.EN_LIMPIEZA + '</span></div>' : full.EN_LIMPIEZA);
+                    },
+                    visible: true,
+                    aTargets: [4],
+                    orderable: false,
 
-        {
-            mRender: function (data, type, full) {
-                return (full.OCUPADAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.OCUPADAS + '</span></div>' : full.OCUPADAS);
-            },
-            visible: true,
-            aTargets: [4],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return (full.LIMPIAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.LIMPIAS + '</span></div>' : full.LIMPIAS);
-            },
-            visible: true,
-            aTargets: [5],
-            orderable: false,
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return full.OCUPADAS;
+                    },
+                    visible: true,
+                    aTargets: [5],
+                    orderable: false,
 
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return (full.SUCIAS < 5 ? '<div class="d-inline tx-danger tx-semibold "><span class="badge badge-danger tx-18">' + full.SUCIAS + '</span></div>' : full.SUCIAS);
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return full.TOTAL_CAMAS;
+                    },
+                    visible: true,
+                    aTargets: [6],
+                    orderable: false,
+
+                },
+
+
+            ],
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+            drawCallback: function(settings) {
+
             },
-            visible: true,
-            aTargets: [6],
-            orderable: false,
 
-        },
+        }).on('xhr.dt', function(e, settings, json, xhr) {
+            // Do some staff here...
+            $('.table-loader').hide();
+            $('.table-content').show();
+        }).on('page.dt', function(e, settings, json, xhr) {
+            // Do some staff here...
+            $('.table-loader').show();
+            $('.table-content').hide();
 
-
-        ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-
-        },
-
-    }).on('xhr.dt', function (e, settings, json, xhr) {
-        // Do some staff here...
-        $('.table-loader').hide();
-        $('.table-content').show();
-    }).on('page.dt', function (e, settings, json, xhr) {
-        // Do some staff here...
-        $('.table-loader').show();
-        $('.table-content').hide();
-
-    })
+        })
         /**
          * Event:       xhrErr.liveAjax
          * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
          *              all of the xhrErr*.liveAjax events below)
          * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
          */
-        .on("xhrErr.liveAjax", function (e, settings, xhr, thrown) {
+        .on("xhrErr.liveAjax", function(e, settings, xhr, thrown) {
             console.log("xhrErr", "General XHR Error: " + thrown);
         })
 
-        /**
-         * Event:       xhrErrTimeout.liveAjax
-         * Description: Triggered when a 'timeout' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrTimeout.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrTimeout", "XHR Error: Timeout");
-        })
+    /**
+     * Event:       xhrErrTimeout.liveAjax
+     * Description: Triggered when a 'timeout' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrTimeout.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrTimeout", "XHR Error: Timeout");
+    })
 
-        /**
-         * Event:       xhrErrError.liveAjax
-         * Description: Triggered when a 'error' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrError.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("XHR Error: Error");
-        })
+    /**
+     * Event:       xhrErrError.liveAjax
+     * Description: Triggered when a 'error' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrError.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("XHR Error: Error");
+    })
 
-        /**
-         * Event:       xhrErrAbort.liveAjax
-         * Description: Triggered when an 'abort' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrAbort.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrAbort", "XHR Error: Abort");
-        })
+    /**
+     * Event:       xhrErrAbort.liveAjax
+     * Description: Triggered when an 'abort' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrAbort.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrAbort", "XHR Error: Abort");
+    })
 
-        /**
-         * Event:       xhrErrParseerror.liveAjax
-         * Description: Triggered when a 'parsererror' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrParseerror.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrParseerror", "XHR Error: Parse Error");
-        })
+    /**
+     * Event:       xhrErrParseerror.liveAjax
+     * Description: Triggered when a 'parsererror' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrParseerror.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrParseerror", "XHR Error: Parse Error");
+    })
 
-        /**
-         * Event:       xhrErrUnknown.liveAjax
-         * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
-         *              happen actually, seeing as how all the textStatus values from
-         *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
-         *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
-         *              updated
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrUnknown.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
-        })
+    /**
+     * Event:       xhrErrUnknown.liveAjax
+     * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
+     *              happen actually, seeing as how all the textStatus values from
+     *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
+     *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
+     *              updated
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrUnknown.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
+    })
 
-        /**
-         * Event:       xhrSkipped.liveAjax
-         * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
-         */
-        .on("xhrSkipped.liveAjax", function (e, settings, reason) {
-            console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
-        })
+    /**
+     * Event:       xhrSkipped.liveAjax
+     * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
+     */
+    .on("xhrSkipped.liveAjax", function(e, settings, reason) {
+        console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
+    })
 
-        /**
-         * Event:       setInterval.liveAjax
-         * Description: Triggered when the setTimeout interval has been changed
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("setInterval.liveAjax", function (e, settings, interval) {
-            console.log("setInterval", "XHR polling interval set to " + interval);
-        })
+    /**
+     * Event:       setInterval.liveAjax
+     * Description: Triggered when the setTimeout interval has been changed
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("setInterval.liveAjax", function(e, settings, interval) {
+        console.log("setInterval", "XHR polling interval set to " + interval);
+    })
 
-        /**
-         * Event:       init.liveAjax
-         * Description: Triggered when the liveAjax plugin has been initialized
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("init.liveAjax", function (e, settings, xhr) {
-            console.log("init", "liveAjax initiated");
-        })
+    /**
+     * Event:       init.liveAjax
+     * Description: Triggered when the liveAjax plugin has been initialized
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("init.liveAjax", function(e, settings, xhr) {
+        console.log("init", "liveAjax initiated");
+    })
 
-        /**
-         * Event:       clearTimeout.liveAjax
-         * Description: Triggered when the timeout has been cleared, killing the XHR polling
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("clearTimeout.liveAjax", function (e, settings, xhr) {
-            console.log("clearTimeout", "liveAjax timeout cleared");
-        })
+    /**
+     * Event:       clearTimeout.liveAjax
+     * Description: Triggered when the timeout has been cleared, killing the XHR polling
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("clearTimeout.liveAjax", function(e, settings, xhr) {
+        console.log("clearTimeout", "liveAjax timeout cleared");
+    })
 
-        /**
-         * Event:       abortXhr.liveAjax
-         * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("abortXhr.liveAjax", function (e, settings, xhr) {
-            console.log("abortXhr", "liveAjax XHR request was aborted");
-        })
+    /**
+     * Event:       abortXhr.liveAjax
+     * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("abortXhr.liveAjax", function(e, settings, xhr) {
+        console.log("abortXhr", "liveAjax XHR request was aborted");
+    })
 
-        /**
-         * Event:       setPause.liveAjax
-         * Description: Triggered when the liveAjax XHR polling was paused or un-paused
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("setPause.liveAjax", function (e, settings, paused) {
-            console.log(
-                "setPause",
-                "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
-            );
-        })
+    /**
+     * Event:       setPause.liveAjax
+     * Description: Triggered when the liveAjax XHR polling was paused or un-paused
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("setPause.liveAjax", function(e, settings, paused) {
+        console.log(
+            "setPause",
+            "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
+        );
+    })
 
-        /**
-         * Event:       onUpdate.liveAjax
-         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
-         */
-        .on("onUpdate.liveAjax", function (e, settings, updates, json, xhr) {
-
-
+    /**
+     * Event:       onUpdate.liveAjax
+     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
+     */
+    .on("onUpdate.liveAjax", function(e, settings, updates, json, xhr) {
 
 
-        })
 
-        /**
-         * Event:       noUpdate.liveAjax
-         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
-         */
-        .on("noUpdate.liveAjax", function (e, settings, json, xhr) {
-            console.log(
-                "noUpdate",
-                "JSON Processed - Table not updated, no new data"
-            );
-        });
+
+    })
+
+    /**
+     * Event:       noUpdate.liveAjax
+     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
+     */
+    .on("noUpdate.liveAjax", function(e, settings, json, xhr) {
+        console.log(
+            "noUpdate",
+            "JSON Processed - Table not updated, no new data"
+        );
+    });
 
 
 
@@ -1765,295 +1763,295 @@ function loadControlCamas() {
 
     $.fn.dataTable.ext.errMode = "none";
     var table = $("#table-control-camas").DataTable({
-        "ajax": {
-            url: "https://api.hospitalmetropolitano.org/t/v1/adm-control-camas",
-            dataSrc: "data",
+            "ajax": {
+                url: "https://api.hospitalmetropolitano.org/t/v1/adm-control-camas",
+                dataSrc: "data",
+                serverSide: true,
+            },
+            processing: true,
             serverSide: true,
-        },
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        dom: 't',
-        language: {
-            searchPlaceholder: "Buscar...",
-            sSearch: "",
-            lengthMenu: "Mostrar _MENU_ registros por página",
-            sProcessing: "Procesando...",
-            sZeroRecords: "Todavía no tienes resultados disponibles.",
-            sEmptyTable: "Ningún dato disponible en esta tabla",
-            sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-            sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
-            sInfoPostFix: "",
-            sUrl: "",
-            sInfoThousands: ",",
-            sLoadingRecords: "Cargando...",
-            oPaginate: {
-                sFirst: "Primero",
-                sLast: "Último",
-                sNext: "Siguiente",
-                sPrevious: "Anterior",
+            responsive: false,
+            dom: 't',
+            language: {
+                searchPlaceholder: "Buscar...",
+                sSearch: "",
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                sProcessing: "Procesando...",
+                sZeroRecords: "Todavía no tienes resultados disponibles.",
+                sEmptyTable: "Ningún dato disponible en esta tabla",
+                sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                sInfoPostFix: "",
+                sUrl: "",
+                sInfoThousands: ",",
+                sLoadingRecords: "Cargando...",
+                oPaginate: {
+                    sFirst: "Primero",
+                    sLast: "Último",
+                    sNext: "Siguiente",
+                    sPrevious: "Anterior",
+                },
+                oAria: {
+                    sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                    sSortDescending: ": Activar para ordenar la columna de manera descendente",
+                },
             },
-            oAria: {
-                sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-                sSortDescending: ": Activar para ordenar la columna de manera descendente",
+            cache: false,
+            order: false,
+            columns: false,
+            aoColumnDefs: [{
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    orderable: false,
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return full.HC_MV;
+                    },
+                    visible: false,
+                    aTargets: [1],
+                    orderable: false,
+
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return full.PTE_MV;
+
+                    },
+                    visible: false,
+                    aTargets: [2],
+                    orderable: false,
+
+                },
+                {
+                    mRender: function(data, type, full) {
+                        return "";
+                    },
+                    visible: true,
+                    aTargets: [3],
+                    width: "100%",
+                    orderable: false,
+
+                },
+
+
+            ],
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+            drawCallback: function(settings) {
+
+                $(".table-content").show();
+                $(".table-loader").hide();
+
+
+                settings.aoData.map(function(_i) {
+
+                    ControlCamas.dataCamaTotales.push(_i._aData)
+
+                    if (_i._aData.DIFERENCIA == 1) {
+                        ControlCamas.camasTotales++;
+                    }
+
+                    if (_i._aData.TIPO == 'SIN ALTA EN MV') {
+                        ControlCamas.pendienteAlta++;
+                        ControlCamas.dataPendientesAlta.push(_i._aData)
+                    }
+
+                    if (_i._aData.TIPO == 'GEMA Y MV') {
+                        ControlCamas.gemaMV++;
+                    }
+
+
+                })
+
+                m.redraw.sync();
+                loadPendientesAlta();
+                loadCamasTotales();
+
             },
-        },
-        cache: false,
-        order: false,
-        columns: false,
-        aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
+            rowId: "NUM",
+            liveAjax: {
+                // 2 second interval
+                interval: 25000,
+                // Do _not_ fire the DT callbacks for every XHR request made by liveAjax
+                dtCallbacks: false,
+                // Abort the XHR polling if one of the below errors were encountered
+                abortOn: ["error", "timeout", "parsererror"],
+                // Disable pagination resetting on updates ("true" will send the viewer
+                // to the first page every update)
+                resetPaging: false,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: false,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.HC_MV;
-            },
-            visible: false,
-            aTargets: [1],
-            orderable: false,
+        }).on('xhr.dt', function(e, settings, json, xhr) {
+            // Do some staff here...
+            $('.table-loader').hide();
+            $('.table-content').show();
+        }).on('page.dt', function(e, settings, json, xhr) {
+            // Do some staff here...
+            $('.table-loader').show();
+            $('.table-content').hide();
 
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.PTE_MV;
-
-            },
-            visible: false,
-            aTargets: [2],
-            orderable: false,
-
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
-            },
-            visible: true,
-            aTargets: [3],
-            width: "100%",
-            orderable: false,
-
-        },
-
-
-        ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-
-            $(".table-content").show();
-            $(".table-loader").hide();
-
-
-            settings.aoData.map(function (_i) {
-
-                ControlCamas.dataCamaTotales.push(_i._aData)
-
-                if (_i._aData.DIFERENCIA == 1) {
-                    ControlCamas.camasTotales++;
-                }
-
-                if (_i._aData.TIPO == 'SIN ALTA EN MV') {
-                    ControlCamas.pendienteAlta++;
-                    ControlCamas.dataPendientesAlta.push(_i._aData)
-                }
-
-                if (_i._aData.TIPO == 'GEMA Y MV') {
-                    ControlCamas.gemaMV++;
-                }
-
-
-            })
-
-            m.redraw.sync();
-            loadPendientesAlta();
-            loadCamasTotales();
-
-        },
-        rowId: "NUM",
-        liveAjax: {
-            // 2 second interval
-            interval: 25000,
-            // Do _not_ fire the DT callbacks for every XHR request made by liveAjax
-            dtCallbacks: false,
-            // Abort the XHR polling if one of the below errors were encountered
-            abortOn: ["error", "timeout", "parsererror"],
-            // Disable pagination resetting on updates ("true" will send the viewer
-            // to the first page every update)
-            resetPaging: false,
-        },
-    }).on('xhr.dt', function (e, settings, json, xhr) {
-        // Do some staff here...
-        $('.table-loader').hide();
-        $('.table-content').show();
-    }).on('page.dt', function (e, settings, json, xhr) {
-        // Do some staff here...
-        $('.table-loader').show();
-        $('.table-content').hide();
-
-    })
+        })
         /**
          * Event:       xhrErr.liveAjax
          * Description: Triggered for any and all errors encountered during an XHR request (Meaning it covers
          *              all of the xhrErr*.liveAjax events below)
          * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
          */
-        .on("xhrErr.liveAjax", function (e, settings, xhr, thrown) {
+        .on("xhrErr.liveAjax", function(e, settings, xhr, thrown) {
             console.log("xhrErr", "General XHR Error: " + thrown);
         })
 
-        /**
-         * Event:       xhrErrTimeout.liveAjax
-         * Description: Triggered when a 'timeout' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrTimeout.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrTimeout", "XHR Error: Timeout");
-        })
+    /**
+     * Event:       xhrErrTimeout.liveAjax
+     * Description: Triggered when a 'timeout' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrTimeout.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrTimeout", "XHR Error: Timeout");
+    })
 
-        /**
-         * Event:       xhrErrError.liveAjax
-         * Description: Triggered when a 'error' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrError.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("XHR Error: Error");
-        })
+    /**
+     * Event:       xhrErrError.liveAjax
+     * Description: Triggered when a 'error' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrError.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("XHR Error: Error");
+    })
 
-        /**
-         * Event:       xhrErrAbort.liveAjax
-         * Description: Triggered when an 'abort' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrAbort.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrAbort", "XHR Error: Abort");
-        })
+    /**
+     * Event:       xhrErrAbort.liveAjax
+     * Description: Triggered when an 'abort' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrAbort.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrAbort", "XHR Error: Abort");
+    })
 
-        /**
-         * Event:       xhrErrParseerror.liveAjax
-         * Description: Triggered when a 'parsererror' error was thrown from an XHR request
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrParseerror.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrParseerror", "XHR Error: Parse Error");
-        })
+    /**
+     * Event:       xhrErrParseerror.liveAjax
+     * Description: Triggered when a 'parsererror' error was thrown from an XHR request
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrParseerror.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrParseerror", "XHR Error: Parse Error");
+    })
 
-        /**
-         * Event:       xhrErrUnknown.liveAjax
-         * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
-         *              happen actually, seeing as how all the textStatus values from
-         *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
-         *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
-         *              updated
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
-         */
-        .on("xhrErrUnknown.liveAjax", function (e, settings, xhr, thrown) {
-            console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
-        })
+    /**
+     * Event:       xhrErrUnknown.liveAjax
+     * Description: Triggered when an unknown error was thrown from an XHR request, this shouldn't ever
+     *              happen actually, seeing as how all the textStatus values from
+     *              http://api.jquery.com/jquery.ajax/ were accounted for. But I just liked having a default
+     *              failsafe, in the case maybe a new error type gets implemented and this plugin doesn't get
+     *              updated
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Error thrown
+     */
+    .on("xhrErrUnknown.liveAjax", function(e, settings, xhr, thrown) {
+        console.log("xhrErrParseerror", "(Unknown) XHR Error: " + thrown);
+    })
 
-        /**
-         * Event:       xhrSkipped.liveAjax
-         * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
-         */
-        .on("xhrSkipped.liveAjax", function (e, settings, reason) {
-            console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
-        })
+    /**
+     * Event:       xhrSkipped.liveAjax
+     * Description: Triggered when an XHR iteration is skipped, either due to polling being paused, or an XHR request is already processing
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object; {string} Reason for skip (either 'paused' or 'processing')
+     */
+    .on("xhrSkipped.liveAjax", function(e, settings, reason) {
+        console.log("xhrSkipped", "XHR Skipped because liveAjax is " + reason);
+    })
 
-        /**
-         * Event:       setInterval.liveAjax
-         * Description: Triggered when the setTimeout interval has been changed
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("setInterval.liveAjax", function (e, settings, interval) {
-            console.log("setInterval", "XHR polling interval set to " + interval);
-        })
+    /**
+     * Event:       setInterval.liveAjax
+     * Description: Triggered when the setTimeout interval has been changed
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("setInterval.liveAjax", function(e, settings, interval) {
+        console.log("setInterval", "XHR polling interval set to " + interval);
+    })
 
-        /**
-         * Event:       init.liveAjax
-         * Description: Triggered when the liveAjax plugin has been initialized
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("init.liveAjax", function (e, settings, xhr) {
-            console.log("init", "liveAjax initiated");
-        })
+    /**
+     * Event:       init.liveAjax
+     * Description: Triggered when the liveAjax plugin has been initialized
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("init.liveAjax", function(e, settings, xhr) {
+        console.log("init", "liveAjax initiated");
+    })
 
-        /**
-         * Event:       clearTimeout.liveAjax
-         * Description: Triggered when the timeout has been cleared, killing the XHR polling
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("clearTimeout.liveAjax", function (e, settings, xhr) {
-            console.log("clearTimeout", "liveAjax timeout cleared");
-        })
+    /**
+     * Event:       clearTimeout.liveAjax
+     * Description: Triggered when the timeout has been cleared, killing the XHR polling
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("clearTimeout.liveAjax", function(e, settings, xhr) {
+        console.log("clearTimeout", "liveAjax timeout cleared");
+    })
 
-        /**
-         * Event:       abortXhr.liveAjax
-         * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("abortXhr.liveAjax", function (e, settings, xhr) {
-            console.log("abortXhr", "liveAjax XHR request was aborted");
-        })
+    /**
+     * Event:       abortXhr.liveAjax
+     * Description: Triggered when the current XHR request was aborted, either by an API method or an internal reason (Not the same as 'xhrErrAbort.liveAjax')
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("abortXhr.liveAjax", function(e, settings, xhr) {
+        console.log("abortXhr", "liveAjax XHR request was aborted");
+    })
 
-        /**
-         * Event:       setPause.liveAjax
-         * Description: Triggered when the liveAjax XHR polling was paused or un-paused
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
-         */
-        .on("setPause.liveAjax", function (e, settings, paused) {
-            console.log(
-                "setPause",
-                "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
-            );
-        })
+    /**
+     * Event:       setPause.liveAjax
+     * Description: Triggered when the liveAjax XHR polling was paused or un-paused
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} XHR Object
+     */
+    .on("setPause.liveAjax", function(e, settings, paused) {
+        console.log(
+            "setPause",
+            "liveAjax XHR polling was " + (paused === true ? "paused" : "un-paused")
+        );
+    })
 
-        /**
-         * Event:       onUpdate.liveAjax
-         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
-         */
-        .on("onUpdate.liveAjax", function (e, settings, updates, json, xhr) {
+    /**
+     * Event:       onUpdate.liveAjax
+     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and has implemented any changes to the table, according to the new JSON data
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} Updates that were implemented; {object} New JSON data for tabke; {object} XHR Object
+     */
+    .on("onUpdate.liveAjax", function(e, settings, updates, json, xhr) {
 
 
-            ControlCamas.dataPendientesAlta = [];
-            ControlCamas.camasTotales = [];
-            ControlCamas.camasTotales = 0;
-            ControlCamas.pendienteAlta = 0;
+        ControlCamas.dataPendientesAlta = [];
+        ControlCamas.camasTotales = [];
+        ControlCamas.camasTotales = 0;
+        ControlCamas.pendienteAlta = 0;
 
-            if (updates !== undefined && updates.delete.length !== 0) {
-                reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
-                reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
-            }
+        if (updates !== undefined && updates.delete.length !== 0) {
+            reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
+            reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
+        }
 
-            if (updates !== undefined && updates.create.length !== 0) {
+        if (updates !== undefined && updates.create.length !== 0) {
 
-                reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
-                reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
-            }
+            reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
+            reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
+        }
 
-            if (updates !== undefined && Object.keys(updates.update).length !== 0) {
+        if (updates !== undefined && Object.keys(updates.update).length !== 0) {
 
-                reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
-                reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
-            }
-        })
+            reloadDataTables('#table-pendientes-alta', ControlCamas.dataPendientesAlta)
+            reloadDataTables('#table-camas-totales', ControlCamas.camasTotales)
+        }
+    })
 
-        /**
-         * Event:       noUpdate.liveAjax
-         * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
-         * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
-         */
-        .on("noUpdate.liveAjax", function (e, settings, json, xhr) {
-            console.log(
-                "noUpdate",
-                "JSON Processed - Table not updated, no new data"
-            );
-        });
+    /**
+     * Event:       noUpdate.liveAjax
+     * Description: Triggered when liveAjax is finished comparing the new/existing JSON, and no updates were implemented
+     * Parameters:  {object} JQ Event; {object} DataTable Settings; {object} New JSON data for tabke; {object} XHR Object
+     */
+    .on("noUpdate.liveAjax", function(e, settings, json, xhr) {
+        console.log(
+            "noUpdate",
+            "JSON Processed - Table not updated, no new data"
+        );
+    });
 
 
 
@@ -2121,21 +2119,21 @@ function loadPendientesAlta() {
         pageLength: 40,
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return "";
+                mRender: function(data, type, row, meta) {
+                    return "";
+                },
+                visible: true,
+                width: "100%",
+                aTargets: [0],
+                orderable: false,
             },
-            visible: true,
-            width: "100%",
-            aTargets: [0],
-            orderable: false,
-        },
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-            settings.aoData.map(function (_v, _i) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
+            settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function () {
+                    view: function() {
 
                         return m(iPendienteAlta, _v._aData)
 
@@ -2206,21 +2204,21 @@ function loadSoloGEMA() {
 
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return "";
+                mRender: function(data, type, row, meta) {
+                    return "";
+                },
+                visible: true,
+                width: "100%",
+                aTargets: [0],
+                orderable: false,
             },
-            visible: true,
-            width: "100%",
-            aTargets: [0],
-            orderable: false,
-        },
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-            settings.aoData.map(function (_v, _i) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
+            settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function () {
+                    view: function() {
 
                         return m(iCama, _v._aData)
 
@@ -2291,21 +2289,21 @@ function loadGEMA_MV() {
 
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, row, meta) {
-                return "";
+                mRender: function(data, type, row, meta) {
+                    return "";
+                },
+                visible: true,
+                width: "100%",
+                aTargets: [0],
+                orderable: false,
             },
-            visible: true,
-            width: "100%",
-            aTargets: [0],
-            orderable: false,
-        },
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-            settings.aoData.map(function (_v, _i) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
+            settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[0], {
-                    view: function () {
+                    view: function() {
 
                         return m(iCama, _v._aData)
 
@@ -2378,54 +2376,54 @@ function loadCamasTotales() {
         pageLength: 20,
         columns: false,
         aoColumnDefs: [{
-            mRender: function (data, type, full) {
-                return full.DIFERENCIA;
+                mRender: function(data, type, full) {
+                    return full.DIFERENCIA;
+                },
+                visible: false,
+                aTargets: [0],
+                orderable: true,
             },
-            visible: false,
-            aTargets: [0],
-            orderable: true,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.TIPO;
+            {
+                mRender: function(data, type, full) {
+                    return full.TIPO;
+                },
+                visible: false,
+                aTargets: [1],
+                orderable: true,
             },
-            visible: false,
-            aTargets: [1],
-            orderable: true,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.NOMBRE_GEMA;
+            {
+                mRender: function(data, type, full) {
+                    return full.NOMBRE_GEMA;
+                },
+                visible: false,
+                aTargets: [2],
+                orderable: true,
             },
-            visible: false,
-            aTargets: [2],
-            orderable: true,
-        },
-        {
-            mRender: function (data, type, full) {
-                return full.NOMBRE_MV;
+            {
+                mRender: function(data, type, full) {
+                    return full.NOMBRE_MV;
+                },
+                visible: false,
+                aTargets: [3],
+                orderable: true,
             },
-            visible: false,
-            aTargets: [3],
-            orderable: true,
-        },
-        {
-            mRender: function (data, type, full) {
-                return "";
-            },
-            visible: true,
-            width: "100%",
-            aTargets: [4],
-            orderable: false,
+            {
+                mRender: function(data, type, full) {
+                    return "";
+                },
+                visible: true,
+                width: "100%",
+                aTargets: [4],
+                orderable: false,
 
-        },
+            },
 
         ],
-        fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-        drawCallback: function (settings) {
-            settings.aoData.map(function (_v, _i) {
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+        drawCallback: function(settings) {
+            settings.aoData.map(function(_v, _i) {
                 m.mount(_v.anCells[4], {
-                    view: function () {
+                    view: function() {
                         return m(iCamasTotales, _v._aData)
                     }
                 });
@@ -2438,7 +2436,7 @@ function loadCamasTotales() {
 
 
 
-    $('#searchField').keyup(function (e) {
+    $('#searchField').keyup(function(e) {
 
         table.search($('#searchField').val()).draw();
     });

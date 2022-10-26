@@ -10,6 +10,7 @@ import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
 import NotificacionesEnviadasLab from '../views/laboratorio/notificaciones/enviadas'
 import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
 import LisaPedidosIngresados from '../views/lisa/pedidosIngresados'
+import LisaPedido from '../views/lisa/pedidoLisa'
 import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import MiPerfil from '../views/perfil/perfil';
@@ -120,6 +121,15 @@ const Routes = {
         },
 
     }, //Laboratorio Lisa Pedidos Ingresados
+    '/laboratorio/lisa/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return LisaPedido;
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, //LisaPedido
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
     '/laboratorio/notificaciones/enviadas': NotificacionesEnviadasLab, //NotificacionesEnviadasLab

@@ -475,15 +475,14 @@ const PedidosIngresados = {
                                 },
                                 'Cancelado'
                             )),
-                            (aData.tipoOperacion == 'I' ? m("td.tx-white.tx-semibold.tx-center", {
+                            m("td.tx-white.tx-semibold.tx-center", {
                                     title: 'Status Toma de Muestras',
-
-                                    style: { "background-color": (aData.enviadoInfinity == 0 ? "#ffc107" : "#0d9448") }
+                                    style: { "background-color": (aData.muestrasProcesadas == 0 ? "#ffc107" : "#0d9448") }
                                 },
-                                (aData.enviadoInfinity == 0 ? "Pendiente" : "Completo")
-                            ) : ''),
+                                (aData.muestrasProcesadas == 0 ? "Pendiente" : "Completo")
+                            ),
 
-                            (aData.tipoOperacion == 'I' ? m("td.tx-center", {
+                            m("td.tx-center", {
                                     onclick: () => {
                                         if (confirm("Esta Ud. seguro de generar este envío.") == true) {
                                             PedidosIngresados.reproesarMensajeXML(Number(aData.codigoPedido));
@@ -495,23 +494,21 @@ const PedidosIngresados = {
                                 m('i.fas.fa-file-upload.mg-r-5'),
                                 (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
 
-                            ) : ''),
-                            (aData.sector !== 'SERVICIOS AMBULATORIOS' ?
-                                m("td.tx-center", {
-                                        onclick: () => {
-                                            m.route.set("/laboratorio/flebotomista/", {
-                                                numeroHistoriaClinica: aData.numeroHistoriaClinica,
-                                                numeroAtencion: aData.at_mv,
-                                                numeroPedido: aData.codigoPedido,
-                                                track: "view",
-                                            });
-                                        },
-                                        "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                            ),
+                            m("td.tx-center.d-none", {
+                                    onclick: () => {
+                                        m.route.set("/laboratorio/flebotomista/", {
+                                            numeroHistoriaClinica: aData.numeroHistoriaClinica,
+                                            numeroAtencion: aData.at_mv,
+                                            numeroPedido: aData.codigoPedido,
+                                            track: "view",
+                                        });
                                     },
-                                    " Ver Pedido "
+                                    "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                                },
+                                " Ver Pedido "
 
-                                ) : ''),
-
+                            )
 
 
 

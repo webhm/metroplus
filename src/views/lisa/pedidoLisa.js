@@ -527,8 +527,6 @@ const Evoluciones = {
             })
             .then(function(result) {
 
-
-
                 if (result.status) {
                     Evoluciones.data = result.data;
                     Formulario.adm = Evoluciones.data[0].ADM;
@@ -573,8 +571,9 @@ const Examenes = {
 
     view: () => {
 
-        if (PedidoLISA.examenes.length !== 0) {
-            return PedidoLISA.examenes.map(function(_val, _i, _contentData) {
+        if (PedidoLISA.examenes !== 0) {
+            /*
+            return PedidoLISA.examenes.Examen.map(function(_val, _i, _contentData) {
                 return [
                     m('.tx-14.tx-semibold.d-inline', _val.EXAMEN),
                     (_val.OBS_EXAMEN !== null ? [
@@ -587,11 +586,11 @@ const Examenes = {
                     ] : ''),
                 ]
             })
+            */
         }
 
     }
 }
-
 
 const PedidoLISA = {
     data: [],
@@ -604,7 +603,6 @@ const PedidoLISA = {
 
         if (_data.attrs.numeroPedido !== undefined) {
             document.title = "Detalle de Pedido N°: " + _data.attrs.numeroPedido + " | " + App.title;
-
             if (PedidoLISA.data !== undefined && PedidoLISA.data.length == 0) {
                 PedidoLISA.numeroPedido = _data.attrs.numeroPedido;
                 PedidoLISA.numeroAtencion = _data.attrs.numeroAtencion;
@@ -668,18 +666,18 @@ const PedidoLISA = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/imagen" }, [
-                                " Imagen "
+                            m(m.route.Link, { href: "/laboratorio" }, [
+                                " Laboratorio "
                             ])
 
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Detalle de PedidoLISA"
+                            "Detalle de Pedido"
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Detalle de PedidoLISA N°: " + PedidoLISA.numeroPedido
+                        "Detalle de Pedido N°: " + PedidoLISA.numeroPedido
                     ),
 
 
@@ -773,19 +771,19 @@ const PedidoLISA = {
                                     ),
 
 
-                                    ((PedidoLISA.data.TIPO_PedidoLISA == 'R') ? [
+                                    ((PedidoLISA.data.TIPO_PEDIDO == 'R') ? [
                                         m("span.pd-6.wd-100p.wd-md-20p", {
                                             class: "badge badge-primary mg-b-2 mg-r-2",
                                         }, [
                                             m("i.fas.fa-file-alt.mg-r-5"),
-                                        ], "PedidoLISA Normal"),
+                                        ], "Pedido Normal"),
 
                                     ] : [
                                         m("span.pd-6.wd-100p.wd-md-20p", {
                                             class: "badge badge-danger mg-b-2 mg-r-2 ",
                                         }, [
                                             m("i.fas.fa-file-alt.mg-r-5"),
-                                        ], "PedidoLISA Urgente"),
+                                        ], "Pedido Urgente"),
                                     ]),
 
 
@@ -795,7 +793,7 @@ const PedidoLISA = {
 
                                                 m("tr.bg-litecoin.op-9.tx-white", [
                                                     m("th[scope='col'][colspan='9']",
-                                                        "DATOS DEL PedidoLISA:"
+                                                        "DATOS DEL PEDIDO:"
                                                     ),
 
                                                 ])
@@ -822,7 +820,7 @@ const PedidoLISA = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                        PedidoLISA.data.FECHA_PedidoLISA + " " + PedidoLISA.data.HORA_PedidoLISA
+                                                        PedidoLISA.data.FECHA_PEDIDO
 
                                                     ),
                                                     m("th", {
@@ -899,7 +897,7 @@ const PedidoLISA = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                        PedidoLISA.data.EDAD
+                                                        PedidoLISA.data.SEXO
 
                                                     ),
 
@@ -931,38 +929,14 @@ const PedidoLISA = {
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
                                                         },
-                                                        "Peso:"
+                                                        "Dg:"
                                                     ),
                                                     m("td", {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                        PedidoLISA.data.PESO + "Kg."
+                                                        PedidoLISA.data.DG
                                                     ),
-                                                    m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                        "Altura:"
-                                                    ),
-                                                    m("td", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-                                                        PedidoLISA.data.ALTURA + "m."
-                                                    ),
-                                                    m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                        "Ubicación:"
-                                                    ),
-
-                                                    m("td[colspan='4']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-                                                        PedidoLISA.data.SECTOR + " " + PedidoLISA.data.UBICACION
-                                                    ),
-
                                                 ]),
                                                 m("tr.bg-litecoin.op-9.tx-white", [
                                                     m("th[scope='col'][colspan='9']",

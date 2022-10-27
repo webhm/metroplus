@@ -433,7 +433,9 @@ const PedidosIngresados = {
                 m.mount(nRow, {
                     view: () => {
                         return [
-                            m("td", { "style": { "background-color": "rgb(247, 250, 254)" } }, [
+                            m("td", {
+                                class: (aData.sector == 'EMERGENCIA' ? 'bg-danger' : 'bg-primary')
+                            }, [
 
                                 (aData.sector == 'EMERGENCIA' ? m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
                                     'E'
@@ -495,9 +497,9 @@ const PedidosIngresados = {
                                 (aData.enviadoInfinity == 0 ? " Enviar " : " Reenviar ")
 
                             ),
-                            m("td.tx-center.d-none", {
+                            m("td.tx-center", {
                                     onclick: () => {
-                                        m.route.set("/laboratorio/flebotomista/", {
+                                        m.route.set("/laboratorio/lisa/pedido/", {
                                             numeroHistoriaClinica: aData.numeroHistoriaClinica,
                                             numeroAtencion: aData.at_mv,
                                             numeroPedido: aData.codigoPedido,

@@ -17,7 +17,7 @@ const FOR005 = {
         let page = 0;
 
         if (Formulario.num == 0) {
-            setTimeout(function() {
+            setTimeout(function () {
                 Formulario.num = Formulario.data.length;
                 Formulario.parseFetch();
                 m.redraw.sync();
@@ -39,7 +39,7 @@ const FOR005 = {
             ),
         ] : [
 
-            FOR005.secs.map(function(_v, _i, _contentData) {
+            FOR005.secs.map(function (_v, _i, _contentData) {
 
                 if (_v.name == 'prescripciones_texto') {
 
@@ -95,9 +95,9 @@ const FOR005 = {
                                     ),
                                     m("th.tx-right[colspan='2'][scope='col']",
                                         m("a.tx-right.tx-semibold", {
-                                                href: urlFor,
-                                                target: "_blank"
-                                            },
+                                            href: urlFor,
+                                            target: "_blank"
+                                        },
                                             m('i.fas.fa-print.mg-r-2'),
                                             " Imprirmir  "
 
@@ -249,10 +249,10 @@ const FOR005 = {
                                     ),
                                     m("th[colspan='1'][scope='row']", { "style": { "padding": "0", "background-color": "#eef9c8" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                                "FIRMAR AL PIE DE",
-                                                m("br"),
-                                                "CADA PRESCRIPCIÓN"
-                                            ]
+                                            "FIRMAR AL PIE DE",
+                                            m("br"),
+                                            "CADA PRESCRIPCIÓN"
+                                        ]
 
                                         )
                                     ),
@@ -278,21 +278,21 @@ const FOR005 = {
                                     ),
                                     m("th[colspan='4'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                                "FARMACOTERAPIA E INDICACIONES",
-                                                m("br"),
-                                                "(PARA ENFERMERÍA Y OTRO PERSONAL)"
+                                            "FARMACOTERAPIA E INDICACIONES",
+                                            m("br"),
+                                            "(PARA ENFERMERÍA Y OTRO PERSONAL)"
 
-                                            ]
+                                        ]
 
                                         )
                                     ),
                                     m("th[colspan='2'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                                "ADMINISTR.",
-                                                m("br"),
-                                                "FÁRMACOS INSUMOS"
+                                            "ADMINISTR.",
+                                            m("br"),
+                                            "FÁRMACOS INSUMOS"
 
-                                            ]
+                                        ]
 
                                         )
                                     ),
@@ -341,11 +341,11 @@ const Formulario = {
     error: "",
     parseDoc: (_data) => {
 
-        Object.keys(_data.data).map(function(_v, _i, _contentData) {
+        Object.keys(_data.data).map(function (_v, _i, _contentData) {
             FOR005.secs.push(_data.data[_v])
         })
 
-        return FOR005.secs.map(function(_v, _i, _contentData) {
+        return FOR005.secs.map(function (_v, _i, _contentData) {
 
 
 
@@ -438,7 +438,7 @@ const Formulario = {
     parseFetch: () => {
         FOR005.secs = [];
 
-        return Formulario.data.map(function(_v, _i, _contentData) {
+        return Formulario.data.map(function (_v, _i, _contentData) {
             Formulario.parseDoc(Formulario.data[_i])
 
         })
@@ -450,14 +450,14 @@ const Formulario = {
         Formulario.data = [];
         Formulario.error = "";
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
 
-                headers: {
-                    "Authorization": localStorage.accessToken,
-                },
-            })
-            .then(function(result) {
+            headers: {
+                "Authorization": localStorage.accessToken,
+            },
+        })
+            .then(function (result) {
                 if (result.length !== 0) {
                     Formulario.data = result;
                     Formulario.num = 0;
@@ -467,8 +467,8 @@ const Formulario = {
                 }
 
             })
-            .catch(function(e) {
-                setTimeout(function() { Formulario.fetch(); }, 5000);
+            .catch(function (e) {
+                setTimeout(function () { Formulario.fetch(); }, 5000);
 
             })
     },
@@ -516,16 +516,16 @@ const Evoluciones = {
         Evoluciones.data = [];
         Evoluciones.error = "";
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
-                body: {
-                    numeroHistoriaClinica: PedidoLISA.data.paciente.codigoPaciente + '01'
-                },
-                headers: {
-                    "Authorization": localStorage.accessToken,
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
+            body: {
+                numeroHistoriaClinica: PedidoLISA.data.paciente.codigoPaciente + '01'
+            },
+            headers: {
+                "Authorization": localStorage.accessToken,
+            },
+        })
+            .then(function (result) {
 
                 if (result.status) {
                     Evoluciones.data = result.data;
@@ -537,8 +537,8 @@ const Evoluciones = {
                 }
 
             })
-            .catch(function(e) {
-                setTimeout(function() { Evoluciones.fetch(); }, 5000);
+            .catch(function (e) {
+                setTimeout(function () { Evoluciones.fetch(); }, 5000);
 
             })
     },
@@ -573,15 +573,18 @@ const Examenes = {
 
         if (PedidoLISA.examenes !== 0) {
 
-            return PedidoLISA.examenes.Exame.map(function(_val, _i, _contentData) {
+            console.log(PedidoLISA.examenes.Exame.length);
+
+            if (PedidoLISA.examenes.Exame.length == undefined) {
+                PedidoLISA.examenes.Exame = [PedidoLISA.examenes.Exame];
+            }
+
+            return PedidoLISA.examenes.Exame.map(function (_val, _i, _contentData) {
 
                 return [
-                    m('.tx-14.tx-semibold.d-inline', _val.descExame),
-                    (_val.OBS_EXAMEN !== null ? [
-                        m('br'),
-                        m('.d-inline', 'Observaciones:'),
-                        m('br'),
-                    ] : ''),
+                    m('.tx-14.tx-semibold.d-inline', (_i + 1) + ': ' + _val.descExame),
+                    m('br'),
+
                 ]
             })
 
@@ -622,16 +625,16 @@ const PedidoLISA = {
         PedidoLISA.data = [];
         PedidoLISA.loader = true;
         m.request({
-                method: "POST",
-                url: "https://lisa.hospitalmetropolitano.org/v1/status-pedido-lisa",
-                body: {
-                    numeroPedido: PedidoLISA.numeroPedido,
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "POST",
+            url: "https://lisa.hospitalmetropolitano.org/v1/status-pedido-lisa",
+            body: {
+                numeroPedido: PedidoLISA.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 if (result.status) {
                     PedidoLISA.loader = false;
                     PedidoLISA.data = result.data.pedido;
@@ -642,7 +645,7 @@ const PedidoLISA = {
                 }
 
             })
-            .catch(function(e) {
+            .catch(function (e) {
 
             })
 
@@ -650,11 +653,67 @@ const PedidoLISA = {
 
     view: (_data) => {
 
-        let nacimiento = moment(PedidoLISA.data.paciente.dataNascimento);
-        let hoy = moment();
-        let anios = hoy.diff(nacimiento, "years");
+        if (PedidoLISA.data.length !== 0) {
 
-        return [
+            let nacimiento = moment(PedidoLISA.data.paciente.dataNascimento);
+            let hoy = moment();
+            PedidoLISA.data.paciente.anios = hoy.diff(nacimiento, "years");
+        }
+
+
+        return PedidoLISA.loader ? [
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+            m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/laboratorio" }, [
+                                " Laboratorio "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Detalle de Pedido"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Detalle de Pedido N°: " + PedidoLISA.numeroPedido
+                    ),
+
+
+                    m("div.row.animated.fadeInUp", [
+
+                        m("div.col-12", [
+
+                            m("div.table-loader.wd-100p", [
+                                m("div.placeholder-paragraph", [
+                                    m("div.line"),
+                                    m("div.line")
+                                ])
+                            ]
+
+
+                            ),
+
+
+                        ])
+
+
+                    ]),
+
+
+
+                ])
+            )] : [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
             m("div.content.content-components",
@@ -688,29 +747,29 @@ const PedidoLISA = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", {
-                                    oncreate: (el) => {
-                                        if (PedidoLISA.loader) {
-                                            el.dom.hidden = false;
-                                        } else {
-                                            el.dom.hidden = true;
+                                oncreate: (el) => {
+                                    if (PedidoLISA.loader) {
+                                        el.dom.hidden = false;
+                                    } else {
+                                        el.dom.hidden = true;
 
-                                        }
-                                    },
-                                    onupdate: (el) => {
-                                        if (PedidoLISA.loader) {
-                                            el.dom.hidden = false;
-                                        } else {
-                                            el.dom.hidden = true;
-
-                                        }
                                     }
+                                },
+                                onupdate: (el) => {
+                                    if (PedidoLISA.loader) {
+                                        el.dom.hidden = false;
+                                    } else {
+                                        el.dom.hidden = true;
 
-                                }, [
-                                    m("div.placeholder-paragraph", [
-                                        m("div.line"),
-                                        m("div.line")
-                                    ])
-                                ]
+                                    }
+                                }
+
+                            }, [
+                                m("div.placeholder-paragraph", [
+                                    m("div.line"),
+                                    m("div.line")
+                                ])
+                            ]
 
 
                             ),
@@ -738,32 +797,32 @@ const PedidoLISA = {
                                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                                         m("small.pd-2.tx-20",
                                             m("i.fas.fa-times-circle.pd-2", {
-                                                    "style": { "cursor": "pointer" },
-                                                    title: "Cerrar",
-                                                    onclick: () => {
+                                                "style": { "cursor": "pointer" },
+                                                title: "Cerrar",
+                                                onclick: () => {
 
 
-                                                        if (pedidosIngresados.idFiltro !== undefined && pedidosIngresados.idFiltro > 1) {
+                                                    if (pedidosIngresados.idFiltro !== undefined && pedidosIngresados.idFiltro > 1) {
 
-                                                            m.route.set('/laboratorio/lisa/pedidos/ingresados/', {
-                                                                idFiltro: pedidosIngresados.idFiltro,
-                                                                fechaDesde: pedidosIngresados.fechaDesde,
-                                                                fechaHasta: pedidosIngresados.fechaHasta,
-                                                            });
+                                                        m.route.set('/laboratorio/lisa/pedidos/ingresados/', {
+                                                            idFiltro: pedidosIngresados.idFiltro,
+                                                            fechaDesde: pedidosIngresados.fechaDesde,
+                                                            fechaHasta: pedidosIngresados.fechaHasta,
+                                                        });
 
-                                                        } else {
+                                                    } else {
 
-                                                            m.route.set('/laboratorio/lisa/pedidos/ingresados/', {
-                                                                idFiltro: 1,
-                                                            });
-
-                                                        }
-
-
-
+                                                        m.route.set('/laboratorio/lisa/pedidos/ingresados/', {
+                                                            idFiltro: 1,
+                                                        });
 
                                                     }
+
+
+
+
                                                 }
+                                            }
 
                                             )
 
@@ -803,41 +862,41 @@ const PedidoLISA = {
                                             m("tbody", [
                                                 m("tr", [
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "N° de Pedido:"
                                                     ),
                                                     m("td", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.codigoPedido
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Fecha Pedido:",
                                                         m('br'),
                                                         m('.d-inline.tx-danger', "Fecha Toma de Muestra:"),
                                                     ),
                                                     m("td[colspan='3']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.dataExame,
                                                         m('br'),
                                                         PedidoLISA.data.dataExame
 
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Origen:"
                                                     ),
                                                     m("td[colspan='3']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.descSetorSolicitante
                                                     ),
 
@@ -845,26 +904,26 @@ const PedidoLISA = {
 
                                                 m("tr", [
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Médico Solicitante:"
                                                     ),
                                                     m("td[colspan='4']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.descPrestadorSolicitante,
 
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Especialidad:"
                                                     ),
                                                     m("td[colspan='4']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.descPrestadorSolicitante
                                                     ),
 
@@ -884,104 +943,105 @@ const PedidoLISA = {
                                             m("tbody", [
                                                 m("tr", [
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Apellidos y Nombres:"
                                                     ),
                                                     m("td[colspan='5']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.paciente.nome
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Edad:"
                                                     ),
                                                     m("td", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
-                                                        anios + " Año(s)"
+                                                    },
+                                                        PedidoLISA.data.paciente.anios
+                                                        + " Año(s)"
 
                                                     ),
 
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "NHC:"
                                                     ),
                                                     m("td", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.paciente.codigoPaciente
                                                     ),
 
                                                 ]),
                                                 m("tr", [
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "N° Atención:"
                                                     ),
                                                     m("td", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.atendimento.codigoAtendimento
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Sexo:"
                                                     ),
                                                     m("td", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.paciente.sexo
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "F. de Nac.:"
                                                     ),
                                                     m("td", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         PedidoLISA.data.paciente.dataNascimento
                                                     ),
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Dg:"
                                                     ),
                                                     m("td[colspan='3']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
-                                                        'CIE: ' + PedidoLISA.data.diagnostico.codigoDiagnostico + " - " + PedidoLISA.data.diagnostico.dsDiagostico
+                                                    },
+                                                        (PedidoLISA.data.diagnostico.codigoDiagnostico.length == undefined ? '' : 'CIE: ' + PedidoLISA.data.diagnostico.codigoDiagnostico) + (PedidoLISA.data.diagnostico.dsDiagostico.length == undefined ? '' : " - " + PedidoLISA.data.diagnostico.dsDiagostico)
                                                     ),
                                                 ]),
                                                 m("tr.bg-litecoin.op-9.tx-white", [
                                                     m("th[scope='col'][colspan='10']",
-                                                        "EXÁMENES Y OBSERVACIONES:"
+                                                        "EXÁMENES:"
                                                     ),
 
                                                 ]),
                                                 m("tr", [
                                                     m("th", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                        style: { "background-color": "#a8bed6" }
+                                                    },
                                                         "Exámenes:"
                                                     ),
                                                     m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         m(Examenes)
                                                     ),
 
@@ -997,14 +1057,14 @@ const PedidoLISA = {
                                                 m("tr.d-print-none", [
 
                                                     m("td[colspan='10']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                    },
                                                         m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
                                                             m("li.nav-item",
                                                                 m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
+                                                                    style: { "color": "#476ba3" }
+                                                                },
                                                                     m("i.fas.fa-file-alt.pd-1.mg-r-2"),
 
                                                                     " HOJA 005"
@@ -1012,8 +1072,8 @@ const PedidoLISA = {
                                                             ),
                                                             m("li.nav-item",
                                                                 m("a.nav-link[id='home-muestra'][data-toggle='tab'][href='#muestra'][role='tab'][aria-controls='muestra']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
+                                                                    style: { "color": "#476ba3" }
+                                                                },
                                                                     m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                     " TOMA DE MUESTRA "
@@ -1021,8 +1081,8 @@ const PedidoLISA = {
                                                             ),
                                                             m("li.nav-item",
                                                                 m("a.nav-link[id='home-recep'][data-toggle='tab'][href='#recep'][role='tab'][aria-controls='recep']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
+                                                                    style: { "color": "#476ba3" }
+                                                                },
                                                                     m("i.fas.fa-inbox.pd-1.mg-r-2"),
 
                                                                     " RECEP. DE MUESTRA "
@@ -1043,11 +1103,11 @@ const PedidoLISA = {
                                                                 m(Evoluciones),
                                                             ]),
                                                             m(".tab-pane.fade[id='muestra'][role='tabpanel'][aria-labelledby='home-muestra']", [
-                                                                m('p', 'mmmm'),
+                                                                m('p', 'En construcción.'),
                                                             ]),
 
                                                             m(".tab-pane.fade[id='recep'][role='tabpanel'][aria-labelledby='home-recep']", [
-                                                                m('p', 'recep'),
+                                                                m('p', 'En construcción.'),
                                                             ]),
 
                                                         ])
@@ -1077,8 +1137,8 @@ const PedidoLISA = {
 
                 ])
             ),
+        ]
 
-        ];
 
 
 

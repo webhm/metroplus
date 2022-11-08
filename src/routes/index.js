@@ -123,7 +123,7 @@ const Routes = {
     }, //Laboratorio Lisa Pedidos Ingresados
     '/laboratorio/lisa/pedido/': {
         onmatch: (_data) => {
-            if (_data.numeroPedido !== undefined) {
+            if (_data.numeroPedido !== undefined && _data.idTimeRecord !== undefined) {
                 return LisaPedido;
             } else {
                 return m.route.SKIP;

@@ -573,25 +573,1396 @@ const Examenes = {
 
         if (PedidoLISA.examenes !== 0) {
 
-            console.log(PedidoLISA.examenes.Exame.length);
-
             if (PedidoLISA.examenes.Exame.length == undefined) {
                 PedidoLISA.examenes.Exame = [PedidoLISA.examenes.Exame];
             }
 
             return PedidoLISA.examenes.Exame.map(function (_val, _i, _contentData) {
 
-                return [
-                    m('.tx-14.tx-semibold.d-inline', (_i + 1) + ': ' + _val.descExame),
-                    m('br'),
+                if (_val.operacao == 'E') {
 
-                ]
+                    return [
+                        m('.tx-14.tx-semibold.tx-danger.d-inline', (_i + 1) + ': ' + _val.descExame + ' - ' + _val.codigoExameFaturamento),
+                        m('br'),
+
+                    ]
+
+                } else {
+
+                    return [
+                        m('.tx-14.tx-semibold.d-inline', (_i + 1) + ': ' + _val.descExame + ' - ' + _val.codigoExameFaturamento),
+                        m('br'),
+
+                    ]
+
+                }
+
+
             })
 
         }
 
     }
 }
+
+
+const StatusPedido = {
+    error: "",
+    documento: [],
+    data: [],
+    dataMuestras: [],
+    fetch: () => {
+        StatusPedido.error = "";
+        StatusPedido.data = [];
+        StatusPedido.documento = [];
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-lab",
+            body: {
+                numeroPedido: PedidoLISA.numeroPedido,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                if (result.status) {
+                    StatusPedido.documento = result.data;
+                    StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
+                } else {
+                    StatusPedido.error = result.message;
+                }
+
+            })
+            .catch(function (e) {
+
+            })
+
+    },
+
+
+};
+
+
+const Insumos = {
+    tuboLila: 0,
+    tuboRojo: 0,
+    tuboCeleste: 0,
+    tuboNegro: 0,
+    tuboVerde: 0,
+    gsav: 0,
+    hemocultivo: 0,
+    qtb: 0,
+
+};
+
+const Observaciones = {
+    dataObservaciones: [],
+    obs: "",
+    show: false,
+
+};
+
+
+const TomaMuestras = {
+    checkedAll: false,
+    disabledToma: false,
+    disabledInsumos: false,
+    seleccionarTodos: (status) => {
+        TomaMuestras.checkedAll = status;
+        var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
+            if (status) {
+                StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                StatusPedido.data[_i]['FECHA_TOMA'] = _fechaToma;
+                StatusPedido.data[_i]['customCheked'] = true;
+            } else {
+                StatusPedido.data[_i]['STATUS_TOMA'] = "";
+                StatusPedido.data[_i]['FECHA_TOMA'] = "";
+                StatusPedido.data[_i]['customCheked'] = false;
+            }
+        })
+    },
+    validarUpdateMuestras: () => {
+
+
+
+        var _t = 0;
+
+        for (var i = 0; i < StatusPedido.data.length; i++) {
+
+            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
+                _t++;
+            }
+
+        }
+
+        // Set State
+
+        if (_t == 0) {
+            alert("El regisro de Toma de (Muestra) e Insumos en necesario.");
+            throw "El regisro de Toma de (Muestra) e Insumos en necesario.";
+        }
+
+        var _r = 0;
+
+        if (Insumos.tuboLila !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboRojo !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboCeleste !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboNegro !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboVerde !== 0) {
+            _r++;
+        }
+        if (Insumos.gsav !== 0) {
+            _r++;
+        }
+        if (Insumos.hemocultivo !== 0) {
+            _r++;
+        }
+        if (Insumos.qtb !== 0) {
+            _r++;
+        }
+
+        if (_r === 0) {
+            console.log(_r)
+            alert("El regisro de Toma de Muestra e (Insumos) en necesario.");
+            throw "El regisro de Toma de Muestra e (Insumos) en necesario.";
+        }
+
+
+    },
+    udpateStatusTomaMuestra: () => {
+        StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.insumosToma = Insumos;
+        StatusPedido.documento.pedidoLaboratorio.dataRecepcion.insumosRecep = Insumos;
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                documento: JSON.stringify(StatusPedido.documento),
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                StatusPedido.documento = result.data;
+                StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
+            })
+            .catch(function (e) { })
+    },
+    oninit: () => {
+        StatusPedido.fetch();
+    },
+    view: () => {
+
+
+
+
+        if (StatusPedido.error) {
+            return [
+                m("p.mg-0",
+                    StatusPedido.error
+                )
+            ]
+        } else if (StatusPedido.data.length !== 0) {
+            return [
+                m("div.bg-white.bd.d-flex.flex-column.justify-content-end", [
+
+
+
+
+                    (TomaMuestras.disabledToma ? [m("p.mg-5.tx-right", [
+                        m("button.btn.btn-xs.btn-outline-secondary[type='button']", {
+                            onclick: () => {
+                                TomaMuestras.disabledToma = false;
+                                TomaMuestras.disabledInsumos = false;
+                            }
+                        },
+                            m("i.fas.fa-edit.mg-r-5"),
+                            " EDITAR"
+
+                        )
+                    ])] : []),
+
+
+                    m(".", {
+                        "style": { "pointer-events": (TomaMuestras.disabledToma ? "none" : "auto") }
+                    }, [
+
+
+                        m("div.table-responsive.mg-b-10.mg-t-10",
+                            m("table.table.table-dashboard.table-hover.mg-b-0", [
+                                m("thead",
+                                    m("tr", [
+                                        m("th.text-dark.text-left.bg-light[colspan='2']",
+                                            "Toma de Muestra"
+                                        ),
+
+
+                                    ]),
+                                    m("tr", [
+                                        m("th.text-left",
+                                            "EXAMEN"
+                                        ),
+                                        m("th",
+                                            "CONFIRMACIÓN"
+                                        ),
+
+                                    ])
+                                ),
+                                m("tbody", [
+                                    m("tr", [
+                                        m("td.tx-normal",
+                                            m("div.custom-control.custom-checkbox", [
+                                                m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
+                                                    checked: TomaMuestras.checkedAll,
+                                                    onclick: function (e) {
+                                                        TomaMuestras.seleccionarTodos(this.checked);
+                                                    }
+                                                }),
+                                                m("label.custom-control-label[for='selectTomaTodos']",
+                                                    'Seleccionar Todos'
+                                                )
+                                            ])
+                                        ),
+                                        m("td.tx-medium.text-right",),
+                                    ]),
+
+                                    StatusPedido.data.map(function (_val, _i, _contentData) {
+
+                                        return [
+                                            m("tr", [
+
+                                                m("td.tx-18.tx-medium.text-left",
+                                                    _val.NM_EXA_LAB
+                                                ),
+
+                                                m("td.tx-16.tx-normal",
+                                                    m("div.custom-control.custom-checkbox.tx-16", [
+                                                        m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                            checked: StatusPedido.data[_i]['customCheked'],
+                                                            onupdate: function (e) {
+                                                                this.checked = StatusPedido.data[_i]['customCheked'];
+                                                            },
+                                                            onclick: function (e) {
+
+                                                                e.preventDefault();
+                                                                var p = this.checked;
+                                                                StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
+                                                                if (p) {
+                                                                    this.checked = true;
+                                                                    StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                                                                    StatusPedido.data[_i]['FECHA_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
+                                                                } else {
+                                                                    this.checked = false;;
+                                                                    TomaMuestras.checkedAll = false;
+                                                                    StatusPedido.data[_i]['STATUS_TOMA'] = "";
+                                                                    StatusPedido.data[_i]['FECHA_TOMA'] = "";
+                                                                }
+
+                                                            },
+
+
+
+                                                        }),
+                                                        m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
+                                                            (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['FECHA_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
+
+                                                        )
+                                                    ])
+                                                ),
+
+
+
+                                            ]),
+                                        ]
+
+
+
+
+
+                                    })
+
+
+                                ])
+                            ])
+                        ),
+
+
+                        m("div.table-responsive.mg-b-10.mg-t-10",
+                            m("table.table.table-dashboard.table-hover.mg-b-0", [
+                                m("thead",
+                                    m("tr", [
+                                        m("th.text-dark.text-left.bg-light[colspan='2']",
+                                            "INSUMOS"
+                                        ),
+
+
+                                    ]),
+                                    m("tr", [
+                                        m("th.text-left",
+                                            "INSUMOS"
+                                        ),
+                                        m("th.text-left",
+                                            "CANTIDAD"
+                                        ),
+                                    ])
+                                ),
+                                m("tbody", [
+
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='tuboLila']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.tuboLila = 1;
+                                                        } else {
+                                                            Insumos.tuboLila = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                            if (Insumos.tuboLila == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold.custom-control-label[for='tuboLila']",
+                                                    "Tubo Lila"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                                el.dom.innerText = Insumos.tuboLila;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboLila !== undefined && Insumos.tuboLila !== 0) {
+                                                                el.dom.innerText = Insumos.tuboLila;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+
+
+                                                        Insumos.tuboLila++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboLila--;
+                                                        if (Insumos.tuboLila < 0) {
+                                                            Insumos.tuboLila = 0;
+                                                        }
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='tuboRojo']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.tuboRojo = 1;
+                                                        } else {
+                                                            Insumos.tuboRojo = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                            if (Insumos.tuboRojo == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='tuboRojo']",
+                                                    "Tubo Rojo"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                                el.dom.innerText = Insumos.tuboRojo;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboRojo !== undefined && Insumos.tuboRojo !== 0) {
+                                                                el.dom.innerText = Insumos.tuboRojo;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboRojo++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboRojo--;
+                                                        if (Insumos.tuboRojo < 0) {
+                                                            Insumos.tuboRojo = 0;
+                                                        }
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='tuboCeleste']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.tuboCeleste = 1;
+                                                        } else {
+                                                            Insumos.tuboCeleste = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                            if (Insumos.tuboCeleste == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='tuboCeleste']",
+                                                    "Tubo Celeste"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                                el.dom.innerText = Insumos.tuboCeleste;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboCeleste !== undefined && Insumos.tuboCeleste !== 0) {
+                                                                el.dom.innerText = Insumos.tuboCeleste;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboCeleste++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboCeleste--;
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='tuboNegro']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.tuboNegro = 1;
+                                                        } else {
+                                                            Insumos.tuboNegro = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                            if (Insumos.tuboNegro == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='tuboNegro']",
+                                                    "Tubo Negro"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                                el.dom.innerText = Insumos.tuboNegro;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboNegro !== undefined && Insumos.tuboNegro !== 0) {
+                                                                el.dom.innerText = Insumos.tuboNegro;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboNegro++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboNegro--;
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='tuboVerde']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.tuboVerde = 1;
+                                                        } else {
+                                                            Insumos.tuboVerde = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                            if (Insumos.tuboVerde == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='tuboVerde']",
+                                                    "Tubo Verde"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                                el.dom.innerText = Insumos.tuboVerde;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.tuboVerde !== undefined && Insumos.tuboVerde !== 0) {
+                                                                el.dom.innerText = Insumos.tuboVerde;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboVerde++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.tuboVerde--;
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='gsav']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.gsav = 1;
+                                                        } else {
+                                                            Insumos.gsav = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                            if (Insumos.gsav == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='gsav']",
+                                                    "GSA V"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                                el.dom.innerText = Insumos.gsav;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.gsav !== undefined && Insumos.gsav !== 0) {
+                                                                el.dom.innerText = Insumos.gsav;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.gsav++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.gsav--;
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+
+                                    ]),
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='hemocultivo']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.hemocultivo = 1;
+                                                        } else {
+                                                            Insumos.hemocultivo = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                            if (Insumos.hemocultivo == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='hemocultivo']",
+                                                    "Hemocultivo"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                                el.dom.innerText = Insumos.hemocultivo;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.hemocultivo !== undefined && Insumos.hemocultivo !== 0) {
+                                                                el.dom.innerText = Insumos.hemocultivo;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.hemocultivo++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.hemocultivo--;
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+                                    m("tr", [
+
+                                        m("td.tx-16.tx-normal",
+                                            m("div.custom-control.custom-checkbox.tx-16", [
+                                                m("input.tx-20.custom-control-input[type='checkbox'][id='qtb']", {
+                                                    onclick: (el) => {
+                                                        if (el.target.checked) {
+                                                            Insumos.qtb = 1;
+                                                        } else {
+                                                            Insumos.qtb = 0;
+                                                        }
+
+                                                    },
+                                                    oncreate: (el) => {
+                                                        if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                            el.dom.checked = true;
+                                                        }
+                                                    },
+                                                    onupdate: (el) => {
+                                                        if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                            if (Insumos.qtb == 1) {
+                                                                el.dom.checked = true;
+
+                                                            }
+                                                        } else {
+                                                            el.dom.checked = false;
+                                                        }
+                                                    }
+                                                }),
+                                                m("label.tx-20.tx-semibold..custom-control-label[for='qtb']",
+                                                    "QTB"
+                                                )
+                                            ])
+                                        ),
+
+                                        m("td.tx-16.tx-medium.text-left", [
+                                            m(".btn-group.btn-group-sm.tx-16[role='group']", {
+
+                                            }, [
+                                                m("button.btn[type='button']",
+                                                    m("div.tx-20.tx-semibold.bg-gray-300.pd-l-5.pd-r-5", {
+                                                        oncreate: (el) => {
+                                                            if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                                el.dom.innerText = Insumos.qtb;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        },
+                                                        onupdate: (el) => {
+                                                            if (Insumos.qtb !== undefined && Insumos.qtb !== 0) {
+                                                                el.dom.innerText = Insumos.qtb;
+                                                            } else {
+                                                                el.dom.innerText = 0;
+
+                                                            }
+                                                        }
+
+                                                    })
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.qtb++;
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-plus-circle.tx-22.tx-success")
+                                                ),
+                                                m("button.btn.btn[type='button']", {
+                                                    onclick: () => {
+                                                        Insumos.qtb--;
+
+                                                    },
+
+                                                },
+                                                    m("i.fas.fa-minus-circle.tx-22.tx-danger")
+                                                ),
+
+                                            ])
+                                        ]),
+
+
+
+
+                                    ]),
+                                ])
+                            ])
+                        ),
+                        ((!TomaMuestras.disabledToma) ? [m("div.pd-10", [
+                            m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
+                                disabled: TomaMuestras.disabledToma,
+                                onclick: () => {
+
+                                    TomaMuestras.validarUpdateMuestras();
+                                    var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+                                    StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.usuarioToma = "flebot1";
+                                    StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.fechaToma = _fechaToma;
+                                    TomaMuestras.disabledToma = true;
+                                    TomaMuestras.udpateStatusTomaMuestra();
+
+
+                                }
+                            },
+                                "Guardar Registro"
+                            )
+                        ])] : [m("p.mg-5.", [
+                            m("span.badge.badge-light.tx-right.wd-100p.tx-14",
+                                "Toma de Muestra: FLEBOT1 " + StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.fechaToma,
+
+                            ),
+                        ])]),
+                    ]),
+
+                ])
+            ]
+        } else {
+            return [
+                m("div.pd-t-10", [
+                    m("div.placeholder-paragraph.wd-100p", [
+                        m("div.line"),
+                        m("div.line")
+                    ])
+                ])
+
+            ]
+        }
+
+    }
+
+};
+
+const RecepMuestras = {
+    checkedAll: false,
+    disabledToma: false,
+    disabledInsumos: false,
+    seleccionarTodos: (status) => {
+        RecepMuestras.checkedAll = status;
+        var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+        return StatusPedido.data.map(function (_val, _i, _contentData) {
+            if (status) {
+                StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                StatusPedido.data[_i]['FECHA_TOMA'] = _fechaToma;
+                StatusPedido.data[_i]['customCheked'] = true;
+            } else {
+                StatusPedido.data[_i]['STATUS_TOMA'] = "";
+                StatusPedido.data[_i]['FECHA_TOMA'] = "";
+                StatusPedido.data[_i]['customCheked'] = false;
+            }
+        })
+    },
+    validarUpdateMuestras: () => {
+
+
+
+        var _t = 0;
+
+        for (var i = 0; i < StatusPedido.data.length; i++) {
+
+            if (StatusPedido.data[i]['STATUS_TOMA'].length !== 0) {
+                _t++;
+            }
+
+        }
+
+        // Set State
+
+        if (_t == 0) {
+            alert("El regisro de Toma de (Muestra) e Insumos en necesario.");
+            throw "El regisro de Toma de (Muestra) e Insumos en necesario.";
+        }
+
+        var _r = 0;
+
+        if (Insumos.tuboLila !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboRojo !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboCeleste !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboNegro !== 0) {
+            _r++;
+        }
+        if (Insumos.tuboVerde !== 0) {
+            _r++;
+        }
+        if (Insumos.gsav !== 0) {
+            _r++;
+        }
+        if (Insumos.hemocultivo !== 0) {
+            _r++;
+        }
+        if (Insumos.qtb !== 0) {
+            _r++;
+        }
+
+        if (_r === 0) {
+            console.log(_r)
+            alert("El regisro de Toma de Muestra e (Insumos) en necesario.");
+            throw "El regisro de Toma de Muestra e (Insumos) en necesario.";
+        }
+
+
+    },
+    udpateStatusTomaMuestra: () => {
+        StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.insumosToma = Insumos;
+        StatusPedido.documento.pedidoLaboratorio.dataRecepcion.insumosRecep = Insumos;
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/up-status-pedido-lab",
+            body: {
+                documento: JSON.stringify(StatusPedido.documento),
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                StatusPedido.documento = result.data;
+                StatusPedido.data = result.data.pedidoLaboratorio.dataTomaMuestra.examenesToma;
+            })
+            .catch(function (e) { })
+    },
+    oninit: () => {
+        StatusPedido.fetch();
+    },
+    view: () => {
+
+
+
+
+        if (StatusPedido.error) {
+            return [
+                m("p.mg-0",
+                    StatusPedido.error
+                )
+            ]
+        } else if (StatusPedido.data.length !== 0) {
+            return [
+                m("div.bg-white.bd.d-flex.flex-column.justify-content-end", [
+
+
+
+
+                    (RecepMuestras.disabledToma ? [m("p.mg-5.tx-right", [
+                        m("button.btn.btn-xs.btn-outline-secondary[type='button']", {
+                            onclick: () => {
+                                RecepMuestras.disabledToma = false;
+                            }
+                        },
+                            m("i.fas.fa-edit.mg-r-5"),
+                            " EDITAR"
+
+                        )
+                    ])] : []),
+
+
+                    m(".", {
+                        "style": { "pointer-events": (RecepMuestras.disabledToma ? "none" : "auto") }
+                    }, [
+
+
+                        m("div.table-responsive.mg-b-10.mg-t-10",
+                            m("table.table.table-dashboard.table-hover.mg-b-0", [
+                                m("thead",
+                                    m("tr", [
+                                        m("th.text-dark.text-left",
+                                            "Recepcion de Muestras"
+                                        ),
+                                        m("th[colspan='2'].text-primary.text-right.bg-light",
+                                            "Ver Historial de Envios"
+                                        ),
+
+
+                                    ]),
+                                    m("tr", [
+                                        m("th.text-left",
+                                            "EXAMEN"
+                                        ),
+                                        m("th[colspan='2']",
+                                            "CONFIRMACIÓN"
+                                        ),
+
+                                    ])
+                                ),
+                                m("tbody", [
+                                    m("tr", [
+                                        m("td.tx-normal",
+                                            m("div.custom-control.custom-checkbox", [
+                                                m("input.custom-control-input[type='checkbox'][id='selectTomaTodos']", {
+                                                    checked: RecepMuestras.checkedAll,
+                                                    onclick: function (e) {
+                                                        RecepMuestras.seleccionarTodos(this.checked);
+                                                    }
+                                                }),
+                                                m("label.custom-control-label[for='selectTomaTodos']",
+                                                    'Seleccionar Todos'
+                                                )
+                                            ])
+                                        ),
+                                        m("td.tx-medium.text-right"),
+                                        m("td.tx-medium.text-left", { style: { 'background-color': 'rgb(255, 193, 7)' } }, 'ENVIO LISA'),
+
+                                    ]),
+
+                                    StatusPedido.data.map(function (_val, _i, _contentData) {
+
+                                        return [
+                                            m("tr", [
+
+                                                m("td.tx-18.tx-medium.text-left",
+                                                    _val.NM_EXA_LAB
+                                                ),
+
+                                                m("td.tx-16.tx-normal",
+                                                    m("div.custom-control.custom-checkbox.tx-16", [
+                                                        m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                            checked: StatusPedido.data[_i]['customCheked'],
+                                                            onupdate: function (e) {
+                                                                this.checked = StatusPedido.data[_i]['customCheked'];
+                                                            },
+                                                            onclick: function (e) {
+
+                                                                e.preventDefault();
+                                                                var p = this.checked;
+                                                                StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
+                                                                if (p) {
+                                                                    this.checked = true;
+                                                                    StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                                                                    StatusPedido.data[_i]['FECHA_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
+                                                                } else {
+                                                                    this.checked = false;;
+                                                                    TomaMuestras.checkedAll = false;
+                                                                    StatusPedido.data[_i]['STATUS_TOMA'] = "";
+                                                                    StatusPedido.data[_i]['FECHA_TOMA'] = "";
+                                                                }
+
+                                                            },
+
+
+
+                                                        }),
+                                                        m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
+                                                            (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['FECHA_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
+
+                                                        )
+                                                    ])
+                                                ),
+
+                                                m('td.tx-12.tx-normal', m("div.custom-control.custom-checkbox.tx-16", [
+                                                    m("input.custom-control-input.tx-16[type='checkbox'][id='" + _val.CD_EXA_LAB + "']", {
+                                                        checked: StatusPedido.data[_i]['customCheked'],
+                                                        onupdate: function (e) {
+                                                            this.checked = StatusPedido.data[_i]['customCheked'];
+                                                        },
+                                                        onclick: function (e) {
+
+                                                            e.preventDefault();
+                                                            var p = this.checked;
+                                                            StatusPedido.data[_i]['customCheked'] = !StatusPedido.data[_i]['customCheked'];
+                                                            if (p) {
+                                                                this.checked = true;
+                                                                StatusPedido.data[_i]['STATUS_TOMA'] = "1";
+                                                                StatusPedido.data[_i]['FECHA_TOMA'] = moment().format('DD-MM-YYYY HH:mm');
+                                                            } else {
+                                                                this.checked = false;;
+                                                                TomaMuestras.checkedAll = false;
+                                                                StatusPedido.data[_i]['STATUS_TOMA'] = "";
+                                                                StatusPedido.data[_i]['FECHA_TOMA'] = "";
+                                                            }
+
+                                                        },
+
+
+
+                                                    }),
+                                                    m("label.custom-control-label.tx-16[for='" + _val.CD_EXA_LAB + "']",
+                                                        (StatusPedido.data[_i]['STATUS_TOMA'].length !== 0) ? StatusPedido.data[_i]['FECHA_TOMA'] : StatusPedido.data[_i]['STATUS_TOMA'],
+
+                                                    )
+                                                ]))
+
+
+
+                                            ]),
+                                        ]
+
+
+
+
+
+                                    }),
+
+
+
+                                ])
+                            ])
+                        ),
+                        m("div.pd-10", [
+                            m("button.btn.btn-xs.btn-primary.btn-block.tx-semibold[type='button']", {
+                                disabled: TomaMuestras.disabledToma,
+                                onclick: () => {
+
+                                    TomaMuestras.validarUpdateMuestras();
+                                    var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
+                                    StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.usuarioToma = "flebot1";
+                                    StatusPedido.documento.pedidoLaboratorio.dataTomaMuestra.fechaToma = _fechaToma;
+                                    TomaMuestras.disabledToma = true;
+                                    TomaMuestras.udpateStatusTomaMuestra();
+
+
+                                }
+                            },
+                                "Guardar y Enviar"
+                            )
+                        ])
+
+
+
+                    ]),
+
+                ])
+            ]
+        } else {
+            return [
+                m("div.pd-t-10", [
+                    m("div.placeholder-paragraph.wd-100p", [
+                        m("div.line"),
+                        m("div.line")
+                    ])
+                ])
+
+            ]
+        }
+
+    }
+
+};
 
 const PedidoLISA = {
     data: [],
@@ -600,25 +1971,19 @@ const PedidoLISA = {
     numeroPedido: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
+    idTimeRecord: "",
     oninit: (_data) => {
+        console.log(1)
 
-        if (_data.attrs.numeroPedido !== undefined) {
+        if (_data.attrs.numeroPedido !== undefined && _data.attrs.idTimeRecord !== undefined) {
             document.title = "Detalle de Pedido N°: " + _data.attrs.numeroPedido + " | " + App.title;
-            if (PedidoLISA.data !== undefined && PedidoLISA.data.length == 0) {
-                PedidoLISA.numeroPedido = _data.attrs.numeroPedido;
-                PedidoLISA.numeroAtencion = _data.attrs.numeroAtencion;
-                PedidoLISA.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
-                PedidoLISA.fetch();
-            } else {
-                if (PedidoLISA.numeroPedido !== _data.attrs.numeroPedido) {
-                    PedidoLISA.numeroPedido = _data.attrs.numeroPedido;
-                    PedidoLISA.numeroAtencion = _data.attrs.numeroAtencion;
-                    PedidoLISA.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
-                    PedidoLISA.fetch();
 
-                }
+            PedidoLISA.numeroPedido = _data.attrs.numeroPedido;
+            PedidoLISA.numeroAtencion = _data.attrs.numeroAtencion;
+            PedidoLISA.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
+            PedidoLISA.idTimeRecord = _data.attrs.idTimeRecord;
+            PedidoLISA.fetch();
 
-            }
         }
     },
     fetch: () => {
@@ -629,6 +1994,7 @@ const PedidoLISA = {
             url: "https://lisa.hospitalmetropolitano.org/v1/status-pedido-lisa",
             body: {
                 numeroPedido: PedidoLISA.numeroPedido,
+                idTimeRecord: PedidoLISA.idTimeRecord
             },
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -1088,6 +2454,16 @@ const PedidoLISA = {
                                                                     " RECEP. DE MUESTRA "
                                                                 )
                                                             ),
+                                                            m("li.nav-item",
+                                                                m("a.nav-link[id='home-comment'][data-toggle='tab'][href='#comment'][role='tab'][aria-controls='comment']", {
+                                                                    style: { "color": "#476ba3" }
+                                                                },
+                                                                    m("i.fas.fa-inbox.pd-1.mg-r-2"),
+
+                                                                    " COMENTARIOS "
+                                                                )
+                                                            ),
+
 
 
                                                         ]),
@@ -1103,10 +2479,13 @@ const PedidoLISA = {
                                                                 m(Evoluciones),
                                                             ]),
                                                             m(".tab-pane.fade[id='muestra'][role='tabpanel'][aria-labelledby='home-muestra']", [
-                                                                m('p', 'En construcción.'),
+                                                                m(TomaMuestras)
                                                             ]),
 
                                                             m(".tab-pane.fade[id='recep'][role='tabpanel'][aria-labelledby='home-recep']", [
+                                                                m(RecepMuestras)
+                                                            ]),
+                                                            m(".tab-pane.fade[id='comment'][role='tabpanel'][aria-labelledby='home-comment']", [
                                                                 m('p', 'En construcción.'),
                                                             ]),
 

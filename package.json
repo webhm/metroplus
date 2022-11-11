@@ -26,7 +26,8 @@
         "@pusher/push-notifications-web": "^1.1.0",
         "crypto-js": "^4.1.1",
         "localstorage-slim": "^2.3.0",
-        "mithril": "^2.2.2"
+        "mithril": "^2.2.2",
+        "xml-js": "^1.6.11"
     },
     "devDependencies": {
         "@babel/core": "^7.18.5",

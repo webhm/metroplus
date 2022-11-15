@@ -466,25 +466,26 @@ const PedidosIngresados = {
                                 aData.descPrestadorSolicitante
 
                             ),
-                            (aData.tipoOperacion == 'I' ? m("td.tx-white.tx-semibold.tx-center", {
-                                    title: (aData.enviadoInfinity == 0 ? " Retenido " : " Enviado "),
+                            (aData.tipoOperacion == 'I' ?
+                                m("td.tx-white.tx-semibold.tx-center", {
+                                        title: (aData.enviadoInfinity == 0 ? " Retenido " : " Enviado "),
 
-                                    style: { "background-color": (aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") }
-                                },
-                                (aData.enviadoInfinity == 0 ? "Retenido" : "Enviado")
-                            ) : m("td.tx-white.tx-semibold.bg-danger.tx-center", {
-                                    title: (aData.enviadoInfinity == 0 ? " Cancelado " : " Cancelado Enviado "),
-                                },
-                                (aData.enviadoInfinity == 0 ? "Cancelado" : "Cancelado Enviado")
-                            )),
+                                        style: { "background-color": (aData.enviadoInfinity == 0 ? "#fd7e14" : "#00cccc") }
+                                    },
+                                    (aData.enviadoInfinity == 0 ? "Retenido" : "Enviado")
+                                ) : m("td.tx-white.tx-semibold.bg-danger.tx-center", {
+                                        title: (aData.enviadoInfinity == 0 ? " Cancelado " : " Cancelado Enviado "),
+                                    },
+                                    (aData.enviadoInfinity == 0 ? "Cancelado" : "Cancelado Enviado")
+                                )),
                             m("td.tx-white.tx-semibold.tx-center", {
                                     title: 'Status Toma de Muestras',
                                     style: { "background-color": (aData.muestrasProcesadas == 0 ? "#ffc107" : "#0d9448") }
                                 },
-                                (aData.muestrasProcesadas == 0 ? "Pendiente" : "Completo")
+                                (aData.muestrasProcesadas == 0 ? "Muestras Pendientes" : "Muestras Completo")
                             ),
 
-                            m("td.tx-center", {
+                            m("td.tx-center.d-none", {
 
                                     onclick: () => {
                                         if (confirm("Esta Ud. seguro de generar este envío.") == true) {

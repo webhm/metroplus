@@ -8,7 +8,7 @@ import NotificacionesLab from '../views/laboratorio/notificaciones/notificacione
 import SubscribirCanal from '../models/subscribirCanal'
 import FiltrosLab from '../views/laboratorio/notificaciones/filtros'
 import NotificacionesEnviadasLab from '../views/laboratorio/notificaciones/enviadas'
-import LaboratorioPedidos from '../views/laboratorio/pedidos/pedidos'
+import LaboratorioPedidos from '../views/laboratorio/flebotomista/flebotomista'
 import LisaPedidosIngresados from '../views/lisa/pedidosIngresados'
 import LisaPedido from '../views/lisa/pedidoLisa'
 import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
@@ -47,6 +47,7 @@ import HeaderPrivate from '../views/layout/header-private';
 import Endoscopia from '../views/endoscopia/endoscopia'
 import EndoscopiaPedidos from '../views/endoscopia/pedidos/pedidos'
 import EndoPedido from '../views/endoscopia/pedidos/pedido'
+import PedidoFlebotomista from '../views/laboratorio/flebotomista/pedidoFlebotomista'
 
 
 
@@ -135,14 +136,13 @@ const Routes = {
     '/laboratorio/notificaciones/enviadas': NotificacionesEnviadasLab, //NotificacionesEnviadasLab
     '/laboratorio/notificaciones/pendientes': NotificacionesPendientesLab, //NotificacionesPendientesLab
     '/laboratorio/notificaciones/error': NotificacionesErroresLab, //NotificacionesErroresLab
-    '/laboratorio/flebotomista': LaboratorioFlebotomista, //LaboratorioFlebotomista Hospitalizacion,
-    '/laboratorio/pedidos': {
+    '/laboratorio/flebotomista': {
         oninit: (_data) => {
             App.isAuth('laboratorio', 16);
             document.title = "Recepción de Pedidos | " + App.title;
 
             if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
-                return m.route.set('/laboratorio/pedidos/', { idFiltro: 1 })
+                return m.route.set('/laboratorio/flebotomista/', { idFiltro: 1 })
             }
 
             LaboratorioPedidos.idFiltro = _data.attrs.idFiltro;
@@ -199,6 +199,15 @@ const Routes = {
         },
 
     }, // LaboratorioPedidos
+    '/laboratorio/flebotomista/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined && _data.idTimeRecord !== undefined) {
+                return PedidoFlebotomista
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, //PedidoFlebotomista
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos
     '/emergencia': Emergencia, //Emergencia
     '/emergencia/auxiliar/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio

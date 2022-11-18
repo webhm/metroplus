@@ -130,7 +130,7 @@ const DetallePedido = {
 
                     ]),
                     m("p.mg-5.tx-15", [
-                        "Fecha Pedido: ",
+                        "Fecha Receta: ",
                         VerReceta.data.DT_ATENDIMENTO
 
                     ]),
@@ -381,11 +381,13 @@ const RecetasAlta = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("farmacia") }),
             m(SidebarFarma, { oncreate: SidebarFarma.setPage(5) }),
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                " Metrovirtual "
+                                " Metroplus "
                             ])
                         ),
                         m("li.breadcrumb-item",
@@ -414,10 +416,10 @@ const RecetasAlta = {
                         m("div.col-12.mg-b-5.wd-100p[data-label='Filtrar'][id='filterTable']",
 
                             m("div.row", [
-
+                                m('p.col-sm-12.pd-b-10"', 'Buscar por HC o Apellidos o Nombres completos:'),
                                 m("div.col-sm-12.pd-b-10",
                                     m("div.input-group", [
-                                        m(".df-example.demo-forms.wd-100p[data-label='Buscar:']", [
+                                        m(".df-example.demo-forms.wd-100p", [
                                             m("input.form-control[type='text'][id='tipoPiso'][data-role='tagsinput']", {
                                                 oncreate: () => {
 
@@ -535,7 +537,7 @@ function loadRecetasAlta() {
         }, {
             title: "PACINTE"
         }, {
-            title: "FECHA:"
+            title: "FECHA RECETA:"
         }, {
             title: "PACIENTE:"
         }, {

@@ -630,10 +630,10 @@ const StatusPedido = {
                     StatusPedido.data = result.data.dataTomaMuestra.examenesToma;
                     StatusPedido.dataMuestras = result.data.dataRecepcion.examenesRecep;
 
-
                     Evoluciones.fetch();
                     ControlLISA.fetch();
                     Observaciones.fetch();
+
                 } else {
                     PedidoLISA.error = result.message;
                 }

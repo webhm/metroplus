@@ -143,6 +143,12 @@ const tablePedidosIngresados = {
                                         if (PedidosIngresados.idFiltro == 2) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
                                         }
+                                        if (PedidosIngresados.idFiltro == 3) {
+                                            el.dom.innerHTML = 'Pedidos de Hospitalización ';
+                                        }
+                                        if (PedidosIngresados.idFiltro == 4) {
+                                            el.dom.innerHTML = 'Pedidos de C. Externa ';
+                                        }
 
                                     },
                                     onupdate: (el) => {
@@ -151,6 +157,14 @@ const tablePedidosIngresados = {
                                         }
                                         if (PedidosIngresados.idFiltro == 2) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        }
+
+                                        if (PedidosIngresados.idFiltro == 3) {
+                                            el.dom.innerHTML = 'Pedidos de Hospitalización ';
+                                        }
+
+                                        if (PedidosIngresados.idFiltro == 4) {
+                                            el.dom.innerHTML = 'Pedidos de C. Externa ';
                                         }
                                     }
                                 }

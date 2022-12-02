@@ -48,6 +48,9 @@ import Endoscopia from '../views/endoscopia/endoscopia'
 import EndoscopiaPedidos from '../views/endoscopia/pedidos/pedidos'
 import EndoPedido from '../views/endoscopia/pedidos/pedido'
 import PedidoFlebotomista from '../views/laboratorio/flebotomista/pedidoFlebotomista'
+import Patologia from '../views/patologia/patologia'
+import PatologiaPedidos from '../views/patologia/pedidos/pedidos'
+import PedidoPatologia from '../views/patologia/pedidos/pedido'
 
 
 
@@ -511,6 +514,80 @@ const Routes = {
         onmatch: (_data) => {
             if (_data.numeroPedido !== undefined) {
                 return EndoPedido;
+
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // EndoPedido
+    '/patologia': Patologia, //Patologia
+    '/patologia/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('patologia', 26);
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/patologia/pedidos/', { idFiltro: 1 })
+            }
+
+            PatologiaPedidos.idFiltro = _data.attrs.idFiltro;
+
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== PatologiaPedidos.idFiltro && PatologiaPedidos.idFiltro !== 1 && PatologiaPedidos.fechaDesde !== undefined) {
+                PatologiaPedidos.idFiltro = _data.attrs.idFiltro;
+                PatologiaPedidos.fechaDesde = _data.attrs.fechaDesde;
+                PatologiaPedidos.fechaHasta = _data.attrs.fechaHasta;
+                PatologiaPedidos.loader = true;
+                PatologiaPedidos.pedidos = [];
+                PatologiaPedidos.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    PatologiaPedidos.idFiltro = _data.attrs.idFiltro;
+                    PatologiaPedidos.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    PatologiaPedidos.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (PatologiaPedidos.pedidos.length == 0) {
+                        PatologiaPedidos.loader = true;
+                        PatologiaPedidos.pedidos = [];
+                        PatologiaPedidos.fetchPedidos();
+                    } else {
+                        PatologiaPedidos.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("patologia") }),
+                m(PatologiaPedidos),
+            ];
+        },
+
+    },
+    '/patologia/pedido/': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return PedidoPatologia;
 
             } else {
                 return m.route.SKIP;

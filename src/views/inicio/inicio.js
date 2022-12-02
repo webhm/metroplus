@@ -83,6 +83,10 @@ const iMdodule = {
             _data.children[0].icon = "fas fa-compact-disc";
             _data.children[0].modulo = 'Endoscopìa';
             _data.children[0].href = 'endoscopia';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'patologia') {
+            _data.children[0].icon = "fas fa-microscope";
+            _data.children[0].modulo = 'Patología';
+            _data.children[0].href = 'patologia';
         } else {
             _data.children[0].icon = "fas fa-hospital";
             _data.children[0].href = _data.children[0].modulo.charAt(0).toUpperCase();

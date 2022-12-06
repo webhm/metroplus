@@ -51,6 +51,7 @@ import PedidoFlebotomista from '../views/laboratorio/flebotomista/pedidoFlebotom
 import Patologia from '../views/patologia/patologia'
 import PatologiaPedidos from '../views/patologia/pedidos/pedidos'
 import PedidoPatologia from '../views/patologia/pedidos/pedido'
+import Etiquetas from '../views/admisiones/etiquetas/etiquetas'
 
 
 
@@ -221,6 +222,65 @@ const Routes = {
     '/farmacia/recetas': FarmaciaRecetasAlta, //FarmaciaRecetasAlta
     '/admisiones': Admisiones, //Admisiones
     '/admisiones/pre': PreAdmisiones, //PreAdmisiones
+    '/admisiones/etiquetas': {
+        oninit: (_data) => {
+            App.isAuth('admisiones', 7);
+            document.title = "Impresión de Etiquetas | " + App.title;
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/admisiones/etiquetas/', { idFiltro: 1 })
+            }
+            Etiquetas.idFiltro = _data.attrs.idFiltro;
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== Etiquetas.idFiltro && Etiquetas.idFiltro !== 1 && Etiquetas.fechaDesde !== undefined) {
+                Etiquetas.idFiltro = _data.attrs.idFiltro;
+                Etiquetas.fechaDesde = _data.attrs.fechaDesde;
+                Etiquetas.fechaHasta = _data.attrs.fechaHasta;
+                Etiquetas.loader = true;
+                Etiquetas.pedidos = [];
+                Etiquetas.fetchEtiquetas();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    Etiquetas.idFiltro = _data.attrs.idFiltro;
+                    Etiquetas.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    Etiquetas.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (Etiquetas.pedidos.length == 0) {
+                        Etiquetas.loader = true;
+                        Etiquetas.pedidos = [];
+                        Etiquetas.fetchEtiquetas();
+                    } else {
+                        Etiquetas.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("admisiones") }),
+                m(Etiquetas),
+            ];
+        },
+
+    }, // PacientesEtiquetas
     '/mantenimiento': Mantenimiento, //Mantenimiento
     '/mantenimiento/higienizacion': IntegracionHigienizacion, //IntegracionHigienizacion
     '/hospitalizacion': Hospitalizacion, //Hospitalizacion

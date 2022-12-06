@@ -6,7 +6,9 @@ const MenuAdmisiones = {
     view: () => {
         return [
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -23,39 +25,55 @@ const MenuAdmisiones = {
 
                     m("div.row.tx-14", [
 
-                        m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='users']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Pre Admisiones"
-                                ),
-                                m(m.route.Link, { href: "/admisiones/pre", class: "tx-medium" }, [
-                                    "Ir a Pre Admisiones",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                        (App.isShow('admisiones', 7) ? [
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/admisiones/pre")
+                                }
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-hospital tx-30 tx-white" })
+                                    ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Pre Admisiones",
+                                        ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Pre Admisiones",
+                                        )
+                                    ])
                                 ]),
 
-
                             ])
-                        ),
+                        ] : []),
 
-                        m("div.col-sm-6.d-none",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='file-text']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Formularios Epidemiológicos"
-                                ),
-                                m(m.route.Link, { href: "/laboratorio/formularios", class: "tx-medium" }, [
-                                    "Ir a Formularios Epidemiológicos",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                        (App.isShow('admisiones', 27) ? [
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/admisiones/etiquetas")
+                                }
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-user-tag tx-30 tx-white" })
+                                    ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Impresión de Etiquetas",
+                                        ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Impresión de Etiquetas",
+                                        )
+                                    ])
                                 ]),
 
-
                             ])
-                        ),
+                        ] : []),
 
                     ]),
 

@@ -175,7 +175,9 @@ const PreAdmisiones = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("admisiones") }),
             m(SidebarAdm, { oncreate: SidebarAdm.setPage(7) }),
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [

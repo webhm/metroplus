@@ -25,7 +25,6 @@ const MenuLaboratorio = {
 
                     m("div.row.tx-14", [
 
-
                         (App.isShow('laboratorio', 16) ? [
                             m("li", {
                                 "class": "list-item bg-white wd-100p",
@@ -50,7 +49,6 @@ const MenuLaboratorio = {
 
                             ])
                         ] : []),
-
                         (App.isShow('laboratorio', 6) ? [
                             m("li", {
                                 "class": "list-item bg-white wd-100p",
@@ -114,6 +112,28 @@ const MenuLaboratorio = {
                                     ),
                                     m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
                                         "Ir a LISA v1.0",
+                                    )
+                                ])
+                            ]),
+
+                        ])] : []),
+                        (App.isShow('laboratorio', 28) ? [m("li", {
+                            "class": "list-item bg-white wd-100p",
+                            "style": { "cursor": "pointer" },
+                            onclick: () => {
+                                m.route.set("/laboratorio/etiquetas")
+                            }
+                        }, [
+                            m("div", { "class": "media" }, [
+                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                    m("i", { "class": "fas fa-cog tx-30 tx-white" })
+                                ),
+                                m("div", { "class": "media-body mg-l-15" }, [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        "Configuración de Etiquetas",
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir a Configuración de Etiquetas",
                                     )
                                 ])
                             ]),

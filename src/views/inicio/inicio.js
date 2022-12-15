@@ -44,17 +44,14 @@ const iMdodule = {
             _data.children[0].modulo = 'Laboratorio';
             _data.children[0].icon = "fas fa-microscope";
             _data.children[0].href = 'laboratorio';
-
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'imagen') {
             _data.children[0].modulo = 'Imagen';
             _data.children[0].icon = "fas fa-file-prescription";
             _data.children[0].href = 'imagen';
-
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'emergencia') {
             _data.children[0].modulo = 'Emergencia';
             _data.children[0].icon = "fas fa-first-aid";
             _data.children[0].href = 'emergencia';
-
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'bco-sangre') {
             _data.children[0].icon = "fas fa-burn";
             _data.children[0].modulo = 'Bco. de Sangre';
@@ -78,7 +75,7 @@ const iMdodule = {
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'mantenimiento') {
             _data.children[0].icon = "fas fa-h-square ";
             _data.children[0].modulo = 'Mantenimento';
-            _data.children[0].href = 'mantenimento';
+            _data.children[0].href = 'mantenimiento';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'endoscopia') {
             _data.children[0].icon = "fas fa-compact-disc";
             _data.children[0].modulo = 'Endoscopìa';
@@ -92,7 +89,6 @@ const iMdodule = {
             _data.children[0].href = _data.children[0].modulo.charAt(0).toUpperCase();
             _data.children[0].modulo = _data.children[0].modulo.charAt(0).toUpperCase() + _data.children[0].modulo.slice(1)
         }
-
 
         return [
             m("li", {

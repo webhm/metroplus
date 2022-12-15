@@ -138,41 +138,41 @@ const tableNotificacionesEnviadasLab = {
                         m("h5.mg-b-0",
                             "NotificacionesEnviadasLab de Laboratorio:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                oncreate: (el) => {
-                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de Hoy';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab entre Fechas';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 3) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de Emergencia';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 4) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de C. Externa';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 5) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de Hospitalización';
-                                    }
-                                },
-                                onupdate: (el) => {
-                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de Hoy';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab entre Fechas';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 3) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de Emergencia';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 4) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de C. Externa';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 5) {
-                                        el.dom.innerHTML = 'NotificacionesEnviadasLab de Hospitalización';
+                                    oncreate: (el) => {
+                                        if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hoy';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab entre Fechas';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 3) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Emergencia';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 4) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de C. Externa';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 5) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hospitalización';
+                                        }
+                                    },
+                                    onupdate: (el) => {
+                                        if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hoy';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab entre Fechas';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 3) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Emergencia';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 4) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de C. Externa';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 5) {
+                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hospitalización';
+                                        }
                                     }
                                 }
-                            }
 
                             )
 
@@ -182,16 +182,16 @@ const tableNotificacionesEnviadasLab = {
                                 class: (NotificacionesEnviadasLab.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
-                                    title: "Desde"
-                                },
+                                        title: "Desde"
+                                    },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Desde:')
                                 ),
                                 m("div.link-03", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Desde"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Desde"
+                                    },
 
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
@@ -210,16 +210,16 @@ const tableNotificacionesEnviadasLab = {
                                     })
                                 ),
                                 m("div.link-03", {
-                                    title: "Hasta"
-                                },
+                                        title: "Hasta"
+                                    },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Hasta:')
                                 ),
                                 m("div.link-03", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Hasta"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Hasta"
+                                    },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
                                             el.dom.value = (NotificacionesEnviadasLab.idFiltro !== 1 ? moment(moment(NotificacionesEnviadasLab.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -239,9 +239,9 @@ const tableNotificacionesEnviadasLab = {
                             ]),
                             m("div.dropdown.dropleft", [
                                 m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Filtrar"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Filtrar"
+                                    },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -275,7 +275,7 @@ const tableNotificacionesEnviadasLab = {
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function (e) { NotificacionesEnviadasLab.searchField = e.target.value; },
+                                oninput: function(e) { NotificacionesEnviadasLab.searchField = e.target.value; },
                                 value: NotificacionesEnviadasLab.searchField,
                             })
                         ),
@@ -380,75 +380,75 @@ const NotificacionesEnviadasLab = {
             destroy: true,
             columns: false,
             aoColumnDefs: [{
-                mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    orderable: true,
                 },
-                visible: false,
-                aTargets: [0],
-                orderable: true,
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.CD_PRE_MED;
-                },
-                visible: false,
-                aTargets: [1],
-                orderable: false,
-
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.CD_PACIENTE;
+                {
+                    mRender: function(data, type, full) {
+                        return full.CD_PRE_MED;
+                    },
+                    visible: false,
+                    aTargets: [1],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [2],
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return full.CD_PACIENTE;
 
-            }, {
-                mRender: function (data, type, full) {
-                    return full.NM_PACIENTE;
+                    },
+                    visible: false,
+                    aTargets: [2],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.NM_PACIENTE;
+
+                    },
+                    visible: false,
+                    aTargets: [3],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.MED_MV;
+
+                    },
+                    visible: false,
+                    aTargets: [4],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return "";
+
+                    },
+                    visible: true,
+                    aTargets: [5],
+                    orderable: false,
 
                 },
-                visible: false,
-                aTargets: [3],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return full.MED_MV;
-
-                },
-                visible: false,
-                aTargets: [4],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return "";
-
-                },
-                visible: true,
-                aTargets: [5],
-                orderable: false,
-
-            },
 
 
             ],
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
             },
-            drawCallback: function (settings) {
+            drawCallback: function(settings) {
 
                 NotificacionesEnviadasLab.loader = false;
 
-                settings.aoData.map(function (_i) {
+                settings.aoData.map(function(_i) {
 
                     $(_i.anCells[5]).css("padding", "0");
 
                     m.mount(_i.anCells[5], {
-                        view: function () {
+                        view: function() {
                             return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
                                 m("div.d-inline.list-group-item.d-flex.pd-sm", [
                                     m("div.avatar.tx-center",
@@ -554,7 +554,7 @@ const NotificacionesEnviadasLab = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function (e) {
+        $('#searchField').keyup(function(e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -566,24 +566,24 @@ const NotificacionesEnviadasLab = {
         let _queryString = '';
 
         if (NotificacionesEnviadasLab.idFiltro == 1) {
-            _queryString = '?idFiltro=' + NotificacionesEnviadasLab.idFiltro;
+            _queryString = '&idFiltro=' + NotificacionesEnviadasLab.idFiltro;
         } else {
-            _queryString = '?idFiltro=' + NotificacionesEnviadasLab.idFiltro + '&fechaDesde=' + NotificacionesEnviadasLab.fechaDesde + '&fechaHasta=' + NotificacionesEnviadasLab.fechaHasta;
+            _queryString = '&idFiltro=' + NotificacionesEnviadasLab.idFiltro + '&fechaDesde=' + NotificacionesEnviadasLab.fechaDesde + '&fechaHasta=' + NotificacionesEnviadasLab.fechaHasta;
         }
 
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/imagen/NotificacionesEnviadasLab" + _queryString,
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 NotificacionesEnviadasLab.loader = false;
                 NotificacionesEnviadasLab.NotificacionesEnviadasLab = result.data;
             })
-            .catch(function (e) {
-                setTimeout(function () { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
+            .catch(function(e) {
+                setTimeout(function() { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
             });
 
 
@@ -600,8 +600,8 @@ const NotificacionesEnviadasLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
+                    style: { "margin-right": "0px" }
+                },
                 m("div.container", {
                     style: { "max-width": "none" }
                 }, [
@@ -630,11 +630,11 @@ const NotificacionesEnviadasLab = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", [
-                                m("div.placeholder-paragraph", [
-                                    m("div.line"),
-                                    m("div.line")
-                                ])
-                            ]
+                                    m("div.placeholder-paragraph", [
+                                        m("div.line"),
+                                        m("div.line")
+                                    ])
+                                ]
 
 
                             ),
@@ -655,8 +655,8 @@ const NotificacionesEnviadasLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
+                    style: { "margin-right": "0px" }
+                },
                 m("div.container", {
                     style: { "max-width": "none" }
                 }, [
@@ -695,12 +695,8 @@ const NotificacionesEnviadasLab = {
         ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length !== 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
-                m("div.container", {
-                    style: { "max-width": "none" }
-                }, [
+            m("div.content.content-components",
+                m("div.container", [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -729,48 +725,14 @@ const NotificacionesEnviadasLab = {
 
                 ])
             ),
-            m("div.section-nav", [
-                m("label.nav-label",
-                    "Notificaciones Enviadas"
-                ),
-                m("div.mg-t-10.bg-white", {
 
-                },
-
-                    m("div.mg-t-10.bg-white",
-                        m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
-                            m("h6.lh-5.mg-b-5",
-                                "N° de NotificacionesEnviadasLab:"
-                            ),
-
-                        ]),
-                        m("div.card-body.pd-0", [
-                            m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
-                                m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
-                                    NotificacionesEnviadasLab.NotificacionesEnviadasLab.length
-                                ),
-                                m("div.tx-18", [
-
-                                    m("divv.lh-0.tx-gray-300", 'Pedido(s)')
-                                ])
-
-                            ]),
-
-                        ])
-                    ),
-                    m("div.pd-20",
-                        m(Stopwatch)
-                    )
-                ),
-
-            ])
 
         ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
+                    style: { "margin-right": "0px" }
+                },
                 m("div.container", {
                     style: { "max-width": "none" }
                 }, [
@@ -817,8 +779,8 @@ const NotificacionesEnviadasLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
+                    style: { "margin-right": "0px" }
+                },
                 m("div.container", {
                     style: { "max-width": "none" }
                 }, [

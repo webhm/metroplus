@@ -171,6 +171,7 @@ const Etiquetas = {
     idFiltro: 0,
     loader: false,
     error: "",
+    loaderImprimir: false,
     oninit: (_data) => {
 
         SidebarAdm.page = "";
@@ -293,9 +294,9 @@ const Etiquetas = {
                             }, [
 
                                 (aData.TP_ATENDIMENTO == 'I' ? m("span.badge.badge-pill.badge-primary.wd-100p.mg-b-1",
-                                    'I'
+                                    'Internación'
                                 ) : m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
-                                    'E'
+                                    'Emergencia'
                                 ))
 
 
@@ -304,12 +305,14 @@ const Etiquetas = {
                                 aData.NM_PACIENTE
                             ),
 
-
-
-
                             m("td.tx-center.tx-semibold", {
                                     onclick: () => {
-                                        alert("Es para impirmir")
+                                        if (!Etiquetas.loaderImprimir) {
+                                            Etiquetas.generarImpresion(aData.CD_ATENDIMENTO)
+                                        } else {
+                                            alert("Tienes un proceso de Impresión pendiente.");
+                                        }
+
                                     },
                                     "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
                                 },
@@ -371,13 +374,75 @@ const Etiquetas = {
 
 
     },
-
     reloadData: () => {
         var table = $('#table-etiquetas').DataTable();
         table.clear();
         table.rows.add(Etiquetas.pedidos).draw();
     },
+    generarImpresion: (at) => {
 
+        Etiquetas.loaderImprimir = true;
+
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/as-print-etiquetas",
+                data: {
+                    numAtencion: at
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+
+
+
+                if (result.status) {
+                    Etiquetas.imprimirEtiquetas(result.data, 12)
+                } else {
+                    Etiquetas.loaderImprimir = false;
+                    alert('Proceso no se completo con éxito, puedes reintetar una vez más. Si el inconveniente persiste, comuníquese con nuestra Mesa de Ayuda Ext: 2020.')
+                }
+
+            })
+            .catch(function(e) {
+                Etiquetas.loaderImprimir = false;
+                alert(e);
+            });
+    },
+    imprimirEtiquetas: (_data_, _num_) => {
+
+
+        m.request({
+                method: "POST",
+                url: "https://eti.hospitalmetropolitano.org/imprimir",
+                data: {
+                    file: _data_,
+                    printer: "ETIQUETAS_MPLUS_EME",
+                    pages: _num_,
+                    ancho: 670,
+                    alto: 120
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                extract: function(xhr) { return { status: xhr.status, body: xhr.responseText } }
+
+            })
+            .then(function(response) {
+                if (response.status == 200) {
+                    Etiquetas.loaderImprimir = false;
+                    alert("Proceso realizado con éxito.");
+                } else {
+                    Etiquetas.loaderImprimir = false;
+                    alert(response.body.mensaje);
+                }
+            })
+            .catch(function(e) {
+                Etiquetas.loaderImprimir = false;
+                alert(e);
+            });
+    },
     view: (_data) => {
 
         return Etiquetas.loader ? [

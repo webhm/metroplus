@@ -386,7 +386,7 @@ const Etiquetas = {
         m.request({
                 method: "POST",
                 url: "https://api.hospitalmetropolitano.org/t/v1/as-print-etiquetas",
-                data: {
+                body: {
                     numAtencion: at
                 },
                 headers: {
@@ -394,7 +394,6 @@ const Etiquetas = {
                 },
             })
             .then(function(result) {
-
 
 
                 if (result.status) {
@@ -416,7 +415,7 @@ const Etiquetas = {
         m.request({
                 method: "POST",
                 url: "https://eti.hospitalmetropolitano.org/imprimir",
-                data: {
+                body: {
                     file: _data_,
                     printer: "ETIQUETAS_MPLUS_EME",
                     pages: _num_,
@@ -430,7 +429,7 @@ const Etiquetas = {
 
             })
             .then(function(response) {
-                if (response.status == 200) {
+                if (response.status == 201) {
                     Etiquetas.loaderImprimir = false;
                     alert("Proceso realizado con éxito.");
                 } else {

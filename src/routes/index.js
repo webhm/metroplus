@@ -53,6 +53,7 @@ import PatologiaPedidos from '../views/patologia/pedidos/pedidos'
 import PedidoPatologia from '../views/patologia/pedidos/pedido'
 import Etiquetas from '../views/admisiones/etiquetas/etiquetas'
 import Recetas from '../views/farmacia/recetas/recetas'
+import RecetaFarmacia from '../views/farmacia/recetas/receta'
 
 
 
@@ -278,6 +279,15 @@ const Routes = {
             ];
         },
     }, //Recetas Alta
+    '/farmacia/receta/': {
+        onmatch: (_data) => {
+            if (_data.numeroReceta !== undefined) {
+                return RecetaFarmacia;
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // RecetaFarmacia
     '/admisiones': Admisiones, //Admisiones
     '/admisiones/pre': PreAdmisiones, //PreAdmisiones
     '/admisiones/etiquetas': {

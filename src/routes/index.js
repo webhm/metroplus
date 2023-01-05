@@ -49,6 +49,9 @@ import EndoscopiaPedidos from '../views/endoscopia/pedidos/pedidos'
 import EndoPedido from '../views/endoscopia/pedidos/pedido'
 import PedidoFlebotomista from '../views/laboratorio/flebotomista/pedidoFlebotomista'
 import Patologia from '../views/patologia/patologia'
+import PatologiaSeguimiento from '../views/patologia/seguimientos/seguimientos'
+import PatologiaPreDiagnosticos from '../views/patologia/prediagnosticos/prediagnosticos'
+import PatologiaConfiguracion from '../views/patologia/configuracion/configuracion'
 import PatologiaPedidos from '../views/patologia/pedidos/pedidos'
 import PedidoPatologia from '../views/patologia/pedidos/pedido'
 import Etiquetas from '../views/admisiones/etiquetas/etiquetas'
@@ -711,6 +714,30 @@ const Routes = {
             ];
         },
 
+    },
+    '/patologia/seguimiento': {
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("patologia") }),
+                m(PatologiaSeguimiento),
+            ];
+        },
+    },
+    '/patologia/prediagnosticos': {
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("patologia") }),
+                m(PatologiaPreDiagnosticos),
+            ];
+        },
+    },
+    '/patologia/configuracion': {
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("patologia") }),
+                m(PatologiaConfiguracion),
+            ];
+        },
     },
     '/patologia/pedido/': {
         onmatch: (_data) => {

@@ -598,6 +598,8 @@ const Examenes = {
     }
 }
 
+
+
 const StatusPedido = {
     error: "",
     documento: [],
@@ -629,15 +631,12 @@ const StatusPedido = {
                     StatusPedido.documento = result.data;
                     StatusPedido.data = result.data.dataTomaMuestra.examenesToma;
                     StatusPedido.dataMuestras = result.data.dataRecepcion.examenesRecep;
-
+                    RecepMuestras.impresora = PedidoLISA.data.PedidoExameLab.atendimento.nomeMaquina;
                     Evoluciones.fetch();
-                    ControlLISA.fetch();
                     Observaciones.fetch();
-
                 } else {
                     PedidoLISA.error = result.message;
                 }
-
             })
             .catch(function(e) {
 
@@ -863,8 +862,8 @@ const TomaMuestras = {
         // Set State
 
         if (_t == 0) {
-            alert("El regisro de Toma de (Muestra) e Insumos en necesario.");
-            throw "El regisro de Toma de (Muestra) e Insumos en necesario.";
+            alert("El regisro de Recepción de (Muestra) e Insumos en necesario.");
+            throw "El regisro de Recepción de (Muestra) e Insumos en necesario.";
         }
 
         var _r = 0;
@@ -1818,12 +1817,15 @@ const TomaMuestras = {
 const ControlLISA = {
     showLogs: "",
     dataXML: "",
+    nuevoPedido: false,
     logsEnvio: [],
     examenes: [],
+    jsonObj: null,
+    vaTime: null,
+    xmlRes: null,
 
-    oninit: () => {
-        ControlLISA.examenes = [];
-
+    setNuevoPedido: () => {
+        ControlLISA.nuevoPedido = true;
     },
     agregarExamen: (exa) => {
 
@@ -1857,8 +1859,6 @@ const ControlLISA = {
         var _ni = null;
 
         ControlLISA.examenes.map(function(_val, _i, _contentData) {
-
-
             if (ControlLISA.examenes[_i]['codigoExame'] == exa.CD_EXA_LAB) {
                 existe = true;
                 _ni = _i;
@@ -1867,42 +1867,64 @@ const ControlLISA = {
 
 
         if (existe) {
-
-
             ControlLISA.examenes.splice(_ni, 1);
-            console.log(ControlLISA.examenes)
-
+            console.log(ControlLISA.examenes);
         }
 
 
     },
     generarXML: () => {
 
-        let jsonObj = {
+        ControlLISA.jsonObj = {
             Exame: ControlLISA.examenes,
         };
 
-
-        let vaTime = moment().format('YYYY-MM-DD HH:mm:ss');
-
+        ControlLISA.vaTime = moment().format('YYYY-MM-DD HH:mm:ss');
         PedidoLISA.data.Cabecalho.mensagemID = moment().unix();
-        PedidoLISA.data.Cabecalho.dataHora = vaTime;
-        PedidoLISA.data.PedidoExameLab.listaExame = jsonObj;
+        PedidoLISA.data.Cabecalho.dataHora = ControlLISA.vaTime;
+        PedidoLISA.data.PedidoExameLab.listaExame = ControlLISA.jsonObj;
         PedidoLISA.data.PedidoExameLab.operacao = "I";
 
+        if (RecepMuestras.impresora.length !== 0) {
+            console.log('RecepMuestras', RecepMuestras.impresora)
+            PedidoLISA.data.PedidoExameLab.atendimento.nomeMaquina = RecepMuestras.impresora;
+        }
 
-
-        let xmlRes = JSONtoXML(PedidoLISA.data);
-
+        ControlLISA.xmlRes = JSONtoXML(PedidoLISA.data);
         console.log('documento', PedidoLISA.data)
+        if (ControlLISA.nuevoPedido) {
+            ControlLISA.sendNuevoPedido(ControlLISA.xmlRes, PedidoLISA.numeroPedido, ControlLISA.vaTime);
+        } else {
+            ControlLISA.sendXML(ControlLISA.xmlRes, PedidoLISA.numeroPedido, ControlLISA.vaTime)
+        }
+    },
+    sendNuevoPedido: (xmlRes, sc, itr) => {
 
-        console.log('xmlRes', xmlRes)
+        m.request({
+                method: "POST",
+                url: "https://lisa.hospitalmetropolitano.org/v1/pedidos/send-nuevo-pedido",
+                body: {
+                    data: xmlRes,
+                    sc: sc,
+                    idTimeRecord: itr,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+                setTimeout(function() {
+                    alert('Proceso realizado con éxito.');
+                    window.location.reload();
+                }, 2000);
+                console.log('result', result);
+            })
+            .catch(function(e) {
 
-        ControlLISA.sendXML(xmlRes, PedidoLISA.numeroPedido, vaTime)
-
-
+            });
     },
     sendXML: (xmlRes, sc, itr) => {
+        console.log('xmlRes', xmlRes);
         m.request({
                 method: "POST",
                 url: "https://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido",
@@ -1920,19 +1942,23 @@ const ControlLISA = {
                     alert('Proceso realizado con éxito.');
                     window.location.reload();
                 }, 2000);
-
-
-
-
-                console.log('result', result)
-
-
             })
-            .catch(function(e) {})
-    },
-    fetch: () => {
+            .catch(function(e) {
 
+            });
+    },
+    oninit: () => {
+
+        ControlLISA.examenes = [];
+        ControlLISA.showLogs = "";
+        ControlLISA.dataXML = [];
+        ControlLISA.nuevoPedido = false;
         ControlLISA.logsEnvio = [];
+        ControlLISA.examenes = [];
+        ControlLISA.jsonObj = null;
+        ControlLISA.vaTime = null;
+        ControlLISA.xmlRes = null;
+        RecepMuestras.disabledToma = false;
 
         m.request({
                 method: "GET",
@@ -1944,8 +1970,21 @@ const ControlLISA = {
             })
             .then(function(result) {
 
-                console.log(result)
-                ControlLISA.logsEnvio = result.data;
+                // Validar control logs para registro
+                result.data.map(function(_val, _i, _contentData) {
+
+                    if (_val.PedidoExameLab.listaExame.Exame !== undefined) {
+                        ControlLISA.logsEnvio.push(_val);
+                    }
+
+                });
+
+                console.log(ControlLISA.logsEnvio)
+
+                if (Object.keys(ControlLISA.logsEnvio).length !== 0) {
+                    RecepMuestras.disabledToma = true;
+                }
+
 
             })
             .catch(function(e) {
@@ -1953,6 +1992,102 @@ const ControlLISA = {
             })
 
 
+
+    },
+    view: () => {
+
+        if (ControlLISA.logsEnvio.length !== 0) {
+
+            return ControlLISA.logsEnvio.map(function(_val, _i, _contentData) {
+
+                return [
+                    m("tr", {
+                        oncreate: () => {
+                            if ((_i + 1) === _contentData.length) {
+                                RecepMuestras.impresora = _val.PedidoExameLab.atendimento.nomeMaquina;
+                            }
+                        }
+                    }, [
+                        m("td.tx-16.tx-normal.text-left",
+                            (_val.PedidoExameLab.listaExame.Exame !== undefined && _val.PedidoExameLab.listaExame.Exame.length !== undefined ? [
+                                (_val.PedidoExameLab.codigoPedido > 88000000 ? [
+                                    _val.PedidoExameLab.listaExame.Exame.map(function(_v, _p, _contentData) {
+                                        RecepMuestras.examenNuevoPedido(_v, _val.PedidoExameLab, _val.Cabecalho);
+                                        return [
+                                            m(".d-inline", _v.descExame),
+                                            m("br")
+                                        ]
+                                    })
+                                ] : [
+                                    _val.PedidoExameLab.listaExame.Exame.map(function(_v, _p, _contentData) {
+                                        return [
+                                            m(".d-inline", _v.descExame),
+                                            m("br")
+                                        ]
+                                    })
+                                ])
+
+                            ] : [
+                                (_val.PedidoExameLab.codigoPedido > 88000000 ? [
+                                    RecepMuestras.examenNuevoPedido(_val.PedidoExameLab.listaExame.Exame, _val.PedidoExameLab, _val.Cabecalho),
+                                    m(".d-inline", _val.PedidoExameLab.listaExame.Exame.descExame),
+                                    m("br")
+                                ] : [
+                                    m(".d-inline", _val.PedidoExameLab.listaExame.Exame.descExame),
+                                    m("br")
+                                ]),
+
+
+
+                            ])
+
+
+                        ),
+
+                        m("td.tx-16.tx-normal",
+                            "TIPO: " + _val.PedidoExameLab.operacao,
+                            m("br"),
+                            "SC: " + _val.PedidoExameLab.codigoPedido,
+                            m("br"),
+                            _val.Cabecalho.dataHora,
+
+                        ),
+                        m("td.tx-16.tx-normal", [
+                            (_val.PedidoExameLab.codigoPedido > 88000000 ? [
+                                m("button.btn.btn-xs.btn-block.btn-danger.d-none",
+                                    " Eliminar "
+                                ),
+                                m("button.btn.btn-xs.btn-block.btn-primary.d-none",
+                                    " Ver Resultado "
+                                )
+                            ] : [
+                                m("button.btn.btn-xs.btn-block.btn-primary.d-none",
+                                    " Ver Resultado "
+                                )
+                            ]),
+                        ]),
+
+
+
+                    ]),
+                ]
+
+
+            });
+
+        } else {
+
+            return [
+                m("tr", [
+
+                    m("td.tx-16.tx-medium.text-left",
+                        "No existe envíos."
+                    ),
+
+                ]),
+            ]
+
+        }
 
     }
 
@@ -1962,6 +2097,15 @@ const RecepMuestras = {
     checkedAll: false,
     disabledToma: false,
     disabledInsumos: false,
+    impresora: "",
+    examenNuevoPedido: (examen, pedido, xml) => {
+        return StatusPedido.dataMuestras.map(function(_val, _i, _contentData) {
+            if (examen.codigoExame === _val.CD_EXA_LAB) {
+                StatusPedido.dataMuestras[_i]['NM_EXA_LAB'] = "";
+                StatusPedido.dataMuestras[_i]['NM_EXA_LAB'] = "*" + examen.descExame + " (" + pedido.codigoPedido + ")";
+            }
+        })
+    },
     seleccionarTodos: (status) => {
         RecepMuestras.checkedAll = status;
         var _fechaToma = moment().format('DD-MM-YYYY HH:mm');
@@ -2000,13 +2144,15 @@ const RecepMuestras = {
             throw "El regisro de Toma de (Muestra) e Insumos en necesario.";
         }
 
+
         ControlLISA.generarXML();
-
-
 
 
     },
     udpateStatusTomaMuestra: () => {
+
+
+
         StatusPedido.documento.dataRecepcion.insumosRecep = Insumos;
         m.request({
                 method: "POST",
@@ -2042,7 +2188,7 @@ const RecepMuestras = {
                 m("div.bg-white.bd.d-flex.flex-column.justify-content-end", [
 
                     m("p.mg-5.tx-right", [
-                        m("button.btn.btn-xs.btn-outline-secondary[type='button']", {
+                        m("button.btn.btn-xs.btn-success.mg-r-5[type='button']", {
                                 class: RecepMuestras.disabledToma ? "" : "d-none",
                                 onclick: () => {
                                     RecepMuestras.disabledToma = false;
@@ -2050,6 +2196,31 @@ const RecepMuestras = {
                             },
                             m("i.fas.fa-edit.mg-r-5"),
                             " EDITAR "
+                        ),
+                        m("button.btn.btn-xs.btn-primary.mg-r-5[type='button']", {
+                                class: "d-none",
+                                onclick: () => {
+                                    if (confirm("Esta seguro de generar un nuevo pedido 88.000.000.") == true) {
+                                        RecepMuestras.disabledToma = false;
+                                        ControlLISA.setNuevoPedido();
+                                    }
+
+                                }
+                            },
+                            m("i.fas.fa-file-alt.mg-r-5"),
+                            " NUEVO PEDIDO "
+                        ),
+                        m("button.btn.btn-xs.btn-warning[type='button']", {
+                                onclick: () => {
+                                    if (ControlLISA.showLogs.length == 0) {
+                                        ControlLISA.showLogs = "d-none";
+                                    } else {
+                                        ControlLISA.showLogs = "";
+                                    }
+
+                                }
+                            },
+                            " VER HISTORIAL DE ENVÍO "
                         )
 
                     ]),
@@ -2057,41 +2228,42 @@ const RecepMuestras = {
 
 
 
-                    m(".", {
-                        "style": { "pointer-events": (RecepMuestras.disabledToma ? "none" : "auto") }
-                    }, [
+                    m(".", [
 
                         m('.', {
-                            class: ControlLISA.showLogs
+                            class: ControlLISA.showLogs,
+                            "style": { "pointer-events": (RecepMuestras.disabledToma ? "none" : "auto") }
+
                         }, [
                             m("div.table-responsive.mg-b-10.mg-t-10",
                                 m("table.table.table-dashboard.table-hover.mg-b-0", [
                                     m("thead",
                                         m("tr", [
-                                            m("th.text-dark.text-left",
-                                                "Recepcion de Muestras"
-                                            ),
-                                            m("th[colspan='2'].text-primary.text-right.bg-light", {
-                                                    onclick: () => {
-                                                        if (ControlLISA.showLogs.length == 0) {
-                                                            ControlLISA.showLogs = 'd-none';
-                                                        } else {
-                                                            ControlLISA.showLogs = '';
-                                                        }
+                                            m("th[colspan='2'].text-dark.text-left.tx-semibold", {
+                                                    oncreate: (el) => {
+                                                        el.dom.innerHTML = "Recepcion de Muestras";
                                                     },
-                                                    style: { "cursor": "pointer" }
+                                                    onupdate: (el) => {
+                                                        if (ControlLISA.nuevoPedido) {
+                                                            el.dom.innerHTML = "Nuevo Pedido LISA:";
+                                                        } else {
+                                                            el.dom.innerHTML = "Recepcion de Muestras";
+
+                                                        }
+                                                    }
                                                 },
-                                                "Ver Historial de Envios"
+
                                             ),
+
 
 
                                         ]),
                                         m("tr", [
                                             m("th.text-left",
-                                                "EXAMEN"
+                                                "EXAMEN(ES)"
                                             ),
                                             m("th[colspan='2']",
-                                                "CONFIRMACIÓN"
+                                                "CONFIRMACIÓN Y ENVÍO LISA"
                                             ),
 
                                         ])
@@ -2111,7 +2283,6 @@ const RecepMuestras = {
                                                     )
                                                 ])
                                             ),
-                                            m("td.tx-medium.text-left", { style: { 'background-color': 'rgb(255, 193, 7)' } }, 'ENVIO LISA'),
 
                                         ]),
 
@@ -2135,18 +2306,30 @@ const RecepMuestras = {
 
                                                                     e.preventDefault();
                                                                     var p = this.checked;
-                                                                    StatusPedido.dataMuestras[_i]['customCheked'] = !StatusPedido.dataMuestras[_i]['customCheked'];
                                                                     if (p) {
-                                                                        this.checked = true;
+                                                                        StatusPedido.dataMuestras[_i]['customCheked'] = !StatusPedido.dataMuestras[_i]['customCheked'];
                                                                         StatusPedido.dataMuestras[_i]['STATUS_RECEP'] = "1";
                                                                         StatusPedido.dataMuestras[_i]['FECHA_RECEP'] = moment().format('DD-MM-YYYY HH:mm');
                                                                         ControlLISA.agregarExamen(StatusPedido.dataMuestras[_i])
                                                                     } else {
-                                                                        this.checked = false;;
-                                                                        TomaMuestras.checkedAll = false;
-                                                                        StatusPedido.dataMuestras[_i]['STATUS_RECEP'] = "";
-                                                                        StatusPedido.dataMuestras[_i]['FECHA_RECEP'] = "";
-                                                                        ControlLISA.eliminarExamen(StatusPedido.dataMuestras[_i])
+                                                                        if (StatusPedido.dataMuestras[_i]['NM_EXA_LAB'].includes("(88")) {
+                                                                            alert("No es posible esta acción. Ya existe un pedido generado.");
+                                                                            throw "No es posible esta acción. Ya existe un pedido generado.";
+                                                                        } else {
+                                                                            if (ControlLISA.nuevoPedido) {
+                                                                                alert("No es posible generar un Nuevo Pedido de este exámen.");
+                                                                                throw "No es posible generar un Nuevo Pedido de este exámen.";
+                                                                            } else {
+                                                                                StatusPedido.dataMuestras[_i]['customCheked'] = !StatusPedido.dataMuestras[_i]['customCheked'];
+                                                                                RecepMuestras.checkedAll = false;
+                                                                                StatusPedido.dataMuestras[_i]['STATUS_RECEP'] = "";
+                                                                                StatusPedido.dataMuestras[_i]['FECHA_RECEP'] = "";
+                                                                                ControlLISA.eliminarExamen(StatusPedido.dataMuestras[_i])
+                                                                            }
+
+
+                                                                        }
+
 
 
                                                                     }
@@ -2163,38 +2346,7 @@ const RecepMuestras = {
                                                         ])
                                                     ),
 
-                                                    m('td.tx-12.tx-normal', m("div.custom-control.custom-checkbox.tx-16", [
-                                                        m("input.custom-control-input.tx-16[type='checkbox'][id='r_" + _val.CD_EXA_LAB + "']", {
-                                                            checked: StatusPedido.dataMuestras[_i]['customCheked'],
-                                                            onupdate: function(e) {
-                                                                this.checked = StatusPedido.dataMuestras[_i]['customCheked'];
-                                                            },
-                                                            onclick: function(e) {
 
-                                                                e.preventDefault();
-                                                                var p = this.checked;
-                                                                StatusPedido.dataMuestras[_i]['customCheked'] = !StatusPedido.dataMuestras[_i]['customCheked'];
-                                                                if (p) {
-                                                                    this.checked = true;
-                                                                    StatusPedido.dataMuestras[_i]['STATUS_RECEP'] = "1";
-                                                                    StatusPedido.dataMuestras[_i]['FECHA_RECEP'] = moment().format('DD-MM-YYYY HH:mm');
-                                                                } else {
-                                                                    this.checked = false;
-                                                                    TomaMuestras.checkedAll = false;
-                                                                    StatusPedido.dataMuestras[_i]['STATUS_RECEP'] = "";
-                                                                    StatusPedido.dataMuestras[_i]['FECHA_RECEP'] = "";
-                                                                }
-
-                                                            },
-
-
-
-                                                        }),
-                                                        m("label.custom-control-label.tx-16[for='r_" + _val.CD_EXA_LAB + "']",
-                                                            (StatusPedido.dataMuestras[_i]['STATUS_RECEP'].length !== 0) ? StatusPedido.dataMuestras[_i]['FECHA_RECEP'] : StatusPedido.dataMuestras[_i]['STATUS_RECEP'],
-
-                                                        )
-                                                    ]))
 
 
 
@@ -2209,7 +2361,36 @@ const RecepMuestras = {
 
 
 
-                                    ])
+
+                                    ]),
+                                    m("thead",
+                                        m("tr", [
+
+                                            m("th[colspan='2'].text-primary.text-right.bg-light.tx-semibold", {
+
+                                                },
+                                                "IMPRESIÓN ETIQUETAS:"
+                                            ),
+
+
+                                        ]),
+                                        m("tr", [
+
+                                            m("th.text-right[colspan='2']",
+                                                m("select.custom-select.wd-30p.tx-semibold", {
+                                                    onchange: (e) => {
+                                                        RecepMuestras.impresora = e.target.value;
+                                                    },
+                                                    disabled: (Object.keys(ControlLISA.logsEnvio).length !== 0 && !ControlLISA.nuevoPedido ? "disabled" : ""),
+                                                    value: RecepMuestras.impresora
+                                                }, ['CAJA1', 'CAJA2', 'CAJA3', 'CAJA4', 'CAJA5', 'CAJA6', 'URGENCIAS', 'METROLAB'].map(x =>
+                                                    m('option', x)
+                                                ))
+                                            ),
+
+                                        ])
+                                    ),
+
                                 ])
                             ),
                             m("div.pd-10", [
@@ -2224,10 +2405,9 @@ const RecepMuestras = {
                                             RecepMuestras.disabledToma = true;
                                             RecepMuestras.udpateStatusTomaMuestra();
 
-
                                         }
                                     },
-                                    "Guardar y Enviar"
+                                    (ControlLISA.nuevoPedido ? "Nuevo Pedido LISA" : "Guardar y Enviar")
                                 )
                             ])
                         ]),
@@ -2240,69 +2420,30 @@ const RecepMuestras = {
                                     m("thead",
                                         m("tr", [
                                             m("th[colspan='2'].text-primary.text-left", {
-                                                    onclick: () => {
-                                                        if (ControlLISA.showLogs.length == 0) {
-                                                            ControlLISA.showLogs = 'd-none';
-                                                        } else {
-                                                            ControlLISA.showLogs = '';
-                                                        }
-                                                    },
-                                                    style: { "cursor": "pointer" }
+
                                                 },
-                                                m("i.fas.fa-times-circle.mg-r-5"),
                                                 "Historial de Envios LISA:"
                                             ),
 
 
                                         ]),
                                         m("tr", [
-                                            m("th.text-left",
-                                                "EXAMEN"
+
+                                            m("th",
+                                                "EXAMENES:"
                                             ),
-                                            m("th[colspan='2']",
-                                                "FECHA ENVÍO"
+                                            m("th",
+                                                "FECHA Y HORA:"
+                                            ),
+                                            m("th",
+                                                "OPCIONES:"
                                             ),
 
                                         ])
                                     ),
                                     m("tbody", [
 
-                                        ControlLISA.logsEnvio.map(function(_val, _i, _contentData) {
-
-                                            if (_val.PedidoExameLab.listaExame.Exame.length == undefined) {
-                                                _val.PedidoExameLab.listaExame.Exame = [_val.PedidoExameLab.listaExame.Exame];
-                                            }
-
-                                            return [
-                                                m("tr", [
-
-                                                    m("td.tx-16.text-left",
-                                                        _val.PedidoExameLab.listaExame.Exame.map(function(_v, _p, ) {
-                                                            return [
-                                                                _v.descExame,
-                                                                m('br')
-
-                                                            ]
-                                                        }),
-                                                    ),
-
-                                                    m("td.tx-16.text-left",
-                                                        _val.Cabecalho.dataHora
-                                                    ),
-
-
-
-
-
-
-                                                ]),
-                                            ]
-
-
-
-
-
-                                        }),
+                                        m(ControlLISA)
 
 
 
@@ -2312,6 +2453,8 @@ const RecepMuestras = {
                             ),
 
                         ]),
+
+
 
 
 
@@ -2426,7 +2569,9 @@ const PedidoLISA = {
         ] : [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(21) }),
-            m("div.content.content-components",
+            m("div.content.content-components", {
+                    style: { "margin-right": "0px" }
+                },
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
                 }, [
@@ -2628,7 +2773,7 @@ const PedidoLISA = {
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
                                                         },
-                                                        "Especialidad:"
+                                                        "Prestador:"
                                                     ),
                                                     m("td[colspan='4']", {
                                                             style: { "background-color": "#eaeff5" }
@@ -2711,7 +2856,7 @@ const PedidoLISA = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                        PedidoLISA.data.PedidoExameLab.paciente.sexo
+                                                        (PedidoLISA.data.PedidoExameLab.paciente.sexo == "F" ? "Femenino" : "Masculino")
                                                     ),
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
@@ -2921,7 +3066,5 @@ function JSONtoXML(obj) {
     xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
     return xml;
 }
-
-
 
 export default PedidoLISA;

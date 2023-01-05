@@ -2,8 +2,6 @@ import HeaderPrivate from '../layout/header-private';
 import SidebarLab from '../laboratorio/sidebarLab';
 import App from '../app';
 import m from 'mithril';
-import pedidosIngresados from './pedidosIngresados';
-
 
 
 const FOR005 = {
@@ -560,10 +558,30 @@ const Evoluciones = {
 }
 
 const Examenes = {
+    data: null,
+    fetch: () => {
 
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/itemslab/" + PedidoLISA.numeroPedido,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(res) {
+                Examenes.data = res.examenes;
+            })
+            .catch(function(e) {
+
+            })
+
+    },
+    oninit: () => {
+        Examenes.fetch()
+    },
     view: () => {
 
-        if (PedidoLISA.examenes !== 0) {
+        if (PedidoLISA.examenes !== 0 && Examenes.data !== null) {
 
             if (PedidoLISA.examenes.Exame.length == undefined) {
                 PedidoLISA.examenes.Exame = [PedidoLISA.examenes.Exame];
@@ -572,11 +590,19 @@ const Examenes = {
 
             return PedidoLISA.examenes.Exame.map(function(_val, _i, _contentData) {
 
+
                 if (_val.operacao == 'E') {
 
                     return [
                         m('.tx-14.tx-semibold.tx-danger.d-inline', (_i + 1) + ': ' + _val.descExame + ' - ' + _val.codigoExameFaturamento),
-                        m('br'),
+                        (Examenes.data.length !== 0 && Examenes.data[_i].OBS_EXAMEN !== null ? [
+                            m('br'),
+                            m('.d-inline.tx-danger', 'Observaciones:'),
+                            m('br'),
+                            m('.d-inline', Examenes.data[_i].OBS_EXAMEN),
+                            m('br'),
+                            m('br')
+                        ] : m('br')),
 
                     ]
 
@@ -584,7 +610,13 @@ const Examenes = {
 
                     return [
                         m('.tx-14.tx-semibold.d-inline', (_i + 1) + ': ' + _val.descExame + ' - ' + _val.codigoExameFaturamento),
-                        m('br'),
+                        (Examenes.data.length !== 0 && Examenes.data[_i].OBS_EXAMEN !== null ? [
+                            m('br'),
+                            m('.d-inline.tx-danger', 'Observaciones:'),
+                            m('br'),
+                            m('.d-inline', Examenes.data[_i].OBS_EXAMEN),
+                            m('br'),
+                        ] : m('br')),
 
                     ]
 
@@ -593,6 +625,16 @@ const Examenes = {
 
             })
 
+        } else {
+            return [
+                m("div.pd-10", [
+                    m("div.placeholder-paragraph", [
+                        m("div.line"),
+                        m("div.line")
+                    ])
+                ])
+
+            ]
         }
 
     }
@@ -2054,16 +2096,16 @@ const ControlLISA = {
                         ),
                         m("td.tx-16.tx-normal", [
                             (_val.PedidoExameLab.codigoPedido > 88000000 ? [
-                                m("button.btn.btn-xs.btn-block.btn-danger.d-none",
+                                m("button.btn.btn-xs.btn-block.wd-50p.btn-danger", {
+                                        onclick: () => {
+
+                                        }
+                                    },
                                     " Eliminar "
                                 ),
-                                m("button.btn.btn-xs.btn-block.btn-primary.d-none",
-                                    " Ver Resultado "
-                                )
+
                             ] : [
-                                m("button.btn.btn-xs.btn-block.btn-primary.d-none",
-                                    " Ver Resultado "
-                                )
+
                             ]),
                         ]),
 
@@ -2656,23 +2698,7 @@ const PedidoLISA = {
                                                     title: "Cerrar",
                                                     onclick: () => {
 
-
-                                                        if (pedidosIngresados.idFiltro !== undefined && pedidosIngresados.idFiltro > 1) {
-
-                                                            m.route.set('/laboratorio/lisa/pedidos/ingresados/', {
-                                                                idFiltro: pedidosIngresados.idFiltro,
-                                                                fechaDesde: pedidosIngresados.fechaDesde,
-                                                                fechaHasta: pedidosIngresados.fechaHasta,
-                                                            });
-
-                                                        } else {
-
-                                                            m.route.set('/laboratorio/lisa/pedidos/ingresados/', {
-                                                                idFiltro: 1,
-                                                            });
-
-                                                        }
-
+                                                        window.close();
 
 
 
@@ -2740,7 +2766,7 @@ const PedidoLISA = {
                                                         },
                                                         PedidoLISA.data.PedidoExameLab.dataExame,
                                                         m('br'),
-                                                        PedidoLISA.data.PedidoExameLab.dataExame
+                                                        PedidoLISA.data.PedidoExameLab.dataColetaPedido
 
                                                     ),
                                                     m("th", {

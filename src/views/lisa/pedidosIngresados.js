@@ -294,6 +294,10 @@ const PedidosIngresados = {
     idFiltro: 0,
     loader: false,
     error: "",
+    pCancelados: 0,
+    pIngreados: 0,
+    pPendientes: 0,
+    pProcesados: 0,
     oninit: (_data) => {
 
         SidebarLab.page = "";
@@ -515,20 +519,24 @@ const PedidosIngresados = {
                             )] : [""]),
 
                             m("td.tx-center", {
-                                    onclick: () => {
-                                        m.route.set("/laboratorio/lisa/pedido/", {
-                                            numeroHistoriaClinica: aData.numeroHistoriaClinica,
-                                            numeroAtencion: aData.at_mv,
-                                            numeroPedido: aData.codigoPedido,
-                                            idTimeRecord: aData.idTimeRecord,
-                                            track: "view",
-                                        });
-                                    },
-                                    "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                                },
-                                " Ver Pedido "
+                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                            }, [
 
-                            )
+                                m(m.route.Link, {
+                                    class: "tx-dark pd-2",
+                                    href: "/laboratorio/lisa/pedido/",
+                                    target: "_blank",
+                                    params: {
+                                        numeroHistoriaClinica: aData.numeroHistoriaClinica,
+                                        numeroAtencion: aData.at_mv,
+                                        numeroPedido: aData.codigoPedido,
+                                        idTimeRecord: aData.idTimeRecord,
+                                        track: "view",
+                                    }
+                                }, "Ver Pedido")
+
+
+                            ])
 
 
 
@@ -541,7 +549,29 @@ const PedidosIngresados = {
             drawCallback: function(settings) {
 
                 PedidosIngresados.loader = false;
+                PedidosIngresados.pProcesados = 0;
+                PedidosIngresados.pPendientes = 0;
+                PedidosIngresados.pIngreados = 0;
+                PedidosIngresados.pCancelados = 0;
 
+
+                settings.aoData.map(function(_v, _i) {
+
+                    if (_v._aData.tipoOperacion == 'I') {
+                        PedidosIngresados.pIngreados++;
+                        if (_v._aData.muestrasProcesadas == 0) {
+                            PedidosIngresados.pPendientes++;
+                        }
+                        if (_v._aData.muestrasProcesadas == 1) {
+                            PedidosIngresados.pProcesados++;
+                        }
+                    }
+
+                    if (_v._aData.tipoOperacion == 'E' || _v._aData.tipoOperacion == 'A') {
+                        PedidosIngresados.pCancelados++;
+                    }
+
+                })
 
             },
         });
@@ -752,9 +782,7 @@ const PedidosIngresados = {
                 m("label.nav-label",
                     "Pedidos Ingresados"
                 ),
-                m("div.mg-t-10.bg-white", {
-
-                    },
+                m("div.mg-t-10.bg-white",
 
                     m("div.mg-t-10.bg-white",
                         m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
@@ -766,7 +794,7 @@ const PedidosIngresados = {
                         m("div.card-body.pd-0", [
                             m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
                                 m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
-                                    PedidosIngresados.pedidos.length
+                                    (PedidosIngresados.pIngreados - PedidosIngresados.pCancelados)
                                 ),
                                 m("div.tx-18", [
 
@@ -775,7 +803,65 @@ const PedidosIngresados = {
 
                             ]),
 
-                        ])
+                        ]),
+                        m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                            m("h6.lh-5.mg-b-5",
+                                "Pedidos Cancelados:"
+                            ),
+
+                        ]),
+                        m("div.card-body.pd-0", [
+                            m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                    PedidosIngresados.pCancelados
+                                ),
+                                m("div.tx-18", [
+
+                                    m("divv.lh-0.tx-gray-300", 'Pedido(s)')
+                                ])
+
+                            ]),
+
+                        ]),
+                        m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                            m("h6.lh-5.mg-b-5",
+                                "Pedidos Pendientes:"
+                            ),
+
+                        ]),
+                        m("div.card-body.pd-0", [
+                            m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                    PedidosIngresados.pPendientes
+                                ),
+                                m("div.tx-18", [
+
+                                    m("divv.lh-0.tx-gray-300", 'Pedido(s)')
+                                ])
+
+                            ]),
+
+                        ]),
+
+                        m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                            m("h6.lh-5.mg-b-5",
+                                "Pedidos Procesados:"
+                            ),
+
+                        ]),
+                        m("div.card-body.pd-0", [
+                            m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                    PedidosIngresados.pProcesados
+                                ),
+                                m("div.tx-18", [
+
+                                    m("divv.lh-0.tx-gray-300", 'Pedido(s)')
+                                ])
+
+                            ]),
+
+                        ]),
                     ),
                     m("div.pd-20",
                         m(Stopwatch)

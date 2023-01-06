@@ -54,6 +54,7 @@ import PedidoPatologia from '../views/patologia/pedidos/pedido'
 import Etiquetas from '../views/admisiones/etiquetas/etiquetas'
 import Recetas from '../views/farmacia/recetas/recetas'
 import RecetaFarmacia from '../views/farmacia/recetas/receta'
+import EtiCajas from '../views/laboratorio/etiquetas/etiCajas'
 
 
 
@@ -214,6 +215,19 @@ const Routes = {
             }
         }
     }, //PedidoFlebotomista
+    '/laboratorio/etiquetas': {
+        oninit: (_data) => {
+            App.isAuth('laboratorio', 28);
+            document.title = "Configuración de Etiquetas | " + App.title;
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+                m(EtiCajas),
+            ];
+        },
+
+    },
     '/laboratorio/formularios': LaboratorioFormularios, //LaboratorioPedidos
     '/emergencia': Emergencia, //Emergencia
     '/emergencia/auxiliar/pedidos/laboratorio': EmergenciaAuxiliarPedidosLaboratorio, //EmergenciaAuxiliarPedidosLaboratorio

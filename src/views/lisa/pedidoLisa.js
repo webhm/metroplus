@@ -587,9 +587,7 @@ const Examenes = {
                 PedidoLISA.examenes.Exame = [PedidoLISA.examenes.Exame];
             }
 
-
             return PedidoLISA.examenes.Exame.map(function(_val, _i, _contentData) {
-
 
                 if (_val.operacao == 'E') {
 
@@ -630,7 +628,6 @@ const Examenes = {
                 m("div.pd-10", [
                     m("div.placeholder-paragraph", [
                         m("div.line"),
-                        m("div.line")
                     ])
                 ])
 

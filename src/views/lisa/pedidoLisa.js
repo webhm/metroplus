@@ -589,11 +589,20 @@ const Examenes = {
 
             return PedidoLISA.examenes.Exame.map(function(_val, _i, _contentData) {
 
+                console.log(Examenes.data[_val.codigoExame]);
+
                 if (_val.operacao == 'E') {
 
                     return [
                         m('.tx-14.tx-semibold.tx-danger.d-inline', (_i + 1) + ': ' + _val.descExame + ' - ' + _val.codigoExameFaturamento),
-                        m("br"),
+                        (Examenes.data[_val.codigoExame] !== undefined && Examenes.data[_val.codigoExame].OBS_EXAMEN !== null ? [
+                            m('br'),
+                            m('.d-inline.tx-danger', 'Observaciones:'),
+                            m('br'),
+                            m('.d-inline', Examenes.data[_val.codigoExame].OBS_EXAMEN),
+                            m('br'),
+                        ] : m("br")),
+
 
                     ]
 
@@ -601,7 +610,14 @@ const Examenes = {
 
                     return [
                         m('.tx-14.tx-semibold.d-inline', (_i + 1) + ': ' + _val.descExame + ' - ' + _val.codigoExameFaturamento),
-                        m("br"),
+                        (Examenes.data[_val.codigoExame] !== undefined && Examenes.data[_val.codigoExame].OBS_EXAMEN !== null ? [
+                            m('br'),
+                            m('.d-inline.tx-danger', 'Observaciones:'),
+                            m('br'),
+                            m('.d-inline', Examenes.data[_val.codigoExame].OBS_EXAMEN),
+                            m('br'),
+                        ] : m("br")),
+
 
 
                     ]
@@ -2074,12 +2090,12 @@ const ControlLISA = {
                         m("td.tx-16.tx-normal",
                             "TIPO: " + _val.PedidoExameLab.operacao,
                             m("br"),
-                            "SC: " + _val.PedidoExameLab.codigoPedido,
+                            m(".d-inline.tx-danger.tx-semibold", "SC: " + _val.PedidoExameLab.codigoPedido),
                             m("br"),
                             _val.Cabecalho.dataHora,
 
                         ),
-                        m("td.tx-16.tx-normal", [
+                        m("td.tx-16.tx-normal.d-none", [
                             (_val.PedidoExameLab.codigoPedido > 88000000 ? [
                                 m("button.btn.btn-xs.btn-block.wd-50p.btn-danger.d-none", {
                                         onclick: () => {
@@ -2225,7 +2241,6 @@ const RecepMuestras = {
                             " EDITAR "
                         ),
                         m("button.btn.btn-xs.btn-primary.mg-r-5[type='button']", {
-                                class: "d-none",
                                 onclick: () => {
                                     if (confirm("Esta seguro de generar un nuevo pedido 88.000.000.") == true) {
                                         RecepMuestras.disabledToma = false;
@@ -2462,7 +2477,7 @@ const RecepMuestras = {
                                             m("th",
                                                 "FECHA Y HORA:"
                                             ),
-                                            m("th",
+                                            m("th.d-none",
                                                 "OPCIONES:"
                                             ),
 

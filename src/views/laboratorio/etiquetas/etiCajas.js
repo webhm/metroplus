@@ -129,16 +129,14 @@ const EtiCajas = {
                 },
             },
             cache: false,
-            order: [
-                [0, "Desc"]
-            ],
+
             destroy: true,
             columns: [{
-                    title: "N°:",
+                    title: "Usuario:",
                 },
 
                 {
-                    title: "Paciente:",
+                    title: "Impresión:",
                 },
 
                 {
@@ -148,30 +146,32 @@ const EtiCajas = {
 
             ],
             aoColumnDefs: [{
-                    mRender: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
+                    mRender: function(data, type, full) {
+                        return full.impresion;
                     },
                     visible: true,
                     aTargets: [0],
-                    orderable: true,
+                    orderable: false
+
                 },
                 {
                     mRender: function(data, type, full) {
-                        return full;
+                        return full.usuario;
                     },
                     visible: true,
                     aTargets: [1],
-                    orderable: false,
+                    orderable: false
+
 
                 },
 
                 {
                     mRender: function(data, type, full) {
-                        return "";
+                        return '';
                     },
                     visible: true,
                     aTargets: [2],
-                    orderable: false,
+                    orderable: false
                 },
 
 
@@ -182,32 +182,35 @@ const EtiCajas = {
                 m.mount(nRow, {
                     view: () => {
                         return [
-                            m("td", {}, [
+                            m("td.tx-18.tx-semibold", {
+                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
 
-                                (aData.TP_ATENDIMENTO == 'I' ? m("span.badge.badge-pill.badge-primary.wd-100p.mg-b-1",
-                                    'Internación'
-                                ) : m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
-                                    'Emergencia'
-                                ))
+                            }, [
 
+                                aData.impresion
 
                             ]),
-                            m("td.wd-40p", { "style": {} },
-                                aData
+                            m("td.wd-40p.tx-18.tx-semibold", { "style": {} },
+                                aData.usuario
                             ),
 
-                            m("td.tx-center.tx-semibold", {
+                            m("td.tx-center.tx-18.tx-semibold", {
                                     onclick: () => {
-                                        if (!EtiCajas.loaderImprimir) {
-                                            EtiCajas.generarImpresion(aData.CD_ATENDIMENTO)
-                                        } else {
-                                            alert("Tienes un proceso de Impresión pendiente.");
+                                        let usuario = prompt('¿Nombre de Usuario?');
+
+                                        if (usuario !== null) {
+                                            EtiCajas.changeUser(aData.impresion, usuario);
                                         }
+
+
+
 
                                     },
                                     "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
                                 },
-                                " Imprimir "
+                                m('i.fas.fa-edit.mg-r-5'),
+
+                                " Modificar "
 
                             )
 
@@ -225,6 +228,7 @@ const EtiCajas = {
 
 
             },
+
         });
 
         $('.dataTables_length select').select2({
@@ -263,66 +267,31 @@ const EtiCajas = {
         table.clear();
         table.rows.add(EtiCajas.pedidos).draw();
     },
-    generarImpresion: (at) => {
-
-        EtiCajas.loaderImprimir = true;
+    changeUser: (caja, usuario) => {
 
         m.request({
                 method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/as-print-EtiCajas",
+                url: "https://lisa.hospitalmetropolitano.org/v1/change-user",
                 body: {
-                    numAtencion: at
+                    impresion: caja,
+                    usuario: usuario
                 },
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
-            .then(function(result) {
+            .then(function(res) {
 
+                alert(res.message);
 
-                if (result.status) {
-                    EtiCajas.imprimirEtiCajas(result.data, 12)
-                } else {
-                    EtiCajas.loaderImprimir = false;
-                    alert('Proceso no se completo con éxito, puedes reintetar una vez más. Si el inconveniente persiste, comuníquese con nuestra Mesa de Ayuda Ext: 2020.')
+                if (res.status) {
+                    window.location.reload();
                 }
+
+
 
             })
             .catch(function(e) {
-                EtiCajas.loaderImprimir = false;
-                alert(e);
-            });
-    },
-    imprimirEtiCajas: (_data_, _num_) => {
-
-
-        m.request({
-                method: "POST",
-                url: "https://eti.hospitalmetropolitano.org/imprimir",
-                body: {
-                    file: _data_,
-                    printer: "EtiCajas_MPLUS_EME",
-                    pages: _num_,
-                    ancho: 670,
-                    alto: 120
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-                extract: function(xhr) { return { status: xhr.status, body: xhr.responseText } }
-
-            })
-            .then(function(response) {
-                if (response.status == 201) {
-                    EtiCajas.loaderImprimir = false;
-                    alert("Proceso realizado con éxito.");
-                } else {
-                    EtiCajas.loaderImprimir = false;
-                    alert(response.body.mensaje);
-                }
-            })
-            .catch(function(e) {
-                EtiCajas.loaderImprimir = false;
                 alert(e);
             });
     },

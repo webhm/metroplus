@@ -236,7 +236,7 @@ const tablePedidosIngresados = {
                                         style: { "cursor": "pointer" },
                                         title: "Filtrar"
                                     },
-                                    m("i.fas.fa-filter.tx-18.pd-5")
+                                    m("i.fas.fa-filter.tx-18.pd-5.tx-primary")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",

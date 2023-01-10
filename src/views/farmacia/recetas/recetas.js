@@ -148,6 +148,18 @@ const tableRecetas = {
                                         if (Recetas.idFiltro == 4) {
                                             el.dom.innerHTML = 'Recetas de Hospitalización';
                                         }
+                                        if (Recetas.idFiltro == 5) {
+                                            el.dom.innerHTML = 'Recetas de PB';
+                                        }
+                                        if (Recetas.idFiltro == 6) {
+                                            el.dom.innerHTML = 'Recetas de H1';
+                                        }
+                                        if (Recetas.idFiltro == 7) {
+                                            el.dom.innerHTML = 'Recetas de H2';
+                                        }
+                                        if (Recetas.idFiltro == 8) {
+                                            el.dom.innerHTML = 'Recetas de C2';
+                                        }
                                     },
                                     onupdate: (el) => {
                                         if (Recetas.idFiltro == 1) {
@@ -161,6 +173,18 @@ const tableRecetas = {
                                         }
                                         if (Recetas.idFiltro == 4) {
                                             el.dom.innerHTML = 'Recetas de Hospitalización';
+                                        }
+                                        if (Recetas.idFiltro == 5) {
+                                            el.dom.innerHTML = 'Recetas de PB';
+                                        }
+                                        if (Recetas.idFiltro == 6) {
+                                            el.dom.innerHTML = 'Recetas de H1';
+                                        }
+                                        if (Recetas.idFiltro == 7) {
+                                            el.dom.innerHTML = 'Recetas de H2';
+                                        }
+                                        if (Recetas.idFiltro == 8) {
+                                            el.dom.innerHTML = 'Recetas de C2';
                                         }
 
                                     }
@@ -233,7 +257,7 @@ const tableRecetas = {
                                         style: { "cursor": "pointer" },
                                         title: "Filtrar"
                                     },
-                                    m("i.fas.fa-filter.tx-18.pd-5")
+                                    m("i.fas.fa-filter.tx-18.pd-5.tx-primary"),
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
@@ -250,6 +274,18 @@ const tableRecetas = {
                                     ]),
                                     m(m.route.Link, { class: 'dropdown-item', href: "/farmacia/recetas/?idFiltro=4&fechaDesde=" + Recetas.fechaDesde + "&fechaHasta=" + Recetas.fechaHasta }, [
                                         "Recetas de Hospitalización"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/farmacia/recetas/?idFiltro=5&fechaDesde=" + Recetas.fechaDesde + "&fechaHasta=" + Recetas.fechaHasta }, [
+                                        "Recetas de PB"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/farmacia/recetas/?idFiltro=6&fechaDesde=" + Recetas.fechaDesde + "&fechaHasta=" + Recetas.fechaHasta }, [
+                                        "Recetas de H1"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/farmacia/recetas/?idFiltro=7&fechaDesde=" + Recetas.fechaDesde + "&fechaHasta=" + Recetas.fechaHasta }, [
+                                        "Recetas de H2"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/farmacia/recetas/?idFiltro=8&fechaDesde=" + Recetas.fechaDesde + "&fechaHasta=" + Recetas.fechaHasta }, [
+                                        "Recetas de C2"
                                     ]),
 
 
@@ -424,13 +460,15 @@ const Recetas = {
                                     m(".d-inline.tx-semibold.tx-14", 'NHC: '),
                                     m(".d-inline.tx-14", aData.CD_PACIENTE),
                                     m('br'),
-                                    m(".d-inline.tx-semibold.tx-14", 'N° de Atención: '),
-                                    m(".d-inline.tx-14", aData.CD_ATENDIMENTO),
-                                    m(".d-inline.tx-semibold.tx-14", ' Ubicación: '),
-                                    m(".d-inline.tx-14", aData.UBICACION),
-                                    m('br'),
                                     m(".d-inline.tx-semibold.tx-14", 'PTE: '),
                                     m(".d-inline.tx-14", aData.NM_PACIENTE),
+                                    m('br'),
+                                    m(".d-inline.tx-semibold.tx-14", 'N° ATENCIÓN: '),
+                                    m(".d-inline.tx-14", aData.CD_ATENDIMENTO),
+                                    m(".d-inline.tx-semibold.tx-14", ' UBICACIÓN: '),
+                                    m(".d-inline.tx-14", aData.UBICACION + " - " + aData.DS_UNID_INT),
+
+
                                 ]
 
                             ),

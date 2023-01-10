@@ -535,7 +535,7 @@ const PatologiaPedidos = {
 
         m.request({
                 method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/patologia/pedidos",
+                url: "https://api.hospitalmetropolitano.org/t/v1/patologia/pedidos" + _queryString,
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
@@ -545,7 +545,7 @@ const PatologiaPedidos = {
                 PatologiaPedidos.pedidos = result.data;
             })
             .catch(function(e) {
-                setTimeout(function() { PatologiaPedidos.fetchPatologiaPedidos(); }, 2000);
+                setTimeout(function() { PatologiaPedidos.fetchPedidos(); }, 2000);
             });
 
 

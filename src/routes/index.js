@@ -51,6 +51,8 @@ import PedidoFlebotomista from '../views/laboratorio/flebotomista/pedidoFlebotom
 import Patologia from '../views/patologia/patologia'
 import PatologiaSeguimiento from '../views/patologia/seguimientos/seguimientos'
 import PatologiaPreDiagnosticos from '../views/patologia/prediagnosticos/prediagnosticos'
+import PreDiagnostico from '../views/patologia/prediagnosticos/prediagnostico'
+import CrearPreDiagnostico from '../views/patologia/prediagnosticos/crearprediagnostico'
 import PatologiaConfiguracion from '../views/patologia/configuracion/configuracion'
 import PatologiaPedidos from '../views/patologia/pedidos/pedidos'
 import PedidoPatologia from '../views/patologia/pedidos/pedido'
@@ -731,6 +733,21 @@ const Routes = {
             ];
         },
     },
+    '/patologia/prediagnostico/': {
+        onmatch: (_data) => {
+            if (_data.id !== undefined) {
+                return PreDiagnostico;
+
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    }, // EndoPedido
+    '/patologia/prediagnosticos/nuevo': {
+        view: (_data) => {
+            return [m(CrearPreDiagnostico)];
+        }
+    }, // EndoPedido
     '/patologia/configuracion': {
         view: (_data) => {
             return [

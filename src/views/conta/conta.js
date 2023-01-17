@@ -1,48 +1,48 @@
 import HeaderPrivate from '../layout/header-private';
-import SidebarImagen from './sidebarImagen';
+import SidebarConta from './sidebarConta';
 import App from '../app';
 
-const MenuImagen = {
+const MenuConta = {
     view: () => {
         return [
             m("div.content.content-components",
-                m("div.container.mg-l-0.mg-r-0", {
+                m("div.container", {
                     style: { "max-width": "100%" }
                 }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                "MetroPlus"
+                                "Metroplus"
                             ])
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Imagen"
+                            "Contabilidad"
                         )
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Imagen:"
+                        "Contabilidad:"
                     ),
 
                     m("div.row.tx-14", [
 
-                        (App.isShow('imagen', 24) ? [
+                        (App.isShow('contabilidad', 29) ? [
                             m("li", {
                                 "class": "list-item bg-white wd-100p",
                                 "style": { "cursor": "pointer" },
                                 onclick: () => {
-                                    m.route.set("/imagen/pedidos")
+                                    m.route.set("/contabilidad/procesos")
                                 }
                             }, [
                                 m("div", { "class": "media" }, [
                                     m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                        m("i", { "class": "fas fa-inbox tx-30 tx-white" })
+                                        m("i", { "class": "fas fa-cog tx-30 tx-white" })
                                     ),
                                     m("div", { "class": "media-body mg-l-15" }, [
                                         m("p", { "class": "tx-18 mg-b-0" },
-                                            "Recepción de Pedidos",
+                                            "Gestión de Procesos",
                                         ),
                                         m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                            "Ir a Recepción de Pedidos",
+                                            "Ir a Gestión de Procesos",
                                         )
                                     ])
                                 ]),
@@ -50,30 +50,32 @@ const MenuImagen = {
                             ])
                         ] : []),
 
-                        (App.isShow('imagen', 31) ? [
+                        (App.isShow('contabilidad', 30) ? [
                             m("li", {
                                 "class": "list-item bg-white wd-100p",
                                 "style": { "cursor": "pointer" },
                                 onclick: () => {
-                                    m.route.set("/imagen/agendamiento")
+                                    m.route.set("/contabilidad/tarjeta-roja")
                                 }
                             }, [
                                 m("div", { "class": "media" }, [
                                     m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                        m("i", { "class": "fas fa-calendar tx-30 tx-white" })
+                                        m("i", { "class": "fas fa-file-alt tx-30 tx-white" })
                                     ),
                                     m("div", { "class": "media-body mg-l-15" }, [
                                         m("p", { "class": "tx-18 mg-b-0" },
-                                            "Agendamiento de Imagen",
+                                            "Tarjeta Roja",
                                         ),
                                         m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                            "Ir a Agendamiento de Imagen",
+                                            "Ir a Tarjeta Roja",
                                         )
                                     ])
                                 ]),
 
                             ])
                         ] : []),
+
+
 
                     ]),
 
@@ -84,21 +86,21 @@ const MenuImagen = {
 
 };
 
-const Imagen = {
+const Conta = {
     oninit: () => {
         HeaderPrivate.page = "";
-        SidebarImagen.page = "";
+        SidebarConta.page = "";
         App.isAuth();
 
     },
     oncreate: () => {
-        document.title = "Imagen | " + App.title;
+        document.title = "Contabilidad | " + App.title;
     },
     view: () => {
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("imagen") }),
-            m(SidebarImagen),
-            m(MenuImagen)
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("contabilidad") }),
+            m(SidebarConta),
+            m(MenuConta)
         ];
     },
 
@@ -106,5 +108,4 @@ const Imagen = {
 
 
 
-
-export default Imagen;
+export default Conta;

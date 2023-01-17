@@ -55,6 +55,8 @@ import Etiquetas from '../views/admisiones/etiquetas/etiquetas'
 import Recetas from '../views/farmacia/recetas/recetas'
 import RecetaFarmacia from '../views/farmacia/recetas/receta'
 import EtiCajas from '../views/laboratorio/etiquetas/etiCajas'
+import Conta from '../views/conta/conta'
+import AgendaImagen from '../views/imagen/agenda/agenImagen'
 
 
 
@@ -302,6 +304,7 @@ const Routes = {
             }
         }
     }, // RecetaFarmacia
+    '/contabilidad': Conta, //Conta
     '/admisiones': Admisiones, //Admisiones
     '/admisiones/pre': PreAdmisiones, //PreAdmisiones
     '/admisiones/etiquetas': {
@@ -516,6 +519,22 @@ const Routes = {
         }
     }, // TRPedido
     '/imagen': Imagen, // Imagen
+    '/imagen/agendamiento': {
+        oninit: (_data) => {
+            App.isAuth('imagen', 31);
+            document.title = "Agendamiento de Imagen | " + App.title;
+        },
+        onupdate: (_data) => {
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("imagen") }),
+                m(AgendaImagen),
+            ];
+        },
+    }, // AgendaImagen
+
     '/imagen/pedidos': {
         oninit: (_data) => {
             App.isAuth('laboratorio', 16);

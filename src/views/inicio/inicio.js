@@ -84,6 +84,10 @@ const iMdodule = {
             _data.children[0].icon = "fas fa-microscope";
             _data.children[0].modulo = 'Patología';
             _data.children[0].href = 'patologia';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'contabilidad') {
+            _data.children[0].icon = "fas fa-book";
+            _data.children[0].modulo = 'Contabilidad';
+            _data.children[0].href = 'contabilidad';
         } else {
             _data.children[0].icon = "fas fa-hospital";
             _data.children[0].href = _data.children[0].modulo.charAt(0).toUpperCase();

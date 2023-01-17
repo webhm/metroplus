@@ -27,6 +27,7 @@
         "crypto-js": "^4.1.1",
         "localstorage-slim": "^2.3.0",
         "mithril": "^2.2.2",
+        "pdfobject": "^2.2.8",
         "xml-js": "^1.6.11"
     },
     "devDependencies": {

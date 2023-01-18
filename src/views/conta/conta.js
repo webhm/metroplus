@@ -25,37 +25,14 @@ const MenuConta = {
 
                     m("div.row.tx-14", [
 
-                        (App.isShow('contabilidad', 29) ? [
-                            m("li", {
-                                "class": "list-item bg-white wd-100p",
-                                "style": { "cursor": "pointer" },
-                                onclick: () => {
-                                    m.route.set("/contabilidad/procesos")
-                                }
-                            }, [
-                                m("div", { "class": "media" }, [
-                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                        m("i", { "class": "fas fa-cog tx-30 tx-white" })
-                                    ),
-                                    m("div", { "class": "media-body mg-l-15" }, [
-                                        m("p", { "class": "tx-18 mg-b-0" },
-                                            "Gestión de Procesos",
-                                        ),
-                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                            "Ir a Gestión de Procesos",
-                                        )
-                                    ])
-                                ]),
 
-                            ])
-                        ] : []),
 
                         (App.isShow('contabilidad', 30) ? [
                             m("li", {
                                 "class": "list-item bg-white wd-100p",
                                 "style": { "cursor": "pointer" },
                                 onclick: () => {
-                                    m.route.set("/contabilidad/tarjeta-roja")
+                                    m.route.set("/contabilidad/proceso/tarjeta-roja")
                                 }
                             }, [
                                 m("div", { "class": "media" }, [

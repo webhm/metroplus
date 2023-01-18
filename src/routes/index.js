@@ -57,6 +57,8 @@ import RecetaFarmacia from '../views/farmacia/recetas/receta'
 import EtiCajas from '../views/laboratorio/etiquetas/etiCajas'
 import Conta from '../views/conta/conta'
 import AgendaImagen from '../views/imagen/agenda/agenImagen'
+import TRoja from '../views/conta/procesos/troja'
+import NuevaTRoja from '../views/conta/procesos/nuevaTRoja'
 
 
 
@@ -305,6 +307,8 @@ const Routes = {
         }
     }, // RecetaFarmacia
     '/contabilidad': Conta, //Conta
+    '/contabilidad/proceso/tarjeta-roja': TRoja, //TRoja
+    '/contabilidad/proceso/tarjeta-roja/nueva': NuevaTRoja, // TRPedido
     '/admisiones': Admisiones, //Admisiones
     '/admisiones/pre': PreAdmisiones, //PreAdmisiones
     '/admisiones/etiquetas': {

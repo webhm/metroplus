@@ -75,6 +75,29 @@ const MenuImagen = {
                             ])
                         ] : []),
 
+                        (App.isShow('imagen', 35) ? [m("li", {
+                            "class": "list-item bg-white wd-100p",
+                            "style": { "cursor": "pointer" },
+                            onclick: () => {
+                                m.route.set("/imagen/notificaciones")
+                            }
+                        }, [
+                            m("div", { "class": "media" }, [
+                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                    m("i", { "class": "fas fa-bell tx-30 tx-white" })
+                                ),
+                                m("div", { "class": "media-body mg-l-15" }, [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        "Notificaciones de Imagen",
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir a Notificaciones de Imagen",
+                                    )
+                                ])
+                            ]),
+
+                        ])] : []),
+
                     ]),
 
                 ])

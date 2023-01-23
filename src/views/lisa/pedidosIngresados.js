@@ -128,8 +128,6 @@ const tablePedidosIngresados = {
 
             m("div.col-12", [
 
-
-
                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [

@@ -559,6 +559,7 @@ const Evoluciones = {
 
 const Examenes = {
     data: null,
+    medico: null,
     fetch: () => {
 
         m.request({
@@ -569,7 +570,10 @@ const Examenes = {
                 },
             })
             .then(function(res) {
+
                 Examenes.data = res.examenes;
+                Examenes.medico = res.medico;
+
             })
             .catch(function(e) {
 
@@ -640,8 +644,6 @@ const Examenes = {
 
     }
 }
-
-
 
 const StatusPedido = {
     error: "",
@@ -1933,6 +1935,13 @@ const ControlLISA = {
             PedidoLISA.data.PedidoExameLab.atendimento.nomeMaquina = RecepMuestras.impresora;
         }
 
+        if (Examenes.medico !== null && Examenes.medico !== false) {
+            console.log("aqui para editar, edd");
+
+        }
+
+
+
         ControlLISA.xmlRes = JSONtoXML(PedidoLISA.data);
         console.log('documento', PedidoLISA.data)
         if (ControlLISA.nuevoPedido) {
@@ -2799,13 +2808,14 @@ const PedidoLISA = {
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
                                                         },
-                                                        "Prestador:"
+                                                        "Médico Tratante:"
                                                     ),
                                                     m("td[colspan='4']", {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                        PedidoLISA.data.PedidoExameLab.descPrestadorSolicitante
+                                                        (Examenes.medico !== null && Examenes.medico !== false ? [m("div.d-inline.tx-semibold.tx-danger", Examenes.medico.PRESTADOR)] : PedidoLISA.data.PedidoExameLab.descPrestadorSolicitante)
+
                                                     ),
 
 

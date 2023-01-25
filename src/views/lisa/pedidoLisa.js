@@ -672,7 +672,6 @@ const StatusPedido = {
                     PedidoLISA.loader = false;
                     PedidoLISA.data = result.data.pedido;
                     PedidoLISA.examenes = result.data.pedido.PedidoExameLab.listaExame;
-
                     StatusPedido.documento = result.data;
                     StatusPedido.data = result.data.dataTomaMuestra.examenesToma;
                     StatusPedido.dataMuestras = result.data.dataRecepcion.examenesRecep;
@@ -2953,7 +2952,9 @@ const PedidoLISA = {
                                                         style: { "background-color": "#eaeff5" }
 
                                                     },
-                                                        m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
+                                                        m("ul.nav.nav-tabs[id='myTab'][role='tablist']", {
+                                                            style: { "pointer-events": (Examenes.data !== null ? "auto" : "none") }
+                                                        }, [
                                                             m("li.nav-item",
                                                                 m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
                                                                     style: { "color": "#476ba3" }

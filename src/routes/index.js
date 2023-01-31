@@ -11,7 +11,6 @@ import NotificacionesEnviadasLab from '../views/laboratorio/notificaciones/envia
 import LaboratorioPedidos from '../views/laboratorio/flebotomista/flebotomista'
 import LisaPedidosIngresados from '../views/lisa/pedidosIngresados'
 import LisaPedido from '../views/lisa/pedidoLisa'
-import LaboratorioFlebotomista from '../views/laboratorio/flebotomista/flebotomista'
 import LaboratorioFormularios from '../views/laboratorio/formularios/formularios'
 import MiPerfil from '../views/perfil/perfil';
 import _404 from '../views/404';
@@ -23,7 +22,6 @@ import VerPedidoAuxiliarEmergencia from '../views/emergencia/auxiliar/verPedido'
 import EmergenciaEnfermeriaPedidosLaboratorio from '../views/emergencia/enfermeria/pedidos'
 import VerPedidoEnfermeriaEmergencia from '../views/emergencia/enfermeria/verPedido'
 import Farmacia from '../views/farmacia//farmacia'
-import FarmaciaRecetasAlta from '../views/farmacia//recetas/recetasAlta'
 import Admisiones from '../views/admisiones/admisiones'
 import PreAdmisiones from '../views/admisiones/pacientes/preadmisiones'
 import Mantenimiento from '../views/mantenimiento/mantenimiento'
@@ -59,7 +57,8 @@ import Conta from '../views/conta/conta'
 import AgendaImagen from '../views/imagen/agenda/agenImagen'
 import TRoja from '../views/conta/procesos/troja'
 import NuevaTRoja from '../views/conta/procesos/nuevaTRoja'
-
+import NSSImagen from '../views/imagen/nss/nss'
+import apiMV from '../views/imagen/agenda/apiMV'
 
 
 
@@ -306,6 +305,7 @@ const Routes = {
             }
         }
     }, // RecetaFarmacia
+
     '/contabilidad': Conta, //Conta
     '/contabilidad/proceso/tarjeta-roja': TRoja, //TRoja
     '/contabilidad/proceso/tarjeta-roja/nueva': NuevaTRoja, // TRPedido
@@ -538,7 +538,64 @@ const Routes = {
             ];
         },
     }, // AgendaImagen
+    '/imagen/agenda': apiMV, // AgendaImagen
+    '/imagen/notificaciones': {
+        oninit: (_data) => {
+            App.isAuth('imagen', 35);
+            document.title = "Notificaciones de Imagen | " + App.title;
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/imagen/notificaciones/', { idFiltro: 1 })
+            }
+            NSSImagen.idFiltro = _data.attrs.idFiltro;
+        },
+        onupdate: (_data) => {
 
+            if (_data.attrs.idFiltro !== NSSImagen.idFiltro && NSSImagen.idFiltro !== 1 && NSSImagen.fechaDesde !== undefined) {
+                NSSImagen.idFiltro = _data.attrs.idFiltro;
+                NSSImagen.fechaDesde = _data.attrs.fechaDesde;
+                NSSImagen.fechaHasta = _data.attrs.fechaHasta;
+                NSSImagen.loader = true;
+                NSSImagen.pedidos = [];
+                NSSImagen.fetch();
+            } else {
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    NSSImagen.idFiltro = _data.attrs.idFiltro;
+                    NSSImagen.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    NSSImagen.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (NSSImagen.pedidos.length == 0) {
+                        NSSImagen.loader = true;
+                        NSSImagen.pedidos = [];
+                        NSSImagen.fetch();
+                    } else {
+                        NSSImagen.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("imagen") }),
+                m(NSSImagen),
+            ];
+        },
+    }, // Notificaciones Imagen
     '/imagen/pedidos': {
         oninit: (_data) => {
             App.isAuth('laboratorio', 16);

@@ -107,6 +107,7 @@ const MenuImagen = {
 
 };
 
+
 const Imagen = {
     oninit: () => {
         HeaderPrivate.page = "";
@@ -126,8 +127,6 @@ const Imagen = {
     },
 
 };
-
-
 
 
 export default Imagen;

@@ -25,7 +25,7 @@ const MenuHeader = {
                         if (_v == 'terapia-respiratoria') {
 
                             return [
-                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+                                m("li.nav-item." + ((HeaderCalendar.page === _v) ? "active" : ""),
 
                                     m(m.route.Link, { href: "/terapia-respiratoria/pedidos", class: "nav-link" }, [
                                         m("i[data-feather='layout']"),
@@ -39,7 +39,7 @@ const MenuHeader = {
                         } else if (_v == 'bco-sangre') {
 
                             return [
-                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+                                m("li.nav-item." + ((HeaderCalendar.page === _v) ? "active" : ""),
 
                                     m(m.route.Link, { href: "/bco-sangre/pedidos", class: "nav-link" }, [
                                         m("i[data-feather='layout']"),
@@ -53,7 +53,7 @@ const MenuHeader = {
                         } else if (_v == 'neurofisiologia') {
 
                             return [
-                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+                                m("li.nav-item." + ((HeaderCalendar.page === _v) ? "active" : ""),
 
                                     m(m.route.Link, { href: "/neurofisiologia/pedidos", class: "nav-link" }, [
                                         m("i[data-feather='layout']"),
@@ -66,7 +66,7 @@ const MenuHeader = {
 
                         } else {
                             return [
-                                m("li.nav-item." + ((HeaderPrivate.page === _v) ? "active" : ""),
+                                m("li.nav-item." + ((HeaderCalendar.page === _v) ? "active" : ""),
 
                                     m(m.route.Link, { href: "/" + _v, class: "nav-link" }, [
                                         m("i[data-feather='layout']"),
@@ -98,11 +98,11 @@ const MenuHeader = {
 };
 
 
-const HeaderPrivate = {
+const HeaderCalendar = {
     page: "",
 
     setPage: (page) => {
-        HeaderPrivate.page = page;
+        HeaderCalendar.page = page;
     },
     oncreate: () => {
         loadCustomPage();
@@ -114,7 +114,10 @@ const HeaderPrivate = {
     view: () => {
         return [
             m("header.navbar.navbar-header.navbar-header-fixed", [
-                m("a.burger-menu[href=''][id='sidebarMenuOpen']",
+                m("a.burger-menu.d-none[href=''][id='sidebarMenuOpen']",
+                    m("i[data-feather='arrow-left']")
+                ),
+                m("a.burger-menu.d-lg-none[href=''][id='calendarSidebarShow']",
                     m("i[data-feather='arrow-left']")
                 ),
                 m("div.navbar-brand",
@@ -286,4 +289,4 @@ function loadCustomPage() {
 
 
 
-export default HeaderPrivate;
+export default HeaderCalendar;

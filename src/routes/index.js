@@ -58,7 +58,7 @@ import AgendaImagen from '../views/imagen/agenda/agenImagen'
 import TRoja from '../views/conta/procesos/troja'
 import NuevaTRoja from '../views/conta/procesos/nuevaTRoja'
 import NSSImagen from '../views/imagen/nss/nss'
-import apiMV from '../views/imagen/agenda/apiMV'
+import HeaderCalendar from '../views/layout/header-calendar'
 
 
 
@@ -533,12 +533,11 @@ const Routes = {
         },
         view: (_data) => {
             return [
-                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("imagen") }),
+                m(HeaderCalendar, { oncreate: HeaderCalendar.setPage("imagen") }),
                 m(AgendaImagen),
             ];
         },
     }, // AgendaImagen
-    '/imagen/agenda': apiMV, // AgendaImagen
     '/imagen/notificaciones': {
         oninit: (_data) => {
             App.isAuth('imagen', 35);

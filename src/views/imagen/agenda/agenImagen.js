@@ -318,6 +318,37 @@ const AgendaImagen = {
         dashCalendar.setAttribute('id', 'dashCalendar');
         document.head.appendChild(dashCalendar);
 
+
+        // Initialize scrollbar for sidebar
+        new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
+
+        $('#calendarSidebarShow').on('click', function(e) {
+            e.preventDefault()
+            $('body').toggleClass('calendar-sidebar-show');
+
+            $(this).addClass('d-none');
+            $('#mainMenuOpen').removeClass('d-none');
+        })
+
+        $(document).on('click touchstart', function(e) {
+            e.stopPropagation();
+
+            // closing of sidebar menu when clicking outside of it
+            if (!$(e.target).closest('.burger-menu').length) {
+                var sb = $(e.target).closest('.calendar-sidebar').length;
+                if (!sb) {
+                    $('body').removeClass('calendar-sidebar-show');
+
+                    $('#mainMenuOpen').addClass('d-none');
+                    $('#calendarSidebarShow').removeClass('d-none');
+                }
+            }
+        });
+
+
+
+
+
     },
     onremove: () => {
         document.getElementById('events_calendar').remove();
@@ -719,6 +750,129 @@ const AgendaImagen = {
                 ]
 
             ),
+            m(".modal.calendar-modal-create.fade.effect-scale[id='modalCreateEvent'][role='dialog'][aria-hidden='true']",
+                m(".modal-dialog.modal-dialog-centered[role='document']",
+                    m("div.modal-content", [
+                        m("div.modal-body.pd-20.pd-sm-30", [
+                            m("button.close.pos-absolute.t-20.r-20[type='button'][data-dismiss='modal'][aria-label='Close']",
+                                m("span[aria-hidden='true']",
+                                    m("i[data-feather='x']")
+                                )
+                            ),
+                            m("h5.tx-18.tx-sm-20.mg-b-20.mg-sm-b-30",
+                                "Nueva Cita"
+                            ),
+                            m("form[id='formCalendar'][method='post'][action='app-calendar.html']", [
+                                m("div.form-group",
+                                    m("input.form-control[type='text'][placeholder='Add title']")
+                                ),
+                                m("div.form-group.d-flex.align-items-center", [
+                                    m("div.custom-control.custom-radio", [
+                                        m("input.custom-control-input[type='radio'][id='customRadio1'][name='customRadio'][checked]"),
+                                        m("label.custom-control-label[for='customRadio1']",
+                                            "Evento"
+                                        )
+                                    ]),
+                                    m("div.custom-control.custom-radio.mg-l-20", [
+                                        m("input.custom-control-input[type='radio'][id='customRadio2'][name='customRadio'][checked]"),
+                                        m("label.custom-control-label[for='customRadio2']",
+                                            "Reminder"
+                                        )
+                                    ])
+                                ]),
+                                m("div.form-group.mg-t-30", [
+                                    m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                        "Fecha Inicio"
+                                    ),
+                                    m("div.row.row-xs", [
+                                        m("div.col-7",
+                                            m("input.form-control[id='eventStartDate'][type='text'][value=''][placeholder='Select date']")
+                                        ),
+                                        m("div.col-5",
+                                            m("select.custom-select",
+                                                m("option[selected]",
+                                                    "Select Time"
+                                                )
+                                            )
+                                        )
+                                    ])
+                                ]),
+                                m("div.form-group", [
+                                    m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                        "Fecha Fin"
+                                    ),
+                                    m("div.row.row-xs", [
+                                        m("div.col-7",
+                                            m("input.form-control[id='eventEndDate'][type='text'][value=''][placeholder='Select date']")
+                                        ),
+                                        m("div.col-5",
+                                            m("select.custom-select",
+                                                m("option[selected]",
+                                                    "Select Time"
+                                                )
+                                            )
+                                        )
+                                    ])
+                                ]),
+                                m("div.form-group",
+                                    m("textarea.form-control[rows='2'][placeholder='Write some description (optional)']")
+                                )
+                            ])
+                        ]),
+                        m("div.modal-footer", [
+                            m("button.btn.btn-primary.mg-r-5[type='submit']",
+                                "Add Event"
+                            ),
+                            m("a.btn.btn-secondary[href=''][data-dismiss='modal']",
+                                "Discard"
+                            )
+                        ])
+                    ])
+                )
+            ),
+            m(".modal.calendar-modal-event.fade.effect-scale[id='modalCalendarEvent'][role='dialog'][aria-hidden='true']",
+                m(".modal-dialog.modal-dialog-centered[role='document']",
+                    m("div.modal-content", [
+                        m("div.modal-header", [
+                            m("h6.event-title"),
+                            m("nav.nav.nav-modal-event", [
+                                m("a.nav-link[href='#']",
+                                    m("i[data-feather='external-link']")
+                                ),
+                                m("a.nav-link[href='#']",
+                                    m("i[data-feather='trash-2']")
+                                ),
+                                m("a.nav-link[href='#'][data-dismiss='modal']",
+                                    m("i[data-feather='x']")
+                                )
+                            ])
+                        ]),
+                        m("div.modal-body", [
+                            m("div.row.row-sm", [
+                                m("div.col-sm-6", [
+                                    m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                        "Start Date"
+                                    ),
+                                    m("p.event-start-date")
+                                ]),
+                                m("div.col-sm-6", [
+                                    m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                        "End Date"
+                                    ),
+                                    m("p.event-end-date")
+                                ])
+                            ]),
+                            m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                "Description"
+                            ),
+                            m("p.event-desc.tx-gray-900.mg-b-40"),
+                            m("a.btn.btn-secondary.pd-x-20[href=''][data-dismiss='modal']",
+                                "Close"
+                            )
+                        ])
+                    ])
+                )
+            )
 
         ] : !AgendaImagen.loader && AgendaImagen.AgendaImagen.length == 0 ? [
             m("div.calendar-wrapper", [

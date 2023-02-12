@@ -111,186 +111,11 @@ function Stopwatch() {
 };
 
 
-const tableAgendaImagen = {
-    oncreate: () => {
-        AgendaImagen.loadAgendaImagen();
-        if (AgendaImagen.searchField.length !== 0) {
-            var table = $('#table-agenda').DataTable();
-            table.search(AgendaImagen.searchField).draw();
-        }
-
-    },
-
-    view: () => {
-        return m("div.row.animated.fadeInUp", {}, [
-
-            m("div.col-12", [
-
-
-
-                m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
-
-                    m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
-                        m("h5.mg-b-0",
-                            "AgendaImagen de Imagen:",
-                            m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                    oncreate: (el) => {
-                                        if (AgendaImagen.idFiltro == 1) {
-                                            el.dom.innerHTML = 'AgendaImagen de Hoy';
-                                        }
-                                        if (AgendaImagen.idFiltro == 2) {
-                                            el.dom.innerHTML = 'AgendaImagen entre Fechas';
-                                        }
-                                        if (AgendaImagen.idFiltro == 3) {
-                                            el.dom.innerHTML = 'AgendaImagen de Emergencia';
-                                        }
-                                        if (AgendaImagen.idFiltro == 4) {
-                                            el.dom.innerHTML = 'AgendaImagen de C. Externa';
-                                        }
-                                        if (AgendaImagen.idFiltro == 5) {
-                                            el.dom.innerHTML = 'AgendaImagen de Hospitalización';
-                                        }
-                                    },
-                                    onupdate: (el) => {
-                                        if (AgendaImagen.idFiltro == 1) {
-                                            el.dom.innerHTML = 'AgendaImagen de Hoy';
-                                        }
-                                        if (AgendaImagen.idFiltro == 2) {
-                                            el.dom.innerHTML = 'AgendaImagen entre Fechas';
-                                        }
-                                        if (AgendaImagen.idFiltro == 3) {
-                                            el.dom.innerHTML = 'AgendaImagen de Emergencia';
-                                        }
-                                        if (AgendaImagen.idFiltro == 4) {
-                                            el.dom.innerHTML = 'AgendaImagen de C. Externa';
-                                        }
-                                        if (AgendaImagen.idFiltro == 5) {
-                                            el.dom.innerHTML = 'AgendaImagen de Hospitalización';
-                                        }
-                                    }
-                                }
-
-                            )
-
-                        ),
-                        m("div.d-flex.tx-14", [
-                            m('.', {
-                                class: (AgendaImagen.idFiltro == 1 ? 'd-none' : 'd-flex')
-                            }, [
-                                m("div.link-03", {
-                                        title: "Desde"
-                                    },
-                                    m(".tx-10.pd-r-0", {
-                                        style: { "padding-top": "10px" }
-                                    }, 'Desde:')
-                                ),
-                                m("div.link-03", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Desde"
-                                    },
-
-                                    m("input.tx-light.pd-4[type='date'][id='desde']", {
-                                        oncreate: (el) => {
-                                            el.dom.value = (AgendaImagen.idFiltro !== 1 ? moment(moment(AgendaImagen.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
-                                        },
-                                        onchange: (el) => {
-                                            AgendaImagen.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            AgendaImagen.loader = true;
-                                            AgendaImagen.AgendaImagen = [];
-                                            AgendaImagen.fetchAgendaImagen();
-                                            m.route.set("/imagen/AgendaImagen?idFiltro=" + AgendaImagen.idFiltro + "&fechaDesde=" + AgendaImagen.fechaDesde + "&fechaHasta=" + AgendaImagen.fechaHasta);
-                                        },
-                                        style: {
-                                            "border": "transparent"
-                                        }
-                                    })
-                                ),
-                                m("div.link-03", {
-                                        title: "Hasta"
-                                    },
-                                    m(".tx-10.pd-r-0", {
-                                        style: { "padding-top": "10px" }
-                                    }, 'Hasta:')
-                                ),
-                                m("div.link-03", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Hasta"
-                                    },
-                                    m("input.tx-light.pd-4[type='date'][id='hasta']", {
-                                        oncreate: (el) => {
-                                            el.dom.value = (AgendaImagen.idFiltro !== 1 ? moment(moment(AgendaImagen.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
-                                        },
-                                        onchange: (el) => {
-                                            AgendaImagen.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            AgendaImagen.loader = true;
-                                            AgendaImagen.AgendaImagen = [];
-                                            AgendaImagen.fetchAgendaImagen();
-                                            m.route.set("/imagen/AgendaImagen?idFiltro=" + AgendaImagen.idFiltro + "&fechaDesde=" + AgendaImagen.fechaDesde + "&fechaHasta=" + AgendaImagen.fechaHasta);
-                                        },
-                                        style: {
-                                            "border": "transparent"
-                                        }
-                                    })
-                                )
-                            ]),
-                            m("div.dropdown.dropleft", [
-                                m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Filtrar"
-                                    },
-                                    m("i.fas.fa-filter.tx-18.pd-5")
-                                ),
-                                m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
-                                    m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
-                                        "FILTROS:"
-                                    ),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/AgendaImagen/?idFiltro=1" }, [
-                                        "AgendaImagen de Hoy"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/AgendaImagen/?idFiltro=2&fechaDesde=" + AgendaImagen.fechaDesde + "&fechaHasta=" + AgendaImagen.fechaHasta }, [
-                                        "AgendaImagen entre Fechas"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/AgendaImagen/?idFiltro=3&fechaDesde=" + AgendaImagen.fechaDesde + "&fechaHasta=" + AgendaImagen.fechaHasta }, [
-                                        "AgendaImagen de Emergencia"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/AgendaImagen/?idFiltro=4&fechaDesde=" + AgendaImagen.fechaDesde + "&fechaHasta=" + AgendaImagen.fechaHasta }, [
-                                        "AgendaImagen de C. Externa"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/AgendaImagen/?idFiltro=5&fechaDesde=" + AgendaImagen.fechaDesde + "&fechaHasta=" + AgendaImagen.fechaHasta }, [
-                                        "AgendaImagen de Hospitalización"
-                                    ]),
-
-                                ])
-                            ])
-                        ])
-                    ]),
-                    m("div.col-sm-12.filemgr-content-header", {
-                        class: (AgendaImagen.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
-                    }, [
-                        m("i[data-feather='search']"),
-                        m("div.search-form",
-                            m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
-
-                                oninput: function(e) { AgendaImagen.searchField = e.target.value; },
-                                value: AgendaImagen.searchField,
-                            })
-                        ),
-
-                    ]),
-
-
-                    m("table.table.table-sm.tx-11[id='table-agenda'][width='100%']"),
-
-
-                ])
-            ])
-        ]);
-    }
-};
 
 const AgendaImagen = {
-    notificaciones: [],
-    AgendaImagen: [],
+    cita: [],
+    citasDisponibles: [],
+    citasAgendadas: [],
     showBitacora: "",
     showPedido: "",
     fechaDesde: "",
@@ -300,24 +125,11 @@ const AgendaImagen = {
     loader: false,
     error: "",
     oninit: (_data) => {
-        AgendaImagen.loader = false;
-        AgendaImagen.AgendaImagen = [1, 2, 3];
+        AgendaImagen.loader = true;
+        AgendaImagen.fetchAgendaImagen();
         document.body.classList.add('app-calendar');
     },
-
-    oncreate: (_data) => {
-        Notificaciones.suscribirCanal('MetroPlus-Imagen-Agenda');
-
-        let events_calendar = document.createElement('script');
-        events_calendar.setAttribute('src', 'assets/dashforge/js/calendar-events.js');
-        events_calendar.setAttribute('id', 'events_calendar');
-        document.head.appendChild(events_calendar);
-
-        let dashCalendar = document.createElement('script');
-        dashCalendar.setAttribute('src', 'assets/dashforge/js/dashforge.calendar.js');
-        dashCalendar.setAttribute('id', 'dashCalendar');
-        document.head.appendChild(dashCalendar);
-
+    setSidebar: () => {
 
         // Initialize scrollbar for sidebar
         new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
@@ -345,356 +157,279 @@ const AgendaImagen = {
             }
         });
 
-
+        // Initialize tooltip
+        $('[data-toggle="tooltip"]').tooltip();
 
 
 
     },
-    onremove: () => {
-        document.getElementById('events_calendar').remove();
-        document.getElementById('dashCalendar').remove();
-    },
-
-    loadAgendaImagen: () => {
+    setCalendar: () => {
 
 
+        // Sidebar calendar
+        $('#calendarInline').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            beforeShowDay: function(date) {
 
+                // add leading zero to single digit date
+                var day = date.getDate();
+                console.log(day);
+                return [true, (day < 10 ? 'zero' : '')];
+            }
+        });
 
-        $.fn.dataTable.ext.errMode = "none";
-        var table = $("#table-agenda").DataTable({
-            data: AgendaImagen.AgendaImagen,
-            dom: 'ltp',
-            language: {
-                searchPlaceholder: "Buscar...",
-                sSearch: "",
-                lengthMenu: "Mostrar _MENU_ registros por página",
-                sProcessing: "Procesando...",
-                sZeroRecords: "Todavía no tienes resultados disponibles.",
-                sEmptyTable: "Ningún dato disponible en esta tabla",
-                sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
-                sInfoPostFix: "",
-                sUrl: "",
-                sInfoThousands: ",",
-                sLoadingRecords: "Cargando...",
-                oPaginate: {
-                    sFirst: "Primero",
-                    sLast: "Último",
-                    sNext: "Siguiente",
-                    sPrevious: "Anterior",
-                },
-                oAria: {
-                    sSortAscending: ": Activar para ordenar la columna de manera ascendente",
-                    sSortDescending: ": Activar para ordenar la columna de manera descendente",
-                },
+        // Initialize fullCalendar
+        $('#calendar').fullCalendar({
+            height: 'parent',
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listWeek'
             },
-            cache: false,
-            order: [
-                [0, "Desc"]
-            ],
-            destroy: true,
-            columns: false,
-            aoColumnDefs: [{
-                    mRender: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    },
-                    visible: false,
-                    aTargets: [0],
-                    orderable: true,
+            navLinks: true,
+            selectable: true,
+            selectLongPressDelay: 100,
+            editable: false,
+            nowIndicator: true,
+            defaultView: 'listMonth',
+            minTime: '06:00:00',
+            maxTime: '21:00:00',
+            slotDuration: '00:15:00',
+            slotLabelInterval: 15,
+            slotLabelFormat: 'HH:mma',
+            slotMinutes: 15,
+            timeFormat: 'HH:mma',
+            views: {
+                agenda: {
+                    columnHeaderHtml: function(mom) {
+                        return '<span>' + mom.format('ddd') + '</span>' +
+                            '<span>' + mom.format('DD') + '</span>';
+                    }
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return full.CD_PRE_MED;
-                    },
-                    visible: false,
-                    aTargets: [1],
-                    orderable: false,
-
+                day: { columnHeader: false },
+                listMonth: {
+                    listDayFormat: 'ddd DD',
+                    listDayAltFormat: false
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return full.CD_PACIENTE;
-
-                    },
-                    visible: false,
-                    aTargets: [2],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.NM_PACIENTE;
-
-                    },
-                    visible: false,
-                    aTargets: [3],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.MED_MV;
-
-                    },
-                    visible: false,
-                    aTargets: [4],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return "";
-
-                    },
-                    visible: true,
-                    aTargets: [5],
-                    orderable: false,
-
+                listWeek: {
+                    listDayFormat: 'ddd DD',
+                    listDayAltFormat: false
                 },
-
-
-            ],
-            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-
+                agendaThreeDay: {
+                    type: 'agenda',
+                    duration: { days: 3 },
+                    titleFormat: 'MMMM YYYY'
+                }
             },
-            drawCallback: function(settings) {
 
-                AgendaImagen.loader = false;
+            eventSources: [AgendaImagen.citasDisponibles, AgendaImagen.citasAgendadas],
+            eventAfterAllRender: function(view) {
+                if (view.name === 'listMonth' || view.name === 'listWeek') {
+                    var dates = view.el.find('.fc-list-heading-main');
+                    dates.each(function() {
+                        var text = $(this).text().split(' ');
+                        var now = moment().format('DD');
 
-                settings.aoData.map(function(_i) {
-
-                    $(_i.anCells[5]).css("padding", "0").css("background-color", "#f7fafe");
-
-                    m.mount(_i.anCells[5], {
-                        view: function() {
-
-                            return [
-                                m("div.d-flex", {}, [
-                                    m("div.pd-0.flex-grow-1",
-                                        m("div.pd-2", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            m('i.fas.fa-file-alt.tx-semibold.tx-15.pd-2.mg-r-5'),
-                                            m('.d-inline.tx-15.mg-r-5', _i._aData.CD_PRE_MED),
-                                            m('i.fas.fa-hospital.tx-semibold.tx-12.pd-2'),
-                                            m('.tx-semibold.d-inline.tx-12', " SECTOR: "),
-                                            m('.d-inline.tx-12.mg-r-5', _i._aData.SECTOR + " " + _i._aData.UBICACION),
-                                            m('i.fas.fa-user-md.tx-semibold.tx-12.pd-2'),
-                                            m('.tx-semibold.d-inline.tx-12', " MED: "),
-                                            _i._aData.MED_MV
-                                        ),
-                                    ),
-                                    m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        _i._aData.EDAD + " - " + _i._aData.PESO + " - " + _i._aData.ALTURA
-                                    )
-                                ]),
-                                m("div.d-flex.mg-b-20", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
-                                    m("div.pd-0.flex-grow-1",
-                                        m("td.wd-1p.tx-white", { "style": { "background-color": (_i._aData.SECTOR == 'EMERGENCIA' ? "#f10075" : "#0168fa") } },
-                                            (_i._aData.SECTOR == 'EMERGENCIA' ? "E" : "H")
-                                        ),
-                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "FECHA:"
-                                        ),
-                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
-                                        ),
-                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "NHC:"
-                                        ),
-                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.CD_PACIENTE
-                                        ),
-                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "N° AT.: "
-                                        ),
-                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.AT_MV
-                                        ),
-
-                                        m("td.tx-10.tx-semibold", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                            "PTE: "
-                                        ),
-                                        m("td", { "style": { "background-color": "rgb(234, 239, 245)" } },
-                                            _i._aData.NM_PACIENTE
-                                        ),
-
-
-
-                                    ),
-
-                                    m("div.pd-0.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        m("td.tx-10", {
-                                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" },
-                                                onclick: () => {
-                                                    m.route.set("/imagen/pedido/", {
-                                                        numeroHistoriaClinica: _i._aData.CD_PACIENTE,
-                                                        numeroAtencion: _i._aData.AT_MV,
-                                                        numeroPedido: _i._aData.CD_PRE_MED,
-                                                        track: "view",
-                                                    });
-                                                }
-                                            },
-                                            m(".tx-normal",
-                                                m("i.fas.fa-file-alt.pd-1.mg-r-2"),
-
-                                                "Ver Pedido"
-                                            )
-                                        ),
-                                    )
-                                ]),
-
-
-                            ]
-
-                            /*
-
-                            return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
-                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
-                                    m("div.avatar.tx-center",
-                                        m("i.fas.fa-file-alt.tx-30", {
-                                            title: "Ver Pedido",
-                                            style: { "color": "#325a98", "cursor": "pointer" },
-                                            onclick: () => {
-
-                                                m.route.set("/imagen/pedido/", {
-                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
-                                                    numeroAtencion: _i._aData.AT_MV,
-                                                    numeroPedido: _i._aData.CD_PRE_MED,
-                                                    track: "view",
-                                                });
-
-                                            }
-                                        })
-                                    ),
-                                    m("div.pd-sm-l-10", [
-                                        m("p.tx-medium.tx-13.mg-b-2",
-                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
-                                        ),
-                                        m("p.tx-medium.tx-14.mg-b-2",
-                                            "PTE: " + _i._aData.NM_PACIENTE
-                                        ),
-                                        m("p.tx-medium.mg-b-2",
-                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
-                                        ),
-                                        m("small.tx-12.tx-light.mg-b-0",
-                                            "MEDICO: " + _i._aData.MED_MV
-                                        )
-                                    ]),
-                                    m("div.mg-l-auto.text-right", [
-                                        m("p.tx-medium.mg-b-2",
-                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
-                                        ),
-                                        m("small.tx-12.tx-danger.mg-b-0",
-                                            _i._aData.SECTOR
-                                        ),
-                                        m("p.tx-12.tx-danger.mg-b-0",
-                                            _i._aData.UBICACION
-                                        )
-                                    ])
-                                ])
-
-                            ] : [
-                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
-                                    m("div.avatar.tx-center",
-                                        m("i.fas.fa-file-alt.tx-30", {
-                                            title: "Ver Pedido",
-                                            style: { "color": "#325a98", "cursor": "pointer" },
-                                            onclick: () => {
-
-
-                                                m.route.set("/imagen/pedido/", {
-                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
-                                                    numeroAtencion: _i._aData.AT_MV,
-                                                    numeroPedido: _i._aData.CD_PRE_MED,
-                                                    track: "view",
-                                                });
-                                            }
-                                        })
-                                    ),
-                                    m("div.pd-sm-l-10", [
-                                        m("p.tx-medium.tx-13.mg-b-2",
-                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
-                                        ),
-                                        m("p.tx-medium.tx-14.mg-b-2",
-                                            "PTE: " + _i._aData.NM_PACIENTE
-                                        ),
-                                        m("p.tx-medium.mg-b-2",
-                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
-                                        ),
-                                        m("small.tx-12.tx-light.mg-b-0",
-                                            "MEDICO: " + _i._aData.MED_MV
-                                        )
-                                    ]),
-                                    m("div.mg-l-auto.text-right", [
-                                        m("p.tx-medium.mg-b-2",
-                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
-                                        ),
-                                        m("small.tx-12.tx-primary.mg-b-0",
-                                            _i._aData.SECTOR
-                                        ),
-                                        m("p.tx-12.tx-primary.mg-b-0",
-                                            _i._aData.UBICACION
-                                        )
-                                    ])
-                                ])
-                            ])
-
-                            */
-
-
-                        }
+                        $(this).html(text[0] + '<span>' + text[1] + '</span>');
+                        if (now === text[1]) { $(this).addClass('now'); }
                     });
+                }
 
-                })
+                console.log(view.el);
+            },
+            eventRender: function(event, element) {
 
+                if (event.description) {
+                    element.find('.fc-list-item-title').append('<span class="fc-desc">' + event.description + '</span>');
+                    element.find('.fc-content').append('<span class="fc-desc">' + event.description + '</span>');
+                }
 
+                var eBorderColor = (event.source.borderColor) ? event.source.borderColor : event.borderColor;
+                element.find('.fc-list-item-time').css({
+                    color: eBorderColor,
+                    borderColor: eBorderColor
+                });
 
+                element.find('.fc-list-item-title').css({
+                    borderColor: eBorderColor
+                });
 
+                element.css('borderLeftColor', eBorderColor);
             },
         });
 
-        $('.dataTables_length select').select2({
-            minimumResultsForSearch: Infinity
+        var calendar = $('#calendar').fullCalendar('getCalendar');
+
+        // change view to week when in tablet
+        if (window.matchMedia('(min-width: 576px)').matches) {
+            calendar.changeView('agendaWeek');
+        }
+
+        // change view to month when in desktop
+        if (window.matchMedia('(min-width: 992px)').matches) {
+            calendar.changeView('month');
+        }
+
+        // change view based in viewport width when resize is detected
+        calendar.option('windowResize', function(view) {
+            if (view.name === 'listWeek') {
+                if (window.matchMedia('(min-width: 992px)').matches) {
+                    calendar.changeView('month');
+                } else {
+                    calendar.changeView('listWeek');
+                }
+            }
         });
 
-        $('#searchField').keyup(function(e) {
+        // Display calendar event modal
+        calendar.on('eventClick', function(calEvent, jsEvent, view) {
 
-            table.search($('#searchField').val()).draw();
+
+            if (calEvent.stAgendar == 1) {
+
+                var modal = $('#modalCalendarEvent');
+
+                modal.modal('show');
+                modal.find('.event-title').text(calEvent.title);
+
+                if (calEvent.description) {
+                    modal.find('.event-desc').text(calEvent.description);
+                    modal.find('.event-desc').prev().removeClass('d-none');
+                } else {
+                    modal.find('.event-desc').text('');
+                    modal.find('.event-desc').prev().addClass('d-none');
+                }
+
+                modal.find('.event-start-date').text(moment(calEvent.start).format('LLL'));
+                modal.find('.event-end-date').text(moment(calEvent.end).format('LLL'));
+
+                //styling
+                modal.find('.modal-header').css('backgroundColor', (calEvent.source.borderColor) ? calEvent.source.borderColor : calEvent.borderColor);
+
+            } else {
+
+                AgendaImagen.cita = calEvent;
+
+                console.log('cita', AgendaImagen.cita)
+
+
+                $('#modalCreateEvent').modal('show');
+                $('#eventStartDate').val(moment(calEvent.start).format('LLL'));
+                $('#eventEndDate').val(moment(calEvent.end).format('LLL'));
+
+                $('#eventStartTime').val(moment(calEvent.start).format('LT')).trigger('change');
+                $('#eventEndTime').val(moment(calEvent.end).format('LT')).trigger('change');
+
+
+            }
+
+
         });
 
-        return table;
+        // display current date
+        var dateNow = calendar.getDate();
+        calendar.option('select', function(startDate, endDate) {
+
+            alert("Seleccione una cita disponible.");
+
+            throw "Seleccione una cita disponible."
+                /*
+
+                $('#modalCreateEvent').modal('show');
+                $('#eventStartDate').val(startDate.format('LL'));
+                $('#eventEndDate').val(endDate.format('LL'));
+
+                $('#eventStartTime').val(startDate.format('LT')).trigger('change');
+                $('#eventEndTime').val(endDate.format('LT')).trigger('change');
+                */
+        });
+
+        $('.select2-modal').select2({
+            minimumResultsForSearch: Infinity,
+            dropdownCssClass: 'select2-dropdown-modal',
+        });
+
+        $('.calendar-add').on('click', function(e) {
+            e.preventDefault()
+
+            $('#modalCreateEvent').modal('show');
+        });
+
+
+
+    },
+    oncreate: (_data) => {
+        Notificaciones.suscribirCanal('MetroPlus-Imagen-Agenda');
     },
     fetchAgendaImagen: () => {
 
-        let _queryString = '';
-
-        if (AgendaImagen.idFiltro == 1) {
-            _queryString = '?idFiltro=' + AgendaImagen.idFiltro;
-        } else {
-            _queryString = '?idFiltro=' + AgendaImagen.idFiltro + '&fechaDesde=' + AgendaImagen.fechaDesde + '&fechaHasta=' + AgendaImagen.fechaHasta;
-        }
-
         m.request({
                 method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/imagen/AgendaImagen" + _queryString,
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
                 AgendaImagen.loader = false;
-                AgendaImagen.AgendaImagen = result.data;
+                AgendaImagen.citasDisponibles = result.citasDisponibles;
+                AgendaImagen.citasAgendadas = result.citasAgendadas;
+                setTimeout(function() { AgendaImagen.setCalendar(); }, 10);
+                setTimeout(function() { AgendaImagen.setSidebar(); }, 20);
+
             })
             .catch(function(e) {
                 setTimeout(function() { AgendaImagen.fetchAgendaImagen(); }, 2000);
             });
 
+    },
+    agendarCita: () => {
+
+        m.request({
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
+                body: {
+                    availableServiceId: 0,
+                    covenantId: 2,
+                    covenantPlanId: 2,
+                    dateBirth: "1962-03-23",
+                    email: "mariobe7@hotmail.com",
+                    id: AgendaImagen.cita.id,
+                    isFitting: true,
+                    markingTypeId: 0,
+                    patientId: 22706,
+                    patientName: "BERMEO CABEZAS MARIO GERMAN",
+                    phoneNumber: "0999721820",
+                    scheduleFormType: "PERSONALLY",
+                    schedulingItemId: 428,
+                    sexType: "MALE",
+                    specialityId: 66,
+                    statusScheduleType: "M"
+
+
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
+
+                console.log(result);
+
+                if (result) {
+                    alert('Cita agendada con éxito.');
+                    window.location.reload();
+                } else {
+                    alert(resul);
+                }
+
+            })
+            .catch(function(e) {});
 
     },
-    reloadData: () => {
-        var table = $('#table-agenda').DataTable();
-        table.clear();
-        table.rows.add(AgendaImagen.AgendaImagen).draw();
-    },
-
     view: (_data) => {
+
 
         return AgendaImagen.loader ? [
             m("div.calendar-wrapper", [
@@ -703,7 +438,7 @@ const AgendaImagen = {
                         m("div.calendar-sidebar-body")
                     ]),
                     m("div.calendar-content", [
-                        m("div.calendar-content-body[id='calendar']")
+                        m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
                     ]),
 
                 ]
@@ -722,8 +457,7 @@ const AgendaImagen = {
                 ]
 
             ),
-
-        ] : !AgendaImagen.loader && AgendaImagen.AgendaImagen.length !== 0 ? [
+        ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length !== 0 && AgendaImagen.citasAgendadas.length !== 0) ? [
             m("div.calendar-wrapper", [
                     m("div.calendar-sidebar", [
                         m("div.calendar-sidebar-header", [
@@ -762,11 +496,15 @@ const AgendaImagen = {
                             m("h5.tx-18.tx-sm-20.mg-b-20.mg-sm-b-30",
                                 "Nueva Cita"
                             ),
-                            m("form[id='formCalendar'][method='post'][action='app-calendar.html']", [
-                                m("div.form-group",
-                                    m("input.form-control[type='text'][placeholder='Add title']")
+                            m("div", [
+                                m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                    "Historia Clínica Paciente:"
                                 ),
-                                m("div.form-group.d-flex.align-items-center", [
+                                m("div.form-group",
+                                    m("input.form-control[type='text'][placeholder='Historia Clínica']")
+                                ),
+
+                                m("div.d-none", [
                                     m("div.custom-control.custom-radio", [
                                         m("input.custom-control-input[type='radio'][id='customRadio1'][name='customRadio'][checked]"),
                                         m("label.custom-control-label[for='customRadio1']",
@@ -782,13 +520,13 @@ const AgendaImagen = {
                                 ]),
                                 m("div.form-group.mg-t-30", [
                                     m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                        "Fecha Inicio"
+                                        "Fecha y Hora de Inicio:"
                                     ),
                                     m("div.row.row-xs", [
                                         m("div.col-7",
-                                            m("input.form-control[id='eventStartDate'][type='text'][value=''][placeholder='Select date']")
+                                            m("input.form-control[id='eventStartDate'][type='text'][value=''][placeholder='Select date'][disabled='disabled']")
                                         ),
-                                        m("div.col-5",
+                                        m("div.col-5.d-none",
                                             m("select.custom-select",
                                                 m("option[selected]",
                                                     "Select Time"
@@ -799,13 +537,13 @@ const AgendaImagen = {
                                 ]),
                                 m("div.form-group", [
                                     m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                        "Fecha Fin"
+                                        "Fecha y Hora de Fin"
                                     ),
                                     m("div.row.row-xs", [
                                         m("div.col-7",
-                                            m("input.form-control[id='eventEndDate'][type='text'][value=''][placeholder='Select date']")
+                                            m("input.form-control[id='eventEndDate'][type='text'][value=''][placeholder='Select date'][disabled='disabled']")
                                         ),
-                                        m("div.col-5",
+                                        m("div.col-5.d-none",
                                             m("select.custom-select",
                                                 m("option[selected]",
                                                     "Select Time"
@@ -815,16 +553,20 @@ const AgendaImagen = {
                                     ])
                                 ]),
                                 m("div.form-group",
-                                    m("textarea.form-control[rows='2'][placeholder='Write some description (optional)']")
+                                    m("textarea.form-control[rows='2'][placeholder='Comentarios']")
                                 )
                             ])
                         ]),
                         m("div.modal-footer", [
-                            m("button.btn.btn-primary.mg-r-5[type='submit']",
-                                "Add Event"
+                            m("button.btn.btn-primary.mg-r-5", {
+                                    onclick: () => {
+                                        AgendaImagen.agendarCita();
+                                    }
+                                },
+                                "Agendar Cita"
                             ),
                             m("a.btn.btn-secondary[href=''][data-dismiss='modal']",
-                                "Discard"
+                                "Cerrar"
                             )
                         ])
                     ])
@@ -874,7 +616,7 @@ const AgendaImagen = {
                 )
             )
 
-        ] : !AgendaImagen.loader && AgendaImagen.AgendaImagen.length == 0 ? [
+        ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length == 0 && AgendaImagen.citasAgendadas.length == 0) ? [
             m("div.calendar-wrapper", [
                     m("div.calendar-sidebar", [
                         m("div.calendar-sidebar-header"),

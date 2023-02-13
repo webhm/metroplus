@@ -16,7 +16,7 @@ const FOR005 = {
         let page = 0;
 
         if (Formulario.num == 0) {
-            setTimeout(function () {
+            setTimeout(function() {
                 Formulario.num = Formulario.data.length;
                 Formulario.parseFetch();
                 m.redraw.sync();
@@ -38,7 +38,7 @@ const FOR005 = {
             ),
         ] : [
 
-            FOR005.secs.map(function (_v, _i, _contentData) {
+            FOR005.secs.map(function(_v, _i, _contentData) {
 
                 if (_v.name == 'prescripciones_texto') {
 
@@ -94,9 +94,9 @@ const FOR005 = {
                                     ),
                                     m("th.tx-right[colspan='2'][scope='col']",
                                         m("a.tx-right.tx-semibold", {
-                                            href: urlFor,
-                                            target: "_blank"
-                                        },
+                                                href: urlFor,
+                                                target: "_blank"
+                                            },
                                             m('i.fas.fa-print.mg-r-2'),
                                             " Imprirmir  "
 
@@ -248,10 +248,10 @@ const FOR005 = {
                                     ),
                                     m("th[colspan='1'][scope='row']", { "style": { "padding": "0", "background-color": "#eef9c8" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                            "FIRMAR AL PIE DE",
-                                            m("br"),
-                                            "CADA PRESCRIPCIÓN"
-                                        ]
+                                                "FIRMAR AL PIE DE",
+                                                m("br"),
+                                                "CADA PRESCRIPCIÓN"
+                                            ]
 
                                         )
                                     ),
@@ -277,21 +277,21 @@ const FOR005 = {
                                     ),
                                     m("th[colspan='4'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                            "FARMACOTERAPIA E INDICACIONES",
-                                            m("br"),
-                                            "(PARA ENFERMERÍA Y OTRO PERSONAL)"
+                                                "FARMACOTERAPIA E INDICACIONES",
+                                                m("br"),
+                                                "(PARA ENFERMERÍA Y OTRO PERSONAL)"
 
-                                        ]
+                                            ]
 
                                         )
                                     ),
                                     m("th[colspan='2'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                            "ADMINISTR.",
-                                            m("br"),
-                                            "FÁRMACOS INSUMOS"
+                                                "ADMINISTR.",
+                                                m("br"),
+                                                "FÁRMACOS INSUMOS"
 
-                                        ]
+                                            ]
 
                                         )
                                     ),
@@ -340,11 +340,11 @@ const Formulario = {
     error: "",
     parseDoc: (_data) => {
 
-        Object.keys(_data.data).map(function (_v, _i, _contentData) {
+        Object.keys(_data.data).map(function(_v, _i, _contentData) {
             FOR005.secs.push(_data.data[_v])
         })
 
-        return FOR005.secs.map(function (_v, _i, _contentData) {
+        return FOR005.secs.map(function(_v, _i, _contentData) {
 
 
 
@@ -437,7 +437,7 @@ const Formulario = {
     parseFetch: () => {
         FOR005.secs = [];
 
-        return Formulario.data.map(function (_v, _i, _contentData) {
+        return Formulario.data.map(function(_v, _i, _contentData) {
             Formulario.parseDoc(Formulario.data[_i])
 
         })
@@ -449,14 +449,14 @@ const Formulario = {
         Formulario.data = [];
         Formulario.error = "";
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
 
-            headers: {
-                "Authorization": localStorage.accessToken,
-            },
-        })
-            .then(function (result) {
+                headers: {
+                    "Authorization": localStorage.accessToken,
+                },
+            })
+            .then(function(result) {
                 if (result.length !== 0) {
                     Formulario.data = result;
                     Formulario.num = 0;
@@ -466,8 +466,8 @@ const Formulario = {
                 }
 
             })
-            .catch(function (e) {
-                setTimeout(function () { Formulario.fetch(); }, 5000);
+            .catch(function(e) {
+                setTimeout(function() { Formulario.fetch(); }, 5000);
 
             })
     },
@@ -515,16 +515,16 @@ const Evoluciones = {
         Evoluciones.data = [];
         Evoluciones.error = "";
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
-            body: {
-                numeroHistoriaClinica: NuevaTRoja.data.CD_PACIENTE + '01'
-            },
-            headers: {
-                "Authorization": localStorage.accessToken,
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
+                body: {
+                    numeroHistoriaClinica: NuevaTRoja.data.CD_PACIENTE + '01'
+                },
+                headers: {
+                    "Authorization": localStorage.accessToken,
+                },
+            })
+            .then(function(result) {
 
 
 
@@ -538,8 +538,8 @@ const Evoluciones = {
                 }
 
             })
-            .catch(function (e) {
-                setTimeout(function () { Evoluciones.fetch(); }, 5000);
+            .catch(function(e) {
+                setTimeout(function() { Evoluciones.fetch(); }, 5000);
 
             })
     },
@@ -573,7 +573,7 @@ const Examenes = {
     view: () => {
 
         if (NuevaTRoja.examenes.length !== 0) {
-            return NuevaTRoja.examenes.map(function (_val, _i, _contentData) {
+            return NuevaTRoja.examenes.map(function(_val, _i, _contentData) {
                 return [
                     m('.tx-14.tx-semibold.d-inline', _val.EXAMEN),
                     (_val.OBS_EXAMEN !== null ? [
@@ -594,59 +594,36 @@ const Examenes = {
 
 const NuevaTRoja = {
     data: [],
+    activos: [],
     examenes: [],
     error: '',
     numeroNuevaTRoja: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
-    oninit: (_data) => {
-
-        if (_data.attrs.numeroNuevaTRoja !== undefined) {
-            document.title = "Detalle de NuevaTRojas N°: " + _data.attrs.numeroNuevaTRoja + " | " + App.title;
-
-            if (NuevaTRoja.data !== undefined && NuevaTRoja.data.length == 0) {
-                NuevaTRoja.numeroNuevaTRoja = _data.attrs.numeroNuevaTRoja;
-                NuevaTRoja.numeroAtencion = _data.attrs.numeroAtencion;
-                NuevaTRoja.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
-                NuevaTRoja.fetch();
-            } else {
-                if (NuevaTRoja.numeroNuevaTRoja !== _data.attrs.numeroNuevaTRoja) {
-                    NuevaTRoja.numeroNuevaTRoja = _data.attrs.numeroNuevaTRoja;
-                    NuevaTRoja.numeroAtencion = _data.attrs.numeroAtencion;
-                    NuevaTRoja.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
-                    NuevaTRoja.fetch();
-
-                }
-
-            }
-        }
+    oninit: () => {
+        NuevaTRoja.fetch();
     },
     fetch: () => {
-        NuevaTRoja.data = [];
+        NuevaTRoja.activos = [];
         NuevaTRoja.loader = true;
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/status-NuevaTRoja-imagen",
-            body: {
-                numeroNuevaTRoja: NuevaTRoja.numeroNuevaTRoja,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
                     NuevaTRoja.loader = false;
-                    NuevaTRoja.data = result.data;
-                    NuevaTRoja.examenes = result.examenes;
-                    Evoluciones.fetch();
+                    NuevaTRoja.activos = result.data;
                 } else {
                     NuevaTRoja.error = result.message;
                 }
 
             })
-            .catch(function (e) {
-
+            .catch(function(e) {
+                NuevaTRoja.fetch();
             })
 
     },
@@ -692,370 +669,392 @@ const NuevaTRoja = {
 
                         m("div.col-12", [
 
-                            m("div.table-loader.wd-100p", {
-                                oncreate: (el) => {
-                                    if (NuevaTRoja.loader) {
-                                        el.dom.hidden = false;
-                                    } else {
-                                        el.dom.hidden = true;
-
-                                    }
-                                },
-                                onupdate: (el) => {
-                                    if (NuevaTRoja.loader) {
-                                        el.dom.hidden = false;
-                                    } else {
-                                        el.dom.hidden = true;
-
-                                    }
-                                }
-
-                            }, [
-                                m("div.placeholder-paragraph", [
-                                    m("div.line"),
-                                    m("div.line")
-                                ])
-                            ]
 
 
-                            ),
-
-                            m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", {
-                                oncreate: (el) => {
-                                    if (NuevaTRoja.loader) {
-                                        el.dom.hidden = true;
-                                    } else {
-                                        el.dom.hidden = false;
-
-                                    }
-                                },
-                                onupdate: (el) => {
-                                    if (NuevaTRoja.loader) {
-                                        el.dom.hidden = true;
-                                    } else {
-                                        el.dom.hidden = false;
-
-                                    }
-                                }
-                            }, [
-
-                                m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+                            (NuevaTRoja.activos.length !== 0 ? [
+                                m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", {
 
 
-                                    m("span.pd-6.wd-100p.wd-md-20p", {
-                                        class: "badge badge-danger mg-b-2 mg-r-2",
-                                    }, [
-                                        m("i.fas.fa-file-alt.mg-r-5"),
-                                    ], "FOR TARJETA ROJA"),
+                                }, [
+                                    m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
 
 
-                                    m('div.table-responsive', [
-                                        m("table.table.table-bordered.table-sm.tx-12", [
-                                            m("thead",
-
-                                                m("tr.bg-litecoin.op-9.tx-white", [
-                                                    m("th[scope='col'][colspan='10']",
-                                                        "DATOS SOLICITUD:"
-                                                    ),
-
-                                                ])
-                                            ),
-                                            m("tbody", [
-                                                m("tr", [
-
-                                                    m("th.tx-semibold.tx-14[colspan='4']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Fecha de Solicitud:"
-                                                    ),
-                                                    m("td[colspan='6']", {
-                                                        style: { "background-color": "#eaeff5" }
-                                                    },
-
-                                                        m("input", { value: moment().format("DD-MM-Y"), "class": "form-control", "type": "text", "placeholder": "Input box" })
+                                        m("span.pd-6.wd-100p.wd-md-20p", {
+                                            class: "badge badge-danger mg-b-2 mg-r-2",
+                                        }, [
+                                            m("i.fas.fa-file-alt.mg-r-5"),
+                                        ], "FOR TARJETA ROJA"),
 
 
-                                                    ),
+                                        m('div.table-responsive', [
+                                            m("table.table.table-bordered.table-sm.tx-12", [
+                                                m("thead",
 
-                                                ]),
-                                                m("tr", [
+                                                    m("tr.bg-litecoin.op-9.tx-white", [
+                                                        m("th[scope='col'][colspan='10']",
+                                                            "DATOS SOLICITUD:"
+                                                        ),
 
-                                                    m("th.tx-semibold.tx-14[colspan='4']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Área de Origen:"
-                                                    ),
-                                                    m("td[colspan='6']", {
-                                                        style: { "background-color": "#eaeff5" }
-                                                    },
-                                                        m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
-                                                    ),
+                                                    ])
+                                                ),
+                                                m("tbody", [
+                                                    m("tr", [
 
-                                                ]),
+                                                        m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Fecha de Solicitud:"
+                                                        ),
+                                                        m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
 
-                                                m("tr", [
-
-                                                    m("th.tx-semibold.tx-14[colspan='4']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Categoría:"
-                                                    ),
-                                                    m("td[colspan='6']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    },
-                                                        m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
-
-                                                    )
+                                                            m("input", { value: moment().format("DD-MM-Y"), "class": "form-control", "type": "text", "placeholder": "Input box" })
 
 
-                                                ]),
+                                                        ),
 
-
-                                            ]),
-                                            m("thead",
-
-                                                m("tr.bg-litecoin.op-9.tx-white", [
-                                                    m("th[scope='col'][colspan='10']",
-                                                        "DATOS DEL EQUIPO:"
-                                                    ),
-
-                                                ])
-                                            ),
-                                            m("tbody", [
-                                                m("tr", [
-                                                    m("th.tx-semibold.tx-14[colspan='2']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Nombre:"
-                                                    ),
-                                                    m("td[colspan='3']", {
-                                                        style: { "background-color": "#eaeff5" }
-                                                    },
-                                                        m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
-                                                    ),
-                                                    m("th.tx-semibold.tx-14[colspan='2']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Marca:"
-                                                    ),
-                                                    m("td[colspan='3']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    },
-                                                        m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
-
-                                                    ),
-
-
-
-                                                ]),
-                                                m("tr", [
-                                                    m("th.tx-semibold.tx-14[colspan='2']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Modelo:"
-                                                    ),
-                                                    m("td[colspan='3']", {
-                                                        style: { "background-color": "#eaeff5" }
-                                                    },
-                                                        m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
-                                                    ),
-                                                    m("th.tx-semibold.tx-14[colspan='2']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Serie:"
-                                                    ),
-                                                    m("td[colspan='3']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    },
-                                                        m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
-
-                                                    ),
-
-
-
-                                                ]),
-
-                                                m("tr.bg-litecoin.op-9.tx-white", [
-                                                    m("th[scope='col'][colspan='10']",
-                                                        "MOTIVO DE BAJA:"
-                                                    ),
-
-                                                ]),
-                                                m("tr", [
-                                                    m("th.tx-semibold.tx-14[colspan='3']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Motivo de Baja:"
-                                                    ),
-                                                    m("td[colspan='7']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    }, [
-                                                        m("select", { "class": "custom-select" }, [
-                                                            m("option", { "selected": "selected" },
-                                                                "Seleccione..."
-                                                            ),
-                                                            m("option", { "value": "1" },
-                                                                "NO_SE_UTILIZA"
-                                                            ),
-                                                            m("option", { "value": "2" },
-                                                                "RENOVACIÓN"
-                                                            ),
-                                                            m("option", { "value": "3" },
-                                                                "RENOVACIÓN_EQ_COMPUTO"
-                                                            ),
-                                                            m("option", { "value": "3" },
-                                                                "OBSOLECENCIA "
-                                                            )
-                                                        ])
                                                     ]),
+                                                    m("tr", [
 
-
-                                                ]),
-
-                                                m("tr.bg-litecoin.op-9.tx-white.", [
-                                                    m("th[scope='col'][colspan='10']",
-                                                        "ACCIÓN SUGERIDA:"
-                                                    ),
-
-                                                ]),
-                                                m("tr", [
-                                                    m("th.tx-semibold.tx-14[colspan='3']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Acción Sugerida:"
-                                                    ),
-                                                    m("td[colspan='7']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    }, [
-                                                        m("select", { "class": "custom-select" }, [
-                                                            m("option", { "selected": "selected" },
-                                                                "Seleccione..."
-                                                            ),
-                                                            m("option", { "value": "1" },
-                                                                "TRANSFERENCIA "
-                                                            ),
-                                                            m("option", { "value": "2" },
-                                                                "BACK UP"
-                                                            ),
-                                                            m("option", { "value": "3" },
-                                                                "POSIBLE VENTA"
-                                                            ),
-                                                            m("option", { "value": "3" },
-                                                                "BAJA"
-                                                            )
-                                                        ])
-                                                    ]),
-
-
-                                                ]),
-                                                m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
-                                                    m("th[scope='col'][colspan='10']",
-                                                        "OBSERVACIÓN:"
-                                                    ),
-
-                                                ]),
-                                                m("tr", [
-                                                    m("th.tx-semibold.tx-14[colspan='3']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Observación:"
-                                                    ),
-                                                    m("td[colspan='7']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    },
-                                                        "Usted debe adjuntar documentación soporte que evidencie la autorización de transferencia, con las firmas correspondientes e indique la nueva área a la que va el equipo"
-
-                                                    ),
-
-
-                                                ]),
-                                                m("tr", [
-
-                                                    m("th.tx-semibold.tx-14[colspan='4']", {
-                                                        style: { "background-color": "#a8bed6" }
-                                                    },
-                                                        "Responsable:"
-                                                    ),
-                                                    m("td[colspan='6']", {
-                                                        style: { "background-color": "#eaeff5" }
-                                                    },
-
-                                                        m("input", {
-                                                            value: "CHANG CHAVEZ MARTIN FRANCISCO",
-                                                            class: "form-control",
-                                                            type: "text",
-                                                            placeholder: "Input box",
-                                                            disabled: "disabled"
-                                                        })
-
-
-                                                    ),
-
-                                                ]),
-                                                // INCLUIR AREA DE DEST Y DESTINO FINAL.
-                                                m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
-                                                    m("th[scope='col'][colspan='10']",
-                                                        "ADJUNTOS:"
-                                                    ),
-
-                                                ]),
-                                                m("tr.d-print-none", [
-
-                                                    m("td[colspan='10']", {
-                                                        style: { "background-color": "#eaeff5" }
-
-                                                    },
-                                                        m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
-                                                            m("li.nav-item",
-                                                                m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
-                                                                    style: { "color": "#476ba3" }
+                                                        m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Área de Origen:"
+                                                        ),
+                                                        m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+                                                            m('select', {
+                                                                onchange: (e) => {
+                                                                    NuevaTRoja.data.area = e.target.value;
                                                                 },
-                                                                    m("i.fas.fa-file-alt.pd-1.mg-r-2"),
+                                                                value: NuevaTRoja.data.area,
+                                                                class: "custom-select"
+                                                            }, ['FINANZAS', 'MANTENIMIENTO'].map(x =>
+                                                                m('option', x)
+                                                            ))
+                                                        ),
 
-                                                                    " Adjuntos "
-                                                                )
-                                                            ),
+                                                    ]),
+
+                                                    m("tr", [
+
+                                                        m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Categoría:"
+                                                        ),
+                                                        m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                            m('select', {
+                                                                onchange: (e) => {
+                                                                    NuevaTRoja.data.categoria = e.target.value;
+                                                                },
+                                                                value: NuevaTRoja.data.categoria,
+                                                                class: "custom-select"
+                                                            }, NuevaTRoja.activos.activos.map(x =>
+                                                                (x.area_tec == NuevaTRoja.data.area ? [m('option', {
+                                                                    value: x.cod_class
+                                                                }, x.class)] : [])
+                                                            ))
+                                                        )
 
 
+                                                    ]),
+                                                    m("tr", [
+
+                                                        m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Sub. Categoría:"
+                                                        ),
+                                                        m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                            m('select', {
+                                                                onchange: (e) => {
+                                                                    NuevaTRoja.data.sub_categoria = e.target.value;
+                                                                },
+                                                                value: NuevaTRoja.data.sub_categoria,
+                                                                class: "custom-select"
+                                                            }, NuevaTRoja.activos.subActivos.map(x =>
+                                                                (x.cod_class == NuevaTRoja.data.categoria ? [m('option', x.class)] : [])
+                                                            ))
+                                                        )
+
+
+                                                    ]),
+
+
+                                                ]),
+                                                m("thead",
+
+                                                    m("tr.bg-litecoin.op-9.tx-white", [
+                                                        m("th[scope='col'][colspan='10']",
+                                                            "DATOS DEL EQUIPO:"
+                                                        ),
+
+                                                    ])
+                                                ),
+                                                m("tbody", [
+                                                    m("tr", [
+                                                        m("th.tx-semibold.tx-14[colspan='2']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Nombre:"
+                                                        ),
+                                                        m("td[colspan='3']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+                                                            m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
+                                                        ),
+                                                        m("th.tx-semibold.tx-14[colspan='2']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Marca:"
+                                                        ),
+                                                        m("td[colspan='3']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                            m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
+
+                                                        ),
+
+
+
+                                                    ]),
+                                                    m("tr", [
+                                                        m("th.tx-semibold.tx-14[colspan='2']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Modelo:"
+                                                        ),
+                                                        m("td[colspan='3']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+                                                            m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
+                                                        ),
+                                                        m("th.tx-semibold.tx-14[colspan='2']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Serie:"
+                                                        ),
+                                                        m("td[colspan='3']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                            m("input", { "class": "form-control", "type": "text", "placeholder": "Input box" })
+
+                                                        ),
+
+
+
+                                                    ]),
+
+                                                    m("tr.bg-litecoin.op-9.tx-white", [
+                                                        m("th[scope='col'][colspan='10']",
+                                                            "MOTIVO DE BAJA:"
+                                                        ),
+
+                                                    ]),
+                                                    m("tr", [
+                                                        m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Motivo de Baja:"
+                                                        ),
+                                                        m("td[colspan='7']", {
+                                                            style: { "background-color": "#eaeff5" }
+
+                                                        }, [
+                                                            m('select', {
+                                                                onchange: (e) => {
+                                                                    NuevaTRoja.data.motivo_baja = e.target.value;
+                                                                },
+                                                                value: NuevaTRoja.data.motivo_baja,
+                                                                class: "custom-select"
+                                                            }, [
+                                                                { label: 'NO SE UTILIZA', value: 'NO_SE_UTILIZA' },
+                                                                { label: 'RENOVACIÓN', value: 'RENOVACION' },
+                                                                { label: 'RENOVACIÓN EQUIPO DE COMPUTO', value: 'RENOVACION_EQ_COMPUTO' },
+                                                                { label: 'DAÑO', value: 'DAÑO' },
+                                                                { label: 'PERDIDA', value: 'PERDIDA' }
+
+
+                                                            ].map(x =>
+                                                                m('option', {
+                                                                    value: x.value
+                                                                }, x.label)
+                                                            ))
                                                         ]),
-                                                    ),
 
 
-                                                ]),
-                                                m("tr.d-print-none", [
+                                                    ]),
 
-                                                    m("td[colspan='9']", {
+                                                    m("tr.bg-litecoin.op-9.tx-white.", [
+                                                        m("th[scope='col'][colspan='10']",
+                                                            "ACCIÓN SUGERIDA:"
+                                                        ),
 
-                                                    },
-                                                        m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
-                                                            m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
-                                                                m(Evoluciones),
+                                                    ]),
+                                                    m("tr", [
+                                                        m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Acción Sugerida:"
+                                                        ),
+                                                        m("td[colspan='7']", {
+                                                            style: { "background-color": "#eaeff5" }
+
+                                                        }, [
+                                                            m('select', {
+                                                                onchange: (e) => {
+                                                                    NuevaTRoja.data.accion_sugerida = e.target.value;
+                                                                },
+                                                                value: NuevaTRoja.data.accion_sugerida,
+                                                                class: "custom-select"
+                                                            }, NuevaTRoja.activos.motivos.map(x =>
+                                                                (x.motivo_baja == NuevaTRoja.data.motivo_baja ? [m('option', x.accion_sugerida)] : [])
+                                                            ))
+                                                        ]),
+
+
+                                                    ]),
+                                                    m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                                        m("th[scope='col'][colspan='10']",
+                                                            "OBSERVACIÓN:"
+                                                        ),
+
+                                                    ]),
+                                                    m("tr", [
+                                                        m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Observación:"
+                                                        ),
+                                                        m("td[colspan='7']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+
+                                                            m('div.tx-justify', {}, NuevaTRoja.activos.motivos.map(x =>
+                                                                (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [m('p.tx-15.tx-semibold.tx-danger', x.obs)] : [])
+                                                            ))
+
+
+                                                        ),
+
+
+                                                    ]),
+
+                                                    m("tr", [
+                                                        m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Destino Final:"
+                                                        ),
+                                                        m("td[colspan='7']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+
+                                                            m('div', {}, NuevaTRoja.activos.motivos.map(x =>
+                                                                (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [m('p.tx-15.tx-semibold.tx-danger', x.destino_final)] : [])
+                                                            ))
+
+                                                        ),
+
+
+                                                    ]),
+                                                    m("tr", [
+
+                                                        m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                            "Responsable:"
+                                                        ),
+                                                        m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+
+                                                            m("input", {
+                                                                value: "CHANG CHAVEZ MARTIN FRANCISCO",
+                                                                class: "form-control",
+                                                                type: "text",
+                                                                placeholder: "Input box",
+                                                                disabled: "disabled"
+                                                            })
+
+
+                                                        ),
+
+                                                    ]),
+                                                    // INCLUIR AREA DE DEST Y DESTINO FINAL.
+                                                    m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                                        m("th[scope='col'][colspan='10']",
+                                                            "ADJUNTOS:"
+                                                        ),
+
+                                                    ]),
+                                                    m("tr.d-print-none", [
+
+                                                        m("td[colspan='10']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                            m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
+                                                                m("li.nav-item",
+                                                                    m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
+                                                                        m("i.fas.fa-file-alt.pd-1.mg-r-2"),
+
+                                                                        " Adjuntos "
+                                                                    )
+                                                                ),
+
+
                                                             ]),
-
-                                                        ])
-                                                    ),
+                                                        ),
 
 
-                                                ]),
-                                                m("tr.d-print-none", [
+                                                    ]),
+                                                    m("tr.d-print-none", [
 
-                                                ]),
+                                                        m("td[colspan='9']", {
 
+                                                            },
+                                                            m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
+                                                                m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
+                                                                    m(Evoluciones),
+                                                                ]),
+
+                                                            ])
+                                                        ),
+
+
+                                                    ]),
+                                                    m("tr.d-print-none", [
+
+                                                    ]),
+
+                                                ])
                                             ])
-                                        ])
-                                    ]),
+                                        ]),
 
+
+                                    ])
 
                                 ])
 
+                            ] : [])
 
-                            ])
+
                         ])
                     ]),
 

@@ -123,18 +123,40 @@ const AgendaImagen = {
     searchField: "",
     idFiltro: 0,
     loader: false,
+    loadDetalle: false,
+    nuevaCita: false,
     error: "",
     oninit: (_data) => {
+
+
+
         AgendaImagen.loader = true;
         AgendaImagen.fetchAgendaImagen();
         document.body.classList.add('app-calendar');
+
+
+        moment.lang("es", {
+            months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                "_"
+            ),
+            monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                "_"
+            ),
+            weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                "_"
+            ),
+            weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+            weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+        });
+
+
     },
     setSidebar: () => {
 
         // Initialize scrollbar for sidebar
         new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
 
-        $('#calendarSidebarShow').on('click', function(e) {
+        $('#calendarSidebarShow').on('click', function (e) {
             e.preventDefault()
             $('body').toggleClass('calendar-sidebar-show');
 
@@ -142,7 +164,7 @@ const AgendaImagen = {
             $('#mainMenuOpen').removeClass('d-none');
         })
 
-        $(document).on('click touchstart', function(e) {
+        $(document).on('click touchstart', function (e) {
             e.stopPropagation();
 
             // closing of sidebar menu when clicking outside of it
@@ -150,7 +172,6 @@ const AgendaImagen = {
                 var sb = $(e.target).closest('.calendar-sidebar').length;
                 if (!sb) {
                     $('body').removeClass('calendar-sidebar-show');
-
                     $('#mainMenuOpen').addClass('d-none');
                     $('#calendarSidebarShow').removeClass('d-none');
                 }
@@ -170,7 +191,7 @@ const AgendaImagen = {
         $('#calendarInline').datepicker({
             showOtherMonths: true,
             selectOtherMonths: true,
-            beforeShowDay: function(date) {
+            beforeShowDay: function (date) {
 
                 // add leading zero to single digit date
                 var day = date.getDate();
@@ -202,7 +223,7 @@ const AgendaImagen = {
             timeFormat: 'HH:mma',
             views: {
                 agenda: {
-                    columnHeaderHtml: function(mom) {
+                    columnHeaderHtml: function (mom) {
                         return '<span>' + mom.format('ddd') + '</span>' +
                             '<span>' + mom.format('DD') + '</span>';
                     }
@@ -224,10 +245,10 @@ const AgendaImagen = {
             },
 
             eventSources: [AgendaImagen.citasDisponibles, AgendaImagen.citasAgendadas],
-            eventAfterAllRender: function(view) {
+            eventAfterAllRender: function (view) {
                 if (view.name === 'listMonth' || view.name === 'listWeek') {
                     var dates = view.el.find('.fc-list-heading-main');
-                    dates.each(function() {
+                    dates.each(function () {
                         var text = $(this).text().split(' ');
                         var now = moment().format('DD');
 
@@ -238,7 +259,7 @@ const AgendaImagen = {
 
                 console.log(view.el);
             },
-            eventRender: function(event, element) {
+            eventRender: function (event, element) {
 
                 if (event.description) {
                     element.find('.fc-list-item-title').append('<span class="fc-desc">' + event.description + '</span>');
@@ -272,7 +293,7 @@ const AgendaImagen = {
         }
 
         // change view based in viewport width when resize is detected
-        calendar.option('windowResize', function(view) {
+        calendar.option('windowResize', function (view) {
             if (view.name === 'listWeek') {
                 if (window.matchMedia('(min-width: 992px)').matches) {
                     calendar.changeView('month');
@@ -283,10 +304,20 @@ const AgendaImagen = {
         });
 
         // Display calendar event modal
-        calendar.on('eventClick', function(calEvent, jsEvent, view) {
+        calendar.on('eventClick', function (calEvent, jsEvent, view) {
 
 
             if (calEvent.stAgendar == 1) {
+
+                AgendaImagen.cita = calEvent;
+                AgendaImagen.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
+                AgendaImagen.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
+                console.log(AgendaImagen.cita)
+
+                AgendaImagen.loadDetalle = true;
+                m.redraw();
+
+                /*
 
                 var modal = $('#modalCalendarEvent');
 
@@ -307,19 +338,26 @@ const AgendaImagen = {
                 //styling
                 modal.find('.modal-header').css('backgroundColor', (calEvent.source.borderColor) ? calEvent.source.borderColor : calEvent.borderColor);
 
+                */
+
             } else {
 
                 AgendaImagen.cita = calEvent;
+                AgendaImagen.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
+                AgendaImagen.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
+                AgendaImagen.nuevaCita = true;
+                m.redraw();
 
-                console.log('cita', AgendaImagen.cita)
-
-
+                /*
+                
                 $('#modalCreateEvent').modal('show');
                 $('#eventStartDate').val(moment(calEvent.start).format('LLL'));
                 $('#eventEndDate').val(moment(calEvent.end).format('LLL'));
 
                 $('#eventStartTime').val(moment(calEvent.start).format('LT')).trigger('change');
                 $('#eventEndTime').val(moment(calEvent.end).format('LT')).trigger('change');
+
+                */
 
 
             }
@@ -329,20 +367,20 @@ const AgendaImagen = {
 
         // display current date
         var dateNow = calendar.getDate();
-        calendar.option('select', function(startDate, endDate) {
+        calendar.option('select', function (startDate, endDate) {
 
             alert("Seleccione una cita disponible.");
 
             throw "Seleccione una cita disponible."
-                /*
+            /*
 
-                $('#modalCreateEvent').modal('show');
-                $('#eventStartDate').val(startDate.format('LL'));
-                $('#eventEndDate').val(endDate.format('LL'));
+            $('#modalCreateEvent').modal('show');
+            $('#eventStartDate').val(startDate.format('LL'));
+            $('#eventEndDate').val(endDate.format('LL'));
 
-                $('#eventStartTime').val(startDate.format('LT')).trigger('change');
-                $('#eventEndTime').val(endDate.format('LT')).trigger('change');
-                */
+            $('#eventStartTime').val(startDate.format('LT')).trigger('change');
+            $('#eventEndTime').val(endDate.format('LT')).trigger('change');
+            */
         });
 
         $('.select2-modal').select2({
@@ -350,7 +388,7 @@ const AgendaImagen = {
             dropdownCssClass: 'select2-dropdown-modal',
         });
 
-        $('.calendar-add').on('click', function(e) {
+        $('.calendar-add').on('click', function (e) {
             e.preventDefault()
 
             $('#modalCreateEvent').modal('show');
@@ -365,55 +403,55 @@ const AgendaImagen = {
     fetchAgendaImagen: () => {
 
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 AgendaImagen.loader = false;
                 AgendaImagen.citasDisponibles = result.citasDisponibles;
                 AgendaImagen.citasAgendadas = result.citasAgendadas;
-                setTimeout(function() { AgendaImagen.setCalendar(); }, 10);
-                setTimeout(function() { AgendaImagen.setSidebar(); }, 20);
+                setTimeout(function () { AgendaImagen.setCalendar(); }, 100);
+                setTimeout(function () { AgendaImagen.setSidebar(); }, 200);
 
             })
-            .catch(function(e) {
-                setTimeout(function() { AgendaImagen.fetchAgendaImagen(); }, 2000);
+            .catch(function (e) {
+                setTimeout(function () { AgendaImagen.fetchAgendaImagen(); }, 2000);
             });
 
     },
     agendarCita: () => {
 
         m.request({
-                method: "POST",
-                url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
-                body: {
-                    availableServiceId: 0,
-                    covenantId: 2,
-                    covenantPlanId: 2,
-                    dateBirth: "1962-03-23",
-                    email: "mariobe7@hotmail.com",
-                    id: AgendaImagen.cita.id,
-                    isFitting: true,
-                    markingTypeId: 0,
-                    patientId: 22706,
-                    patientName: "BERMEO CABEZAS MARIO GERMAN",
-                    phoneNumber: "0999721820",
-                    scheduleFormType: "PERSONALLY",
-                    schedulingItemId: 428,
-                    sexType: "MALE",
-                    specialityId: 66,
-                    statusScheduleType: "M"
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
+            body: {
+                availableServiceId: 0,
+                covenantId: 2,
+                covenantPlanId: 2,
+                dateBirth: "1962-03-23",
+                email: "mariobe7@hotmail.com",
+                id: AgendaImagen.cita.id,
+                isFitting: true,
+                markingTypeId: 0,
+                patientId: 22706,
+                patientName: "BERMEO CABEZAS MARIO GERMAN",
+                phoneNumber: "0999721820",
+                scheduleFormType: "PERSONALLY",
+                schedulingItemId: 428,
+                sexType: "MALE",
+                specialityId: 66,
+                statusScheduleType: "M"
 
 
-                },
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
 
                 console.log(result);
 
@@ -425,7 +463,7 @@ const AgendaImagen = {
                 }
 
             })
-            .catch(function(e) {});
+            .catch(function (e) { });
 
     },
     view: (_data) => {
@@ -433,57 +471,626 @@ const AgendaImagen = {
 
         return AgendaImagen.loader ? [
             m("div.calendar-wrapper", [
-                    m("div.calendar-sidebar", [
-                        m("div.calendar-sidebar-header"),
-                        m("div.calendar-sidebar-body")
-                    ]),
-                    m("div.calendar-content", [
-                        m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
-                    ]),
+                m("div.calendar-sidebar", [
+                    m("div.calendar-sidebar-header"),
+                    m("div.calendar-sidebar-body")
+                ]),
+                m("div.calendar-content", [
+                    m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
+                ]),
 
-                ]
+            ]
 
             ),
         ] : AgendaImagen.error.length !== 0 ? [
             m("div.calendar-wrapper", [
-                    m("div.calendar-sidebar", [
-                        m("div.calendar-sidebar-header"),
-                        m("div.calendar-sidebar-body")
-                    ]),
-                    m("div.calendar-content", [
-                        m("div.calendar-content-body[id='calendar']")
-                    ]),
+                m("div.calendar-sidebar", [
+                    m("div.calendar-sidebar-header"),
+                    m("div.calendar-sidebar-body")
+                ]),
+                m("div.calendar-content", [
+                    m("div.calendar-content-body[id='calendar']")
+                ]),
 
-                ]
+            ]
 
             ),
         ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length !== 0 && AgendaImagen.citasAgendadas.length !== 0) ? [
             m("div.calendar-wrapper", [
-                    m("div.calendar-sidebar", [
-                        m("div.calendar-sidebar-header", [
-                            m("i[data-feather='search']"),
-                            m("div.search-form", [
-                                m("input.form-control[type='search']")
-                            ]),
-                            m("a.btn btn-sm btn-primary btn-icon calendar-add", [
-                                m("div[data-toggle='tooltip']", [
-                                    m("i.tx-white[data-feather='plus']")
-                                ])
-                            ])
+                m("div.calendar-sidebar", [
+                    m("div.calendar-sidebar-header", [
+                        m("i[data-feather='search']"),
+                        m("div.search-form", [
+                            m("input.form-control[type='search']")
                         ]),
-                        m("div.calendar-sidebar-body[id='calendarSidebarBody']", [
-                            m("div.calendar-inline", [
-                                m("div[id='calendarInline']")
+                        m("a.btn btn-sm btn-primary btn-icon calendar-add", [
+                            m("div[data-toggle='tooltip']", [
+                                m("i.tx-white[data-feather='plus']")
                             ])
                         ])
                     ]),
-                    m("div.calendar-content", [
-                        m("div.calendar-content-body[id='calendar']")
-                    ]),
+                    m("div.calendar-sidebar-body[id='calendarSidebarBody']", [
+                        m("div.calendar-inline", [
+                            m("div[id='calendarInline']")
+                        ])
+                    ])
+                ]),
+                m("div.calendar-content", {
+                    class: (AgendaImagen.loadDetalle || AgendaImagen.nuevaCita ? 'd-none' : '')
 
-                ]
+                }, [
+                    m("div.calendar-content-body[id='calendar']", {}),
+                ]),
+                m("div.calendar-content", {
+                    class: (!AgendaImagen.loadDetalle ? 'd-none' : '')
 
-            ),
+                }, [
+                    m("div.calendar-content-body.pd-5", m("table.table.table-bordered.table-sm.tx-12", [
+                        m("thead",
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
+                                    m("small.pd-2.tx-15.tx-white ",
+                                        m("i.fas.fa-times-circle.pd-2", {
+                                            "style": { "cursor": "pointer" },
+                                            title: "Cerrar",
+                                            onclick: () => {
+                                                AgendaImagen.loadDetalle = !AgendaImagen.loadDetalle;
+                                            }
+                                        }
+
+                                        )
+
+
+                                    ),
+                                    "DETALLE DE CITA:",
+
+                                ),
+
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Id Cita:"
+                                ),
+                                m("td[colspan='2'].tx-13", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    AgendaImagen.cita.id
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Fecha Hora Inicio:",
+                                ),
+                                m("td.tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    AgendaImagen.cita.horaInicio
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Fecha Hora Fin:"
+                                ),
+                                m("td.tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    AgendaImagen.cita.horaFin
+                                ),
+
+                            ]),
+                            m("tr", [
+                                m("th[colspan='3'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Médico Prestador:"
+                                ),
+                                m("td[colspan='3'].tx-13", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    AgendaImagen.cita.id
+                                ),
+                                m("th[colspan='3'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Especialidad:",
+                                ),
+
+                                m("td[colspan='3'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    AgendaImagen.cita.horaFin
+                                ),
+
+                            ]),
+                        ]),
+                        m("thead",
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
+                                    "DATOS DEL PACIENTE:"
+                                ),
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "NHC:"
+                                ),
+                                m("td[colspan='4']", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    AgendaImagen.cita.title
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Apellidos y Nombres:"
+                                ),
+                                m("td[colspan='4']", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    AgendaImagen.cita.title
+                                ),
+
+
+
+                            ]),
+                            m("tr", [
+
+
+
+
+                            ]),
+
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='10']",
+                                    "EXÁMENES:"
+                                ),
+
+                            ]),
+                            m("tr", [
+                                m("th", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Exámenes:"
+                                ),
+                                m("td[colspan='9']", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },),
+
+
+                            ]),
+                            m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='10']",
+                                    "OPCIONES DISPONIBLES:"
+                                ),
+
+                            ]),
+                            m("tr.d-print-none", [
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    m("ul.nav.nav-tabs[id='myTab'][role='tablist']", {}, [
+
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-editar'][data-toggle='tab'][href='#editar'][role='tab'][aria-controls='editar']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+                                                m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                " EDITAR "
+                                            )
+                                        ),
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-cancelacion'][data-toggle='tab'][href='#cancelacion'][role='tab'][aria-controls='cancelacion']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+                                                m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                " CANCELAR "
+                                            )
+                                        ),
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-comment'][data-toggle='tab'][href='#comment'][role='tab'][aria-controls='comment']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+
+                                                " COMENTARIOS "
+                                            )
+                                        ),
+
+
+
+                                    ]),
+                                ),
+
+
+                            ]),
+                            m("tr.d-print-none", [
+                                m("td[colspan='10']",
+                                    m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
+                                        m(".tab-pane.fade[id='editar'][role='tabpanel'][aria-labelledby='home-editar']", [
+                                            [
+                                                m("div.form-group", [
+                                                    m("label",
+                                                        "Nuevo Horario"
+                                                    ),
+                                                    m("input.form-control[type='text'][placeholder='Nuevo Horario']"),
+                                                    m("div.input-group-append",
+                                                        m("button.btn.btn-outline-light.tx-semibold[type='button']",
+                                                            "Nuevo Horario"
+                                                        )
+                                                    )
+                                                ]),
+                                                m("div.form-group", [
+                                                    m("label",
+                                                        "Médico Prestador:"
+                                                    ),
+                                                    m("input.form-control[type='text'][placeholder='Médico Prestador']"),
+                                                    m("div.input-group-append",
+                                                        m("button.btn.btn-outline-light.tx-semibold[type='button']",
+                                                            "Buscar"
+                                                        )
+                                                    )
+                                                ]),
+
+                                                m("button.btn.btn-primary.tx-semibold",
+                                                    "Editar Cita"
+                                                )
+                                            ]
+
+                                        ]),
+                                        m(".tab-pane.fade[id='cancelacion'][role='tabpanel'][aria-labelledby='home-cancelacion']", [
+                                            m('div.pd-5', [
+                                                m("div.form-group",
+                                                    m("div.custom-control.custom-checkbox", [
+                                                        m("input.custom-control-input[type='checkbox'][id='customCheck0']"),
+                                                        m("label.custom-control-label.tx-semibold[for='customCheck0']",
+                                                            "¿Esta seguro de cancelar esta Cita?"
+                                                        )
+                                                    ])
+                                                ),
+                                                m("div.form-group",
+                                                    m("div.custom-control.custom-checkbox", [
+                                                        m("input.custom-control-input[type='checkbox'][id='customCheckC']"),
+                                                        m("label.custom-control-label.tx-semibold[for='customCheckC']",
+                                                            "Enviar correo de notificación al paciente."
+                                                        )
+                                                    ])
+                                                ),
+                                                m("button.btn.btn-danger.tx-semibold",
+                                                    "Cancelar Cita"
+                                                )
+                                            ]),
+
+                                        ]),
+                                        m(".tab-pane.fade[id='comment'][role='tabpanel'][aria-labelledby='home-comment']", [
+                                            m("p.mg-5", [
+                                                m("span.badge.badge-light.wd-100p.tx-14",
+                                                    "Observaciones",
+                                                ),
+                                                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                m("div.mg-0.mg-t-5.text-right", [
+
+                                                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                        onclick: function () {
+
+                                                            AgendaImagen.loadDetalle = !AgendaImagen.loadDetalle;
+
+                                                        },
+                                                    }, [
+                                                        m("i.fas.fa-paper-plane.mg-r-5",)
+                                                    ], "Guardar"),
+
+
+                                                ]),
+                                                m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                            ]),
+                                            m("p.mg-5", [
+                                                m("span.badge.badge-light.wd-100p.tx-14",
+                                                    "Historial de Observaciones",
+                                                ),
+                                                m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                            ]),
+                                        ]),
+
+                                    ])
+                                ),
+
+
+                            ]),
+                            m("tr.d-print-none", [
+
+                            ]),
+
+                        ])
+                    ]))
+                ]),
+                m("div.calendar-content", {
+                    class: (!AgendaImagen.nuevaCita ? 'd-none' : '')
+                }, [
+                    m("div.calendar-content-body.pd-5", m("table.table.table-bordered.table-sm.tx-12", [
+                        m("thead",
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
+                                    m("small.pd-2.tx-15.tx-white ",
+                                        m("i.fas.fa-times-circle.pd-2", {
+                                            "style": { "cursor": "pointer" },
+                                            title: "Cerrar",
+                                            onclick: () => {
+                                                AgendaImagen.nuevaCita = !AgendaImagen.nuevaCita;
+                                            }
+                                        }
+
+                                        )
+
+
+                                    ),
+                                    "NUEVA CITA:",
+
+                                ),
+
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Fecha Hora Inicio:",
+                                ),
+                                m("td[colspan='4'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    AgendaImagen.cita.horaInicio
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Fecha Hora Fin:"
+                                ),
+                                m("td[colspan='4'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    AgendaImagen.cita.horaFin
+                                ),
+
+                            ]),
+                            m("tr", [
+
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Médico Prestador",
+                                ),
+                                m("td[colspan='10'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    m("div.input-group", [
+                                        m("input.form-control[type='text'][placeholder='Médico Prestador']"),
+                                        m("div.input-group-append",
+                                            m("button.btn.btn-outline-light.tx-semibold[type='button'][id='button-addon2']",
+                                                "Buscar"
+                                            )
+                                        )
+                                    ])
+                                ),
+
+                            ]),
+                        ]),
+                        m("thead",
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
+                                    "DATOS DEL PACIENTE:"
+                                ),
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "NHC:"
+                                ),
+                                m("td[colspan='2']", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    m("div.input-group", [
+                                        m("input.form-control[type='text'][placeholder='NHC']"),
+                                        m("div.input-group-append",
+                                            m("button.btn.btn-outline-light.tx-semibold[type='button'][id='button-addon2']",
+                                                "Buscar"
+                                            )
+                                        )
+                                    ])
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Apellidos y Nombres:"
+                                ),
+                                m("td[colspan='6']", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    AgendaImagen.cita.title
+                                ),
+
+
+
+                            ]),
+
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='10']",
+                                    "EXÁMENES:"
+                                ),
+
+                            ]),
+                            m("tr", [
+                                m("th[colspan='2']", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Exámenes:"
+                                ),
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                }, m("div.input-group", [
+                                    m("input.form-control[type='text'][placeholder='Exámenes']"),
+                                    m("div.input-group-append",
+                                        m("button.btn.btn-outline-light.tx-semibold[type='button'][id='button-addon2']",
+                                            "Buscar Examen"
+                                        )
+                                    )
+                                ])),
+
+
+                            ]),
+                            m("tr", [
+                                m("th[colspan='2']", {
+                                    style: { "background-color": "#a8bed6" }
+                                }),
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+                                }),
+
+
+                            ]),
+                            m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='10']",
+                                    "OPCIONES DISPONIBLES:"
+                                ),
+
+                            ]),
+                            m("tr.d-print-none", [
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    m("ul.nav.nav-tabs[id='myTab'][role='tablist']", {}, [
+
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-confirmacion'][data-toggle='tab'][href='#confirmacion'][role='tab'][aria-controls='confirmacion']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+                                                m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                " CONFIRMACIÓN "
+                                            )
+                                        ),
+
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-commentAgenda'][data-toggle='tab'][href='#commentAgenda'][role='tab'][aria-controls='commentAgenda']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+
+                                                " COMENTARIOS "
+                                            )
+                                        ),
+
+
+
+                                    ]),
+                                ),
+
+
+                            ]),
+                            m("tr.d-print-none", [
+                                m("td[colspan='10']",
+                                    m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
+                                        m(".tab-pane.fade[id='confirmacion'][role='tabpanel'][aria-labelledby='home-confirmacion']", [
+
+                                            [
+                                                m('div.pd-5', [
+                                                    m("div.form-group",
+                                                        m("div.custom-control.custom-checkbox", [
+                                                            m("input.custom-control-input[type='checkbox'][id='customCheck1']"),
+                                                            m("label.custom-control-label.tx-semibold[for='customCheck1']",
+                                                                "¿Esta seguro de agendar esta Cita?"
+                                                            )
+                                                        ])
+                                                    ),
+                                                    m("div.form-group",
+                                                        m("div.custom-control.custom-checkbox", [
+                                                            m("input.custom-control-input[type='checkbox'][id='customCheck2']"),
+                                                            m("label.custom-control-label.tx-semibold[for='customCheck2']",
+                                                                "Enviar correo de notificación al paciente."
+                                                            )
+                                                        ])
+                                                    ),
+                                                    m("button.btn.btn-primary.tx-semibold",
+                                                        "Agendar Cita"
+                                                    )
+                                                ]),
+
+
+                                            ]
+
+
+                                        ]),
+                                        m(".tab-pane.fade[id='commentAgenda'][role='tabpanel'][aria-labelledby='home-commentAgenda']", [
+                                            m("p.mg-5", [
+                                                m("span.badge.badge-light.wd-100p.tx-14",
+                                                    "Observaciones",
+                                                ),
+                                                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                m("div.mg-0.mg-t-5.text-right", [
+
+                                                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+
+                                                    }, [
+                                                        m("i.fas.fa-paper-plane.mg-r-5",)
+                                                    ], "Guardar"),
+
+
+                                                ]),
+                                                m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                            ]),
+                                            m("p.mg-5", [
+                                                m("span.badge.badge-light.wd-100p.tx-14",
+                                                    "Historial de Observaciones",
+                                                ),
+                                                m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                            ]),
+                                        ]),
+
+                                    ])
+                                ),
+
+
+                            ]),
+                            m("tr.d-print-none", [
+
+                            ]),
+
+                        ])
+                    ]))
+
+
+                ]),
+
+
+
+            ]),
             m(".modal.calendar-modal-create.fade.effect-scale[id='modalCreateEvent'][role='dialog'][aria-hidden='true']",
                 m(".modal-dialog.modal-dialog-centered[role='document']",
                     m("div.modal-content", [
@@ -559,10 +1166,10 @@ const AgendaImagen = {
                         ]),
                         m("div.modal-footer", [
                             m("button.btn.btn-primary.mg-r-5", {
-                                    onclick: () => {
-                                        AgendaImagen.agendarCita();
-                                    }
-                                },
+                                onclick: () => {
+                                    AgendaImagen.agendarCita();
+                                }
+                            },
                                 "Agendar Cita"
                             ),
                             m("a.btn.btn-secondary[href=''][data-dismiss='modal']",
@@ -618,28 +1225,28 @@ const AgendaImagen = {
 
         ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length == 0 && AgendaImagen.citasAgendadas.length == 0) ? [
             m("div.calendar-wrapper", [
-                    m("div.calendar-sidebar", [
-                        m("div.calendar-sidebar-header"),
-                        m("div.calendar-sidebar-body")
-                    ]),
-                    m("div.calendar-content", [
-                        m("div.calendar-content-body[id='calendar']")
-                    ]),
+                m("div.calendar-sidebar", [
+                    m("div.calendar-sidebar-header"),
+                    m("div.calendar-sidebar-body")
+                ]),
+                m("div.calendar-content", [
+                    m("div.calendar-content-body[id='calendar']")
+                ]),
 
-                ]
+            ]
 
             ),
         ] : [
             m("div.calendar-wrapper", [
-                    m("div.calendar-sidebar", [
-                        m("div.calendar-sidebar-header"),
-                        m("div.calendar-sidebar-body")
-                    ]),
-                    m("div.calendar-content", [
-                        m("div.calendar-content-body[id='calendar']")
-                    ]),
+                m("div.calendar-sidebar", [
+                    m("div.calendar-sidebar-header"),
+                    m("div.calendar-sidebar-body")
+                ]),
+                m("div.calendar-content", [
+                    m("div.calendar-content-body[id='calendar']")
+                ]),
 
-                ]
+            ]
 
             ),
         ];

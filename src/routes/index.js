@@ -59,6 +59,9 @@ import TRoja from '../views/conta/procesos/troja'
 import NuevaTRoja from '../views/conta/procesos/nuevaTRoja'
 import NSSImagen from '../views/imagen/nss/nss'
 import HeaderCalendar from '../views/layout/header-calendar'
+import DetalleCita from '../views/imagen/agenda/detalleCita'
+import NuevaCita from '../views/imagen/agenda/nuevaCita'
+import AuthTR from '../views/conta/procesos/autorizacionesTR'
 
 
 
@@ -309,7 +312,9 @@ const Routes = {
     '/contabilidad': Conta, //Conta
     '/contabilidad/proceso/tarjeta-roja': TRoja, //TRoja
     '/contabilidad/proceso/tarjeta-roja/nueva': NuevaTRoja, // TRPedido
+    '/contabilidad/proceso/tarjeta-roja/id': AuthTR, // Detalle Pedido
     '/admisiones': Admisiones, //Admisiones
+
     '/admisiones/pre': PreAdmisiones, //PreAdmisiones
     '/admisiones/etiquetas': {
         oninit: (_data) => {
@@ -535,6 +540,34 @@ const Routes = {
             return [
                 m(HeaderCalendar, { oncreate: HeaderCalendar.setPage("imagen") }),
                 m(AgendaImagen),
+            ];
+        },
+    }, // AgendaImagen
+    '/imagen/agendamiento/cita': {
+        oninit: (_data) => {
+            App.isAuth('imagen', 31);
+            document.title = "Detalle de Cita | " + App.title;
+            console.log(_data);
+        },
+        view: (_data) => {
+            return [
+                m(HeaderCalendar, { oncreate: HeaderCalendar.setPage("imagen") }),
+                m(DetalleCita),
+            ];
+        },
+    }, // AgendaImagen
+    '/imagen/agendamiento/nueva-cita': {
+        oninit: (_data) => {
+            App.isAuth('imagen', 31);
+            document.title = "Agendamiento de Imagen | " + App.title;
+        },
+        onupdate: (_data) => {
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderCalendar, { oncreate: HeaderCalendar.setPage("imagen") }),
+                m(NuevaCita),
             ];
         },
     }, // AgendaImagen

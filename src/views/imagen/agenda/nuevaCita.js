@@ -112,7 +112,7 @@ function Stopwatch() {
 
 
 
-const AgendaImagen = {
+const NuevaCita = {
     cita: [],
     citasDisponibles: [],
     citasAgendadas: [],
@@ -130,8 +130,8 @@ const AgendaImagen = {
 
 
 
-        AgendaImagen.loader = true;
-        AgendaImagen.fetchAgendaImagen();
+        NuevaCita.loader = true;
+        NuevaCita.fetchNuevaCita();
         document.body.classList.add('app-calendar');
 
 
@@ -244,7 +244,7 @@ const AgendaImagen = {
                 }
             },
 
-            eventSources: [AgendaImagen.citasDisponibles, AgendaImagen.citasAgendadas],
+            eventSources: [NuevaCita.citasDisponibles, NuevaCita.citasAgendadas],
             eventAfterAllRender: function (view) {
                 if (view.name === 'listMonth' || view.name === 'listWeek') {
                     var dates = view.el.find('.fc-list-heading-main');
@@ -309,14 +309,13 @@ const AgendaImagen = {
 
             if (calEvent.stAgendar == 1) {
 
-                AgendaImagen.cita = calEvent;
-                AgendaImagen.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
-                AgendaImagen.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
-                AgendaImagen.loadDetalle = true;
+                NuevaCita.cita = calEvent;
+                NuevaCita.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
+                NuevaCita.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
+                console.log(NuevaCita.cita)
 
-                m.route.set('/imagen/agendamiento/cita/', {
-                    id: AgendaImagen.cita.id,
-                });
+                NuevaCita.loadDetalle = true;
+                m.redraw();
 
                 /*
 
@@ -343,10 +342,10 @@ const AgendaImagen = {
 
             } else {
 
-                AgendaImagen.cita = calEvent;
-                AgendaImagen.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
-                AgendaImagen.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
-                AgendaImagen.nuevaCita = true;
+                NuevaCita.cita = calEvent;
+                NuevaCita.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
+                NuevaCita.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
+                NuevaCita.nuevaCita = true;
                 m.redraw();
 
                 /*
@@ -401,7 +400,7 @@ const AgendaImagen = {
     oncreate: (_data) => {
         Notificaciones.suscribirCanal('MetroPlus-Imagen-Agenda');
     },
-    fetchAgendaImagen: () => {
+    fetchNuevaCita: () => {
 
         m.request({
             method: "GET",
@@ -411,15 +410,15 @@ const AgendaImagen = {
             },
         })
             .then(function (result) {
-                AgendaImagen.loader = false;
-                AgendaImagen.citasDisponibles = result.citasDisponibles;
-                AgendaImagen.citasAgendadas = result.citasAgendadas;
-                setTimeout(function () { AgendaImagen.setCalendar(); }, 10);
-                setTimeout(function () { AgendaImagen.setSidebar(); }, 20);
+                NuevaCita.loader = false;
+                NuevaCita.citasDisponibles = result.citasDisponibles;
+                NuevaCita.citasAgendadas = result.citasAgendadas;
+                setTimeout(function () { NuevaCita.setCalendar(); }, 100);
+                setTimeout(function () { NuevaCita.setSidebar(); }, 200);
 
             })
             .catch(function (e) {
-                setTimeout(function () { AgendaImagen.fetchAgendaImagen(); }, 2000);
+                setTimeout(function () { NuevaCita.fetchNuevaCita(); }, 2000);
             });
 
     },
@@ -434,7 +433,7 @@ const AgendaImagen = {
                 covenantPlanId: 2,
                 dateBirth: "1962-03-23",
                 email: "mariobe7@hotmail.com",
-                id: AgendaImagen.cita.id,
+                id: NuevaCita.cita.id,
                 isFitting: true,
                 markingTypeId: 0,
                 patientId: 22706,
@@ -445,8 +444,6 @@ const AgendaImagen = {
                 sexType: "MALE",
                 specialityId: 66,
                 statusScheduleType: "M"
-
-
             },
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -469,8 +466,7 @@ const AgendaImagen = {
     },
     view: (_data) => {
 
-
-        return AgendaImagen.loader ? [
+        return NuevaCita.loader ? [
             m("div.calendar-wrapper", [
                 m("div.calendar-sidebar", [
                     m("div.calendar-sidebar-header"),
@@ -483,7 +479,7 @@ const AgendaImagen = {
             ]
 
             ),
-        ] : AgendaImagen.error.length !== 0 ? [
+        ] : NuevaCita.error.length !== 0 ? [
             m("div.calendar-wrapper", [
                 m("div.calendar-sidebar", [
                     m("div.calendar-sidebar-header"),
@@ -496,7 +492,7 @@ const AgendaImagen = {
             ]
 
             ),
-        ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length !== 0 && AgendaImagen.citasAgendadas.length !== 0) ? [
+        ] : !NuevaCita.loader && (NuevaCita.citasDisponibles.length !== 0 && NuevaCita.citasAgendadas.length !== 0) ? [
             m("div.calendar-wrapper", [
                 m("div.calendar-sidebar", [
                     m("div.calendar-sidebar-header", [
@@ -516,10 +512,275 @@ const AgendaImagen = {
                         ])
                     ])
                 ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']",),
-                ]),
 
+
+
+                m("div.calendar-content", [
+                    m("div.calendar-content-body.pd-5", m("table.table.table-bordered.table-sm.tx-12", [
+                        m("thead",
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
+                                    m("small.pd-2.tx-15.tx-white ",
+                                        m("i.fas.fa-times-circle.pd-2", {
+                                            "style": { "cursor": "pointer" },
+                                            title: "Cerrar",
+                                            onclick: () => {
+                                                NuevaCita.nuevaCita = !NuevaCita.nuevaCita;
+                                            }
+                                        }
+
+                                        )
+
+
+                                    ),
+                                    "NUEVA CITA:",
+
+                                ),
+
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Fecha Hora Inicio:",
+                                ),
+                                m("td[colspan='4'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    NuevaCita.cita.horaInicio
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Fecha Hora Fin:"
+                                ),
+                                m("td[colspan='4'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    NuevaCita.cita.horaFin
+                                ),
+
+                            ]),
+                            m("tr", [
+
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Médico Prestador",
+                                ),
+                                m("td[colspan='10'].tx-13.tx-danger.tx-semibold", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    m("div.input-group", [
+                                        m("input.form-control[type='text'][placeholder='Médico Prestador']"),
+                                        m("div.input-group-append",
+                                            m("button.btn.btn-outline-light.tx-semibold[type='button'][id='button-addon2']",
+                                                "Buscar"
+                                            )
+                                        )
+                                    ])
+                                ),
+
+                            ]),
+                        ]),
+                        m("thead",
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
+                                    "DATOS DEL PACIENTE:"
+                                ),
+
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "NHC:"
+                                ),
+                                m("td[colspan='2']", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    m("div.input-group", [
+                                        m("input.form-control[type='text'][placeholder='NHC']"),
+                                        m("div.input-group-append",
+                                            m("button.btn.btn-outline-light.tx-semibold[type='button'][id='button-addon2']",
+                                                "Buscar"
+                                            )
+                                        )
+                                    ])
+                                ),
+                                m("th[colspan='2'].tx-13", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Apellidos y Nombres:"
+                                ),
+                                m("td[colspan='6']", {
+                                    style: { "background-color": "#eaeff5" }
+                                },
+                                    NuevaCita.cita.title
+                                ),
+
+
+
+                            ]),
+
+                            m("tr.bg-litecoin.op-9.tx-white", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='10']",
+                                    "EXÁMENES:"
+                                ),
+
+                            ]),
+                            m("tr", [
+                                m("th[colspan='2']", {
+                                    style: { "background-color": "#a8bed6" }
+                                },
+                                    "Exámenes:"
+                                ),
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                }, m("div.input-group", [
+                                    m("input.form-control[type='text'][placeholder='Exámenes']"),
+                                    m("div.input-group-append",
+                                        m("button.btn.btn-outline-light.tx-semibold[type='button'][id='button-addon2']",
+                                            "Buscar Examen"
+                                        )
+                                    )
+                                ])),
+
+
+                            ]),
+                            m("tr", [
+                                m("th[colspan='2']", {
+                                    style: { "background-color": "#a8bed6" }
+                                }),
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+                                }),
+
+
+                            ]),
+                            m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                m("th.tx-15.tx-semibold[scope='col'][colspan='10']",
+                                    "OPCIONES DISPONIBLES:"
+                                ),
+
+                            ]),
+                            m("tr.d-print-none", [
+                                m("td[colspan='10']", {
+                                    style: { "background-color": "#eaeff5" }
+
+                                },
+                                    m("ul.nav.nav-tabs[id='myTab'][role='tablist']", {}, [
+
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-confirmacion'][data-toggle='tab'][href='#confirmacion'][role='tab'][aria-controls='confirmacion']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+                                                m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                " CONFIRMACIÓN "
+                                            )
+                                        ),
+
+                                        m("li.nav-item",
+                                            m("a.nav-link[id='home-commentAgenda'][data-toggle='tab'][href='#commentAgenda'][role='tab'][aria-controls='commentAgenda']", {
+                                                style: { "color": "#476ba3" }
+                                            },
+
+                                                " COMENTARIOS "
+                                            )
+                                        ),
+
+
+
+                                    ]),
+                                ),
+
+
+                            ]),
+                            m("tr.d-print-none", [
+                                m("td[colspan='10']",
+                                    m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
+                                        m(".tab-pane.fade[id='confirmacion'][role='tabpanel'][aria-labelledby='home-confirmacion']", [
+
+                                            [
+                                                m('div.pd-5', [
+                                                    m("div.form-group",
+                                                        m("div.custom-control.custom-checkbox", [
+                                                            m("input.custom-control-input[type='checkbox'][id='customCheck1']"),
+                                                            m("label.custom-control-label.tx-semibold[for='customCheck1']",
+                                                                "¿Esta seguro de agendar esta Cita?"
+                                                            )
+                                                        ])
+                                                    ),
+                                                    m("div.form-group",
+                                                        m("div.custom-control.custom-checkbox", [
+                                                            m("input.custom-control-input[type='checkbox'][id='customCheck2']"),
+                                                            m("label.custom-control-label.tx-semibold[for='customCheck2']",
+                                                                "Enviar correo de notificación al paciente."
+                                                            )
+                                                        ])
+                                                    ),
+                                                    m("button.btn.btn-primary.tx-semibold",
+                                                        "Agendar Cita"
+                                                    )
+                                                ]),
+
+
+                                            ]
+
+
+                                        ]),
+                                        m(".tab-pane.fade[id='commentAgenda'][role='tabpanel'][aria-labelledby='home-commentAgenda']", [
+                                            m("p.mg-5", [
+                                                m("span.badge.badge-light.wd-100p.tx-14",
+                                                    "Observaciones",
+                                                ),
+                                                m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                m("div.mg-0.mg-t-5.text-right", [
+
+                                                    m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+
+                                                    }, [
+                                                        m("i.fas.fa-paper-plane.mg-r-5",)
+                                                    ], "Guardar"),
+
+
+                                                ]),
+                                                m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                            ]),
+                                            m("p.mg-5", [
+                                                m("span.badge.badge-light.wd-100p.tx-14",
+                                                    "Historial de Observaciones",
+                                                ),
+                                                m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                            ]),
+                                        ]),
+
+                                    ])
+                                ),
+
+
+                            ]),
+                            m("tr.d-print-none", [
+
+                            ]),
+
+                        ])
+                    ]))
+
+
+                ]),
 
 
 
@@ -600,7 +861,7 @@ const AgendaImagen = {
                         m("div.modal-footer", [
                             m("button.btn.btn-primary.mg-r-5", {
                                 onclick: () => {
-                                    AgendaImagen.agendarCita();
+                                    NuevaCita.agendarCita();
                                 }
                             },
                                 "Agendar Cita"
@@ -656,7 +917,7 @@ const AgendaImagen = {
                 )
             )
 
-        ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length == 0 && AgendaImagen.citasAgendadas.length == 0) ? [
+        ] : !NuevaCita.loader && (NuevaCita.citasDisponibles.length == 0 && NuevaCita.citasAgendadas.length == 0) ? [
             m("div.calendar-wrapper", [
                 m("div.calendar-sidebar", [
                     m("div.calendar-sidebar-header"),
@@ -690,4 +951,4 @@ const AgendaImagen = {
 };
 
 
-export default AgendaImagen;
+export default NuevaCita;

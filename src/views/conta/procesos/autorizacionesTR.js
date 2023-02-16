@@ -1,5 +1,8 @@
-import HeadPublic from '../../layout/header-public';
+import App from '../../app';
 import m from 'mithril';
+import HeaderPrivate from '../../layout/header-private';
+import SidebarTRoja from './sidebarTRoja';
+
 
 const FOR005 = {
     secs: [],
@@ -515,7 +518,7 @@ const Evoluciones = {
             method: "POST",
             url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
             body: {
-                numeroHistoriaClinica: NuevaTRoja.data.CD_PACIENTE + '01'
+                numeroHistoriaClinica: AuthTR.data.CD_PACIENTE + '01'
             },
             headers: {
                 "Authorization": localStorage.accessToken,
@@ -569,8 +572,8 @@ const Examenes = {
 
     view: () => {
 
-        if (NuevaTRoja.examenes.length !== 0) {
-            return NuevaTRoja.examenes.map(function (_val, _i, _contentData) {
+        if (AuthTR.examenes.length !== 0) {
+            return AuthTR.examenes.map(function (_val, _i, _contentData) {
                 return [
                     m('.tx-14.tx-semibold.d-inline', _val.EXAMEN),
                     (_val.OBS_EXAMEN !== null ? [
@@ -591,20 +594,10 @@ const Examenes = {
 const DestinoFinal = {
     view: (_data) => {
         if (_data.attrs.destino_final == 'ALMACENAR') {
-            return m("input", {
-                "class": "form-control tx-semibold tx-15",
-                "type": "text",
-                "placeholder": "Destino Final",
-                oninput: (e) => {
-                    NuevaTRoja.data.destino_final = e.target.value;
-
-                }
-            })
+            return m("input", { "class": "form-control tx-semibold tx-15", "type": "text", "placeholder": "Destino Final" })
         } else {
             return m('select.tx-semibold', {
-                onchange: (e) => {
-                    NuevaTRoja.data.destino_final = e.target.value;
-                },
+
                 class: "custom-select"
             }, m('option', 'Seleccione...'), ['FINANZAS', 'SISTEMAS', 'MANTENIMIENTO', 'INGENIERIA CLINICA'].map(x =>
                 m('option', x)
@@ -616,17 +609,23 @@ const DestinoFinal = {
 
 
 
-const NuevaTRoja = {
+const AuthTR = {
+    id: '',
     data: [],
     activos: [],
     examenes: [],
     error: '',
-    numeroNuevaTRoja: '',
+    numeroAuthTR: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
     autorizado: false,
-    oninit: () => {
-        NuevaTRoja.fetch();
+    oninit: (_data) => {
+
+
+        AuthTR.id = _data.attrs.tr;
+
+        AuthTR.fetch();
+
         moment.lang("es", {
             months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
                 "_"
@@ -642,50 +641,13 @@ const NuevaTRoja = {
         });
     },
     fetch: () => {
-        NuevaTRoja.activos = [];
-        NuevaTRoja.loader = true;
+        AuthTR.activos = [];
+        AuthTR.loader = true;
         m.request({
             method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
-                if (result.status) {
-                    NuevaTRoja.loader = false;
-                    NuevaTRoja.activos = result.data;
-                } else {
-                    NuevaTRoja.error = result.message;
-                }
-
-            })
-            .catch(function (e) {
-                NuevaTRoja.fetch();
-            })
-
-    },
-    sendDataTR: () => {
-
-        NuevaTRoja.loader = true;
-
-        console.log('dd => ', NuevaTRoja.data)
-
-        m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/nueva",
+            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id",
             body: {
-                accion_sugerida: NuevaTRoja.data.accion_sugerida,
-                categoria: NuevaTRoja.data.categoria,
-                marca: NuevaTRoja.data.marca,
-                modelo: NuevaTRoja.data.modelo,
-                motivo_baja: NuevaTRoja.data.motivo_baja,
-                nombre: NuevaTRoja.data.nombre,
-                serie: NuevaTRoja.data.serie,
-                sub_categoria: NuevaTRoja.data.sub_categoria,
-                usuario: NuevaTRoja.data.usuario,
-                destino_final: NuevaTRoja.data.destino_final,
-
+                idTR: AuthTR.id,
             },
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -693,14 +655,15 @@ const NuevaTRoja = {
         })
             .then(function (result) {
                 if (result.status) {
-                    alert('Proceso realizado con éxito');
-                    window.location.reload();
+                    AuthTR.loader = false;
+                    AuthTR.data = result.data;
                 } else {
-                    NuevaTRoja.error = result.message;
+                    AuthTR.error = result.message;
                 }
+
             })
             .catch(function (e) {
-                NuevaTRoja.fetch();
+                AuthTR.fetch();
             })
 
     },
@@ -708,13 +671,39 @@ const NuevaTRoja = {
     view: (_data) => {
 
         return [
-            m(HeadPublic),
-            m("div.content.content-components", {},
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("contabilidad") }),
+            m(SidebarTRoja, { oncreate: SidebarTRoja.setPage(32) }),
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+
+            },
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
                 }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad" }, [
+                                " Contabilidad "
+                            ])
 
-                    m("h1.df-title.mg-b-10",
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
+                                " Tarjeta Roja "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Nueva Tarjeta Roja"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
                         "Nueva Tarjeta Roja: "
                     ),
 
@@ -725,7 +714,7 @@ const NuevaTRoja = {
 
 
 
-                            (NuevaTRoja.activos.length !== 0 ? [
+                            (AuthTR.data.length !== 0 ? [
                                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", {
 
 
@@ -755,7 +744,7 @@ const NuevaTRoja = {
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
+                                                            style: { "background-color": "#a8bed6", "width": "25%" }
                                                         },
                                                             "Fecha de Solicitud:"
                                                         ),
@@ -770,6 +759,7 @@ const NuevaTRoja = {
 
                                                     ]),
 
+
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='4']", {
@@ -781,16 +771,12 @@ const NuevaTRoja = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.categoria = e.target.value;
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), NuevaTRoja.activos.activos.map(x =>
-                                                                m('option', {
-                                                                    value: x.cod_class
-                                                                }, x.class)
-                                                            ))
+                                                            m("input", {
+                                                                "class": "form-control tx-semibold tx-14",
+                                                                "type": "text",
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.categoria
+                                                            })
                                                         )
 
 
@@ -806,14 +792,12 @@ const NuevaTRoja = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         },
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.sub_categoria = e.target.value;
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), NuevaTRoja.activos.subActivos.map(x =>
-                                                                (x.cod_class == NuevaTRoja.data.categoria ? [m('option', x.class)] : [])
-                                                            ))
+                                                            m("input", {
+                                                                "class": "form-control tx-semibold tx-14",
+                                                                "type": "text",
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.sub_categoria
+                                                            })
                                                         )
 
 
@@ -843,12 +827,9 @@ const NuevaTRoja = {
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
-                                                                "placeholder": "Nombre",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.nombre = e.target.value;
-                                                                }
-                                                            })
-                                                        )
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.nombre
+                                                            }))
                                                     ]),
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='1']", {
@@ -863,12 +844,9 @@ const NuevaTRoja = {
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
-                                                                "placeholder": "Marca",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.marca = e.target.value;
-                                                                }
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.marca
                                                             })
-
                                                         ),
                                                     ]),
                                                     m("tr", [
@@ -883,10 +861,8 @@ const NuevaTRoja = {
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
-                                                                "placeholder": "Modelo",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.modelo = e.target.value;
-                                                                }
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.modelo
                                                             })
                                                         )
 
@@ -907,12 +883,9 @@ const NuevaTRoja = {
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
-                                                                "placeholder": "Serie",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.serie = e.target.value;
-                                                                }
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.serie
                                                             })
-
                                                         ),
 
 
@@ -934,22 +907,12 @@ const NuevaTRoja = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         }, [
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.motivo_baja = e.target.value;
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), [
-                                                                { label: 'NO SE UTILIZA', value: 'NO_SE_UTILIZA' },
-                                                                { label: 'RENOVACIÓN', value: 'RENOVACION' },
-                                                                { label: 'RENOVACIÓN EQUIPO DE COMPUTO', value: 'RENOVACION_EQ_COMPUTO' },
-                                                                { label: 'DAÑO', value: 'DAÑO' },
-                                                                { label: 'PERDIDA', value: 'PERDIDA' }
-                                                            ].map(x =>
-                                                                m('option', {
-                                                                    value: x.value
-                                                                }, x.label)
-                                                            ))
+                                                            m("input", {
+                                                                "class": "form-control tx-semibold tx-14",
+                                                                "type": "text",
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.motivo_baja
+                                                            })
                                                         ]),
 
 
@@ -971,16 +934,12 @@ const NuevaTRoja = {
                                                             style: { "background-color": "#eaeff5" }
 
                                                         }, [
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.accion_sugerida = e.target.value;
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), NuevaTRoja.activos.motivos.map(x =>
-                                                            (x.motivo_baja == NuevaTRoja.data.motivo_baja ? [m('option', {
-                                                                value: x.accion_sugerida
-                                                            }, x.accion_sugerida.replace('_', ' '))] : [])
-                                                            ))
+                                                            m("input", {
+                                                                "class": "form-control tx-semibold tx-14",
+                                                                "type": "text",
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.accion_sugerida
+                                                            })
                                                         ]),
 
 
@@ -991,21 +950,7 @@ const NuevaTRoja = {
                                                         ),
 
                                                     ]),
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Observación:"
-                                                        ),
-                                                        m("td[colspan='7']", {
-                                                            style: { "background-color": "#eaeff5" }
 
-                                                        },
-                                                            m('div.tx-justify', {}, NuevaTRoja.activos.motivos.map(x =>
-                                                                (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [m('p.tx-15.tx-semibold.tx-danger', x.obs)] : [])
-                                                            ))
-                                                        ),
-                                                    ]),
 
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='3']", {
@@ -1018,14 +963,12 @@ const NuevaTRoja = {
 
                                                         },
 
-                                                            m('div', {}, NuevaTRoja.activos.motivos.map(x =>
-                                                            (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
-
-                                                                m(DestinoFinal, { destino_final: x.destino_final })
-
-
-                                                            ] : [])
-                                                            ))
+                                                            m("input", {
+                                                                "class": "form-control tx-semibold tx-14",
+                                                                "type": "text",
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.destino_final
+                                                            })
 
                                                         ),
 
@@ -1041,52 +984,12 @@ const NuevaTRoja = {
                                                         m("td[colspan='6']", {
                                                             style: { "background-color": "#eaeff5" }
                                                         },
-                                                            (NuevaTRoja.data.usuario !== undefined ? [
-                                                                m("div.input-group", [
-                                                                    m("input.form-control[type='text'][disabled='disabled'][placeholder='Usuario Responsable']", {
-                                                                        value: NuevaTRoja.data.usuario,
-                                                                    }),
-                                                                    m("div.input-group-append",
-                                                                        m("button.btn.btn-primary[type='button']", {
-                                                                            onclick: (e) => {
-                                                                                NuevaTRoja.sendDataTR();
-                                                                            }
-                                                                        },
-                                                                            "Enviar"
-                                                                        )
-                                                                    )
-                                                                ])
-                                                            ] : [
-                                                                m("div",
-                                                                    (NuevaTRoja.autorizado ? [
-                                                                        m("div.input-group", [
-                                                                            m("input.form-control[type='text'][placeholder='Correo Electrónico'][autofocus='true']"),
-                                                                            m("input.form-control[type='password'][placeholder='Contraseña']"),
-                                                                            m("div.input-group-append",
-                                                                                m("button.btn.btn-primary[type='button']", {
-                                                                                    onclick: (e) => {
-                                                                                        alert('Usuario validado con éxito');
-                                                                                        NuevaTRoja.data.usuario = 'CHANG CHAVEZ MARTIN FRANCISCO - ANALISTA PROGRAMADOR ERP-MV SOUL - IMPLEMENTACION ERP MV SOUL (009333000)';
-                                                                                    }
-                                                                                },
-                                                                                    "Validar"
-                                                                                )
-                                                                            )
-                                                                        ])
-                                                                    ] : [
-                                                                        m("button.btn.btn-xs.btn-block.btn-outline-light[type='button']", {
-                                                                            onclick: (e) => {
-                                                                                NuevaTRoja.autorizado = true;
-                                                                            }
-                                                                        },
-                                                                            m("i.fas.fa-edit.pd-1.mg-r-2"),
-                                                                            "Firma de Responsabilidad"
-                                                                        ),
-                                                                    ])
-
-
-                                                                )
-                                                            ])
+                                                            m("input", {
+                                                                "class": "form-control tx-semibold tx-14",
+                                                                "type": "text",
+                                                                "disabled": "disabled",
+                                                                value: AuthTR.data.usuario
+                                                            })
 
 
 
@@ -1119,6 +1022,54 @@ const NuevaTRoja = {
                                                                         " Adjuntos "
                                                                     )
                                                                 ),
+                                                                m("li.nav-item",
+                                                                    m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth1'][role='tab'][aria-controls='auth1']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                                        " Autorización "
+                                                                    )
+                                                                ),
+                                                                m("li.nav-item",
+                                                                    m("a.nav-link[id='home-auth2'][data-toggle='tab'][href='#auth2'][role='tab'][aria-controls='auth2']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                                        " Revisión Técnica "
+                                                                    )
+                                                                ),
+
+                                                                m("li.nav-item",
+                                                                    m("a.nav-link[id='home-auth3'][data-toggle='tab'][href='#auth3'][role='tab'][aria-controls='auth3']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                                        " Revisión CT "
+                                                                    )
+                                                                ),
+
+                                                                m("li.nav-item",
+                                                                    m("a.nav-link[id='home-auth4'][data-toggle='tab'][href='#auth4'][role='tab'][aria-controls='auth4']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                                        " Aprobación GC "
+                                                                    )
+                                                                ),
+
+                                                                m("li.nav-item",
+                                                                    m("a.nav-link[id='home-auth5'][data-toggle='tab'][href='#auth5'][role='tab'][aria-controls='auth5']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
+
+                                                                        " USSA "
+                                                                    )
+                                                                ),
 
 
                                                             ]),
@@ -1135,6 +1086,170 @@ const NuevaTRoja = {
                                                                 m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
                                                                     m(Evoluciones),
                                                                 ]),
+                                                                m(".tab-pane.fade[id='auth1'][role='tabpanel'][aria-labelledby='home-auth1']", [
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Autorización",
+                                                                        ),
+                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                                        m("div.mg-0.mg-t-5.text-right", [
+
+                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [
+                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                            ], "Autorizado"),
+
+                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [], "Rechazar"),
+
+
+                                                                        ]),
+                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                                                    ]),
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Historial de Observaciones",
+                                                                        ),
+                                                                        m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                                                    ]),
+                                                                ]),
+                                                                m(".tab-pane.fade[id='auth2'][role='tabpanel'][aria-labelledby='home-auth2']", [
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Revisión Técnica",
+                                                                        ),
+                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                                        m("div.mg-0.mg-t-5.text-right", [
+
+                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [], "Revisado"),
+
+                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [], "Rechazado"),
+
+
+                                                                        ]),
+                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                                                    ]),
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Historial de Observaciones",
+                                                                        ),
+                                                                        m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                                                    ]),
+                                                                ]),
+                                                                m(".tab-pane.fade[id='auth3'][role='tabpanel'][aria-labelledby='home-auth3']", [
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Revisión Contabilidad",
+                                                                        ),
+                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                                        m("div.mg-0.mg-t-5.text-right", [
+
+                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [
+                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                            ], "Aprobado"),
+
+                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [], "Rechazado"),
+
+
+                                                                        ]),
+                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                                                    ]),
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Historial de Observaciones",
+                                                                        ),
+                                                                        m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                                                    ]),
+                                                                ]),
+                                                                m(".tab-pane.fade[id='auth4'][role='tabpanel'][aria-labelledby='home-auth4']", [
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Aprobación GC",
+                                                                        ),
+                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                                        m("div.mg-0.mg-t-5.text-right", [
+
+                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [
+                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                            ], "Aprobado"),
+
+                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [], "Rechazado"),
+
+
+                                                                        ]),
+                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                                                    ]),
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Historial de Observaciones",
+                                                                        ),
+                                                                        m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                                                    ]),
+                                                                ]),
+                                                                m(".tab-pane.fade[id='auth5'][role='tabpanel'][aria-labelledby='home-auth5']", [
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "USSA",
+                                                                        ),
+                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                                        m("div.mg-0.mg-t-5.text-right", [
+
+                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+
+                                                                                },
+                                                                            }, [
+                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                            ], "Guardar"),
+
+
+
+                                                                        ]),
+                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
+
+                                                                    ]),
+                                                                    m("p.mg-5", [
+                                                                        m("span.badge.badge-light.wd-100p.tx-14",
+                                                                            "Historial de Observaciones",
+                                                                        ),
+                                                                        m("table.table.table-sm[id='table-observaciones'][width='100%']")
+                                                                    ]),
+                                                                ]),
+
 
 
                                                             ])
@@ -1182,4 +1297,4 @@ const NuevaTRoja = {
 };
 
 
-export default NuevaTRoja;
+export default AuthTR;

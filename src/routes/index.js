@@ -547,12 +547,11 @@ const Routes = {
         oninit: (_data) => {
             App.isAuth('imagen', 31);
             document.title = "Detalle de Cita | " + App.title;
-            console.log(_data);
         },
         view: (_data) => {
             return [
                 m(HeaderCalendar, { oncreate: HeaderCalendar.setPage("imagen") }),
-                m(DetalleCita),
+                m(DetalleCita, { id: _data.attrs.id }),
             ];
         },
     }, // AgendaImagen

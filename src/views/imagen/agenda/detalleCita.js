@@ -114,6 +114,7 @@ function Stopwatch() {
 
 
 const DetalleCita = {
+    id: '',
     cita: [],
     citasDisponibles: [],
     citasAgendadas: [],
@@ -129,12 +130,11 @@ const DetalleCita = {
     error: "",
     oninit: (_data) => {
 
-        console.log('cita => ', AgendaImagen.cita)
 
+        DetalleCita.id = _data.attrs.id;
         DetalleCita.loader = true;
-        //  DetalleCita.fetchDetalleCita();
+        DetalleCita.fetchDetalleCita();
         document.body.classList.add('app-calendar');
-
         moment.lang("es", {
             months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
                 "_"
@@ -149,34 +149,26 @@ const DetalleCita = {
             weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
         });
 
-
     },
     setSidebar: () => {
 
-        // Initialize scrollbar for sidebar
-        new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
+        // Sidebar calendar
+        $('#calendarInline').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            beforeShowDay: function(date) {
 
-        $('#calendarSidebarShow').on('click', function (e) {
-            e.preventDefault()
-            $('body').toggleClass('calendar-sidebar-show');
-
-            $(this).addClass('d-none');
-            $('#mainMenuOpen').removeClass('d-none');
-        })
-
-        $(document).on('click touchstart', function (e) {
-            e.stopPropagation();
-
-            // closing of sidebar menu when clicking outside of it
-            if (!$(e.target).closest('.burger-menu').length) {
-                var sb = $(e.target).closest('.calendar-sidebar').length;
-                if (!sb) {
-                    $('body').removeClass('calendar-sidebar-show');
-                    $('#mainMenuOpen').addClass('d-none');
-                    $('#calendarSidebarShow').removeClass('d-none');
-                }
+                // add leading zero to single digit date
+                var day = date.getDate();
+                console.log(day);
+                return [true, (day < 10 ? 'zero' : '')];
             }
         });
+
+        setTimeout(function() {
+            // Initialize scrollbar for sidebar
+            new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
+        }, 100);
 
         // Initialize tooltip
         $('[data-toggle="tooltip"]').tooltip();
@@ -189,55 +181,56 @@ const DetalleCita = {
     fetchDetalleCita: () => {
 
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda/cita?id=" + DetalleCita.id,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 DetalleCita.loader = false;
-                DetalleCita.citasDisponibles = result.citasDisponibles;
-                DetalleCita.citasAgendadas = result.citasAgendadas;
-                setTimeout(function () { DetalleCita.setCalendar(); }, 100);
-                setTimeout(function () { DetalleCita.setSidebar(); }, 200);
+                DetalleCita.cita = result.data
+                DetalleCita.cita.horaInicio = moment(DetalleCita.cita.start).format('dddd, DD-MM-YYYY HH:mm');
+                DetalleCita.cita.horaFin = moment(DetalleCita.cita.end).format('dddd, DD-MM-YYYY HH:mm');
+                console.log(1, DetalleCita.cita)
+                setTimeout(function() { DetalleCita.setSidebar(); }, 100);
 
             })
-            .catch(function (e) {
-                setTimeout(function () { DetalleCita.fetchDetalleCita(); }, 2000);
+            .catch(function(e) {
+                setTimeout(function() { DetalleCita.fetchDetalleCita(); }, 2000);
             });
 
     },
     agendarCita: () => {
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
-            body: {
-                availableServiceId: 0,
-                covenantId: 2,
-                covenantPlanId: 2,
-                dateBirth: "1962-03-23",
-                email: "mariobe7@hotmail.com",
-                id: DetalleCita.cita.id,
-                isFitting: true,
-                markingTypeId: 0,
-                patientId: 22706,
-                patientName: "BERMEO CABEZAS MARIO GERMAN",
-                phoneNumber: "0999721820",
-                scheduleFormType: "PERSONALLY",
-                schedulingItemId: 428,
-                sexType: "MALE",
-                specialityId: 66,
-                statusScheduleType: "M"
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
+                body: {
+                    availableServiceId: 0,
+                    covenantId: 2,
+                    covenantPlanId: 2,
+                    dateBirth: "1962-03-23",
+                    email: "mariobe7@hotmail.com",
+                    id: DetalleCita.cita.id,
+                    isFitting: true,
+                    markingTypeId: 0,
+                    patientId: 22706,
+                    patientName: "BERMEO CABEZAS MARIO GERMAN",
+                    phoneNumber: "0999721820",
+                    scheduleFormType: "PERSONALLY",
+                    schedulingItemId: 428,
+                    sexType: "MALE",
+                    specialityId: 66,
+                    statusScheduleType: "M"
 
 
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
 
                 console.log(result);
 
@@ -249,7 +242,7 @@ const DetalleCita = {
                 }
 
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
 
     },
     view: (_data) => {
@@ -257,31 +250,31 @@ const DetalleCita = {
 
         return DetalleCita.loader ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
+                    ]),
 
-            ]
+                ]
 
             ),
         ] : DetalleCita.error.length !== 0 ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body")
+                    ]),
 
-            ]
+                ]
 
             ),
-        ] : !DetalleCita.loader && (DetalleCita.citasDisponibles.length !== 0 && DetalleCita.citasAgendadas.length !== 0) ? [
+        ] : !DetalleCita.loader && DetalleCita.cita.length !== 0 ? [
             m("div.calendar-wrapper", [
                 m("div.calendar-sidebar", [
                     m("div.calendar-sidebar-header", [
@@ -307,15 +300,16 @@ const DetalleCita = {
                         m("table.table.table-bordered.table-sm.tx-12", [
                             m("thead",
                                 m("tr.bg-litecoin.op-9.tx-white", [
+
                                     m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
                                         m("small.pd-2.tx-15.tx-white ",
                                             m("i.fas.fa-times-circle.pd-2", {
-                                                "style": { "cursor": "pointer" },
-                                                title: "Cerrar",
-                                                onclick: () => {
-                                                    DetalleCita.loadDetalle = !DetalleCita.loadDetalle;
+                                                    "style": { "cursor": "pointer" },
+                                                    title: "Cerrar",
+                                                    onclick: () => {
+                                                        m.route.set('/imagen/agendamiento/');
+                                                    }
                                                 }
-                                            }
 
                                             )
 
@@ -331,60 +325,60 @@ const DetalleCita = {
                             m("tbody", [
                                 m("tr", [
                                     m("th[colspan='2'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Id Cita:"
                                     ),
                                     m("td[colspan='2'].tx-13", {
-                                        style: { "background-color": "#eaeff5" }
-                                    },
+                                            style: { "background-color": "#eaeff5" }
+                                        },
                                         DetalleCita.cita.id
                                     ),
                                     m("th[colspan='2'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Fecha Hora Inicio:",
                                     ),
                                     m("td.tx-13.tx-danger.tx-semibold", {
-                                        style: { "background-color": "#eaeff5" }
+                                            style: { "background-color": "#eaeff5" }
 
-                                    },
+                                        },
                                         DetalleCita.cita.horaInicio
                                     ),
                                     m("th[colspan='2'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Fecha Hora Fin:"
                                     ),
                                     m("td.tx-13.tx-danger.tx-semibold", {
-                                        style: { "background-color": "#eaeff5" }
+                                            style: { "background-color": "#eaeff5" }
 
-                                    },
+                                        },
                                         DetalleCita.cita.horaFin
                                     ),
 
                                 ]),
                                 m("tr", [
                                     m("th[colspan='3'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Médico Prestador:"
                                     ),
                                     m("td[colspan='3'].tx-13", {
-                                        style: { "background-color": "#eaeff5" }
-                                    },
+                                            style: { "background-color": "#eaeff5" }
+                                        },
                                         DetalleCita.cita.id
                                     ),
                                     m("th[colspan='3'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Especialidad:",
                                     ),
 
                                     m("td[colspan='3'].tx-13.tx-danger.tx-semibold", {
-                                        style: { "background-color": "#eaeff5" }
+                                            style: { "background-color": "#eaeff5" }
 
-                                    },
+                                        },
                                         DetalleCita.cita.horaFin
                                     ),
 
@@ -401,23 +395,23 @@ const DetalleCita = {
                             m("tbody", [
                                 m("tr", [
                                     m("th[colspan='2'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "NHC:"
                                     ),
                                     m("td[colspan='4']", {
-                                        style: { "background-color": "#eaeff5" }
-                                    },
+                                            style: { "background-color": "#eaeff5" }
+                                        },
                                         DetalleCita.cita.title
                                     ),
                                     m("th[colspan='2'].tx-13", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Apellidos y Nombres:"
                                     ),
                                     m("td[colspan='4']", {
-                                        style: { "background-color": "#eaeff5" }
-                                    },
+                                            style: { "background-color": "#eaeff5" }
+                                        },
                                         DetalleCita.cita.title
                                     ),
 
@@ -439,14 +433,14 @@ const DetalleCita = {
                                 ]),
                                 m("tr", [
                                     m("th", {
-                                        style: { "background-color": "#a8bed6" }
-                                    },
+                                            style: { "background-color": "#a8bed6" }
+                                        },
                                         "Exámenes:"
                                     ),
                                     m("td[colspan='9']", {
                                         style: { "background-color": "#eaeff5" }
 
-                                    },),
+                                    }, ),
 
 
                                 ]),
@@ -458,15 +452,15 @@ const DetalleCita = {
                                 ]),
                                 m("tr.d-print-none", [
                                     m("td[colspan='10']", {
-                                        style: { "background-color": "#eaeff5" }
+                                            style: { "background-color": "#eaeff5" }
 
-                                    },
+                                        },
                                         m("ul.nav.nav-tabs[id='myTab'][role='tablist']", {}, [
 
                                             m("li.nav-item",
                                                 m("a.nav-link[id='home-editar'][data-toggle='tab'][href='#editar'][role='tab'][aria-controls='editar']", {
-                                                    style: { "color": "#476ba3" }
-                                                },
+                                                        style: { "color": "#476ba3" }
+                                                    },
                                                     m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                     " EDITAR "
@@ -474,8 +468,8 @@ const DetalleCita = {
                                             ),
                                             m("li.nav-item",
                                                 m("a.nav-link[id='home-cancelacion'][data-toggle='tab'][href='#cancelacion'][role='tab'][aria-controls='cancelacion']", {
-                                                    style: { "color": "#476ba3" }
-                                                },
+                                                        style: { "color": "#476ba3" }
+                                                    },
                                                     m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                     " CANCELAR "
@@ -483,8 +477,8 @@ const DetalleCita = {
                                             ),
                                             m("li.nav-item",
                                                 m("a.nav-link[id='home-comment'][data-toggle='tab'][href='#comment'][role='tab'][aria-controls='comment']", {
-                                                    style: { "color": "#476ba3" }
-                                                },
+                                                        style: { "color": "#476ba3" }
+                                                    },
 
                                                     " COMENTARIOS "
                                                 )
@@ -564,13 +558,13 @@ const DetalleCita = {
                                                     m("div.mg-0.mg-t-5.text-right", [
 
                                                         m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                            onclick: function () {
+                                                            onclick: function() {
 
                                                                 DetalleCita.loadDetalle = !DetalleCita.loadDetalle;
 
                                                             },
                                                         }, [
-                                                            m("i.fas.fa-paper-plane.mg-r-5",)
+                                                            m("i.fas.fa-paper-plane.mg-r-5", )
                                                         ], "Guardar"),
 
 
@@ -676,10 +670,10 @@ const DetalleCita = {
                         ]),
                         m("div.modal-footer", [
                             m("button.btn.btn-primary.mg-r-5", {
-                                onclick: () => {
-                                    DetalleCita.agendarCita();
-                                }
-                            },
+                                    onclick: () => {
+                                        DetalleCita.agendarCita();
+                                    }
+                                },
                                 "Agendar Cita"
                             ),
                             m("a.btn.btn-secondary[href=''][data-dismiss='modal']",
@@ -733,30 +727,17 @@ const DetalleCita = {
                 )
             )
 
-        ] : !DetalleCita.loader && (DetalleCita.citasDisponibles.length == 0 && DetalleCita.citasAgendadas.length == 0) ? [
-            m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body")
-                ]),
-
-            ]
-
-            ),
         ] : [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body")
+                    ]),
 
-            ]
+                ]
 
             ),
         ];

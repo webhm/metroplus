@@ -1,5 +1,6 @@
 import Notificaciones from '../../../models/notificaciones';
 import m from 'mithril';
+import AgendaImagen from './agenImagen';
 
 function stopwatchModel() {
     return {
@@ -128,12 +129,15 @@ const NuevaCita = {
     error: "",
     oninit: (_data) => {
 
+        if (AgendaImagen.cita.length == 0) {
+            m.route.set('/imagen/agendamiento/');
+        }
 
+        NuevaCita.cita = AgendaImagen.cita;
 
-        NuevaCita.loader = true;
-        NuevaCita.fetchNuevaCita();
+        console.log(1, NuevaCita.cita)
+
         document.body.classList.add('app-calendar');
-
 
         moment.lang("es", {
             months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
@@ -149,14 +153,33 @@ const NuevaCita = {
             weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
         });
 
+        setTimeout(function() { NuevaCita.setSidebar(); }, 20);
+
+
 
     },
     setSidebar: () => {
 
-        // Initialize scrollbar for sidebar
-        new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
 
-        $('#calendarSidebarShow').on('click', function (e) {
+        // Sidebar calendar
+        $('#calendarInline').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            beforeShowDay: function(date) {
+
+                // add leading zero to single digit date
+                var day = date.getDate();
+                console.log(day);
+                return [true, (day < 10 ? 'zero' : '')];
+            }
+        });
+
+        setTimeout(function() {
+            // Initialize scrollbar for sidebar
+            new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
+        }, 100);
+
+        $('#calendarSidebarShow').on('click', function(e) {
             e.preventDefault()
             $('body').toggleClass('calendar-sidebar-show');
 
@@ -164,7 +187,7 @@ const NuevaCita = {
             $('#mainMenuOpen').removeClass('d-none');
         })
 
-        $(document).on('click touchstart', function (e) {
+        $(document).on('click touchstart', function(e) {
             e.stopPropagation();
 
             // closing of sidebar menu when clicking outside of it
@@ -184,272 +207,39 @@ const NuevaCita = {
 
 
     },
-    setCalendar: () => {
 
-
-        // Sidebar calendar
-        $('#calendarInline').datepicker({
-            showOtherMonths: true,
-            selectOtherMonths: true,
-            beforeShowDay: function (date) {
-
-                // add leading zero to single digit date
-                var day = date.getDate();
-                console.log(day);
-                return [true, (day < 10 ? 'zero' : '')];
-            }
-        });
-
-        // Initialize fullCalendar
-        $('#calendar').fullCalendar({
-            height: 'parent',
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay,listWeek'
-            },
-            navLinks: true,
-            selectable: true,
-            selectLongPressDelay: 100,
-            editable: false,
-            nowIndicator: true,
-            defaultView: 'listMonth',
-            minTime: '06:00:00',
-            maxTime: '21:00:00',
-            slotDuration: '00:15:00',
-            slotLabelInterval: 15,
-            slotLabelFormat: 'HH:mma',
-            slotMinutes: 15,
-            timeFormat: 'HH:mma',
-            views: {
-                agenda: {
-                    columnHeaderHtml: function (mom) {
-                        return '<span>' + mom.format('ddd') + '</span>' +
-                            '<span>' + mom.format('DD') + '</span>';
-                    }
-                },
-                day: { columnHeader: false },
-                listMonth: {
-                    listDayFormat: 'ddd DD',
-                    listDayAltFormat: false
-                },
-                listWeek: {
-                    listDayFormat: 'ddd DD',
-                    listDayAltFormat: false
-                },
-                agendaThreeDay: {
-                    type: 'agenda',
-                    duration: { days: 3 },
-                    titleFormat: 'MMMM YYYY'
-                }
-            },
-
-            eventSources: [NuevaCita.citasDisponibles, NuevaCita.citasAgendadas],
-            eventAfterAllRender: function (view) {
-                if (view.name === 'listMonth' || view.name === 'listWeek') {
-                    var dates = view.el.find('.fc-list-heading-main');
-                    dates.each(function () {
-                        var text = $(this).text().split(' ');
-                        var now = moment().format('DD');
-
-                        $(this).html(text[0] + '<span>' + text[1] + '</span>');
-                        if (now === text[1]) { $(this).addClass('now'); }
-                    });
-                }
-
-                console.log(view.el);
-            },
-            eventRender: function (event, element) {
-
-                if (event.description) {
-                    element.find('.fc-list-item-title').append('<span class="fc-desc">' + event.description + '</span>');
-                    element.find('.fc-content').append('<span class="fc-desc">' + event.description + '</span>');
-                }
-
-                var eBorderColor = (event.source.borderColor) ? event.source.borderColor : event.borderColor;
-                element.find('.fc-list-item-time').css({
-                    color: eBorderColor,
-                    borderColor: eBorderColor
-                });
-
-                element.find('.fc-list-item-title').css({
-                    borderColor: eBorderColor
-                });
-
-                element.css('borderLeftColor', eBorderColor);
-            },
-        });
-
-        var calendar = $('#calendar').fullCalendar('getCalendar');
-
-        // change view to week when in tablet
-        if (window.matchMedia('(min-width: 576px)').matches) {
-            calendar.changeView('agendaWeek');
-        }
-
-        // change view to month when in desktop
-        if (window.matchMedia('(min-width: 992px)').matches) {
-            calendar.changeView('month');
-        }
-
-        // change view based in viewport width when resize is detected
-        calendar.option('windowResize', function (view) {
-            if (view.name === 'listWeek') {
-                if (window.matchMedia('(min-width: 992px)').matches) {
-                    calendar.changeView('month');
-                } else {
-                    calendar.changeView('listWeek');
-                }
-            }
-        });
-
-        // Display calendar event modal
-        calendar.on('eventClick', function (calEvent, jsEvent, view) {
-
-
-            if (calEvent.stAgendar == 1) {
-
-                NuevaCita.cita = calEvent;
-                NuevaCita.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
-                NuevaCita.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
-                console.log(NuevaCita.cita)
-
-                NuevaCita.loadDetalle = true;
-                m.redraw();
-
-                /*
-
-                var modal = $('#modalCalendarEvent');
-
-                modal.modal('show');
-                modal.find('.event-title').text(calEvent.title);
-
-                if (calEvent.description) {
-                    modal.find('.event-desc').text(calEvent.description);
-                    modal.find('.event-desc').prev().removeClass('d-none');
-                } else {
-                    modal.find('.event-desc').text('');
-                    modal.find('.event-desc').prev().addClass('d-none');
-                }
-
-                modal.find('.event-start-date').text(moment(calEvent.start).format('LLL'));
-                modal.find('.event-end-date').text(moment(calEvent.end).format('LLL'));
-
-                //styling
-                modal.find('.modal-header').css('backgroundColor', (calEvent.source.borderColor) ? calEvent.source.borderColor : calEvent.borderColor);
-
-                */
-
-            } else {
-
-                NuevaCita.cita = calEvent;
-                NuevaCita.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
-                NuevaCita.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
-                NuevaCita.nuevaCita = true;
-                m.redraw();
-
-                /*
-                
-                $('#modalCreateEvent').modal('show');
-                $('#eventStartDate').val(moment(calEvent.start).format('LLL'));
-                $('#eventEndDate').val(moment(calEvent.end).format('LLL'));
-
-                $('#eventStartTime').val(moment(calEvent.start).format('LT')).trigger('change');
-                $('#eventEndTime').val(moment(calEvent.end).format('LT')).trigger('change');
-
-                */
-
-
-            }
-
-
-        });
-
-        // display current date
-        var dateNow = calendar.getDate();
-        calendar.option('select', function (startDate, endDate) {
-
-            alert("Seleccione una cita disponible.");
-
-            throw "Seleccione una cita disponible."
-            /*
-
-            $('#modalCreateEvent').modal('show');
-            $('#eventStartDate').val(startDate.format('LL'));
-            $('#eventEndDate').val(endDate.format('LL'));
-
-            $('#eventStartTime').val(startDate.format('LT')).trigger('change');
-            $('#eventEndTime').val(endDate.format('LT')).trigger('change');
-            */
-        });
-
-        $('.select2-modal').select2({
-            minimumResultsForSearch: Infinity,
-            dropdownCssClass: 'select2-dropdown-modal',
-        });
-
-        $('.calendar-add').on('click', function (e) {
-            e.preventDefault()
-
-            $('#modalCreateEvent').modal('show');
-        });
-
-
-
-    },
     oncreate: (_data) => {
         Notificaciones.suscribirCanal('MetroPlus-Imagen-Agenda');
     },
-    fetchNuevaCita: () => {
 
-        m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
-                NuevaCita.loader = false;
-                NuevaCita.citasDisponibles = result.citasDisponibles;
-                NuevaCita.citasAgendadas = result.citasAgendadas;
-                setTimeout(function () { NuevaCita.setCalendar(); }, 100);
-                setTimeout(function () { NuevaCita.setSidebar(); }, 200);
-
-            })
-            .catch(function (e) {
-                setTimeout(function () { NuevaCita.fetchNuevaCita(); }, 2000);
-            });
-
-    },
     agendarCita: () => {
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
-            body: {
-                availableServiceId: 0,
-                covenantId: 2,
-                covenantPlanId: 2,
-                dateBirth: "1962-03-23",
-                email: "mariobe7@hotmail.com",
-                id: NuevaCita.cita.id,
-                isFitting: true,
-                markingTypeId: 0,
-                patientId: 22706,
-                patientName: "BERMEO CABEZAS MARIO GERMAN",
-                phoneNumber: "0999721820",
-                scheduleFormType: "PERSONALLY",
-                schedulingItemId: 428,
-                sexType: "MALE",
-                specialityId: 66,
-                statusScheduleType: "M"
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
+                body: {
+                    availableServiceId: 0,
+                    covenantId: 2,
+                    covenantPlanId: 2,
+                    dateBirth: "1962-03-23",
+                    email: "mariobe7@hotmail.com",
+                    id: NuevaCita.cita.id,
+                    isFitting: true,
+                    markingTypeId: 0,
+                    patientId: 22706,
+                    patientName: "BERMEO CABEZAS MARIO GERMAN",
+                    phoneNumber: "0999721820",
+                    scheduleFormType: "PERSONALLY",
+                    schedulingItemId: 428,
+                    sexType: "MALE",
+                    specialityId: 66,
+                    statusScheduleType: "M"
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
 
                 console.log(result);
 
@@ -461,38 +251,38 @@ const NuevaCita = {
                 }
 
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
 
     },
     view: (_data) => {
 
         return NuevaCita.loader ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
+                    ]),
 
-            ]
+                ]
 
             ),
         ] : NuevaCita.error.length !== 0 ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body[id='calendar']")
+                    ]),
 
-            ]
+                ]
 
             ),
-        ] : !NuevaCita.loader && (NuevaCita.citasDisponibles.length !== 0 && NuevaCita.citasAgendadas.length !== 0) ? [
+        ] : !NuevaCita.loader && NuevaCita.cita.length !== 0 ? [
             m("div.calendar-wrapper", [
                 m("div.calendar-sidebar", [
                     m("div.calendar-sidebar-header", [
@@ -522,12 +312,12 @@ const NuevaCita = {
                                 m("th.tx-15.tx-semibold[scope='col'][colspan='12']",
                                     m("small.pd-2.tx-15.tx-white ",
                                         m("i.fas.fa-times-circle.pd-2", {
-                                            "style": { "cursor": "pointer" },
-                                            title: "Cerrar",
-                                            onclick: () => {
-                                                NuevaCita.nuevaCita = !NuevaCita.nuevaCita;
+                                                "style": { "cursor": "pointer" },
+                                                title: "Cerrar",
+                                                onclick: () => {
+                                                    m.route.set('/imagen/agendamiento/');
+                                                }
                                             }
-                                        }
 
                                         )
 
@@ -544,25 +334,25 @@ const NuevaCita = {
                             m("tr", [
 
                                 m("th[colspan='2'].tx-13", {
-                                    style: { "background-color": "#a8bed6" }
-                                },
+                                        style: { "background-color": "#a8bed6" }
+                                    },
                                     "Fecha Hora Inicio:",
                                 ),
                                 m("td[colspan='4'].tx-13.tx-danger.tx-semibold", {
-                                    style: { "background-color": "#eaeff5" }
+                                        style: { "background-color": "#eaeff5" }
 
-                                },
+                                    },
                                     NuevaCita.cita.horaInicio
                                 ),
                                 m("th[colspan='2'].tx-13", {
-                                    style: { "background-color": "#a8bed6" }
-                                },
+                                        style: { "background-color": "#a8bed6" }
+                                    },
                                     "Fecha Hora Fin:"
                                 ),
                                 m("td[colspan='4'].tx-13.tx-danger.tx-semibold", {
-                                    style: { "background-color": "#eaeff5" }
+                                        style: { "background-color": "#eaeff5" }
 
-                                },
+                                    },
                                     NuevaCita.cita.horaFin
                                 ),
 
@@ -570,14 +360,14 @@ const NuevaCita = {
                             m("tr", [
 
                                 m("th[colspan='2'].tx-13", {
-                                    style: { "background-color": "#a8bed6" }
-                                },
+                                        style: { "background-color": "#a8bed6" }
+                                    },
                                     "Médico Prestador",
                                 ),
                                 m("td[colspan='10'].tx-13.tx-danger.tx-semibold", {
-                                    style: { "background-color": "#eaeff5" }
+                                        style: { "background-color": "#eaeff5" }
 
-                                },
+                                    },
                                     m("div.input-group", [
                                         m("input.form-control[type='text'][placeholder='Médico Prestador']"),
                                         m("div.input-group-append",
@@ -601,13 +391,13 @@ const NuevaCita = {
                         m("tbody", [
                             m("tr", [
                                 m("th[colspan='2'].tx-13", {
-                                    style: { "background-color": "#a8bed6" }
-                                },
+                                        style: { "background-color": "#a8bed6" }
+                                    },
                                     "NHC:"
                                 ),
                                 m("td[colspan='2']", {
-                                    style: { "background-color": "#eaeff5" }
-                                },
+                                        style: { "background-color": "#eaeff5" }
+                                    },
                                     m("div.input-group", [
                                         m("input.form-control[type='text'][placeholder='NHC']"),
                                         m("div.input-group-append",
@@ -618,13 +408,13 @@ const NuevaCita = {
                                     ])
                                 ),
                                 m("th[colspan='2'].tx-13", {
-                                    style: { "background-color": "#a8bed6" }
-                                },
+                                        style: { "background-color": "#a8bed6" }
+                                    },
                                     "Apellidos y Nombres:"
                                 ),
                                 m("td[colspan='6']", {
-                                    style: { "background-color": "#eaeff5" }
-                                },
+                                        style: { "background-color": "#eaeff5" }
+                                    },
                                     NuevaCita.cita.title
                                 ),
 
@@ -640,8 +430,8 @@ const NuevaCita = {
                             ]),
                             m("tr", [
                                 m("th[colspan='2']", {
-                                    style: { "background-color": "#a8bed6" }
-                                },
+                                        style: { "background-color": "#a8bed6" }
+                                    },
                                     "Exámenes:"
                                 ),
                                 m("td[colspan='10']", {
@@ -676,15 +466,15 @@ const NuevaCita = {
                             ]),
                             m("tr.d-print-none", [
                                 m("td[colspan='10']", {
-                                    style: { "background-color": "#eaeff5" }
+                                        style: { "background-color": "#eaeff5" }
 
-                                },
+                                    },
                                     m("ul.nav.nav-tabs[id='myTab'][role='tablist']", {}, [
 
                                         m("li.nav-item",
                                             m("a.nav-link[id='home-confirmacion'][data-toggle='tab'][href='#confirmacion'][role='tab'][aria-controls='confirmacion']", {
-                                                style: { "color": "#476ba3" }
-                                            },
+                                                    style: { "color": "#476ba3" }
+                                                },
                                                 m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                 " CONFIRMACIÓN "
@@ -693,8 +483,8 @@ const NuevaCita = {
 
                                         m("li.nav-item",
                                             m("a.nav-link[id='home-commentAgenda'][data-toggle='tab'][href='#commentAgenda'][role='tab'][aria-controls='commentAgenda']", {
-                                                style: { "color": "#476ba3" }
-                                            },
+                                                    style: { "color": "#476ba3" }
+                                                },
 
                                                 " COMENTARIOS "
                                             )
@@ -751,7 +541,7 @@ const NuevaCita = {
                                                     m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
 
                                                     }, [
-                                                        m("i.fas.fa-paper-plane.mg-r-5",)
+                                                        m("i.fas.fa-paper-plane.mg-r-5", )
                                                     ], "Guardar"),
 
 
@@ -860,10 +650,10 @@ const NuevaCita = {
                         ]),
                         m("div.modal-footer", [
                             m("button.btn.btn-primary.mg-r-5", {
-                                onclick: () => {
-                                    NuevaCita.agendarCita();
-                                }
-                            },
+                                    onclick: () => {
+                                        NuevaCita.agendarCita();
+                                    }
+                                },
                                 "Agendar Cita"
                             ),
                             m("a.btn.btn-secondary[href=''][data-dismiss='modal']",
@@ -917,30 +707,17 @@ const NuevaCita = {
                 )
             )
 
-        ] : !NuevaCita.loader && (NuevaCita.citasDisponibles.length == 0 && NuevaCita.citasAgendadas.length == 0) ? [
-            m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']")
-                ]),
-
-            ]
-
-            ),
         ] : [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body[id='calendar']")
+                    ]),
 
-            ]
+                ]
 
             ),
         ];

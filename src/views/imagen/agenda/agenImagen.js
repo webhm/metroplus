@@ -153,10 +153,30 @@ const AgendaImagen = {
     },
     setSidebar: () => {
 
-        // Initialize scrollbar for sidebar
-        new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
 
-        $('#calendarSidebarShow').on('click', function (e) {
+
+        // Sidebar calendar
+        $('#calendarInline').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            beforeShowDay: function(date) {
+
+                // add leading zero to single digit date
+                var day = date.getDate();
+                console.log(day);
+                return [true, (day < 10 ? 'zero' : '')];
+            }
+        });
+
+
+        setTimeout(function() {
+            // Initialize scrollbar for sidebar
+            new PerfectScrollbar('#calendarSidebarBody', { suppressScrollX: true });
+        }, 100);
+
+
+
+        $('#calendarSidebarShow').on('click', function(e) {
             e.preventDefault()
             $('body').toggleClass('calendar-sidebar-show');
 
@@ -164,7 +184,7 @@ const AgendaImagen = {
             $('#mainMenuOpen').removeClass('d-none');
         })
 
-        $(document).on('click touchstart', function (e) {
+        $(document).on('click touchstart', function(e) {
             e.stopPropagation();
 
             // closing of sidebar menu when clicking outside of it
@@ -187,18 +207,6 @@ const AgendaImagen = {
     setCalendar: () => {
 
 
-        // Sidebar calendar
-        $('#calendarInline').datepicker({
-            showOtherMonths: true,
-            selectOtherMonths: true,
-            beforeShowDay: function (date) {
-
-                // add leading zero to single digit date
-                var day = date.getDate();
-                console.log(day);
-                return [true, (day < 10 ? 'zero' : '')];
-            }
-        });
 
         // Initialize fullCalendar
         $('#calendar').fullCalendar({
@@ -223,7 +231,7 @@ const AgendaImagen = {
             timeFormat: 'HH:mma',
             views: {
                 agenda: {
-                    columnHeaderHtml: function (mom) {
+                    columnHeaderHtml: function(mom) {
                         return '<span>' + mom.format('ddd') + '</span>' +
                             '<span>' + mom.format('DD') + '</span>';
                     }
@@ -245,10 +253,10 @@ const AgendaImagen = {
             },
 
             eventSources: [AgendaImagen.citasDisponibles, AgendaImagen.citasAgendadas],
-            eventAfterAllRender: function (view) {
+            eventAfterAllRender: function(view) {
                 if (view.name === 'listMonth' || view.name === 'listWeek') {
                     var dates = view.el.find('.fc-list-heading-main');
-                    dates.each(function () {
+                    dates.each(function() {
                         var text = $(this).text().split(' ');
                         var now = moment().format('DD');
 
@@ -259,7 +267,7 @@ const AgendaImagen = {
 
                 console.log(view.el);
             },
-            eventRender: function (event, element) {
+            eventRender: function(event, element) {
 
                 if (event.description) {
                     element.find('.fc-list-item-title').append('<span class="fc-desc">' + event.description + '</span>');
@@ -293,7 +301,7 @@ const AgendaImagen = {
         }
 
         // change view based in viewport width when resize is detected
-        calendar.option('windowResize', function (view) {
+        calendar.option('windowResize', function(view) {
             if (view.name === 'listWeek') {
                 if (window.matchMedia('(min-width: 992px)').matches) {
                     calendar.changeView('month');
@@ -304,7 +312,7 @@ const AgendaImagen = {
         });
 
         // Display calendar event modal
-        calendar.on('eventClick', function (calEvent, jsEvent, view) {
+        calendar.on('eventClick', function(calEvent, jsEvent, view) {
 
 
             if (calEvent.stAgendar == 1) {
@@ -346,8 +354,11 @@ const AgendaImagen = {
                 AgendaImagen.cita = calEvent;
                 AgendaImagen.cita.horaInicio = moment(calEvent.start).format('dddd, DD-MM-YYYY HH:mm');
                 AgendaImagen.cita.horaFin = moment(calEvent.end).format('dddd, DD-MM-YYYY HH:mm');
-                AgendaImagen.nuevaCita = true;
-                m.redraw();
+                m.route.set('/imagen/agendamiento/nueva-cita/', {
+                    id: AgendaImagen.cita.id,
+                });
+
+
 
                 /*
                 
@@ -368,20 +379,20 @@ const AgendaImagen = {
 
         // display current date
         var dateNow = calendar.getDate();
-        calendar.option('select', function (startDate, endDate) {
+        calendar.option('select', function(startDate, endDate) {
 
             alert("Seleccione una cita disponible.");
 
             throw "Seleccione una cita disponible."
-            /*
+                /*
 
-            $('#modalCreateEvent').modal('show');
-            $('#eventStartDate').val(startDate.format('LL'));
-            $('#eventEndDate').val(endDate.format('LL'));
+                $('#modalCreateEvent').modal('show');
+                $('#eventStartDate').val(startDate.format('LL'));
+                $('#eventEndDate').val(endDate.format('LL'));
 
-            $('#eventStartTime').val(startDate.format('LT')).trigger('change');
-            $('#eventEndTime').val(endDate.format('LT')).trigger('change');
-            */
+                $('#eventStartTime').val(startDate.format('LT')).trigger('change');
+                $('#eventEndTime').val(endDate.format('LT')).trigger('change');
+                */
         });
 
         $('.select2-modal').select2({
@@ -389,7 +400,7 @@ const AgendaImagen = {
             dropdownCssClass: 'select2-dropdown-modal',
         });
 
-        $('.calendar-add').on('click', function (e) {
+        $('.calendar-add').on('click', function(e) {
             e.preventDefault()
 
             $('#modalCreateEvent').modal('show');
@@ -404,55 +415,54 @@ const AgendaImagen = {
     fetchAgendaImagen: () => {
 
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/mi-agenda?idAgenda=1875",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 AgendaImagen.loader = false;
                 AgendaImagen.citasDisponibles = result.citasDisponibles;
                 AgendaImagen.citasAgendadas = result.citasAgendadas;
-                setTimeout(function () { AgendaImagen.setCalendar(); }, 10);
-                setTimeout(function () { AgendaImagen.setSidebar(); }, 20);
-
+                setTimeout(function() { AgendaImagen.setCalendar(); }, 10);
+                setTimeout(function() { AgendaImagen.setSidebar(); }, 20);
             })
-            .catch(function (e) {
-                setTimeout(function () { AgendaImagen.fetchAgendaImagen(); }, 2000);
+            .catch(function(e) {
+                setTimeout(function() { AgendaImagen.fetchAgendaImagen(); }, 2000);
             });
 
     },
     agendarCita: () => {
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
-            body: {
-                availableServiceId: 0,
-                covenantId: 2,
-                covenantPlanId: 2,
-                dateBirth: "1962-03-23",
-                email: "mariobe7@hotmail.com",
-                id: AgendaImagen.cita.id,
-                isFitting: true,
-                markingTypeId: 0,
-                patientId: 22706,
-                patientName: "BERMEO CABEZAS MARIO GERMAN",
-                phoneNumber: "0999721820",
-                scheduleFormType: "PERSONALLY",
-                schedulingItemId: 428,
-                sexType: "MALE",
-                specialityId: 66,
-                statusScheduleType: "M"
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/agenda/crear-cita",
+                body: {
+                    availableServiceId: 0,
+                    covenantId: 2,
+                    covenantPlanId: 2,
+                    dateBirth: "1962-03-23",
+                    email: "mariobe7@hotmail.com",
+                    id: AgendaImagen.cita.id,
+                    isFitting: true,
+                    markingTypeId: 0,
+                    patientId: 22706,
+                    patientName: "BERMEO CABEZAS MARIO GERMAN",
+                    phoneNumber: "0999721820",
+                    scheduleFormType: "PERSONALLY",
+                    schedulingItemId: 428,
+                    sexType: "MALE",
+                    specialityId: 66,
+                    statusScheduleType: "M"
 
 
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
 
                 console.log(result);
 
@@ -464,7 +474,7 @@ const AgendaImagen = {
                 }
 
             })
-            .catch(function (e) { });
+            .catch(function(e) {});
 
     },
     view: (_data) => {
@@ -472,28 +482,28 @@ const AgendaImagen = {
 
         return AgendaImagen.loader ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body.tx-center.mg-t-50", "Procesando... por favor espere.")
+                    ]),
 
-            ]
+                ]
 
             ),
         ] : AgendaImagen.error.length !== 0 ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body[id='calendar']")
+                    ]),
 
-            ]
+                ]
 
             ),
         ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length !== 0 && AgendaImagen.citasAgendadas.length !== 0) ? [
@@ -513,11 +523,27 @@ const AgendaImagen = {
                     m("div.calendar-sidebar-body[id='calendarSidebarBody']", [
                         m("div.calendar-inline", [
                             m("div[id='calendarInline']")
+                        ]),
+                        m("div.pd-y-20.pd-x-15", [
+                            m("label.tx-uppercase.tx-sans.tx-10.tx-medium.tx-spacing-1.tx-color-03.pd-l-10.mg-b-10",
+                                "Área/Salas:"
+                            ),
+                            m("nav.calendar-nav", [
+                                m("a.discover.show[href='']", [
+                                    m("span"),
+                                    "  Sala 1 "
+                                ]),
+                                m("a.meetup.show[href='']", [
+                                    m("span"),
+                                    " Sala 2"
+                                ]),
+
+                            ])
                         ])
                     ])
                 ]),
                 m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']",),
+                    m("div.calendar-content-body[id='calendar']", ),
                 ]),
 
 
@@ -599,10 +625,10 @@ const AgendaImagen = {
                         ]),
                         m("div.modal-footer", [
                             m("button.btn.btn-primary.mg-r-5", {
-                                onclick: () => {
-                                    AgendaImagen.agendarCita();
-                                }
-                            },
+                                    onclick: () => {
+                                        AgendaImagen.agendarCita();
+                                    }
+                                },
                                 "Agendar Cita"
                             ),
                             m("a.btn.btn-secondary[href=''][data-dismiss='modal']",
@@ -658,28 +684,28 @@ const AgendaImagen = {
 
         ] : !AgendaImagen.loader && (AgendaImagen.citasDisponibles.length == 0 && AgendaImagen.citasAgendadas.length == 0) ? [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body[id='calendar']")
+                    ]),
 
-            ]
+                ]
 
             ),
         ] : [
             m("div.calendar-wrapper", [
-                m("div.calendar-sidebar", [
-                    m("div.calendar-sidebar-header"),
-                    m("div.calendar-sidebar-body")
-                ]),
-                m("div.calendar-content", [
-                    m("div.calendar-content-body[id='calendar']")
-                ]),
+                    m("div.calendar-sidebar", [
+                        m("div.calendar-sidebar-header"),
+                        m("div.calendar-sidebar-body")
+                    ]),
+                    m("div.calendar-content", [
+                        m("div.calendar-content-body[id='calendar']")
+                    ]),
 
-            ]
+                ]
 
             ),
         ];

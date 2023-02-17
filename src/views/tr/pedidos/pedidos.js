@@ -1,7 +1,7 @@
 import sidebarTr from '../sidebarTr';
 import Notificaciones from '../../../models/notificaciones';
 import m from 'mithril';
-
+// http://localhost:3000/terapia-respiratoria/pedidos/?idFiltro=1
 function stopwatchModel() {
     return {
         interval: null,

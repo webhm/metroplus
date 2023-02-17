@@ -4,7 +4,7 @@ import App from '../../app';
 import m from 'mithril';
 import Pedidos from './pedidos';
 
-
+// http://localhost:3000/terapia-respiratoria/pedido/?numeroHistoriaClinica=838112&numeroAtencion=46512&numeroPedido=250221&track=view
 const FOR005 = {
     secs: [],
     nombres: "",
@@ -483,7 +483,7 @@ const Formulario = {
         ] : (Formulario.data.length !== 0) ? [
 
 
-            m(FOR005)
+            m(FOR005),// Aqui se llama el componente que necesito. Aqui debo trabajar para que se muestre el formulario que necesito.
 
 
 
@@ -506,7 +506,6 @@ const Formulario = {
 
     },
 }
-
 const Evoluciones = {
     data: [],
     detalle: [],
@@ -587,7 +586,6 @@ const Examenes = {
 
     }
 }
-
 
 const Pedido = {
     data: [],

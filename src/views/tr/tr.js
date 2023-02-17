@@ -1,7 +1,7 @@
 import HeaderPrivate from '../layout/header-private';
 import SidebarTr from './sidebarTr';
 import App from '../app';
-
+//Este componente es el que se muestra en la ruta http://localhost:3000/terapia-respiratoria
 const MenuTerapiaRespiratoria = {
     view: () => {
         return [

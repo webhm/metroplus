@@ -46,6 +46,72 @@ const MenuPatologia = {
                             ]),
 
                         ])] : []),
+                        (App.isShow('patologia', 26) ? [m("li", {
+                            "class": "list-item bg-white wd-100p",
+                            "style": { "cursor": "pointer" },
+                            onclick: () => {
+                                m.route.set("/patologia/seguimiento")
+                            }
+                        }, [
+                            m("div", { "class": "media" }, [
+                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                    m("i", { "class": "fas fa-stream tx-30 tx-white" })
+                                ),
+                                m("div", { "class": "media-body mg-l-15" }, [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        "Seguimiento de Pedidos",
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir al Seguimiento de Pedidos",
+                                    )
+                                ])
+                            ]),
+
+                        ])] : []),
+                        (App.isShow('patologia', 26) ? [m("li", {
+                            "class": "list-item bg-white wd-100p",
+                            "style": { "cursor": "pointer" },
+                            onclick: () => {
+                                m.route.set("/patologia/prediagnosticos")
+                            }
+                        }, [
+                            m("div", { "class": "media" }, [
+                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                    m("i", { "class": "fas fa-stethoscope tx-30 tx-white" })
+                                ),
+                                m("div", { "class": "media-body mg-l-15" }, [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        "Generar Pre-Diagnósticos",
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir a Generación de pre-diagnosticos",
+                                    )
+                                ])
+                            ]),
+
+                        ])] : []),
+                        (App.isShow('patologia', 26) ? [m("li", {
+                            "class": "list-item bg-white wd-100p",
+                            "style": { "cursor": "pointer" },
+                            onclick: () => {
+                                m.route.set("/patologia/configuracion")
+                            }
+                        }, [
+                            m("div", { "class": "media" }, [
+                                m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                    m("i", { "class": "fas fa-cog tx-30 tx-white" })
+                                ),
+                                m("div", { "class": "media-body mg-l-15" }, [
+                                    m("p", { "class": "tx-18 mg-b-0" },
+                                        "Configuración",
+                                    ),
+                                    m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                        "Ir a Configuración",
+                                    )
+                                ])
+                            ]),
+
+                        ])] : []),
                     ]),
 
                 ])

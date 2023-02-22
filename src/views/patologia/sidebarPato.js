@@ -4,7 +4,45 @@ import Encrypt from '../../models/encrypt';
 const MenuSidebar = {
     view: () => {
 
-        let _data = Encrypt.getDataUser();
+        let data = Encrypt.getDataUser();
+        let _data = {
+            modulesAccess: {
+                patologia: [
+                    {
+                        "idUser": "159",
+                        "rol": "1",
+                        "idModulo": "26",
+                        "modulo": "patologia",
+                        "href": "patologia/pedidos",
+                        "label": "Recepción de Pedidos"
+                    },
+                    {
+                        "idUser": "159",
+                        "rol": "1",
+                        "idModulo": "27",
+                        "modulo": "patologia",
+                        "href": "patologia/seguimiento",
+                        "label": "Seguimiento de Pedidos"
+                    },
+                    {
+                        "idUser": "159",
+                        "rol": "1",
+                        "idModulo": "28",
+                        "modulo": "patologia",
+                        "href": "patologia/prediagnosticos",
+                        "label": "Generar Pre-Diagnósticos"
+                    },
+                    {
+                        "idUser": "159",
+                        "rol": "1",
+                        "idModulo": "29",
+                        "modulo": "patologia",
+                        "href": "patologia/configuracion",
+                        "label": "Configuración"
+                    }
+                ]
+            }
+        };
 
         if (_data.length !== 0) {
             return [

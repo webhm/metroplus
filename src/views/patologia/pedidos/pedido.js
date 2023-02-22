@@ -1,9 +1,13 @@
 import HeaderPrivate from '../../layout/header-private';
 import SidebarPato from '../sidebarPato';
 import App from '../../app';
-import m from 'mithril';
+import m, { redraw } from 'mithril';
 import PedidoPatologias from './pedidos';
-
+import BreadCrumb from '../../layout/breadcrumb';
+import listadoMuestras from './listadoMuestras';
+import crearMuestra from './crearMuestra';
+import cerrarGestionMuestra from './cerrarGestionMuestra';
+import listadoMuestrasInforme from './listadoMuestrasInforme';
 
 const FOR005 = {
     secs: [],
@@ -323,13 +327,8 @@ const FOR005 = {
 
 
             })
-
         ]
-
-
-
     }
-
 };
 
 const Formulario = {
@@ -339,6 +338,7 @@ const Formulario = {
     num: 0,
     data: [],
     error: "",
+
     parseDoc: (_data) => {
 
         Object.keys(_data.data).map(function(_v, _i, _contentData) {
@@ -435,17 +435,14 @@ const Formulario = {
         })
 
     },
+
     parseFetch: () => {
         FOR005.secs = [];
-
         return Formulario.data.map(function(_v, _i, _contentData) {
             Formulario.parseDoc(Formulario.data[_i])
-
         })
-
-
-
     },
+
     fetch: () => {
         Formulario.data = [];
         Formulario.error = "";
@@ -454,7 +451,7 @@ const Formulario = {
                 url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
 
                 headers: {
-                    "Authorization": localStorage.accessToken,
+                    "Authorization": localStorage.aesComplementarioessToken,
                 },
             })
             .then(function(result) {
@@ -474,26 +471,17 @@ const Formulario = {
     },
 
     view: () => {
-
-
         return Formulario.error ? [
             m(".alert.alert-danger[role='alert']",
                 Formulario.error
             )
         ] : (Formulario.data.length !== 0) ? [
-
-
             m(FOR005)
-
-
-
         ] : [
             m("div.d-inline.tx-secondary.tx-12", {
                 oncreate: (el) => {
                     el.dom.innerHTML = "Buscando información...";
                 },
-
-
             }),
             m("div.pd-10.wd-100p",
                 m("div.placeholder-paragraph", [
@@ -596,6 +584,7 @@ const PedidoPatologia = {
     numeroPedido: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
+
     oninit: (_data) => {
 
         if (_data.attrs.numeroPedido !== undefined) {
@@ -612,12 +601,11 @@ const PedidoPatologia = {
                     PedidoPatologia.numeroAtencion = _data.attrs.numeroAtencion;
                     PedidoPatologia.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
                     PedidoPatologia.fetch();
-
                 }
-
             }
         }
     },
+
     fetch: () => {
         PedidoPatologia.data = [];
         PedidoPatologia.loader = true;
@@ -649,7 +637,6 @@ const PedidoPatologia = {
     },
 
     view: (_data) => {
-
         return [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("patologia") }),
             m(SidebarPato, { oncreate: SidebarPato.setPage(26) }),
@@ -657,39 +644,20 @@ const PedidoPatologia = {
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
                 }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/patologia" }, [
-                                "Patología"
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "DETALLE DE PEDIDO"
-                        ),
-
-                    ]),
+                    m(BreadCrumb, [{path: "/", label: "metroplus"}, 
+                                   {path: "/patologia", label: "patologia"},
+                                   {path: "", label: "pedidos ingresados"}]),
                     m("h1.df-title.mg-t-20.mg-b-10",
                         "Detalle de Pedido N°: " + PedidoPatologia.numeroPedido
                     ),
-
-
                     m("div.row.animated.fadeInUp", [
-
                         m("div.col-12", [
-
                             m("div.table-loader.wd-100p", {
                                     oncreate: (el) => {
                                         if (PedidoPatologia.loader) {
                                             el.dom.hidden = false;
                                         } else {
                                             el.dom.hidden = true;
-
                                         }
                                     },
                                     onupdate: (el) => {
@@ -697,27 +665,21 @@ const PedidoPatologia = {
                                             el.dom.hidden = false;
                                         } else {
                                             el.dom.hidden = true;
-
                                         }
                                     }
-
                                 }, [
                                     m("div.placeholder-paragraph", [
                                         m("div.line"),
                                         m("div.line")
                                     ])
                                 ]
-
-
                             ),
-
                             m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", {
                                 oncreate: (el) => {
                                     if (PedidoPatologia.loader) {
                                         el.dom.hidden = true;
                                     } else {
                                         el.dom.hidden = false;
-
                                     }
                                 },
                                 onupdate: (el) => {
@@ -725,11 +687,9 @@ const PedidoPatologia = {
                                         el.dom.hidden = true;
                                     } else {
                                         el.dom.hidden = false;
-
                                     }
                                 }
                             }, [
-
                                 m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                                     m("h5.tx-right.tx-normal.tx-rubik.tx-color-03.mg-b-0",
                                         m("small.pd-2.tx-20",
@@ -737,50 +697,29 @@ const PedidoPatologia = {
                                                     "style": { "cursor": "pointer" },
                                                     title: "Cerrar",
                                                     onclick: () => {
-
-
                                                         if (PedidoPatologias.idFiltro !== undefined && PedidoPatologias.idFiltro > 1) {
-
                                                             m.route.set('/patologia/pedidos/', {
                                                                 idFiltro: PedidoPatologias.idFiltro,
                                                                 fechaDesde: PedidoPatologias.fechaDesde,
                                                                 fechaHasta: PedidoPatologias.fechaHasta,
                                                             });
-
                                                         } else {
-
                                                             m.route.set('/patologia/pedidos/', {
                                                                 idFiltro: 1,
                                                             });
-
                                                         }
-
-
-
-
                                                     }
                                                 }
-
                                             )
-
-
                                         ),
-
                                     ),
-
-
-
-
-
                                     m('div.table-responsive', [
                                         m("table.table.table-bordered.table-sm.tx-12", [
                                             m("thead",
-
                                                 m("tr.bg-litecoin.op-9.tx-white", [
                                                     m("th[scope='col'][colspan='9']",
                                                         "DATOS DEL PEDIDO:"
                                                     ),
-
                                                 ])
                                             ),
                                             m("tbody", [
@@ -788,11 +727,10 @@ const PedidoPatologia = {
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
                                                         },
-                                                        "N° de PedidoPatologia:"
+                                                        "N° Pedido Patología:"
                                                     ),
                                                     m("td", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.CD_PRE_MED
                                                     ),
@@ -803,10 +741,8 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='2']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.FECHA_PEDIDO + " " + PedidoPatologia.data.HORA_PEDIDO
-
                                                     ),
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
@@ -815,7 +751,6 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='3']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.SECTOR
                                                     ),
@@ -830,10 +765,8 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='4']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.MED_MV,
-
                                                     ),
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
@@ -842,22 +775,16 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='3']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.ESPECIALIDAD
                                                     ),
-
-
-
                                                 ]),
                                             ]),
                                             m("thead",
-
                                                 m("tr.bg-litecoin.op-9.tx-white", [
                                                     m("th[scope='col'][colspan='9']",
                                                         "DATOS DEL PACIENTE:"
                                                     ),
-
                                                 ])
                                             ),
                                             m("tbody", [
@@ -869,7 +796,6 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='4']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.NM_PACIENTE
                                                     ),
@@ -880,10 +806,8 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.EDAD
-
                                                     ),
 
                                                     m("th", {
@@ -893,7 +817,6 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='2']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.CD_PACIENTE
                                                     ),
@@ -907,7 +830,6 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.AT_MV
                                                     ),
@@ -918,7 +840,6 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.PESO
                                                     ),
@@ -929,7 +850,6 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.ALTURA
                                                     ),
@@ -938,20 +858,16 @@ const PedidoPatologia = {
                                                         },
                                                         "Ubicación:"
                                                     ),
-
                                                     m("td[colspan='4']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         PedidoPatologia.data.SECTOR + " " + PedidoPatologia.data.UBICACION
                                                     ),
-
                                                 ]),
                                                 m("tr.bg-litecoin.op-9.tx-white", [
                                                     m("th[scope='col'][colspan='9']",
                                                         "EXÁMENES Y OBSERVACIONES:"
                                                     ),
-
                                                 ]),
                                                 m("tr", [
                                                     m("th", {
@@ -961,25 +877,18 @@ const PedidoPatologia = {
                                                     ),
                                                     m("td[colspan='8']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         m(Examenes)
                                                     ),
-
-
                                                 ]),
-
                                                 m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
                                                     m("th[scope='col'][colspan='9']",
                                                         "EVOLUCIONES Y PRESCRIPCIONES:"
                                                     ),
-
                                                 ]),
                                                 m("tr.d-print-none", [
-
                                                     m("td[colspan='9']", {
                                                             style: { "background-color": "#eaeff5" }
-
                                                         },
                                                         m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
                                                             m("li.nav-item",
@@ -987,60 +896,91 @@ const PedidoPatologia = {
                                                                         style: { "color": "#476ba3" }
                                                                     },
                                                                     m("i.fas.fa-file-alt.pd-1.mg-r-2"),
-
                                                                     " HOJA 005"
                                                                 )
                                                             ),
-
-
+                                                            m("li.nav-item",
+                                                                m("a.nav-link[id='recepcionmuestra-tab'][data-toggle='tab'][href='#recepcionmuestra'][role='tab'][aria-controls='recepcionmuestra'][aria-selected='true']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                    m("i.fas.fa-microscope.pd-1.mg-r-2"),
+                                                                    " MUESTRAS"
+                                                                )
+                                                            ),
+                                                            m("li.nav-item",
+                                                                m("a.nav-link[id='informes-tab'][data-toggle='tab'][href='#informes'][role='tab'][aria-controls='seguimiento'][aria-selected='true']", {
+                                                                        style: { "color": "#476ba3" },
+                                                                        onclick: () => {
+                                                                            listadoMuestrasInforme.oninit({"attrs": {"numeroPedido": PedidoPatologia.numeroPedido}});
+                                                                            m.redraw(listadoMuestrasInforme);
+                                                                        }
+                                                                    },
+                                                                    m("i.fas.fa-book.pd-1.mg-r-2"),
+                                                                    " INFORMES"
+                                                                )
+                                                            ),
+                                                            m("li.nav-item",
+                                                                m("a.nav-link[id='reportes-tab'][data-toggle='tab'][href='#reportes'][role='tab'][aria-controls='seguimiento'][aria-selected='true']", {
+                                                                        style: { "color": "#476ba3" }
+                                                                    },
+                                                                    m("i.fas.fa-archive.pd-1.mg-r-2"),
+                                                                    " REPORTES"
+                                                                )
+                                                            ),
                                                         ]),
                                                     ),
-
-
                                                 ]),
                                                 m("tr.d-print-none", [
-
                                                     m("td[colspan='9']", {
-
                                                         },
                                                         m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
                                                             m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
                                                                 m(Evoluciones),
                                                             ]),
-
+                                                            m(".tab-pane.fade[id='recepcionmuestra'][role='tabpanel'][aria-labelledby='recepcionmuestra-tab']", [
+                                                                m("div.mg-0.mg-t-10.mg-b-10.text-left", [
+                                                                    m("button#btnnuevamuestra.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                        onclick: () => {
+                                                                            m.mount(document.querySelector("#gestion-muestras"), crearMuestra);
+                                                                            m.mount(document.querySelector("#cerrar-gestion-muestras"), cerrarGestionMuestra);
+                                                                        }
+                                                                    }, [
+                                                                            m("i.fas.mg-r-5", )
+                                                                        ], "Nueva Muestra"
+                                                                    ),
+                                                                    m("div#cerrar-gestion-muestras", {
+                                                                        style: { 'width': '50%', 'float': 'right'}
+                                                                    }),
+                                                                ]),
+                                                                m("div#gestion-muestras"),
+                                                                m(listadoMuestras, { 
+                                                                    "numeroPedido": PedidoPatologia.numeroPedido,
+                                                                    "numeroAtencion": PedidoPatologia.numeroAtencion,
+                                                                    "numeroHistoriaClinica": PedidoPatologia.numeroHistoriaClinica,
+                                                                }),
+                                                            ]),
+                                                            m(".tab-pane.fade[id='informes'][role='tabpanel'][aria-labelledby='informes-tab']", [
+                                                                m(listadoMuestrasInforme, { 
+                                                                    "numeroPedido": PedidoPatologia.numeroPedido,
+                                                                    "numeroAtencion": PedidoPatologia.numeroAtencion,
+                                                                    "numeroHistoriaClinica": PedidoPatologia.numeroHistoriaClinica,
+                                                                }),
+                                                            ]),
                                                         ])
                                                     ),
-
-
                                                 ]),
-                                                m("tr.d-print-none", [
-
-                                                ]),
-
+                                                m("tr.d-print-none", []),
                                             ])
                                         ])
                                     ]),
-
-
                                 ])
-
-
                             ])
                         ])
                     ]),
-
-
-
                 ])
             ),
-
         ];
-
-
-
     }
-
 };
-
 
 export default PedidoPatologia;

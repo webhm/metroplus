@@ -3,6 +3,7 @@ import SidebarTR from '../sidebarTr';
 import App from '../../app';
 import m from 'mithril';
 import Pedidos from './pedidos';
+import FormularioDeRegistro from './formularioDeRegistro';
 
 // http://localhost:3000/terapia-respiratoria/pedido/?numeroHistoriaClinica=838112&numeroAtencion=46512&numeroPedido=250221&track=view
 const FOR005 = {
@@ -1031,7 +1032,7 @@ const Pedido = {
                                                                                 
                                                              m(".tab.pane.fade[id='muestra'][role='tabpanel'][aria-labelledby='home-muestra']", 
                                                             [
-                                                                m('p','hola'),
+                                                                m(FormularioDeRegistro),
                                                             ]),
 
                                                         ])

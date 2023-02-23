@@ -1003,6 +1003,15 @@ const Pedido = {
                                                                     " HOJA 005"
                                                                 )
                                                             ),
+                                                            m("li.nav-item",
+                                                            m("a.nav-link[id='home-muestra'][data-toggle='tab'][href='#muestra'][role='tab'][aria-controls='muestra']", {
+                                                                    style: { "color": "#476ba3" }
+                                                                },
+                                                                m("i.fas.fa-file-alt.pd-1.mg-r-2"),
+
+                                                                "Registro Terapia Respiratoria"
+                                                            )
+                                                        ),
 
 
                                                         ]),
@@ -1018,6 +1027,11 @@ const Pedido = {
                                                         m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
                                                             m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
                                                                 m(Evoluciones),
+                                                            ]),
+                                                                                
+                                                             m(".tab.pane.fade[id='muestra'][role='tabpanel'][aria-labelledby='home-muestra']", 
+                                                            [
+                                                                m('p','hola'),
                                                             ]),
 
                                                         ])

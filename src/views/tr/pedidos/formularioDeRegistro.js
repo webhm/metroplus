@@ -72,6 +72,14 @@ const FormularioDeRegistro = {
         ]),
       ]),
       m("div", { class: "form-group" }, [
+        m("label", { for: "inputPrescripcion" }, "Prescripción"),
+        m("select", { class: "custom-select" }, [
+          m("option", { value: "1" }, "Hay que traer de la base de datos"),
+          m("option", { value: "2" }, "Hay que traer de la base de datos"),
+          m("option", { value: "3" }, "Hay que traer de la base de datos"),
+        ]),
+      ]),
+      m("div", { class: "form-group" }, [
         m("label", { for: "inputCod" }, "Cod"),
         m("input", {
           class: "form-control",
@@ -101,6 +109,7 @@ const FormularioDeRegistro = {
       m("div", { class: "form-group" }, [
         m("label", { for: "inputFrecuenciaAlDia" }, "Frecuencia al día"),
         m("select", { class: "custom-select" }, [
+          m('option','Seleccione...'),
           m("option", { value: "1" }, "En este momento"),
           m("option", { value: "2" }, "Una vez"),
           m("option", { value: "3" }, "Dos veces"),
@@ -128,11 +137,13 @@ const FormularioDeRegistro = {
           ),
           m("div", { class: "input-group" }, [
             m("select", { class: "custom-select" }, [
+              m('option','Seleccione...'),
               m("option", { value: "1" }, "Nebulización"),
               m("option", { value: "2" }, "Ultrasonido"),
               m("option", { value: "3" }, "Inhaladores dosis medida"),
             ]),
             m("select", { class: "custom-select" }, [
+              m('option','Seleccione...'),
               m("option", { value: "1" }, "Salbumatol"),
               m("option", { value: "2" }, "Bromuro de ipratropio"),
               m("option", { value: "3" }, "N acetilcisteina"),
@@ -154,6 +165,7 @@ const FormularioDeRegistro = {
           "Higiene Bronco Pulmonar"
         ),
         m("select", { class: "custom-select" }, [
+          m('option','Seleccione...'),
           m("option", { value: "1" }, "Drenaje postural"),
           m("option", { value: "2" }, "Percusiones"),
           m("option", { value: "3" }, "Vibraciones"),
@@ -166,32 +178,59 @@ const FormularioDeRegistro = {
         "div",
         { class: "form-row" },
         m("div", { class: "form-group col-md-12" }, [
-          m("label", { for: "inputTerapiaExansiva" }, "Terapia Expansiva"),
+          m("label", { for: "inputTerapiaExpansiva" }, "Terapia Expansiva"),
           m("div", { class: "input-group" }, [
-            m("select", { class: "custom-select" }, [
-              m("option", { value: "1" }, "Incentivo Respiratorio"),
-              m(
-                "option",
-                { value: "2" },
-                "Presión positiva contunua en la vía aérea"
-              ),
-              m(
-                "option",
-                { value: "3" },
-                "Presión positiva al final de la expiración"
-              ),
-              m("option", { value: "4" }, "Kinesioterapia del tórax"),
-            ]),
+            m(
+              "select",
+              {
+                class: "custom-select",
+                onchange: function (event) {
+                  let selectValue = event.target.value;
+                  let inputTerapiaExpansiva2 = document.getElementById(
+                    "inputTerapiaExpansiva2"
+                  );
+                  if (selectValue === "1") {
+                    inputTerapiaExpansiva2.removeAttribute("readonly");
+                  } else {
+                    inputTerapiaExpansiva2.setAttribute("readonly", "readonly");
+                    inputTerapiaExpansiva2.value = "";
+                  }
+                },
+                
+              },
+              [
+                m('option','Seleccione...'),
+                m("option", {value: "1"},"Incentivo respiratorio"),
+                m(
+                  "option",
+                  { value: "2" },
+                  "Presión positiva continua en la vía aérea"
+                ),
+                m(
+                  "option",
+                  { value: "3" },
+                  "Presión positiva al final de la expiración"
+                ),
+                m("option", { value: "4" }, "Kinesioterapia del torax"),
+                m("option", { value: "5" }, "Ejercicios respiratorios"),
+              ]
+            ),
+
             m("input", {
               class: "form-control",
               type: "number",
-              id: "inputTerapiaExansiva2",
+              id: "inputTerapiaExpansiva2",
               placeholder: "Frecuencia Cardiaca",
               readonly: "readonly",
+              maxlength: "50",
+              oninput: function (event) {
+                event.target.value = event.target.value.slice(0, 10);
+              },
             }),
           ]),
         ])
       ),
+
       m(
         "div",
         { class: "form-row" },
@@ -199,6 +238,7 @@ const FormularioDeRegistro = {
           m("label", { for: "inputOxinoterapia" }, "Oxinoterapia"),
           m("div", { class: "input-group" }, [
             m("select", { class: "custom-select" }, [
+              m('option','Seleccione...'),
               m(
                 "option",
                 { value: "1" },
@@ -225,6 +265,7 @@ const FormularioDeRegistro = {
           m("label", { for: "inputMonitoreoPrevio" }, "Monitoreo Previo"),
           m("div", { class: "input-group" }, [
             m("select", { class: "custom-select" }, [
+              m('option','Seleccione...'),
               m("option", { value: "1" }, "Saturación O2(%)"),
               m("option", { value: "2" }, "Ventilación mecánica"),
               m("option", { value: "3" }, "Ventilación no invasiva"),
@@ -273,8 +314,8 @@ const FormularioDeRegistro = {
               {
                 class: "custom-select",
                 onchange: function (event) {
-                  var selectValue = event.target.value;
-                  var inputSuccion2 = document.getElementById("inputSuccion2");
+                  let selectValue = event.target.value;
+                  let inputSuccion2 = document.getElementById("inputSuccion2");
                   if (selectValue === "2") {
                     inputSuccion2.removeAttribute("readonly");
                   } else {
@@ -284,6 +325,7 @@ const FormularioDeRegistro = {
                 },
               },
               [
+                m('option','Seleccione...'),
                 m("option", { value: "1" }, "Nasotraqueal"),
                 m("option", { value: "2" }, "Traqueal"),
                 m("option", { value: "3" }, "Otrotraqueal"),
@@ -298,7 +340,6 @@ const FormularioDeRegistro = {
               placeholder: "Frecuencia Cardiaca",
               readonly: "readonly",
               maxlength: "50",
-            
             }),
           ]),
         ])

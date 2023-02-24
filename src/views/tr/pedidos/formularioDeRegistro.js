@@ -109,7 +109,7 @@ const FormularioDeRegistro = {
       m("div", { class: "form-group" }, [
         m("label", { for: "inputFrecuenciaAlDia" }, "Frecuencia al día"),
         m("select", { class: "custom-select" }, [
-          m('option','Seleccione...'),
+          m("option", "Seleccione..."),
           m("option", { value: "1" }, "En este momento"),
           m("option", { value: "2" }, "Una vez"),
           m("option", { value: "3" }, "Dos veces"),
@@ -137,13 +137,13 @@ const FormularioDeRegistro = {
           ),
           m("div", { class: "input-group" }, [
             m("select", { class: "custom-select" }, [
-              m('option','Seleccione...'),
+              m("option", "Seleccione..."),
               m("option", { value: "1" }, "Nebulización"),
               m("option", { value: "2" }, "Ultrasonido"),
               m("option", { value: "3" }, "Inhaladores dosis medida"),
             ]),
             m("select", { class: "custom-select" }, [
-              m('option','Seleccione...'),
+              m("option", "Seleccione..."),
               m("option", { value: "1" }, "Salbumatol"),
               m("option", { value: "2" }, "Bromuro de ipratropio"),
               m("option", { value: "3" }, "N acetilcisteina"),
@@ -165,7 +165,7 @@ const FormularioDeRegistro = {
           "Higiene Bronco Pulmonar"
         ),
         m("select", { class: "custom-select" }, [
-          m('option','Seleccione...'),
+          m("option", "Seleccione..."),
           m("option", { value: "1" }, "Drenaje postural"),
           m("option", { value: "2" }, "Percusiones"),
           m("option", { value: "3" }, "Vibraciones"),
@@ -196,11 +196,10 @@ const FormularioDeRegistro = {
                     inputTerapiaExpansiva2.value = "";
                   }
                 },
-                
               },
               [
-                m('option','Seleccione...'),
-                m("option", {value: "1"},"Incentivo respiratorio"),
+                m("option", "Seleccione..."),
+                m("option", { value: "1" }, "Incentivo respiratorio"),
                 m(
                   "option",
                   { value: "2" },
@@ -238,7 +237,7 @@ const FormularioDeRegistro = {
           m("label", { for: "inputOxinoterapia" }, "Oxinoterapia"),
           m("div", { class: "input-group" }, [
             m("select", { class: "custom-select" }, [
-              m('option','Seleccione...'),
+              m("option", "Seleccione..."),
               m(
                 "option",
                 { value: "1" },
@@ -265,7 +264,7 @@ const FormularioDeRegistro = {
           m("label", { for: "inputMonitoreoPrevio" }, "Monitoreo Previo"),
           m("div", { class: "input-group" }, [
             m("select", { class: "custom-select" }, [
-              m('option','Seleccione...'),
+              m("option", "Seleccione..."),
               m("option", { value: "1" }, "Saturación O2(%)"),
               m("option", { value: "2" }, "Ventilación mecánica"),
               m("option", { value: "3" }, "Ventilación no invasiva"),
@@ -325,7 +324,7 @@ const FormularioDeRegistro = {
                 },
               },
               [
-                m('option','Seleccione...'),
+                m("option", "Seleccione..."),
                 m("option", { value: "1" }, "Nasotraqueal"),
                 m("option", { value: "2" }, "Traqueal"),
                 m("option", { value: "3" }, "Otrotraqueal"),
@@ -366,52 +365,30 @@ const FormularioDeRegistro = {
           ]),
         ]),
       ]),
-      m("div", { class: "form-row" }, [
-        m("div", { class: "form-group col-md-5" }, [
-          m("label", "Birthday"),
-          m("select", { class: "custom-select" }, [
-            m("option", { selected: "selected" }, "Month"),
-            m("option", { value: "1" }, "January"),
-            m("option", { value: "2" }, "February"),
-            m("option", { value: "3" }, "March"),
-            m("option", { value: "4" }, "April"),
-            m("option", { value: "5" }, "May"),
-            m("option", { value: "6" }, "June"),
-            m("option", { value: "7" }, "July"),
-            m("option", { value: "8" }, "August"),
-            m("option", { value: "9" }, "September"),
-            m("option", { value: "10" }, "October"),
-            m("option", { value: "11" }, "November"),
-            m("option", { value: "12" }, "December"),
-          ]),
-        ]),
+      m("div", { class: "form-group" }, [
         m(
-          "div",
-          { class: "form-group col-md-3 d-flex align-items-end" },
-          m("select", { class: "custom-select" }, " ... ")
+          "label",
+          { class: "form-label", for: "textAreaObservacionClinica" },
+          "Observación clinica"
         ),
-        m(
-          "div",
-          { class: "form-group col-md-4 d-flex align-items-end" },
-          m("select", { class: "custom-select" }, " ... ")
-        ),
+        m("textarea", {
+          class: "form-control",
+          id: "textAreaObservacionClinica",
+          rows: "3",
+        }),
       ]),
-      m(
-        "div",
-        { class: "form-group" },
-        m("div", { class: "custom-control custom-checkbox" }, [
-          m("input", {
-            class: "custom-control-input",
-            type: "checkbox",
-            id: "customCheck1",
-          }),
-          m(
-            "label",
-            { class: "custom-control-label", for: "customCheck1" },
-            "Agree with Terms of Use and Privacy Policy"
-          ),
-        ])
-      ),
+      m("div", { class: "form-group" }, [
+        m(
+          "label",
+          { class: "form-label", for: "textAreaCriterio" },
+          "Criterio"
+        ),
+        m("textarea", {
+          class: "form-control",
+          id: "textAreaCriterio",
+          rows: "3",
+        }),
+      ]),
       m("button", { class: "btn btn-primary", type: "submit" }, "Guardar"),
       m("button", { class: "btn btn-primary", type: "submit" }, "Eliminar"),
     ]);

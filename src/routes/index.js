@@ -61,7 +61,8 @@ import NSSImagen from '../views/imagen/nss/nss'
 import HeaderCalendar from '../views/layout/header-calendar'
 import DetalleCita from '../views/imagen/agenda/detalleCita'
 import NuevaCita from '../views/imagen/agenda/nuevaCita'
-import AuthTR from '../views/conta/procesos/autorizacionesTR'
+import AuthTR from '../views/conta/procesos/autorizarTR'
+import AutorizacionesTR from '../views/conta/procesos/autorizacionesTR'
 
 
 
@@ -312,9 +313,66 @@ const Routes = {
     '/contabilidad': Conta, //Conta
     '/contabilidad/proceso/tarjeta-roja': TRoja, //TRoja
     '/contabilidad/proceso/tarjeta-roja/nueva': NuevaTRoja, // TRPedido
-    '/contabilidad/proceso/tarjeta-roja/id': AuthTR, // Detalle Pedido
-    '/admisiones': Admisiones, //Admisiones
+    '/contabilidad/proceso/tarjeta-roja/id': AuthTR, // Autorizar Pedido
+    '/contabilidad/proceso/tarjeta-roja/autorizaciones': {
+        oninit: (_data) => {
+            App.isAuth('contabilidad', 33);
+            document.title = "Autorizaciones | " + App.title;
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/contabilidad/proceso/tarjeta-roja/autorizaciones/', { idFiltro: 1 })
+            }
+            AutorizacionesTR.idFiltro = _data.attrs.idFiltro;
+        },
+        onupdate: (_data) => {
 
+            if (_data.attrs.idFiltro !== AutorizacionesTR.idFiltro && AutorizacionesTR.idFiltro !== 1 && AutorizacionesTR.fechaDesde !== undefined) {
+                AutorizacionesTR.idFiltro = _data.attrs.idFiltro;
+                AutorizacionesTR.fechaDesde = _data.attrs.fechaDesde;
+                AutorizacionesTR.fechaHasta = _data.attrs.fechaHasta;
+                AutorizacionesTR.loader = true;
+                AutorizacionesTR.pedidos = [];
+                AutorizacionesTR.fetch();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    AutorizacionesTR.idFiltro = _data.attrs.idFiltro;
+                    AutorizacionesTR.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    AutorizacionesTR.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (AutorizacionesTR.pedidos.length == 0) {
+                        AutorizacionesTR.loader = true;
+                        AutorizacionesTR.pedidos = [];
+                        AutorizacionesTR.fetch();
+                    } else {
+                        AutorizacionesTR.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("contabilidad") }),
+                m(AutorizacionesTR),
+            ];
+        },
+    }, //TRoja
+    '/admisiones': Admisiones, //Admisiones
     '/admisiones/pre': PreAdmisiones, //PreAdmisiones
     '/admisiones/etiquetas': {
         oninit: (_data) => {

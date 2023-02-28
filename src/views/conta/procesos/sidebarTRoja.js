@@ -4,24 +4,16 @@ const MenuSidebar = {
         label: "Nueva Tarjeta Roja",
         href: "contabilidad/proceso/tarjeta-roja/nueva"
     }, {
-        idModulo: 2,
+        idModulo: 33,
         label: "Autorizaciones",
         href: "contabilidad/proceso/tarjeta-roja/autorizaciones"
-    }, {
-        idModulo: 3,
-        label: "Todas las Solicitudes",
-        href: "contabilidad/proceso/tarjeta-roja/solicitudes"
-    }, {
-        idModulo: 4,
-        label: "Configuración del Proceso",
-        href: "contabilidad/proceso/tarjeta-roja/configuracion"
     }],
     view: () => {
 
         if (MenuSidebar.menu.length !== 0) {
             return [
 
-                MenuSidebar.menu.map(function(_v, _i, _contentData) {
+                MenuSidebar.menu.map(function (_v, _i, _contentData) {
                     return [
 
                         m(m.route.Link, { href: "/" + _v.href, class: ((SidebarTRoja.page == _v.idModulo) ? "active" : "") }, [

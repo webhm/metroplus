@@ -568,28 +568,167 @@ const Evoluciones = {
     },
 }
 
-const Examenes = {
+const Observaciones = {
+    observaciones: "",
+    data: [],
+    obs: "",
+    show: false,
+    loadObservaciones: () => {
+        // MOMMENT
+        moment.lang("es", {
+            months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                "_"
+            ),
+            monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                "_"
+            ),
+            weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                "_"
+            ),
+            weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+            weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+        });
 
-    view: () => {
+        $.fn.dataTable.ext.errMode = "none";
+        var table = $("#table-observaciones").DataTable({
+            data: Observaciones.data,
+            dom: 'tp',
+            language: {
+                searchPlaceholder: "Buscar...",
+                sSearch: "",
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                sProcessing: "Procesando...",
+                sZeroRecords: "Sin Notificaciones",
+                sEmptyTable: "Sin Notificaciones",
+                sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                sInfoPostFix: "",
+                sUrl: "",
+                sInfoThousands: ",",
+                sLoadingRecords: "Cargando...",
+                oPaginate: {
+                    sFirst: "Primero",
+                    sLast: "Último",
+                    sNext: "Siguiente",
+                    sPrevious: "Anterior",
+                },
+                oAria: {
+                    sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                    sSortDescending: ": Activar para ordenar la columna de manera descendente",
+                },
+            },
+            cache: false,
+            order: false,
+            destroy: true,
 
-        if (AuthTR.examenes.length !== 0) {
-            return AuthTR.examenes.map(function (_val, _i, _contentData) {
-                return [
-                    m('.tx-14.tx-semibold.d-inline', _val.EXAMEN),
-                    (_val.OBS_EXAMEN !== null ? [
-                        m('br'),
-                        m('.d-inline', 'Observaciones:'),
-                        m('br'),
-                        m('.d-inline', _val.OBS_EXAMEN),
-                        m('br'),
-                        m('br'),
-                    ] : ''),
-                ]
+            columns: false,
+            aoColumnDefs: [{
+                mRender: function (data, type, row, meta) {
+                    return "";
+                },
+                visible: true,
+                width: "100%",
+                aTargets: [0],
+                orderable: false,
+            },
+
+            ],
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
+            drawCallback: function (settings) {
+                settings.aoData.map(function (_v, _i) {
+                    m.mount(_v.anCells[0], {
+                        view: function () {
+                            if (_v._aData.title == 'Nuevo Mensaje') {
+                                return m("div.demo-static-toast",
+                                    m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
+                                        "style": { "max-width": "none" }
+                                    }, [
+                                        m("div.toast-header.bg-primary", [
+                                            m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                                _v._aData.title
+                                            ),
+                                            m("small.tx-white",
+                                                moment.unix(_v._aData.timestamp).format("HH:mm")
+                                            ),
+                                        ]),
+                                        m("div.toast-body.small",
+                                            _v._aData.message
+                                        )
+                                    ])
+                                )
+                            } else {
+                                return m("div.demo-static-toast",
+                                    m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
+                                        "style": { "max-width": "none" }
+                                    }, [
+                                        m("div.toast-header.bg-primary", [
+                                            m("small.tx-white.tx-5.mg-b-0.mg-r-auto",
+                                                _v._aData.title
+                                            ),
+                                            m("small.tx-white",
+                                                moment.unix(_v._aData.timestamp).format("HH:mm")
+                                            ),
+                                        ]),
+                                        m("div.toast-body.small",
+                                            _v._aData.message
+                                        )
+                                    ])
+                                )
+                            }
+
+                        }
+                    });
+
+
+                })
+            },
+        });
+
+
+        return table;
+    },
+    reloadObservaciones: () => {
+        var table = $('#table-observaciones').DataTable();
+        table.clear();
+        table.rows.add(Observaciones.data).draw();
+    },
+    fetch: () => {
+        m.request({
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/obs-tr/" + AuthTR.id,
+        })
+            .then(function (result) {
+                Observaciones.data = result.data;
+                Observaciones.loadObservaciones();
+
             })
-        }
+            .catch(function (e) { })
+    },
+    sendObs: () => {
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/obs-tr/" + AuthTR.id,
+            body: {
+                message: Observaciones.observaciones
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                if (result.status) {
+                    Observaciones.observaciones = "";
+                    Observaciones.fetch();
+                    alert('Observación registrada con éxito.');
+                }
+            })
+            .catch(function (e) {
+            })
 
-    }
-}
+
+    },
+};
 
 const DestinoFinal = {
     view: (_data) => {
@@ -1022,7 +1161,9 @@ const AuthTR = {
                                                                         " Adjuntos "
                                                                     )
                                                                 ),
-                                                                m("li.nav-item",
+                                                                m("li.nav-item", {
+                                                                    class: (AuthTR.data.status >= 1 ? '' : 'd-none')
+                                                                },
                                                                     m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth1'][role='tab'][aria-controls='auth1']", {
                                                                         style: { "color": "#476ba3" }
                                                                     },
@@ -1031,7 +1172,9 @@ const AuthTR = {
                                                                         " Autorización "
                                                                     )
                                                                 ),
-                                                                m("li.nav-item",
+                                                                m("li.nav-item", {
+                                                                    class: (AuthTR.data.status >= 2 ? '' : 'd-none')
+                                                                },
                                                                     m("a.nav-link[id='home-auth2'][data-toggle='tab'][href='#auth2'][role='tab'][aria-controls='auth2']", {
                                                                         style: { "color": "#476ba3" }
                                                                     },
@@ -1041,7 +1184,10 @@ const AuthTR = {
                                                                     )
                                                                 ),
 
-                                                                m("li.nav-item",
+                                                                m("li.nav-item", {
+                                                                    class: (AuthTR.data.status >= 3 ? '' : 'd-none')
+
+                                                                },
                                                                     m("a.nav-link[id='home-auth3'][data-toggle='tab'][href='#auth3'][role='tab'][aria-controls='auth3']", {
                                                                         style: { "color": "#476ba3" }
                                                                     },
@@ -1051,7 +1197,10 @@ const AuthTR = {
                                                                     )
                                                                 ),
 
-                                                                m("li.nav-item",
+                                                                m("li.nav-item", {
+                                                                    class: (AuthTR.data.status >= 4 ? '' : 'd-none')
+
+                                                                },
                                                                     m("a.nav-link[id='home-auth4'][data-toggle='tab'][href='#auth4'][role='tab'][aria-controls='auth4']", {
                                                                         style: { "color": "#476ba3" }
                                                                     },
@@ -1062,6 +1211,10 @@ const AuthTR = {
                                                                 ),
 
                                                                 m("li.nav-item",
+                                                                    {
+                                                                        class: (AuthTR.data.status >= 3 ? '' : 'd-none')
+
+                                                                    },
                                                                     m("a.nav-link[id='home-auth5'][data-toggle='tab'][href='#auth5'][role='tab'][aria-controls='auth5']", {
                                                                         style: { "color": "#476ba3" }
                                                                     },
@@ -1091,7 +1244,27 @@ const AuthTR = {
                                                                         m("span.badge.badge-light.wd-100p.tx-14",
                                                                             "Autorización",
                                                                         ),
-                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {}),
+                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
+                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
+                                                                            value: Observaciones.observaciones,
+                                                                        }),
+                                                                        m("div.mg-0.mg-t-5.text-left", [
+
+                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
+                                                                                onclick: function () {
+                                                                                    if (Observaciones.observaciones.length !== 0) {
+                                                                                        Observaciones.sendObs();
+                                                                                    } else {
+                                                                                        alert("Observaciones es obligatorio.");
+                                                                                    }
+                                                                                },
+                                                                            }, [
+                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                            ], "Autorizado"),
+
+
+
+                                                                        ]),
                                                                         m("div.mg-0.mg-t-5.text-right", [
 
                                                                             m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {

@@ -140,28 +140,34 @@ const tableAutorizacionesTR = {
                                         el.dom.innerHTML = 'Autorizaciones de Hoy';
                                     }
                                     if (AutorizacionesTR.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        el.dom.innerHTML = 'Autorizaciones Pendientes';
                                     }
                                     if (AutorizacionesTR.idFiltro == 3) {
-                                        el.dom.innerHTML = 'Pedidos de Hospitalización';
+                                        el.dom.innerHTML = 'En Revisión Técnica';
                                     }
                                     if (AutorizacionesTR.idFiltro == 4) {
-                                        el.dom.innerHTML = 'Pedidos de C. Externa';
+                                        el.dom.innerHTML = 'En Revisión CT';
+                                    }
+                                    if (AutorizacionesTR.idFiltro == 5) {
+                                        el.dom.innerHTML = 'En Revisión GC';
                                     }
 
                                 },
                                 onupdate: (el) => {
                                     if (AutorizacionesTR.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Pedidos de Hoy';
+                                        el.dom.innerHTML = 'Autorizaciones de Hoy';
                                     }
                                     if (AutorizacionesTR.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Pedidos de Emergencia';
+                                        el.dom.innerHTML = 'Autorizaciones Pendientes';
                                     }
                                     if (AutorizacionesTR.idFiltro == 3) {
-                                        el.dom.innerHTML = 'Pedidos de Hospitalización';
+                                        el.dom.innerHTML = 'En Revisión Técnica';
                                     }
                                     if (AutorizacionesTR.idFiltro == 4) {
-                                        el.dom.innerHTML = 'Pedidos de C. Externa';
+                                        el.dom.innerHTML = 'En Revisión CT';
+                                    }
+                                    if (AutorizacionesTR.idFiltro == 5) {
+                                        el.dom.innerHTML = 'En Revisión GC';
                                     }
                                 }
                             }
@@ -192,7 +198,7 @@ const tableAutorizacionesTR = {
                                             AutorizacionesTR.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
                                             AutorizacionesTR.loader = true;
                                             AutorizacionesTR.pedidos = [];
-                                            AutorizacionesTR.fecth();
+                                            AutorizacionesTR.fetch();
                                             m.route.set("/laboratorio/autorizaciones?idFiltro=" + AutorizacionesTR.idFiltro + "&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta);
                                         },
                                         style: {
@@ -219,7 +225,7 @@ const tableAutorizacionesTR = {
                                             AutorizacionesTR.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
                                             AutorizacionesTR.loader = true;
                                             AutorizacionesTR.pedidos = [];
-                                            AutorizacionesTR.fecth();
+                                            AutorizacionesTR.fetch();
                                             m.route.set("/laboratorio/AutorizacionesTR?idFiltro=" + AutorizacionesTR.idFiltro + "&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta);
                                         },
                                         style: {
@@ -239,17 +245,20 @@ const tableAutorizacionesTR = {
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
                                         "FILTROS:"
                                     ),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/AutorizacionesTR/?idFiltro=1" }, [
-                                        "Pedidos de Hoy"
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/contabilidad/proceso/tarjeta-roja/autorizaciones/?idFiltro=1" }, [
+                                        "Autorizaciones de Hoy"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/AutorizacionesTR/?idFiltro=2&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
-                                        "Pedidos de Emergencia"
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/contabilidad/proceso/tarjeta-roja/autorizaciones/?idFiltro=2&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
+                                        "Autorizaciones Pendientes"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/AutorizacionesTR/?idFiltro=3&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
-                                        "Pedidos de Hospitalización"
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/contabilidad/proceso/tarjeta-roja/autorizaciones/?idFiltro=3&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
+                                        "En Revisión Técnica"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/AutorizacionesTR/?idFiltro=4&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
-                                        "Pedidos de C. Externa"
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/contabilidad/proceso/tarjeta-roja/autorizaciones/?idFiltro=4&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
+                                        "En Revisión CT"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/contabilidad/proceso/tarjeta-roja/autorizaciones/?idFiltro=4&fechaDesde=" + AutorizacionesTR.fechaDesde + "&fechaHasta=" + AutorizacionesTR.fechaHasta }, [
+                                        "En Revisión GC"
                                     ]),
 
                                 ])
@@ -317,7 +326,7 @@ const AutorizacionesTR = {
             AutorizacionesTR.fechaHasta = moment().format('DD-MM-YYYY');
             AutorizacionesTR.loader = true;
             AutorizacionesTR.pedidos = [];
-            AutorizacionesTR.fecth();
+            AutorizacionesTR.fetch();
 
         }
 
@@ -369,13 +378,13 @@ const AutorizacionesTR = {
                 title: "Fecha:",
             },
             {
-                title: "SC:",
+                title: "Motivo de Baja:",
             },
             {
-                title: "Paciente:",
+                title: "Usuario:",
             },
             {
-                title: "Médico:",
+                title: "Status:",
             },
             {
                 title: "Opciones:",
@@ -389,11 +398,11 @@ const AutorizacionesTR = {
                 },
                 visible: true,
                 aTargets: [0],
-                orderable: true,
+                orderable: false,
             },
             {
                 mRender: function (data, type, full) {
-                    return full.fechaPedido;
+                    return full.fecha;
                 },
                 visible: true,
                 aTargets: [1],
@@ -402,7 +411,7 @@ const AutorizacionesTR = {
             },
             {
                 mRender: function (data, type, full) {
-                    return full.codigoPedido;
+                    return full.motivo_baja;
                 },
                 visible: true,
                 aTargets: [2],
@@ -410,14 +419,15 @@ const AutorizacionesTR = {
             },
             {
                 mRender: function (data, type, full) {
-                    return full.paciente;
+                    return full.usuario;
                 },
                 visible: true,
                 aTargets: [3],
                 orderable: false,
-            }, {
+            },
+            {
                 mRender: function (data, type, full) {
-                    return full.descPrestadorSolicitante;
+                    return 'OPCIONES';
 
                 },
                 visible: true,
@@ -442,64 +452,59 @@ const AutorizacionesTR = {
                     view: () => {
                         return [
                             m("td", {
-                                class: (aData.tipoPedido == 'R' ? 'bg-primary' : 'bg-danger')
+                                class: 'bg-danger'
                             }, [
 
-                                (aData.tipoPedido == 'R' ? m("span.badge.badge-pill.badge-primary.wd-100p.mg-b-1",
-                                    'R'
-                                ) : m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
-                                    'U'
-                                ))
+                                m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
+                                    iDisplayIndexFull + 1
+                                )
 
 
                             ]),
                             m("td", { "style": {} },
-                                aData.fechaPedido
+                                aData.fecha
                             ),
                             m("td", { "style": {} },
                                 m("span.tx-semibold.tx-dark.tx-15.wd-100p.mg-b-1",
-                                    aData.codigoPedido
+                                    aData.motivo_baja
                                 ),
                             ),
                             m("td", { "style": {} }, [
-                                m('.d-inline.mg-r-5', {
-                                    class: (aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
-                                }, aData.sector),
-                                m('br'),
-                                aData.paciente,
+                                aData.usuario
+
                             ]
 
                             ),
-                            m("td", { "style": {} },
-                                aData.descPrestadorSolicitante
-
-                            ),
 
 
-                            (aData.tipoOperacion == 'I' ? [m("td.tx-white.tx-semibold.tx-center", {
-                                title: 'Status Toma de Muestras',
-                                style: { "background-color": (aData.muestrasProcesadas == 0 ? "#ffc107" : "#0d9448") }
-                            },
-                                (aData.muestrasProcesadas == 0 ? "Muestras Pendientes" : "Muestras Completo")
-                            ),] : [""]),
+
+                            (aData.status == 1 ? [
+                                m("td.tx-white.tx-semibold.tx-center", {
+                                    style: { "background-color": "#ffc107" }
+                                },
+                                    "Pendiente"
+                                )
+                            ] : [
+                                m("td.tx-white.tx-semibold.tx-center", {
+                                    style: { "background-color": "#0d9448" }
+                                },
+                                    "Gestionando"
+                                )
+                            ]),
 
 
                             m("td.tx-center", {
                                 onclick: () => {
-                                    m.route.set("/laboratorio/AutorizacionesTR/pedido/", {
-                                        numeroHistoriaClinica: aData.numeroHistoriaClinica,
-                                        numeroAtencion: aData.at_mv,
-                                        numeroPedido: aData.codigoPedido,
-                                        idTimeRecord: aData.idTimeRecord,
+                                    m.route.set("/contabilidad/proceso/tarjeta-roja/id/", {
+                                        tr: aData.id,
                                         track: "view",
                                     });
                                 },
                                 "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
                             },
-                                " Ver Pedido "
+                                " Ver Detalle "
 
                             )
-
 
 
 
@@ -527,7 +532,8 @@ const AutorizacionesTR = {
 
         return table;
     },
-    fecth: () => {
+    fetch: () => {
+
         let _queryString = '';
 
         if (AutorizacionesTR.idFiltro == 1) {
@@ -548,49 +554,17 @@ const AutorizacionesTR = {
                 AutorizacionesTR.pedidos = result.data;
             })
             .catch(function (e) {
-                setTimeout(function () { AutorizacionesTR.fecth(); }, 2000);
+                setTimeout(function () { AutorizacionesTR.fetch(); }, 2000);
             });
 
 
     },
-    reproesarMensajeXML: (codigoPedido, idTimeRecord) => {
 
-        AutorizacionesTR.loader = true;
-
-
-        m.request({
-            method: "GET",
-            url: "https://lisa.hospitalmetropolitano.org/v1/pedidos/send-pedido?sc=" + codigoPedido + "&idTimeRecord=" + idTimeRecord,
-            extract: function (xhr) { return { status: xhr.status, body: xhr.responseText } },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (response) {
-
-
-                if (response.status == 200) {
-                    alert('Preceso realizado con éxito.')
-                    setTimeout(function () { window.location.reload(); }, 300);
-                } else {
-                    alert('Error en envío de este mensaje. Reintente nuevamente.');
-
-                }
-
-
-            })
-            .catch(function (e) {
-                alert('Error en envío de este mensaje. Reintente nuevamente.');
-            });
-
-
-    },
     reloadData: () => {
         var table = $('#table-AutorizacionesTR').DataTable();
         table.clear();
         table.rows.add(AutorizacionesTR.pedidos).draw();
     },
-
     view: (_data) => {
 
         return AutorizacionesTR.loader ? [
@@ -606,18 +580,21 @@ const AutorizacionesTR = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/contabilidad" }, [
+                                " Contabilidad "
                             ])
 
                         ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
+                                " Tarjeta Roja "
+                            ])
+
                         ),
 
                     ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Autorizaciones"
+                        "Autorizaciones:"
                     ),
                     m("div.row.animated.fadeInUp", [
 
@@ -645,45 +622,7 @@ const AutorizacionesTR = {
                 ])
             ),
         ] : AutorizacionesTR.error.length !== 0 ? [
-            m(SidebarTR, { oncreate: SidebarTR.setPage(16) }),
-            m("div.content.content-components",
-                m("div.container.mg-l-0.mg-r-0", {
-                    style: { "max-width": "100%" }
-                }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
-                        ),
-
-                    ]),
-                    m("h1.df-title.mg-t-20.mg-b-10",
-                        "Autorizaciones"
-                    ),
-                    m("div.row.animated.fadeInUp", [
-
-                        m('p', 'No existe información.')
-                    ]),
-
-
-
-
-
-                ])
-            ),
-
-        ] : !AutorizacionesTR.loader && AutorizacionesTR.pedidos.length !== 0 ? [
-            m(SidebarTR, { oncreate: SidebarTR.setPage(16) }),
+            m(SidebarTR, { oncreate: SidebarTR.setPage(33) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -700,9 +639,56 @@ const AutorizacionesTR = {
                             ])
 
                         ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
+                                " Tarjeta Roja "
+                            ])
+
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Autorizaciones;"
+                    ),
+                    m("div.row.animated.fadeInUp", [
+
+                        m('p', 'No existe información.')
+                    ]),
+
+
+
+
+
+                ])
+            ),
+
+        ] : !AutorizacionesTR.loader && AutorizacionesTR.pedidos.length !== 0 ? [
+            m(SidebarTR, { oncreate: SidebarTR.setPage(33) }),
+            m("div.content.content-components",
+                m("div.container.mg-l-0.mg-r-0", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad" }, [
+                                " Contabilidad "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
+                                " Tarjeta Roja "
+                            ])
+
+                        ),
 
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Autorizaciones"
+                            "Autorizaciones:"
                         ),
 
                     ]),
@@ -754,7 +740,7 @@ const AutorizacionesTR = {
             ])
 
         ] : !AutorizacionesTR.loader && AutorizacionesTR.pedidos.length == 0 ? [
-            m(SidebarTR, { oncreate: SidebarTR.setPage(16) }),
+            m(SidebarTR, { oncreate: SidebarTR.setPage(33) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -766,13 +752,20 @@ const AutorizacionesTR = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/contabilidad" }, [
+                                " Contabilidad "
                             ])
 
                         ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
+                                " Tarjeta Roja "
+                            ])
+
+                        ),
+
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Autorizaciones:"
                         ),
 
                     ]),
@@ -799,7 +792,7 @@ const AutorizacionesTR = {
                 ])
             ),
         ] : [
-            m(SidebarTR, { oncreate: SidebarTR.setPage(16) }),
+            m(SidebarTR, { oncreate: SidebarTR.setPage(33) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -811,13 +804,20 @@ const AutorizacionesTR = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
+                            m(m.route.Link, { href: "/contabilidad" }, [
+                                " Contabilidad "
                             ])
 
                         ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
+                                " Tarjeta Roja "
+                            ])
+
+                        ),
+
                         m("li.breadcrumb-item.active[aria-current='page']",
-                            "Pedidos Ingresados"
+                            "Autorizaciones:"
                         ),
 
                     ]),

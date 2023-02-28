@@ -82,57 +82,8 @@ const MenuTRoja = {
                             ])
                         ] : []),
 
-                        (App.isShow('contabilidad', 33) ? [
-                            m("li", {
-                                "class": "list-item bg-white wd-100p",
-                                "style": { "cursor": "pointer" },
-                                onclick: () => {
-                                    m.route.set("/contabilidad/proceso/tarjeta-roja/solicitudes")
-                                }
-                            }, [
-                                m("div", { "class": "media" }, [
-                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                        m("i", { "class": "fas fa-inbox tx-30 tx-white" })
 
-                                    ),
-                                    m("div", { "class": "media-body mg-l-15" }, [
-                                        m("p", { "class": "tx-18 mg-b-0" },
-                                            "Todas las Solicitudes",
-                                        ),
-                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                            "Ir a Todas las Solicitudes",
-                                        )
-                                    ])
-                                ]),
 
-                            ])
-                        ] : []),
-
-                        (App.isShow('contabilidad', 34) ? [
-                            m("li", {
-                                "class": "list-item bg-white wd-100p",
-                                "style": { "cursor": "pointer" },
-                                onclick: () => {
-                                    m.route.set("/contabilidad/proceso/tarjeta-roja/configuracion")
-                                }
-                            }, [
-                                m("div", { "class": "media" }, [
-                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
-                                        m("i", { "class": "fas fa-cog tx-30 tx-white" })
-
-                                    ),
-                                    m("div", { "class": "media-body mg-l-15" }, [
-                                        m("p", { "class": "tx-18 mg-b-0" },
-                                            "Configuración del Proceso",
-                                        ),
-                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
-                                            "Ir a Configuración del Proceso",
-                                        )
-                                    ])
-                                ]),
-
-                            ])
-                        ] : []),
 
 
 

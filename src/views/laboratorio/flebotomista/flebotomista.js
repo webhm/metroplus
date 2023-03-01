@@ -16,11 +16,15 @@ const actions = {
     showSearch: true,
     show: false,
     increment(model) {
-        model.seconds--;
-        if (model.seconds == 0) {
-            window.location.reload();
+
+        if (Flebotomista.searchField.length == 0) {
+            model.seconds--;
+            if (model.seconds == 0) {
+                window.location.reload();
+            }
+            m.redraw();
         }
-        m.redraw();
+
     },
 
     start(model) {
@@ -115,11 +119,22 @@ function Stopwatch() {
 
 const tableFlebotomista = {
     oncreate: () => {
-        Flebotomista.loadFlebotomista();
-        if (Flebotomista.searchField.length !== 0) {
-            var table = $('#table-flebotomista').DataTable();
-            table.search(Flebotomista.searchField).draw();
+
+        if (Flebotomista.idFiltro == 4) {
+            Flebotomista.loadFlebotomistaCE();
+            if (Flebotomista.searchField.length !== 0) {
+                var table = $('#table-flebotomista').DataTable();
+                table.search(Flebotomista.searchField).draw();
+            }
+        } else {
+            Flebotomista.loadFlebotomista();
+            if (Flebotomista.searchField.length !== 0) {
+                var table = $('#table-flebotomista').DataTable();
+                table.search(Flebotomista.searchField).draw();
+            }
         }
+
+
 
     },
 
@@ -501,6 +516,220 @@ const Flebotomista = {
                                 "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
                             },
                                 " Ver Pedido "
+
+                            )
+
+
+
+
+
+                        ];
+                    },
+                });
+            },
+            drawCallback: function (settings) {
+
+                Flebotomista.loader = false;
+
+
+            },
+        });
+
+        $('.dataTables_length select').select2({
+            minimumResultsForSearch: Infinity
+        });
+
+        $('#searchField').keyup(function (e) {
+
+            table.search($('#searchField').val()).draw();
+        });
+
+        return table;
+    },
+    loadFlebotomistaCE: () => {
+
+        $.fn.dataTable.ext.errMode = "none";
+        var table = $("#table-flebotomista").DataTable({
+            data: Flebotomista.pedidos,
+            dom: 'ltp',
+            responsive: true,
+            language: {
+                searchPlaceholder: "Buscar...",
+                sSearch: "",
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                sProcessing: "Procesando...",
+                sZeroRecords: "Todavía no tienes resultados disponibles.",
+                sEmptyTable: "Ningún dato disponible en esta tabla",
+                sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                sInfoPostFix: "",
+                sUrl: "",
+                sInfoThousands: ",",
+                sLoadingRecords: "Cargando...",
+                oPaginate: {
+                    sFirst: "Primero",
+                    sLast: "Último",
+                    sNext: "Siguiente",
+                    sPrevious: "Anterior",
+                },
+                oAria: {
+                    sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                    sSortDescending: ": Activar para ordenar la columna de manera descendente",
+                },
+            },
+            cache: false,
+            order: false,
+            destroy: true,
+            columns: [{
+                title: "N°:",
+            },
+            {
+                title: "Fecha:",
+            },
+            {
+                title: "SC:",
+            },
+            {
+                title: "Paciente:",
+            },
+            {
+                title: "Médico:",
+            },
+            {
+                title: "Opciones:",
+            },
+
+
+            ],
+            aoColumnDefs: [{
+                mRender: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: true,
+                aTargets: [0],
+                orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.fechaPedido;
+                },
+                visible: true,
+                aTargets: [1],
+                orderable: false,
+
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.codigoPedido;
+                },
+                visible: true,
+                aTargets: [2],
+                orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.paciente;
+                },
+                visible: true,
+                aTargets: [3],
+                orderable: false,
+                width: '60%'
+            }, {
+                mRender: function (data, type, full) {
+                    return full.descPrestadorSolicitante;
+
+                },
+                visible: true,
+                aTargets: [4],
+                orderable: false,
+                width: '5%'
+
+            },
+            {
+                mRender: function (data, type, full) {
+                    return 'OPCIONES';
+
+                },
+                visible: true,
+                aTargets: [5],
+                orderable: false,
+                width: '5%'
+
+            },
+
+
+            ],
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+                m.mount(nRow, {
+                    view: () => {
+                        return [
+                            m("td", {
+                                class: (aData.tipoPedido == 'R' ? 'bg-primary' : 'bg-danger')
+                            }, [
+
+                                (aData.tipoPedido == 'R' ? m("span.badge.badge-pill.badge-primary.wd-100p.mg-b-1",
+                                    'R'
+                                ) : m("span.badge.badge-pill.badge-danger.wd-100p.mg-b-1",
+                                    'U'
+                                ))
+
+
+                            ]),
+                            m("td", { "style": {} },
+                                aData.fechaPedido
+                            ),
+                            m("td", { "style": {} },
+                                m("span.tx-semibold.tx-dark.tx-18.wd-100p.mg-b-1",
+                                    aData.codigoPedido
+                                ),
+                            ),
+                            m("td", { "style": {} }, [
+                                m('.d-inline.mg-r-5', {
+                                    class: (aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
+                                }, aData.sector),
+                                m('br'),
+                                m('.d-inline.tx-18.tx-semibold', {
+                                }, 'PTE: ' + aData.paciente),
+                                m('br'),
+                                m('.d-inline', {
+                                }, 'MED: ' + aData.descPrestadorSolicitante),
+
+
+
+                            ]
+
+                            ),
+
+
+                            (aData.tipoOperacion == 'I' ? [m("td.tx-white.tx-semibold.tx-center", {
+                                title: 'Status Toma de Muestras',
+                                style: { "background-color": (aData.muestrasProcesadas == 0 ? "#ffc107" : "#0d9448") }
+                            },
+                                (aData.muestrasProcesadas == 0 ? "Muestras Pendientes" : "Muestras Completo")
+                            ),] : [""]),
+
+
+                            m("td.tx-center", {
+                                "style": { "cursor": "pointer" }
+                            }, [
+                                m('br'),
+                                m(m.route.Link, {
+                                    class: 'pd-10 tx-semibold d-inline tx-18',
+                                    href: "/laboratorio/flebotomista/pedido/",
+                                    target: '_blank',
+                                    params: {
+                                        numeroHistoriaClinica: aData.numeroHistoriaClinica,
+                                        numeroAtencion: aData.at_mv,
+                                        numeroPedido: aData.codigoPedido,
+                                        idTimeRecord: aData.idTimeRecord,
+                                        track: "view",
+                                    }
+                                }, [
+                                    " Ver "
+                                ])
+                            ]
 
                             )
 

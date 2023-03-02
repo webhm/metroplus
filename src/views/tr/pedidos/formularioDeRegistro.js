@@ -1,6 +1,62 @@
 import m from "mithril";
 
 const FormularioDeRegistro = {
+  oninit: () => {
+    const apiFrecuenciaCardiaca =
+      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=FRECUENCIA_CARDIACA&CD_ATENDIMENTO=";
+    const apiFrecuenciaRespiratoria =
+      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=FRECUENCIA_RESPIRATORIA&CD_ATENDIMENTO=";
+
+    const apiPeso =
+      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=PESO&CD_ATENDIMENTO=";
+    const apiEscalaDelDolor =
+      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=ESCALA_DOLOR&CD_ATENDIMENTO=";
+
+    const inputFrecuenciaCardiaca = "inputFrecuenciaCardiaca";
+    const inputFrecuenciaRespiratoria = "inputFrecuenciaRespiratoria";
+    const inputPeso = "inputPeso";
+    const inputEscalaDolor = "inputEscalaDolor";
+
+    const respuestaProcedimientos = async (
+      api,
+      numeroDeAtendimiento,
+      nombreDelInput
+    ) => {
+      try {
+        const respuesta = await m.request({
+          method: "GET",
+          url: `${api}${numeroDeAtendimiento}`,
+          responseType: "json",
+        });
+
+        if (respuesta.status) {
+          const valor = respuesta.data[0].VALUE;
+          const inputFrecuenciaCardiaca = document.getElementById(
+            `${nombreDelInput}`
+          );
+          inputFrecuenciaCardiaca.value = valor;
+          return valor;
+        } else {
+          throw new Error(error);
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    };
+
+    respuestaProcedimientos(
+      apiFrecuenciaCardiaca,
+      10090,
+      inputFrecuenciaCardiaca
+    );
+    respuestaProcedimientos(
+      apiFrecuenciaRespiratoria,
+      10090,
+      inputFrecuenciaRespiratoria
+    );
+    respuestaProcedimientos(apiPeso, 10090, inputPeso);
+    respuestaProcedimientos(apiEscalaDelDolor, 10090, inputEscalaDolor);
+  },
   view: () => {
     return m("form", [
       m("div", { class: "form-row" }, [

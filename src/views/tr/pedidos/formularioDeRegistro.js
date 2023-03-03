@@ -1,4 +1,8 @@
 import m from "mithril";
+//import comboBoxDePrescripcion from "./comboboxDePrescripcion.js";
+
+
+//const arregloDePrescripcion = "";
 
 const FormularioDeRegistro = {
   oninit: () => {
@@ -16,7 +20,7 @@ const FormularioDeRegistro = {
     const inputFrecuenciaRespiratoria = "inputFrecuenciaRespiratoria";
     const inputPeso = "inputPeso";
     const inputEscalaDolor = "inputEscalaDolor";
-
+    // Karla, Shiris, Apo, Emill, Norms, Faris, Boss, Billy.
     const respuestaProcedimientos = async (
       api,
       numeroDeAtendimiento,
@@ -43,6 +47,31 @@ const FormularioDeRegistro = {
         throw new Error(error);
       }
     };
+
+    /* const respuestaPrescripcion = async (numeroDeAtendimiento) => {
+      try {
+        const ApiPreescripcion = `https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=PRESC&&CD_ATENDIMENTO=${numeroDeAtendimiento}`;
+        const respuesta = await m.request({
+          method: "GET",
+          url: `${ApiPreescripcion}${numeroDeAtendimiento}`,
+          responseType: "json",
+        });
+
+        if (respuesta.status && respuesta.data.length > 0) {
+          const valoresDePrescripcion = respuesta.data.map((preescripcion) => {
+            console.log(valoresDePrescripcion);
+            return preescripcion;
+          });
+          return valoresDePrescripcion;
+        } else {
+          throw new Error(error);
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    }; */
+
+    //arregloDePrescripcion = respuestaPrescripcion(2780);
 
     respuestaProcedimientos(
       apiFrecuenciaCardiaca,
@@ -135,6 +164,7 @@ const FormularioDeRegistro = {
           m("option", { value: "3" }, "Hay que traer de la base de datos"),
         ]),
       ]),
+      //m(comboBoxDePrescripcion, {"attrs": {"numeroDeAtendimiento": 2780}}),
       m("div", { class: "form-group" }, [
         m("label", { for: "inputCod" }, "Cod"),
         m("input", {

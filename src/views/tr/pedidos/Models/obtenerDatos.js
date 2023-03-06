@@ -6,6 +6,7 @@ const terapiaRespiratoriaController = {
   listaDeFrecuenciaCardiaca: [],
   listaDeFrecuenciaRespiratoria: [],
   listaDePeso: [],
+  listaEscalaDelDolor: [],
 
   cargarPrescripcion: function (numeroDeAtendimiento) {
     m.request({
@@ -69,7 +70,7 @@ const terapiaRespiratoriaController = {
     })
       .then(function (resultado) {
         if (resultado.status) {
-          terapiaRespiratoriaController.cargarFrecuenciaRespiratoria =
+          terapiaRespiratoriaController.listaDeFrecuenciaRespiratoria =
             resultado;
         } else {
           terapiaRespiratoriaController.error = resultado.error;
@@ -96,6 +97,31 @@ const terapiaRespiratoriaController = {
       .then(function (resultado) {
         if (resultado.status) {
           terapiaRespiratoriaController.listaDePeso = resultado;
+        } else {
+          terapiaRespiratoriaController.error = resultado.error;
+          alert(terapiaRespiratoriaController.error);
+        }
+      })
+      .catch(function (error) {
+        terapiaRespiratoriaController.error = error;
+        alert(terapiaRespiratoriaController.error);
+      });
+  },
+
+  cargarEscalaDelDolor: function (numeroDeAtendimiento) {
+    m.request({
+      method: "GET",
+      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=ESCALA_DOLOR&CD_ATENDIMENTO=${numeroDeAtendimiento}`,
+      body: {},
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
+    })
+      .then(function (resultado) {
+        if (resultado.status) {
+          terapiaRespiratoriaController.listaEscalaDelDolor = resultado;
         } else {
           terapiaRespiratoriaController.error = resultado.error;
           alert(terapiaRespiratoriaController.error);

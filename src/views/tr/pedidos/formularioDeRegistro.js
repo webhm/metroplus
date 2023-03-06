@@ -1,90 +1,15 @@
 import m from "mithril";
-//import comboBoxDePrescripcion from "./comboboxDePrescripcion.js";
-
-
-//const arregloDePrescripcion = "";
+import terapiaRespiratoriaController from "./Models/obtenerDatos";
 
 const FormularioDeRegistro = {
   oninit: () => {
-    const apiFrecuenciaCardiaca =
-      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=FRECUENCIA_CARDIACA&CD_ATENDIMENTO=";
-    const apiFrecuenciaRespiratoria =
-      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=FRECUENCIA_RESPIRATORIA&CD_ATENDIMENTO=";
+    
+    terapiaRespiratoriaController.cargarFrecuenciaCardiaca(10090);
+    terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(10090);
+    terapiaRespiratoriaController.cargarPeso(10090);
+    terapiaRespiratoriaController.cargarEscalaDelDolor(10090);
 
-    const apiPeso =
-      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=PESO&CD_ATENDIMENTO=";
-    const apiEscalaDelDolor =
-      "https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=ESCALA_DOLOR&CD_ATENDIMENTO=";
-
-    const inputFrecuenciaCardiaca = "inputFrecuenciaCardiaca";
-    const inputFrecuenciaRespiratoria = "inputFrecuenciaRespiratoria";
-    const inputPeso = "inputPeso";
-    const inputEscalaDolor = "inputEscalaDolor";
-    // Karla, Shiris, Apo, Emill, Norms, Faris, Boss, Billy.
-    const respuestaProcedimientos = async (
-      api,
-      numeroDeAtendimiento,
-      nombreDelInput
-    ) => {
-      try {
-        const respuesta = await m.request({
-          method: "GET",
-          url: `${api}${numeroDeAtendimiento}`,
-          responseType: "json",
-        });
-
-        if (respuesta.status) {
-          const valor = respuesta.data[0].VALUE;
-          const inputFrecuenciaCardiaca = document.getElementById(
-            `${nombreDelInput}`
-          );
-          inputFrecuenciaCardiaca.value = valor;
-          return valor;
-        } else {
-          throw new Error(error);
-        }
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    /* const respuestaPrescripcion = async (numeroDeAtendimiento) => {
-      try {
-        const ApiPreescripcion = `https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=PRESC&&CD_ATENDIMENTO=${numeroDeAtendimiento}`;
-        const respuesta = await m.request({
-          method: "GET",
-          url: `${ApiPreescripcion}${numeroDeAtendimiento}`,
-          responseType: "json",
-        });
-
-        if (respuesta.status && respuesta.data.length > 0) {
-          const valoresDePrescripcion = respuesta.data.map((preescripcion) => {
-            console.log(valoresDePrescripcion);
-            return preescripcion;
-          });
-          return valoresDePrescripcion;
-        } else {
-          throw new Error(error);
-        }
-      } catch (error) {
-        throw new Error(error);
-      }
-    }; */
-
-    //arregloDePrescripcion = respuestaPrescripcion(2780);
-
-    respuestaProcedimientos(
-      apiFrecuenciaCardiaca,
-      10090,
-      inputFrecuenciaCardiaca
-    );
-    respuestaProcedimientos(
-      apiFrecuenciaRespiratoria,
-      10090,
-      inputFrecuenciaRespiratoria
-    );
-    respuestaProcedimientos(apiPeso, 10090, inputPeso);
-    respuestaProcedimientos(apiEscalaDelDolor, 10090, inputEscalaDolor);
+    terapiaRespiratoriaController.cargarPrescripcion(2780); //Aqui poner el numero de atendimiento
   },
   view: () => {
     return m("form", [
@@ -97,6 +22,7 @@ const FormularioDeRegistro = {
             id: "inputFrecuenciaCardiaca",
             placeholder: "Frecuencia Cardiaca",
             readonly: "readonly",
+            value: terapiaRespiratoriaController.listaDeFrecuenciaCardiaca.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -111,6 +37,7 @@ const FormularioDeRegistro = {
             id: "inputFrecuenciaRespiratoria",
             placeholder: "Frecuencia Respiratoria",
             readonly: "readonly",
+            value: terapiaRespiratoriaController.listaDeFrecuenciaRespiratoria.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -121,6 +48,7 @@ const FormularioDeRegistro = {
             id: "inputPeso",
             placeholder: "Peso",
             readonly: "readonly",
+            value: terapiaRespiratoriaController.listaDePeso.data[0].VALUE,
           }),
         ]),
       ]),
@@ -133,6 +61,7 @@ const FormularioDeRegistro = {
             id: "inputEscalaDolor",
             placeholder: "Escala Dolor",
             readonly: "readonly",
+            value: terapiaRespiratoriaController.listaEscalaDelDolor.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -158,12 +87,20 @@ const FormularioDeRegistro = {
       ]),
       m("div", { class: "form-group" }, [
         m("label", { for: "inputPrescripcion" }, "Prescripción"),
-        m("select", { class: "custom-select" }, [
-          m("option", { value: "1" }, "Hay que traer de la base de datos"),
-          m("option", { value: "2" }, "Hay que traer de la base de datos"),
-          m("option", { value: "3" }, "Hay que traer de la base de datos"),
-        ]),
+        m(
+          "select",
+          { class: "custom-select" },
+          terapiaRespiratoriaController.lista.data.map(function (prescripcion) {
+            return m(
+              "option",
+              { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
+              prescripcion.CODIGO, " ", prescripcion.FECHA
+            );
+          })
+        ),
       ]),
+
+      //m(comboboxPrescripcion, { numeroDeAtendimiento: 2780 }),
       //m(comboBoxDePrescripcion, {"attrs": {"numeroDeAtendimiento": 2780}}),
       m("div", { class: "form-group" }, [
         m("label", { for: "inputCod" }, "Cod"),

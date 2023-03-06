@@ -7,6 +7,8 @@ const terapiaRespiratoriaController = {
   listaDeFrecuenciaRespiratoria: [],
   listaDePeso: [],
   listaEscalaDelDolor: [],
+  fechaActual: "",
+  horaActual: "",
 
   cargarPrescripcion: function (numeroDeAtendimiento) {
     m.request({
@@ -132,6 +134,27 @@ const terapiaRespiratoriaController = {
         alert(terapiaRespiratoriaController.error);
       });
   },
+
+  cargarFechaActual: function () {
+    const fechaActual = new Date();
+    const dia = fechaActual.getDate();
+    const mes = fechaActual.getMonth() + 1;
+    const anio = fechaActual.getFullYear();
+
+    const fechaFormateada = `${dia}/${mes}/${anio}`;
+    terapiaRespiratoriaController.fechaActual = fechaFormateada;
+  },
+
+  cargarHoraActual: function () {
+    const fechaActual = new Date();
+    const hora = fechaActual.getHours();
+    const minutos = fechaActual.getMinutes();
+    const segundos = fechaActual.getSeconds();
+    
+    const horaFormateada = `${hora}:${minutos}:${segundos}`;
+    terapiaRespiratoriaController.horaActual = horaFormateada;
+  },
+
 };
 
 export default terapiaRespiratoriaController;

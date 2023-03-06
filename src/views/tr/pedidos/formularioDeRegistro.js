@@ -12,6 +12,8 @@ const FormularioDeRegistro = {
     terapiaRespiratoriaController.cargarEscalaDelDolor(10090);
 
     terapiaRespiratoriaController.cargarPrescripcion(2780); //Aqui poner el numero de atendimiento
+    terapiaRespiratoriaController.cargarFechaActual();
+    terapiaRespiratoriaController.cargarHoraActual();
     
     FormularioDeRegistro.usuarioConectado = Encrypt.getDataUser(); // Obtener el nombre de usuario
   },
@@ -106,9 +108,6 @@ const FormularioDeRegistro = {
           })
         ),
       ]),
-
-      //m(comboboxPrescripcion, { numeroDeAtendimiento: 2780 }),
-      //m(comboBoxDePrescripcion, {"attrs": {"numeroDeAtendimiento": 2780}}),
       m("div", { class: "form-group" }, [
         m("label", { for: "inputCod" }, "Cod"),
         m("input", {
@@ -125,6 +124,8 @@ const FormularioDeRegistro = {
           type: "text",
           id: "inputFecha",
           placeholder: "Fecha",
+          value: terapiaRespiratoriaController.fechaActual,
+          readonly: "readonly",
         }),
       ]),
       m("div", { class: "form-group" }, [
@@ -134,6 +135,8 @@ const FormularioDeRegistro = {
           type: "text",
           id: "inputHora",
           placeholder: "Hora",
+          value: terapiaRespiratoriaController.horaActual,
+          readonly: "readonly",
         }),
       ]),
       m("div", { class: "form-group" }, [

@@ -1,5 +1,7 @@
 import m from "mithril";
 import terapiaRespiratoriaController from "./Models/obtenerDatos";
+import Pedido from "./pedido";
+import Encrypt from '../../../models/encrypt';
 
 const FormularioDeRegistro = {
   oninit: () => {
@@ -10,7 +12,10 @@ const FormularioDeRegistro = {
     terapiaRespiratoriaController.cargarEscalaDelDolor(10090);
 
     terapiaRespiratoriaController.cargarPrescripcion(2780); //Aqui poner el numero de atendimiento
+    
+    FormularioDeRegistro.usuarioConectado = Encrypt.getDataUser(); // Obtener el nombre de usuario
   },
+  usuarioConectado: [],
   view: () => {
     return m("form", [
       m("div", { class: "form-row" }, [
@@ -72,6 +77,7 @@ const FormularioDeRegistro = {
             id: "inputAtencion",
             placeholder: "Atención",
             readonly: "readonly",
+            value: Pedido.data.AT_MV,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -82,6 +88,7 @@ const FormularioDeRegistro = {
             id: "inputUsuario",
             placeholder: "Usuario",
             readonly: "readonly",
+            value: FormularioDeRegistro.usuarioConectado.user.user,
           }),
         ]),
       ]),

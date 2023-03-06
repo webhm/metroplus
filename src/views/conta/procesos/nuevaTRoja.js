@@ -753,7 +753,7 @@ const NuevaTRoja = {
                                                 m("tbody", [
                                                     m("tr", [
 
-                                                        m("th.tx-semibold.tx-14[colspan='4']", {
+                                                        m("th.tx-semibold.tx-14[colspan='4'][width='20%']", {
                                                             style: { "background-color": "#a8bed6" }
                                                         },
                                                             "Fecha de Solicitud:"
@@ -782,12 +782,14 @@ const NuevaTRoja = {
                                                         },
                                                             m('select.tx-semibold', {
                                                                 onchange: (e) => {
-                                                                    NuevaTRoja.data.categoria = e.target.value;
+                                                                    NuevaTRoja.data.categoria = e.target.options[e.target.options.selectedIndex].value;
+                                                                    NuevaTRoja.data.id_categoria = e.target.options[e.target.options.selectedIndex].id;
                                                                 },
                                                                 class: "custom-select"
                                                             }, m('option', 'Seleccione...'), NuevaTRoja.activos.activos.map(x =>
                                                                 m('option', {
-                                                                    value: x.cod_class
+                                                                    id: x.cod_class,
+                                                                    value: x.class,
                                                                 }, x.class)
                                                             ))
                                                         )
@@ -807,11 +809,20 @@ const NuevaTRoja = {
                                                         },
                                                             m('select.tx-semibold', {
                                                                 onchange: (e) => {
-                                                                    NuevaTRoja.data.sub_categoria = e.target.value;
+                                                                    NuevaTRoja.data.id_sub_categoria = e.target.options[e.target.options.selectedIndex].id;
+                                                                    NuevaTRoja.data.sub_categoria = e.target.options[e.target.options.selectedIndex].value;
+                                                                    console.log('data => ', NuevaTRoja.data);
                                                                 },
                                                                 class: "custom-select"
                                                             }, m('option', 'Seleccione...'), NuevaTRoja.activos.subActivos.map(x =>
-                                                                (x.cod_class == NuevaTRoja.data.categoria ? [m('option', x.class)] : [])
+                                                            (x.cod_class == NuevaTRoja.data.id_categoria ? [
+                                                                m('option', {
+                                                                    value: x.class,
+                                                                    id: x.cod_class
+                                                                },
+                                                                    x.class
+                                                                )
+                                                            ] : [])
                                                             ))
                                                         )
 
@@ -935,7 +946,9 @@ const NuevaTRoja = {
                                                         }, [
                                                             m('select.tx-semibold', {
                                                                 onchange: (e) => {
-                                                                    NuevaTRoja.data.motivo_baja = e.target.value;
+                                                                    NuevaTRoja.data.id_motivo_baja = e.target.options[e.target.options.selectedIndex].id;
+                                                                    NuevaTRoja.data.motivo_baja = e.target.options[e.target.options.selectedIndex].value;
+                                                                    console.log('data => ', NuevaTRoja.data);
                                                                 },
                                                                 class: "custom-select"
                                                             }, m('option', 'Seleccione...'), [
@@ -946,7 +959,8 @@ const NuevaTRoja = {
                                                                 { label: 'PERDIDA', value: 'PERDIDA' }
                                                             ].map(x =>
                                                                 m('option', {
-                                                                    value: x.value
+                                                                    id: x.value,
+                                                                    value: x.label
                                                                 }, x.label)
                                                             ))
                                                         ]),
@@ -976,7 +990,7 @@ const NuevaTRoja = {
                                                                 },
                                                                 class: "custom-select"
                                                             }, m('option', 'Seleccione...'), NuevaTRoja.activos.motivos.map(x =>
-                                                            (x.motivo_baja == NuevaTRoja.data.motivo_baja ? [m('option', {
+                                                            (x.motivo_baja == NuevaTRoja.data.id_motivo_baja ? [m('option', {
                                                                 value: x.accion_sugerida
                                                             }, x.accion_sugerida.replace('_', ' '))] : [])
                                                             ))
@@ -1001,7 +1015,9 @@ const NuevaTRoja = {
 
                                                         },
                                                             m('div.tx-justify', {}, NuevaTRoja.activos.motivos.map(x =>
-                                                                (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [m('p.tx-15.tx-semibold.tx-danger', x.obs)] : [])
+                                                            (x.motivo_baja == NuevaTRoja.data.id_motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
+                                                                m('p.tx-15.tx-semibold.tx-danger', x.obs)
+                                                            ] : [])
                                                             ))
                                                         ),
                                                     ]),
@@ -1019,10 +1035,7 @@ const NuevaTRoja = {
 
                                                             m('div', {}, NuevaTRoja.activos.motivos.map(x =>
                                                             (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
-
                                                                 m(DestinoFinal, { destino_final: x.destino_final })
-
-
                                                             ] : [])
                                                             ))
 
@@ -1049,6 +1062,7 @@ const NuevaTRoja = {
                                                                         m("button.btn.btn-primary[type='button']", {
                                                                             onclick: (e) => {
                                                                                 NuevaTRoja.sendDataTR();
+
                                                                             }
                                                                         },
                                                                             "Enviar"

@@ -9,6 +9,7 @@ const terapiaRespiratoriaController = {
   listaEscalaDelDolor: [],
   fechaActual: "",
   horaActual: "",
+  habilitarCampos: false,
 
   cargarPrescripcion: function (numeroDeAtendimiento) {
     m.request({
@@ -24,14 +25,18 @@ const terapiaRespiratoriaController = {
       .then(function (resultado) {
         if (resultado.status && resultado.data.length > 0) {
           terapiaRespiratoriaController.lista = resultado;
+          //terapiaRespiratoriaController.habilitarCampos = true;
         } else {
           terapiaRespiratoriaController.error = resultado.error;
-          alert(terapiaRespiratoriaController.error);
+          terapiaRespiratoriaController.habilitarCampos = true;
+          return m("div", {class: "modal"}, "La lista está vacía");
+          //alert(terapiaRespiratoriaController.error);
         }
       })
       .catch(function (error) {
         terapiaRespiratoriaController.error = error;
-        alert(terapiaRespiratoriaController.error);
+        terapiaRespiratoriaController.habilitarCampos = true;
+        //alert(terapiaRespiratoriaController.error);
       });
   },
 

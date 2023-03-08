@@ -3,6 +3,7 @@ import terapiaRespiratoriaController from "./Models/obtenerDatos";
 import Pedido from "./pedido";
 import Encrypt from "../../../models/encrypt";
 
+const obtenerDatos = terapiaRespiratoriaController;
 const FormularioDeRegistro = {
   oninit: () => {
     terapiaRespiratoriaController.cargarFrecuenciaCardiaca(10090);
@@ -20,7 +21,7 @@ const FormularioDeRegistro = {
     FormularioDeRegistro.usuarioConectado = Encrypt.getDataUser(); // Obtener el nombre de usuario
   },
   usuarioConectado: [],
-  view: () => {
+  view: (vnode) => {
     return m("form", [
       m("div", { class: "form-row" }, [
         m("div", { class: "form-group col-md-4" }, [
@@ -31,9 +32,10 @@ const FormularioDeRegistro = {
             id: "inputFrecuenciaCardiaca",
             placeholder: "Frecuencia Cardiaca",
             readonly: "readonly",
-            value:
+            /* value:
               terapiaRespiratoriaController.listaDeFrecuenciaCardiaca.data[0]
-                .VALUE,
+                .VALUE, */
+            value: obtenerDatos.listaDeFrecuenciaCardiaca.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -48,9 +50,10 @@ const FormularioDeRegistro = {
             id: "inputFrecuenciaRespiratoria",
             placeholder: "Frecuencia Respiratoria",
             readonly: "readonly",
-            value:
+            /* value:
               terapiaRespiratoriaController.listaDeFrecuenciaRespiratoria
-                .data[0].VALUE,
+                .data[0].VALUE, */
+            value: obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -61,7 +64,7 @@ const FormularioDeRegistro = {
             id: "inputPeso",
             placeholder: "Peso",
             readonly: "readonly",
-            value: terapiaRespiratoriaController.listaDePeso.data[0].VALUE,
+            value: obtenerDatos.listaDePeso.data[0].VALUE,
           }),
         ]),
       ]),
@@ -75,7 +78,7 @@ const FormularioDeRegistro = {
             placeholder: "Escala Dolor",
             readonly: "readonly",
             value:
-              terapiaRespiratoriaController.listaEscalaDelDolor.data[0].VALUE,
+            obtenerDatos.listaEscalaDelDolor.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -106,7 +109,7 @@ const FormularioDeRegistro = {
         m(
           "select",
           { class: "custom-select" },
-          terapiaRespiratoriaController.lista.data.map(function (prescripcion) {
+          obtenerDatos.lista.data.map(function (prescripcion) {
             return m(
               "option",
               { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
@@ -133,7 +136,7 @@ const FormularioDeRegistro = {
           type: "text",
           id: "inputFecha",
           placeholder: "Fecha",
-          value: terapiaRespiratoriaController.fechaActual,
+          value: obtenerDatos.fechaActual,
           readonly: "readonly",
         }),
       ]),
@@ -144,7 +147,7 @@ const FormularioDeRegistro = {
           type: "text",
           id: "inputHora",
           placeholder: "Hora",
-          value: terapiaRespiratoriaController.horaActual,
+          value: obtenerDatos.horaActual,
           readonly: "readonly",
         }),
       ]),
@@ -154,7 +157,8 @@ const FormularioDeRegistro = {
           "select",
           {
             class: "custom-select",
-            disabled: terapiaRespiratoriaController.habilitarCampos,
+            disabled: obtenerDatos.habilitarCampos,
+            id: "inputFrecuenciaAlDia"
           },
           [
             m("option", "Seleccione..."),
@@ -189,7 +193,8 @@ const FormularioDeRegistro = {
               "select",
               {
                 class: "custom-select",
-                disabled: terapiaRespiratoriaController.habilitarCampos,
+                disabled: obtenerDatos.habilitarCampos,
+                id: "inputTerapiaAerosolMedicina",
               },
               [
                 m("option", "Seleccione..."),
@@ -202,8 +207,9 @@ const FormularioDeRegistro = {
               "select",
               {
                 class: "custom-select",
-                disabled: terapiaRespiratoriaController.habilitarCampos,
+                disabled: obtenerDatos.habilitarCampos,
                 //disabled: true,
+                id: "inputDosisTerapiaAerosol"
               },
               [
                 m("option", "Seleccione..."),
@@ -232,7 +238,8 @@ const FormularioDeRegistro = {
           "select",
           {
             class: "custom-select",
-            disabled: terapiaRespiratoriaController.habilitarCampos,
+            disabled: obtenerDatos.habilitarCampos,
+            id: "inputHigieneBroncoPulmonar",
           },
           [
             m("option", "Seleccione..."),
@@ -254,6 +261,7 @@ const FormularioDeRegistro = {
             m(
               "select",
               {
+                id: "inputTerapiaExpansiva",
                 class: "custom-select",
                 onchange: function (event) {
                   let selectValue = event.target.value;
@@ -267,7 +275,7 @@ const FormularioDeRegistro = {
                     inputTerapiaExpansiva2.value = "";
                   }
                 },
-                disabled: terapiaRespiratoriaController.habilitarCampos,
+                disabled: obtenerDatos.habilitarCampos,
               },
               [
                 m("option", "Seleccione..."),
@@ -312,7 +320,8 @@ const FormularioDeRegistro = {
               "select",
               {
                 class: "custom-select",
-                disabled: terapiaRespiratoriaController.habilitarCampos,
+                disabled: obtenerDatos.habilitarCampos,
+                id: "Oxinoterapia",
               },
               [
                 m("option", "Seleccione..."),
@@ -331,7 +340,8 @@ const FormularioDeRegistro = {
               type: "number",
               id: "inputOxinoterapia2",
               placeholder: "Frecuencia Cardiaca",
-              readonly: "readonly",
+              //readonly: "readonly",
+              disabled: obtenerDatos.habilitarCampos
             }),
           ]),
         ])
@@ -346,7 +356,18 @@ const FormularioDeRegistro = {
               "select",
               {
                 class: "custom-select",
-                disabled: terapiaRespiratoriaController.habilitarCampos,
+                disabled: obtenerDatos.habilitarCampos,
+                id: "inputMonitoreoPrevio",
+                onchange: function (event) {
+                  let selectValue = event.target.value;
+                  let inputMonitoreoPrevio2 = document.getElementById("inputMonitoreoPrevio2");
+                  if (selectValue === "1") {
+                    inputMonitoreoPrevio2.removeAttribute("readonly");
+                  } else {
+                    inputMonitoreoPrevio2.setAttribute("readonly", "readonly");
+                    inputMonitoreoPrevio2.value = "";
+                  }
+                },
               },
               [
                 m("option", "Seleccione..."),
@@ -371,13 +392,30 @@ const FormularioDeRegistro = {
         m("div", { class: "form-group col-md-12" }, [
           m("label", { for: "inputMonitoreoPosterior" }, "Monitereo Posterior"),
           m("div", { class: "input-group" }, [
-            m("input", {
-              class: "form-control mr-2",
-              type: "number",
-              id: "inputMonitoreoPosterior",
-              placeholder: "Terapia Aerosol Medicinas",
-              readonly: "readonly",
-            }),
+            m(
+              "select",
+              {
+                class: "custom-select",
+                disabled: obtenerDatos.habilitarCampos,
+                id: "inputMonitoreoPosterior",
+                onchange: function (event) {
+                  let selectValue = event.target.value;
+                  let inputMonitoreoPosterior2 = document.getElementById("inputMonitoreoPosterior2");
+                  if (selectValue === "1") {
+                    inputMonitoreoPosterior2.removeAttribute("readonly");
+                  } else {
+                    inputMonitoreoPosterior2.setAttribute("readonly", "readonly");
+                    inputMonitoreoPosterior2.value = "";
+                  }
+                },
+              },
+              [
+                m("option", "Seleccione..."),
+                m("option", { value: "1" }, "Saturación O2(%)"),
+                m("option", { value: "2" }, "Ventilación mecánica"),
+                m("option", { value: "3" }, "Ventilación no invasiva"),
+              ]
+            ),
             m("input", {
               class: "form-control",
               type: "number",
@@ -397,6 +435,7 @@ const FormularioDeRegistro = {
             m(
               "select",
               {
+                id: "inputSuccion",
                 class: "custom-select",
                 onchange: function (event) {
                   let selectValue = event.target.value;
@@ -408,7 +447,7 @@ const FormularioDeRegistro = {
                     inputSuccion2.value = "";
                   }
                 },
-                disabled: terapiaRespiratoriaController.habilitarCampos,
+                disabled: obtenerDatos.habilitarCampos,
               },
               [
                 m("option", "Seleccione..."),
@@ -439,7 +478,7 @@ const FormularioDeRegistro = {
               type: "radio",
               name: "customRadio",
               checked: "checked",
-              disabled: terapiaRespiratoriaController.habilitarCampos,
+              disabled: obtenerDatos.habilitarCampos,
             }),
             m("label", { class: "custom-control-label" }, "Esputo"),
           ]),
@@ -463,7 +502,7 @@ const FormularioDeRegistro = {
           class: "form-control",
           id: "textAreaObservacionClinica",
           rows: "3",
-          disabled: terapiaRespiratoriaController.habilitarCampos,
+          disabled: obtenerDatos.habilitarCampos,
         }),
       ]),
       m("div", { class: "form-group" }, [
@@ -476,7 +515,7 @@ const FormularioDeRegistro = {
           class: "form-control",
           id: "textAreaCriterio",
           rows: "3",
-          disabled: terapiaRespiratoriaController.habilitarCampos,
+          disabled: obtenerDatos.habilitarCampos,
         }),
       ]),
       m(
@@ -484,7 +523,43 @@ const FormularioDeRegistro = {
         {
           class: "btn btn-primary",
           type: "submit",
-          disabled: terapiaRespiratoriaController.habilitarCampos,
+          disabled: obtenerDatos.habilitarCampos,
+          onclick: function () {
+            const formulario = {
+              CD_FORMULARIO: 17,
+              CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
+              FECHA_REGISTRO: `to_date('${vnode.dom['inputFecha'].value}','DD-MM-YY')`,
+              USUARIO: `'${vnode.dom['inputUsuario'].value}'`,
+              CD_SECUENCIAL: 11, // Aqui poner un secuencial
+              FRECUENCIA_CARDIACA: `${vnode.dom['inputFrecuenciaCardiaca'].value}`,
+              FRECUENCIA_RESPIRATORIA: `${vnode.dom['inputFrecuenciaRespiratoria'].value}`,	
+              PESO: `'${vnode.dom['inputPeso'].value}'`,
+              ESCALA_DOLOR: `'${vnode.dom['inputEscalaDolor'].value}'`,
+              HORA_REGISTRO: `'${vnode.dom['inputHora'].value}'`,
+              FRECUENCIA_DIARIA: `'${vnode.dom['inputFrecuenciaAlDia'].value}'`,
+              TERAPIA_AEROSOL: `'${vnode.dom['inputTerapiaAerosolMedicina'].value}'`,
+              DOSIS_TERAPIA_AEROSOL: `'${vnode.dom['inputDosisTerapiaAerosol'].value}'`,
+              HIGIENE_BRONCO_PULMONA: `'${vnode.dom['inputHigieneBroncoPulmonar'].value}'`,
+              TERAPIA_EXPANSIVA: `'${vnode.dom['inputTerapiaExpansiva'].value}'`,
+              CANTIDAD_TERAPIA_EXPANSIVA: `'${vnode.dom['inputTerapiaExpansiva2'].value}'`,
+              OXIGENO_TERAPIA: `'${parseInt(vnode.dom['Oxinoterapia'].value)}'`,
+              CANTIDAD_OXIGENO_TERAPIA: `'${vnode.dom['inputOxinoterapia2'].value}'`,
+              MONITOREO_TERAPIA: `'${vnode.dom['inputMonitoreoPrevio'].value}'`,
+              CANTIDAD_MONITOREO_TERAPIA: `'${vnode.dom['inputMonitoreoPrevio2'].value}'`,
+              SUCCION_TERAPIA: `'${vnode.dom['inputSuccion'].value}'`,
+              ESPUTO: "'false'",
+              PANEL_VIRAL: "'false'",
+              OBSERVACION_CLINICA: `${vnode.dom['textAreaObservacionClinica'].value}`,
+              CRITERIO_CLINICO: `${vnode.dom['textAreaCriterio'].value}`,
+              CD_PRE_MED: 10, // Este es la la información de la prescripción
+
+              // Falta monitoreo posterior y cantidad de monitoreo posterior
+            };
+            obtenerDatos.guardar(formulario);
+            //alert("Guardar");
+            //alert("Guardar");
+            //terapiaRespiratoriaController.guardar(formulario);
+          },
         },
         "Guardar"
       ),
@@ -493,7 +568,7 @@ const FormularioDeRegistro = {
         {
           class: "btn btn-primary",
           type: "submit",
-          disabled: terapiaRespiratoriaController.habilitarCampos,
+          disabled: obtenerDatos.habilitarCampos,
         },
         "Eliminar"
       ),

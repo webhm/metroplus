@@ -160,6 +160,26 @@ const terapiaRespiratoriaController = {
     terapiaRespiratoriaController.horaActual = horaFormateada;
   },
 
+  guardar: (formularioTerapiaRespiratoria) => {
+    m.request({
+        method: 'POST',
+        url: "https://api.hospitalmetropolitano.org/t/v1/tr/formularios",
+        body:  formularioTerapiaRespiratoria,
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "Accept": "application/json",
+            "Authorization": localStorage.accessToken,
+        },
+    })
+    .then(function(result) {
+        //resultado = result;
+    })
+    .catch(function(error) {
+      terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
+      alert(terapiaRespiratoriaController.error);
+    }) 
+},
+
 };
 
 export default terapiaRespiratoriaController;

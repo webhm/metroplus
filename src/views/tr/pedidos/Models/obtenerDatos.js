@@ -10,6 +10,7 @@ const terapiaRespiratoriaController = {
   fechaActual: "",
   horaActual: "",
   habilitarCampos: false,
+  datosEnviadosDelFormulario: [],
 
   cargarPrescripcion: function (numeroDeAtendimiento) {
     m.request({
@@ -173,6 +174,12 @@ const terapiaRespiratoriaController = {
     })
     .then(function(result) {
         //resultado = result;
+        if (result.status) {
+          terapiaRespiratoriaController.datosEnviadosDelFormulario = result;
+        }else{
+          terapiaRespiratoriaController.error = result.error;
+          alert(terapiaRespiratoriaController.error);
+        }
     })
     .catch(function(error) {
       terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;

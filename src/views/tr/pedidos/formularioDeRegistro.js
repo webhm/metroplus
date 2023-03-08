@@ -299,9 +299,9 @@ const FormularioDeRegistro = {
               class: "form-control",
               type: "number",
               id: "inputTerapiaExpansiva2",
-              placeholder: "Frecuencia Cardiaca",
+              placeholder: "Terapia Expansiva",
               readonly: "readonly",
-              maxlength: "50",
+              maxlength: 10,
               oninput: function (event) {
                 event.target.value = event.target.value.slice(0, 10);
               },
@@ -339,9 +339,13 @@ const FormularioDeRegistro = {
               class: "form-control",
               type: "number",
               id: "inputOxinoterapia2",
-              placeholder: "Frecuencia Cardiaca",
+              placeholder: "Oxinoterapia",
               //readonly: "readonly",
-              disabled: obtenerDatos.habilitarCampos
+              disabled: obtenerDatos.habilitarCampos,
+              maxlength: 10,
+              oninput: function (event) {
+                event.target.value = event.target.value.slice(0, 10);
+              },
             }),
           ]),
         ])
@@ -380,8 +384,12 @@ const FormularioDeRegistro = {
               class: "form-control",
               type: "number",
               id: "inputMonitoreoPrevio2",
-              placeholder: "Frecuencia Cardiaca",
+              placeholder: "Monitoreo Previo",
               readonly: "readonly",
+              maxlength: 10,
+              oninput: function (event) {
+                event.target.value = event.target.value.slice(0, 10);
+              },
             }),
           ]),
         ])
@@ -420,51 +428,41 @@ const FormularioDeRegistro = {
               class: "form-control",
               type: "number",
               id: "inputMonitoreoPosterior2",
-              placeholder: "Frecuencia Cardiaca",
+              placeholder: "Monitoreo Posterior",
               readonly: "readonly",
+              maxlength: 10,
+              oninput: function (event) {
+                event.target.value = event.target.value.slice(0, 10);
+              },
             }),
           ]),
         ])
       ),
+      /* m("input", {
+        class: "form-control",
+        type: "number",
+        id: "inputSuccion",
+        placeholder: "Frecuencia Cardiaca",
+        //readonly: "readonly",
+        disabled: obtenerDatos.habilitarCampos
+      }), */
       m(
         "div",
         { class: "form-row" },
         m("div", { class: "form-group col-md-12" }, [
           m("label", { for: "inputSuccion" }, "Succión"),
           m("div", { class: "input-group" }, [
-            m(
-              "select",
-              {
-                id: "inputSuccion",
-                class: "custom-select",
-                onchange: function (event) {
-                  let selectValue = event.target.value;
-                  let inputSuccion2 = document.getElementById("inputSuccion2");
-                  if (selectValue === "2") {
-                    inputSuccion2.removeAttribute("readonly");
-                  } else {
-                    inputSuccion2.setAttribute("readonly", "readonly");
-                    inputSuccion2.value = "";
-                  }
-                },
-                disabled: obtenerDatos.habilitarCampos,
-              },
-              [
-                m("option", "Seleccione..."),
-                m("option", { value: "1" }, "Nasotraqueal"),
-                m("option", { value: "2" }, "Traqueal"),
-                m("option", { value: "3" }, "Otrotraqueal"),
-                m("option", { value: "4" }, "Lavado nasal"),
-                m("option", { value: "5" }, "Suglótica"),
-              ]
-            ),
             m("input", {
               class: "form-control",
               type: "text",
-              id: "inputSuccion2",
+              id: "inputSuccion",
               placeholder: "Frecuencia Cardiaca",
-              readonly: "readonly",
-              maxlength: "50",
+              //readonly: "readonly",
+              disabled: obtenerDatos.habilitarCampos,
+              maxlength: 50,
+              oninput: function (event) {
+                event.target.value = event.target.value.slice(0, 50);
+              },
             }),
           ]),
         ])
@@ -477,8 +475,8 @@ const FormularioDeRegistro = {
               class: "custom-control-input",
               type: "radio",
               name: "customRadio",
-              checked: "checked",
-              disabled: obtenerDatos.habilitarCampos,
+              //checked: "checked",
+              disabled: !obtenerDatos.habilitarCampos,
             }),
             m("label", { class: "custom-control-label" }, "Esputo"),
           ]),
@@ -487,6 +485,7 @@ const FormularioDeRegistro = {
               class: "custom-control-input",
               type: "radio",
               name: "customRadio",
+              disabled: !obtenerDatos.habilitarCampos,
             }),
             m("label", { class: "custom-control-label" }, "Panel Viral"),
           ]),
@@ -555,6 +554,7 @@ const FormularioDeRegistro = {
 
               // Falta monitoreo posterior y cantidad de monitoreo posterior
             };
+            console.log(formulario);
             obtenerDatos.guardar(formulario);
             //alert("Guardar");
             //alert("Guardar");

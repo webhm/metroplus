@@ -172,18 +172,20 @@ const terapiaRespiratoriaController = {
             "Authorization": localStorage.accessToken,
         },
     })
-    .then(function(result) {
+    .then(function() {
         //resultado = result;
-        if (result.status) {
+        /* if (result.status) {
           terapiaRespiratoriaController.datosEnviadosDelFormulario = result;
         }else{
           terapiaRespiratoriaController.error = result.error;
           alert(terapiaRespiratoriaController.error);
-        }
+        } */
+        window.location.href = window.location.href;
     })
     .catch(function(error) {
-      terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
-      alert(terapiaRespiratoriaController.error);
+      //terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
+      alert(error);
+      console.log(error);
     }) 
 },
 

@@ -503,14 +503,14 @@ const Formulario = {
     },
 }
 
-const Evoluciones = {
+const Uploads = {
     data: [],
     detalle: [],
     error: "",
     showFor: "",
     fetch: () => {
-        Evoluciones.data = [];
-        Evoluciones.error = "";
+        Uploads.data = [];
+        Uploads.error = "";
         m.request({
             method: "POST",
             url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
@@ -526,67 +526,51 @@ const Evoluciones = {
 
 
                 if (result.status) {
-                    Evoluciones.data = result.data;
-                    Formulario.adm = Evoluciones.data[0].ADM;
-                    Formulario.nhc = Evoluciones.data[0].NHCL;
+                    Uploads.data = result.data;
+                    Formulario.adm = Uploads.data[0].ADM;
+                    Formulario.nhc = Uploads.data[0].NHCL;
                     Formulario.fetch();
                 } else {
-                    Evoluciones.error = result.message;
+                    Uploads.error = result.message;
                 }
 
             })
             .catch(function (e) {
-                setTimeout(function () { Evoluciones.fetch(); }, 5000);
+                setTimeout(function () { Uploads.fetch(); }, 5000);
 
             })
+    },
+    oncreate: () => {
+        const upload = new FileUploadWithPreview.FileUploadWithPreview("myFirstImage", {
+            text: {
+                label: '',
+                chooseFile: 'Elejir archiv...',
+                browse: 'Explorar',
+                selectedCount: 'archivos seleccionados.'
+            },
+            maxFileCount: 4,
+            showDeleteButtonOnImages: true,
+            multiple: true
+
+        });
+        upload.clearButton.title = "Vaciar";
+
+
+        console.log("upload", upload);
     },
 
     view: () => {
 
+        return [
+            m(".ht-auto.custom-file-container[data-upload-id='myFirstImage']")
+        ];
 
-        return Evoluciones.error ? [
-            m(".alert.alert-danger[role='alert']",
-                Evoluciones.error
-            )
-        ] : Evoluciones.data.length !== 0 ? [
-
-            m(Formulario)
-        ] : [
-
-            m("div.pd-10.wd-100p",
-                m("div.placeholder-paragraph", [
-                    m("div.line"),
-                    m("div.line")
-                ])
-            ),
-        ]
 
 
     },
 }
 
-const Examenes = {
 
-    view: () => {
-
-        if (NuevaTRoja.examenes.length !== 0) {
-            return NuevaTRoja.examenes.map(function (_val, _i, _contentData) {
-                return [
-                    m('.tx-14.tx-semibold.d-inline', _val.EXAMEN),
-                    (_val.OBS_EXAMEN !== null ? [
-                        m('br'),
-                        m('.d-inline', 'Observaciones:'),
-                        m('br'),
-                        m('.d-inline', _val.OBS_EXAMEN),
-                        m('br'),
-                        m('br'),
-                    ] : ''),
-                ]
-            })
-        }
-
-    }
-}
 
 const DestinoFinal = {
     view: (_data) => {
@@ -1146,7 +1130,7 @@ const NuevaTRoja = {
                                                         },
                                                             m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
                                                                 m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
-                                                                    m(Evoluciones),
+                                                                    m(Uploads),
                                                                 ]),
 
 

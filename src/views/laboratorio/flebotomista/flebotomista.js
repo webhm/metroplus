@@ -579,7 +579,9 @@ const Flebotomista = {
                 },
             },
             cache: false,
-            order: false,
+            order: [
+                [2, "Desc"]
+            ],
             destroy: true,
             columns: [{
                 title: "N°:",
@@ -625,7 +627,7 @@ const Flebotomista = {
                 },
                 visible: true,
                 aTargets: [2],
-                orderable: false,
+                orderable: true,
             },
             {
                 mRender: function (data, type, full) {

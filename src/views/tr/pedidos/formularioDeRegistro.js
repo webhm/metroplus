@@ -4,6 +4,9 @@ import Pedido from "./pedido";
 import Encrypt from "../../../models/encrypt";
 
 const obtenerDatos = terapiaRespiratoriaController;
+let isEsputoSelected = false;
+let isPanelViralSelected = false;
+let isRadioSelected = false;
 const FormularioDeRegistro = {
   oninit: () => {
     terapiaRespiratoriaController.cargarFrecuenciaCardiaca(10090);
@@ -77,8 +80,7 @@ const FormularioDeRegistro = {
             id: "inputEscalaDolor",
             placeholder: "Escala Dolor",
             readonly: "readonly",
-            value:
-            obtenerDatos.listaEscalaDelDolor.data[0].VALUE,
+            value: obtenerDatos.listaEscalaDelDolor.data[0].VALUE,
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -158,7 +160,7 @@ const FormularioDeRegistro = {
           {
             class: "custom-select",
             disabled: obtenerDatos.habilitarCampos,
-            id: "inputFrecuenciaAlDia"
+            id: "inputFrecuenciaAlDia",
           },
           [
             m("option", "Seleccione..."),
@@ -209,7 +211,7 @@ const FormularioDeRegistro = {
                 class: "custom-select",
                 disabled: obtenerDatos.habilitarCampos,
                 //disabled: true,
-                id: "inputDosisTerapiaAerosol"
+                id: "inputDosisTerapiaAerosol",
               },
               [
                 m("option", "Seleccione..."),
@@ -364,7 +366,9 @@ const FormularioDeRegistro = {
                 id: "inputMonitoreoPrevio",
                 onchange: function (event) {
                   let selectValue = event.target.value;
-                  let inputMonitoreoPrevio2 = document.getElementById("inputMonitoreoPrevio2");
+                  let inputMonitoreoPrevio2 = document.getElementById(
+                    "inputMonitoreoPrevio2"
+                  );
                   if (selectValue === "1") {
                     inputMonitoreoPrevio2.removeAttribute("readonly");
                   } else {
@@ -408,11 +412,16 @@ const FormularioDeRegistro = {
                 id: "inputMonitoreoPosterior",
                 onchange: function (event) {
                   let selectValue = event.target.value;
-                  let inputMonitoreoPosterior2 = document.getElementById("inputMonitoreoPosterior2");
+                  let inputMonitoreoPosterior2 = document.getElementById(
+                    "inputMonitoreoPosterior2"
+                  );
                   if (selectValue === "1") {
                     inputMonitoreoPosterior2.removeAttribute("readonly");
                   } else {
-                    inputMonitoreoPosterior2.setAttribute("readonly", "readonly");
+                    inputMonitoreoPosterior2.setAttribute(
+                      "readonly",
+                      "readonly"
+                    );
                     inputMonitoreoPosterior2.value = "";
                   }
                 },
@@ -470,24 +479,35 @@ const FormularioDeRegistro = {
       m("div", { class: "form-group row" }, [
         m("label", { class: "col-form-label col-sm-2 pt-0" }, "Muestra"),
         m("div", { class: "col-sm-10" }, [
-          m("div", { class: "custom-control custom-radio" }, [
+          m("div", { class: "custom-control custom-checkbox" }, [
             m("input", {
               class: "custom-control-input",
-              type: "radio",
-              name: "customRadio",
-              //checked: "checked",
-              disabled: !obtenerDatos.habilitarCampos,
+              type: "checkbox",
+              id: "checkboxEsputo",
+              onclick: function (event) {
+                isEsputoSelected = event.target.checked;
+              },
             }),
-            m("label", { class: "custom-control-label" }, "Esputo"),
+            m(
+              "label",
+              { class: "custom-control-label", for: "checkboxEsputo" },
+              "Esputo"
+            ),
           ]),
-          m("div", { class: "custom-control custom-radio" }, [
+          m("div", { class: "custom-control custom-checkbox" }, [
             m("input", {
               class: "custom-control-input",
-              type: "radio",
-              name: "customRadio",
-              disabled: !obtenerDatos.habilitarCampos,
+              type: "checkbox",
+              id: "checkboxPanelViral",
+              onclick: function (event) {
+                isPanelViralSelected = event.target.checked;
+              },
             }),
-            m("label", { class: "custom-control-label" }, "Panel Viral"),
+            m(
+              "label",
+              { class: "custom-control-label", for: "checkboxPanelViral" },
+              "Panel Viral"
+            ),
           ]),
         ]),
       ]),
@@ -521,40 +541,53 @@ const FormularioDeRegistro = {
         "button",
         {
           class: "btn btn-primary",
-          type: "submit",
+          type: "button",
           disabled: obtenerDatos.habilitarCampos,
           onclick: function () {
             const formulario = {
-              CD_FORMULARIO: 17,
+              CD_FORMULARIO: 20,
               CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
-              FECHA_REGISTRO: `to_date('${vnode.dom['inputFecha'].value}','DD-MM-YY')`,
-              USUARIO: `'${vnode.dom['inputUsuario'].value}'`,
+              FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
+              USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
               CD_SECUENCIAL: 11, // Aqui poner un secuencial
-              FRECUENCIA_CARDIACA: `${vnode.dom['inputFrecuenciaCardiaca'].value}`,
-              FRECUENCIA_RESPIRATORIA: `${vnode.dom['inputFrecuenciaRespiratoria'].value}`,	
-              PESO: `'${vnode.dom['inputPeso'].value}'`,
-              ESCALA_DOLOR: `'${vnode.dom['inputEscalaDolor'].value}'`,
-              HORA_REGISTRO: `'${vnode.dom['inputHora'].value}'`,
-              FRECUENCIA_DIARIA: `'${vnode.dom['inputFrecuenciaAlDia'].value}'`,
-              TERAPIA_AEROSOL: `'${vnode.dom['inputTerapiaAerosolMedicina'].value}'`,
-              DOSIS_TERAPIA_AEROSOL: `'${vnode.dom['inputDosisTerapiaAerosol'].value}'`,
-              HIGIENE_BRONCO_PULMONA: `'${vnode.dom['inputHigieneBroncoPulmonar'].value}'`,
-              TERAPIA_EXPANSIVA: `'${vnode.dom['inputTerapiaExpansiva'].value}'`,
-              CANTIDAD_TERAPIA_EXPANSIVA: `'${vnode.dom['inputTerapiaExpansiva2'].value}'`,
-              OXIGENO_TERAPIA: `'${parseInt(vnode.dom['Oxinoterapia'].value)}'`,
-              CANTIDAD_OXIGENO_TERAPIA: `'${vnode.dom['inputOxinoterapia2'].value}'`,
-              MONITOREO_TERAPIA: `'${vnode.dom['inputMonitoreoPrevio'].value}'`,
-              CANTIDAD_MONITOREO_TERAPIA: `'${vnode.dom['inputMonitoreoPrevio2'].value}'`,
-              SUCCION_TERAPIA: `'${vnode.dom['inputSuccion'].value}'`,
-              ESPUTO: "'false'",
-              PANEL_VIRAL: "'false'",
-              OBSERVACION_CLINICA: `${vnode.dom['textAreaObservacionClinica'].value}`,
-              CRITERIO_CLINICO: `${vnode.dom['textAreaCriterio'].value}`,
-              CD_PRE_MED: 10, // Este es la la información de la prescripción
+              FRECUENCIA_CARDIACA: `${vnode.dom["inputFrecuenciaCardiaca"].value}`,
+              FRECUENCIA_RESPIRATORIA: `${vnode.dom["inputFrecuenciaRespiratoria"].value}`,
+              PESO: `'${vnode.dom["inputPeso"].value}'`,
+              ESCALA_DOLOR: `'${vnode.dom["inputEscalaDolor"].value}'`,
+              HORA_REGISTRO: `'${vnode.dom["inputHora"].value}'`,
+              //FRECUENCIA_DIARIA: `'${vnode.dom['inputFrecuenciaAlDia'].text}'`,
+              FRECUENCIA_DIARIA: `'${
+                vnode.dom["inputFrecuenciaAlDia"].options[
+                  vnode.dom["inputFrecuenciaAlDia"].selectedIndex
+                ].text
+              }'`,
+
+              TERAPIA_AEROSOL: `'${
+                vnode.dom["inputTerapiaAerosolMedicina"].options[
+                  vnode.dom["inputTerapiaAerosolMedicina"].selectedIndex
+                ].text
+              }'`,
+              DOSIS_TERAPIA_AEROSOL: `'${
+                vnode.dom["inputDosisTerapiaAerosol"].options[
+                  vnode.dom["inputDosisTerapiaAerosol"].selectedIndex
+                ].text
+              }'`,
+              // HIGIENE_BRONCO_PULMONA: `"'${vnode.dom['inputHigieneBroncoPulmonar'].value}'"`,
+              // TERAPIA_EXPANSIVA: `"'${vnode.dom['inputTerapiaExpansiva'].value}'"`,
+              // CANTIDAD_TERAPIA_EXPANSIVA: `"'${vnode.dom['inputTerapiaExpansiva2'].value}'"`,
+              // OXIGENO_TERAPIA: `"'${parseInt(vnode.dom['Oxinoterapia'].value)}'"`,
+              // CANTIDAD_OXIGENO_TERAPIA: `"'${vnode.dom['inputOxinoterapia2'].value}'"`,
+              // MONITOREO_TERAPIA: `"'${vnode.dom['inputMonitoreoPrevio'].value}'"`,
+              // CANTIDAD_MONITOREO_TERAPIA: `"'${vnode.dom['inputMonitoreoPrevio2'].value}'"`,
+              // SUCCION_TERAPIA: `"'${vnode.dom['inputSuccion'].value}'"`,
+              // ESPUTO: isEsputoSelected ? "'true'" : "'false'",
+              // PANEL_VIRAL: isPanelViralSelected ? "'true'" : "'false'",
+              // OBSERVACION_CLINICA: `"${vnode.dom['textAreaObservacionClinica'].value}"`,
+              // CRITERIO_CLINICO: `"${vnode.dom['textAreaCriterio'].value}"`,
+              // CD_PRE_MED: 10, // Este es la la información de la prescripción
 
               // Falta monitoreo posterior y cantidad de monitoreo posterior
             };
-            console.log(formulario);
             obtenerDatos.guardar(formulario);
             //alert("Guardar");
             //alert("Guardar");
@@ -567,8 +600,42 @@ const FormularioDeRegistro = {
         "button",
         {
           class: "btn btn-primary",
-          type: "submit",
+          //type: "submit",
+          type: "button",
           disabled: obtenerDatos.habilitarCampos,
+          onclick: function () {
+            const formulario = {
+              CD_FORMULARIO: 18,
+              CD_ATENDIMENTO: 10090,
+              FECHA_REGISTRO: "to_date('02-12-2022','DD-MM-YY')",
+              USUARIO: "'Nathaly Prueba'",
+              CD_SECUENCIAL: 11,
+              FRECUENCIA_CARDIACA: 85,
+              FRECUENCIA_RESPIRATORIA: 18,
+              PESO: "'52.2 KILOGRAMO'",
+              ESCALA_DOLOR: "'4 - EVALUACIÓN ANALOGA DOLOR ENFER'",
+              HORA_REGISTRO: "'13:16'",
+              FRECUENCIA_DIARIA: "'A) En este momento'",
+              TERAPIA_AEROSOL: "'C) Inhaladores dosis medida'",
+              DOSIS_TERAPIA_AEROSOL: "'Prueba'",
+              HIGIENE_BRONCO_PULMONA: "'F) Chaleco Vibroprecutor'",
+              TERAPIA_EXPANSIVA: "'Prueba'",
+              CANTIDAD_TERAPIA_EXPANSIVA: 10,
+              OXIGENO_TERAPIA: "'Prueba'",
+              CANTIDAD_OXIGENO_TERAPIA: 10,
+              MONITOREO_TERAPIA: "'Prueba'",
+              CANTIDAD_MONITOREO_TERAPIA: 10,
+              SUCCION_TERAPIA: "'Prueba'",
+              ESPUTO: "'false'",
+              PANEL_VIRAL: "'false'",
+              OBSERVACION_CLINICA: "'Prueba'",
+              CRITERIO_CLINICO: "'Prueba'",
+              CD_PRE_MED: 10,
+              MONITOREO_TERAPIA_POSTERIOR: "'Emill'",
+              CANTIDAD_MONITOREO_TERAPIA_POS: 10,
+            };
+            obtenerDatos.guardar(formulario);
+          },
         },
         "Eliminar"
       ),

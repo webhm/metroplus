@@ -402,7 +402,7 @@ const FormularioDeRegistro = {
         "div",
         { class: "form-row" },
         m("div", { class: "form-group col-md-12" }, [
-          m("label", { for: "inputMonitoreoPosterior" }, "Monitereo Posterior"),
+          m("label", { for: "inputMonitoreoPosterior" }, "Monitoreo Posterior"),
           m("div", { class: "input-group" }, [
             m(
               "select",
@@ -545,7 +545,7 @@ const FormularioDeRegistro = {
           disabled: obtenerDatos.habilitarCampos,
           onclick: function () {
             const formulario = {
-              CD_FORMULARIO: 20,
+              CD_FORMULARIO: 21,
               CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
               FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
               USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
@@ -572,19 +572,41 @@ const FormularioDeRegistro = {
                   vnode.dom["inputDosisTerapiaAerosol"].selectedIndex
                 ].text
               }'`,
-              // HIGIENE_BRONCO_PULMONA: `"'${vnode.dom['inputHigieneBroncoPulmonar'].value}'"`,
-              // TERAPIA_EXPANSIVA: `"'${vnode.dom['inputTerapiaExpansiva'].value}'"`,
-              // CANTIDAD_TERAPIA_EXPANSIVA: `"'${vnode.dom['inputTerapiaExpansiva2'].value}'"`,
-              // OXIGENO_TERAPIA: `"'${parseInt(vnode.dom['Oxinoterapia'].value)}'"`,
-              // CANTIDAD_OXIGENO_TERAPIA: `"'${vnode.dom['inputOxinoterapia2'].value}'"`,
-              // MONITOREO_TERAPIA: `"'${vnode.dom['inputMonitoreoPrevio'].value}'"`,
-              // CANTIDAD_MONITOREO_TERAPIA: `"'${vnode.dom['inputMonitoreoPrevio2'].value}'"`,
-              // SUCCION_TERAPIA: `"'${vnode.dom['inputSuccion'].value}'"`,
-              // ESPUTO: isEsputoSelected ? "'true'" : "'false'",
-              // PANEL_VIRAL: isPanelViralSelected ? "'true'" : "'false'",
-              // OBSERVACION_CLINICA: `"${vnode.dom['textAreaObservacionClinica'].value}"`,
-              // CRITERIO_CLINICO: `"${vnode.dom['textAreaCriterio'].value}"`,
-              // CD_PRE_MED: 10, // Este es la la información de la prescripción
+              HIGIENE_BRONCO_PULMONA: `'${
+                vnode.dom["inputHigieneBroncoPulmonar"].options[
+                  vnode.dom["inputHigieneBroncoPulmonar"].selectedIndex
+                ].text
+              }'`,
+              TERAPIA_EXPANSIVA: `'${
+                vnode.dom["inputTerapiaExpansiva"].options[
+                  vnode.dom["inputTerapiaExpansiva"].selectedIndex
+                ].text
+              }'`,
+              CANTIDAD_TERAPIA_EXPANSIVA: `'${vnode.dom["inputTerapiaExpansiva2"].value}'`,
+              OXIGENO_TERAPIA: `'${
+                vnode.dom["Oxinoterapia"].options[
+                  vnode.dom["Oxinoterapia"].selectedIndex
+                ].text
+              }'`,
+              CANTIDAD_OXIGENO_TERAPIA: `'${vnode.dom["inputOxinoterapia2"].value}'`,
+              MONITOREO_TERAPIA: `'${
+                vnode.dom["inputMonitoreoPrevio"].options[
+                  vnode.dom["inputMonitoreoPrevio"].selectedIndex
+                ].text
+              }'`,
+              CANTIDAD_MONITOREO_TERAPIA: `'${vnode.dom["inputMonitoreoPrevio2"].value}'`,
+              SUCCION_TERAPIA: `'${vnode.dom["inputSuccion"].value}'`,
+              ESPUTO: isEsputoSelected ? "'true'" : "'false'",
+              PANEL_VIRAL: isPanelViralSelected ? "'true'" : "'false'",
+              OBSERVACION_CLINICA: `'${vnode.dom["textAreaObservacionClinica"].value}'`,
+              CRITERIO_CLINICO: `'${vnode.dom["textAreaCriterio"].value}'`,
+              //CD_PRE_MED: 10, // Este es la la información de la prescripción
+              /* MONITOREO_TERAPIA_POSTERIOR: `'${
+                vnode.dom["inputMonitoreoPosterior"].options[
+                  vnode.dom["inputMonitoreoPosterior"].selectedIndex
+                ].text
+              }'`, */
+              CANTIDAD_MONITOREO_TERAPIA_POS: `'${vnode.dom["inputMonitoreoPosterior2"].value}'`,
 
               // Falta monitoreo posterior y cantidad de monitoreo posterior
             };

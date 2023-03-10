@@ -11,6 +11,8 @@ const terapiaRespiratoriaController = {
   horaActual: "",
   habilitarCampos: false,
   datosEnviadosDelFormulario: [],
+  datosGuardados: [],
+  bloquearCamposCuandoSeGuarda: false,
 
   cargarPrescripcion: function (numeroDeAtendimiento) {
     m.request({
@@ -172,7 +174,7 @@ const terapiaRespiratoriaController = {
             "Authorization": localStorage.accessToken,
         },
     })
-    .then(function() {
+    .then(function(result) {
         //resultado = result;
         /* if (result.status) {
           terapiaRespiratoriaController.datosEnviadosDelFormulario = result;
@@ -180,6 +182,8 @@ const terapiaRespiratoriaController = {
           terapiaRespiratoriaController.error = result.error;
           alert(terapiaRespiratoriaController.error);
         } */
+        terapiaRespiratoriaController.datosGuardados = result;
+        terapiaRespiratoriaController.bloquearCamposCuandoSeGuarda = true;
         window.location.href = window.location.href;
     })
     .catch(function(error) {

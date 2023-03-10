@@ -545,7 +545,7 @@ const FormularioDeRegistro = {
           disabled: obtenerDatos.habilitarCampos,
           onclick: function () {
             const formulario = {
-              CD_FORMULARIO: 21,
+              CD_FORMULARIO: 23,
               CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
               FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
               USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
@@ -601,15 +601,16 @@ const FormularioDeRegistro = {
               OBSERVACION_CLINICA: `'${vnode.dom["textAreaObservacionClinica"].value}'`,
               CRITERIO_CLINICO: `'${vnode.dom["textAreaCriterio"].value}'`,
               //CD_PRE_MED: 10, // Este es la la información de la prescripción
-              /* MONITOREO_TERAPIA_POSTERIOR: `'${
+              MONITOREO_TERAPIA_POSTERIOR: `'${
                 vnode.dom["inputMonitoreoPosterior"].options[
                   vnode.dom["inputMonitoreoPosterior"].selectedIndex
                 ].text
-              }'`, */
+              }'`,
               CANTIDAD_MONITOREO_TERAPIA_POS: `'${vnode.dom["inputMonitoreoPosterior2"].value}'`,
 
               // Falta monitoreo posterior y cantidad de monitoreo posterior
             };
+            console.log(formulario.MONITOREO_TERAPIA_POSTERIOR);
             obtenerDatos.guardar(formulario);
             //alert("Guardar");
             //alert("Guardar");

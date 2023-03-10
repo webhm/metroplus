@@ -563,7 +563,7 @@ const FormularioDeRegistro = {
               CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
               FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
               USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
-              CD_SECUENCIAL: 11, // Aqui poner un secuencial
+              CD_SECUENCIAL: "SEQ_TERAPIA_RESPIRATORIA.nextval",//"SEQ_TERAPIA_RESPIRATORIA.nextval", // Aqui poner un secuencial
               FRECUENCIA_CARDIACA: `${vnode.dom["inputFrecuenciaCardiaca"].value}`,
               FRECUENCIA_RESPIRATORIA: `${vnode.dom["inputFrecuenciaRespiratoria"].value}`,
               PESO: `'${vnode.dom["inputPeso"].value}'`,
@@ -624,7 +624,7 @@ const FormularioDeRegistro = {
 
               // Falta monitoreo posterior y cantidad de monitoreo posterior
             };
-            console.log(formulario.MONITOREO_TERAPIA_POSTERIOR);
+            console.log(formulario);
             obtenerDatos.guardar(formulario);
             //alert("Guardar");
             //alert("Guardar");

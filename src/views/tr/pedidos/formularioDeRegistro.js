@@ -39,6 +39,13 @@ const FormularioDeRegistro = {
               terapiaRespiratoriaController.listaDeFrecuenciaCardiaca.data[0]
                 .VALUE, */
             value: obtenerDatos.listaDeFrecuenciaCardiaca.data[0].VALUE,
+            /* value: function(){
+              if(obtenerDatos.bloquearCamposCuandoSeGuarda){
+                obtenerDatos.datosGuardados.FRECUENCIA_CARDIACA
+              }else{
+                obtenerDatos.listaDeFrecuenciaCardiaca.data[0].VALUE
+              }
+            } */
           }),
         ]),
         m("div", { class: "form-group col-md-4" }, [
@@ -345,9 +352,16 @@ const FormularioDeRegistro = {
               //readonly: "readonly",
               disabled: obtenerDatos.habilitarCampos,
               maxlength: 10,
+              /* disabled: obtenerDatos.bloquearCamposCuandoSeGuarda, */
               oninput: function (event) {
                 event.target.value = event.target.value.slice(0, 10);
               },
+              /* value: obtenerDatos.bloquearCamposCuandoSeGuarda ? obtenerDatos.datosGuardados.OXIGENO_TERAPIA : 0 */
+              /* function(){
+                if(obtenerDatos.bloquearCamposCuandoSeGuarda){
+                  obtenerDatos.datosGuardados.OXIGENO_TERAPIA
+                }
+              }, */
             }),
           ]),
         ])

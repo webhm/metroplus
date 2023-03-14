@@ -117,14 +117,17 @@ const FormularioDeRegistro = {
         m("label", { for: "inputPrescripcion" }, "Prescripción"),
         m(
           "select",
-          { class: "custom-select" },
+          /* {
+            id: "inputPrescripcion",
+          }, */
+          { class: "custom-select", id: "inputPrescripcion" },
           obtenerDatos.lista.data.map(function (prescripcion) {
             return m(
               "option",
-              { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
+              // { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
               prescripcion.CODIGO,
-              " ",
-              prescripcion.FECHA
+              /* " ",
+              prescripcion.FECHA */
             );
           })
         ),
@@ -136,6 +139,8 @@ const FormularioDeRegistro = {
           type: "text",
           id: "inputCod",
           placeholder: "Código",
+          readonly: "readonly",
+          value: Pedido.data.AT_MV,
         }),
       ]),
       m("div", { class: "form-group" }, [
@@ -559,11 +564,17 @@ const FormularioDeRegistro = {
           disabled: obtenerDatos.habilitarCampos,
           onclick: function () {
             const formulario = {
-              CD_FORMULARIO: 23,
+              CD_FORMULARIO: 24,
               CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
               FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
               USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
-              CD_SECUENCIAL: "SEQ_TERAPIA_RESPIRATORIA.nextval",//"SEQ_TERAPIA_RESPIRATORIA.nextval", // Aqui poner un secuencial
+              CD_PRE_MED: `${
+                vnode.dom["inputPrescripcion"].options[
+                  vnode.dom["inputPrescripcion"].selectedIndex
+                ].text
+              }`,
+              // 10,
+              CD_SECUENCIAL: `${vnode.dom["inputCod"].value}`, //"SEQ_TERAPIA_RESPIRATORIA.nextval",//"SEQ_TERAPIA_RESPIRATORIA.nextval", // Aqui poner un secuencial
               FRECUENCIA_CARDIACA: `${vnode.dom["inputFrecuenciaCardiaca"].value}`,
               FRECUENCIA_RESPIRATORIA: `${vnode.dom["inputFrecuenciaRespiratoria"].value}`,
               PESO: `'${vnode.dom["inputPeso"].value}'`,
@@ -625,6 +636,7 @@ const FormularioDeRegistro = {
               // Falta monitoreo posterior y cantidad de monitoreo posterior
             };
             console.log(formulario);
+            console.log(Pedido.data.AT_MV);
             obtenerDatos.guardar(formulario);
             //alert("Guardar");
             //alert("Guardar");

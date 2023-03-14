@@ -32,7 +32,7 @@ const terapiaRespiratoriaController = {
         } else {
           terapiaRespiratoriaController.error = resultado.error;
           terapiaRespiratoriaController.habilitarCampos = true;
-          return m("div", {class: "modal"}, "La lista está vacía");
+          //return m("div", {class: "modal"}, "La lista está vacía");
           //alert(terapiaRespiratoriaController.error);
         }
       })
@@ -58,6 +58,13 @@ const terapiaRespiratoriaController = {
         if (resultado.status) {
           terapiaRespiratoriaController.listaDeFrecuenciaCardiaca = resultado;
         } else {
+          /* terapiaRespiratoriaController.listaDeFrecuenciaCardiaca = {
+            data: [
+              {
+                VALUE: "No hay datos",
+              },
+            ],
+          }; */
           terapiaRespiratoriaController.error = resultado.error;
           alert(terapiaRespiratoriaController.error);
         }
@@ -158,23 +165,23 @@ const terapiaRespiratoriaController = {
     const hora = fechaActual.getHours();
     const minutos = fechaActual.getMinutes();
     const segundos = fechaActual.getSeconds();
-    
+
     const horaFormateada = `${hora}:${minutos}:${segundos}`;
     terapiaRespiratoriaController.horaActual = horaFormateada;
   },
 
   guardar: (formularioTerapiaRespiratoria) => {
     m.request({
-        method: 'POST',
-        url: "https://api.hospitalmetropolitano.org/t/v1/tr/formularios",
-        body:  formularioTerapiaRespiratoria,
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "Accept": "application/json",
-            "Authorization": localStorage.accessToken,
-        },
+      method: "POST",
+      url: "https://api.hospitalmetropolitano.org/t/v1/tr/formularios",
+      body: formularioTerapiaRespiratoria,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
     })
-    .then(function(result) {
+      .then(function (result) {
         //resultado = result;
         /* if (result.status) {
           terapiaRespiratoriaController.datosEnviadosDelFormulario = result;
@@ -185,14 +192,34 @@ const terapiaRespiratoriaController = {
         terapiaRespiratoriaController.datosGuardados = result;
         terapiaRespiratoriaController.bloquearCamposCuandoSeGuarda = true;
         window.location.href = window.location.href;
-    })
-    .catch(function(error) {
-      //terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
-      alert(error);
-      console.log(error);
-    }) 
-},
+      })
+      .catch(function (error) {
+        //terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
+        alert(error);
+        console.log(error);
+      });
+  },
 
+  actualizar: (formularioTerapiaRespiratoria) => {
+    m.request({
+      method: "PUT",
+      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios=${formularioTerapiaRespiratoria.CD_SECUENCIAL}`,
+      body: formularioTerapiaRespiratoria, // cuerpo de los datos a enviar,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
+    })
+      .then(function (result) {
+        terapiaRespiratoriaController.guardar(
+          terapiaRespiratoriaController.datosGuardados
+        ); // se envia el numero de atencion para que guarde los datos de nuevo
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  },
 };
 
 export default terapiaRespiratoriaController;

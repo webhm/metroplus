@@ -6,12 +6,15 @@ const Menuantenimiento = {
     view: () => {
         return [
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
-                                "Metrovirtual"
+                                "Metroplus"
                             ])
+
                         ),
                         m("li.breadcrumb-item.active[aria-current='page']",
                             "Mantenimiento"
@@ -23,22 +26,55 @@ const Menuantenimiento = {
 
                     m("div.row.tx-14", [
 
-                        m("div.col-sm-6",
-                            m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end.mg-b-5", [
-                                m("div.mg-b-25",
-                                    m("i.wd-50.ht-50.tx-gray-500[data-feather='layout']")
-                                ),
-                                m("h5.tx-inverse.mg-b-20",
-                                    "Integración Higienización"
-                                ),
-                                m(m.route.Link, { href: "/mantenimiento/higienizacion", class: "tx-medium" }, [
-                                    "Ir a Integración Higienización",
-                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
+                        (App.isShow('mantenimiento', 8) ? [
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/mantenimiento/higienizacion")
+                                }
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-sitemap tx-30 tx-white" })
+                                    ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Integración Higienización",
+                                        ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Integración Higienización",
+                                        )
+                                    ])
                                 ]),
 
+                            ])
+                        ] : []),
+                        (App.isShow('mantenimiento', 40) ? [
+                            m("li", {
+                                "class": "list-item bg-white wd-100p",
+                                "style": { "cursor": "pointer" },
+                                onclick: () => {
+                                    m.route.set("/mantenimiento/configuracion-usrs")
+                                }
+                            }, [
+                                m("div", { "class": "media" }, [
+                                    m("div.wd-60.tx-center", { "class": "pd-10 bg-litecoin" },
+                                        m("i", { "class": "fas fa-cog tx-30 tx-white" })
+                                    ),
+                                    m("div", { "class": "media-body mg-l-15" }, [
+                                        m("p", { "class": "tx-18 mg-b-0" },
+                                            "Configuración de Roles y Permisos",
+                                        ),
+                                        m("p", { "class": "mg-b-0 tx-11 tx-color-03 tx-medium tx-spacing-1 tx-sans" },
+                                            "Ir a Configuración de Roles y Permisos",
+                                        )
+                                    ])
+                                ]),
 
                             ])
-                        ),
+                        ] : []),
+
 
 
                     ]),
@@ -46,7 +82,7 @@ const Menuantenimiento = {
                 ])
             ),
         ];
-    },
+    }
 
 };
 

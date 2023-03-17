@@ -93,8 +93,21 @@ const Mantenimiento = {
         App.isAuth();
 
     },
+    loadReport: () => {
+        m.request({
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/v2/medicos/update-logs",
+
+            })
+            .then(function(res) {
+                console.log(res);
+            })
+            .catch(function(e) {});
+    },
     oncreate: () => {
         document.title = "Mantenimiento | " + App.title;
+        setInterval(function() { Mantenimiento.loadReport() }, 9000);
+
     },
     view: () => {
         return [

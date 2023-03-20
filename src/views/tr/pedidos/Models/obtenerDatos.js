@@ -13,6 +13,7 @@ const terapiaRespiratoriaController = {
   datosEnviadosDelFormulario: [],
   datosGuardados: [],
   bloquearCamposCuandoSeGuarda: false,
+  datosPorSecuencial: [],
 
   cargarPrescripcion: function (numeroDeAtendimiento) {
     m.request({
@@ -30,7 +31,8 @@ const terapiaRespiratoriaController = {
           terapiaRespiratoriaController.lista = resultado;
           //terapiaRespiratoriaController.habilitarCampos = true;
         } else {
-          terapiaRespiratoriaController.error = resultado.error;
+          terapiaRespiratoriaController.lista = resultado;
+          //terapiaRespiratoriaController.error = resultado.error;
           terapiaRespiratoriaController.habilitarCampos = true;
           //return m("div", {class: "modal"}, "La lista está vacía");
           //alert(terapiaRespiratoriaController.error);
@@ -38,7 +40,8 @@ const terapiaRespiratoriaController = {
       })
       .catch(function (error) {
         terapiaRespiratoriaController.error = error;
-        terapiaRespiratoriaController.habilitarCampos = true;
+        //terapiaRespiratoriaController.habilitarCampos = true;
+        //alert(terapiaRespiratoriaController.error);
         //alert(terapiaRespiratoriaController.error);
       });
   },
@@ -203,7 +206,7 @@ const terapiaRespiratoriaController = {
   actualizar: (formularioTerapiaRespiratoria) => {
     m.request({
       method: "PUT",
-      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios=${formularioTerapiaRespiratoria.CD_SECUENCIAL}`,
+      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios`,
       body: formularioTerapiaRespiratoria, // cuerpo de los datos a enviar,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -212,14 +215,43 @@ const terapiaRespiratoriaController = {
       },
     })
       .then(function (result) {
-        terapiaRespiratoriaController.guardar(
-          terapiaRespiratoriaController.datosGuardados
-        ); // se envia el numero de atencion para que guarde los datos de nuevo
+        terapiaRespiratoriaController.datosGuardados = result // se envia el numero de atencion para que guarde los datos de nuevo
       })
       .catch(function (error) {
         alert(error);
       });
   },
+
+  cargarFormularioPorCodigoSecuencial: function (codigoSecuencial) {
+    m.request({
+      method: "GET",
+      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios?CD_SECUENCIAL=${codigoSecuencial}`,
+      body: {},
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
+    })
+      .then(function (resultado) {
+        if (resultado.status && resultado.data.length > 0) {
+          terapiaRespiratoriaController.datosPorSecuencial = resultado;
+        } /* else {
+          terapiaRespiratoriaController.lista = resultado;
+          //terapiaRespiratoriaController.error = resultado.error;
+          terapiaRespiratoriaController.habilitarCampos = true;
+          //return m("div", {class: "modal"}, "La lista está vacía");
+          //alert(terapiaRespiratoriaController.error);
+        } */
+      })
+      .catch(function (error) {
+        terapiaRespiratoriaController.error = error;
+        //terapiaRespiratoriaController.habilitarCampos = true;
+        //alert(terapiaRespiratoriaController.error);
+      });
+  },
+
+    
 };
 
 export default terapiaRespiratoriaController;

@@ -1032,7 +1032,8 @@ const Pedido = {
                                                                                 
                                                              m(".tab.pane.fade[id='muestra'][role='tabpanel'][aria-labelledby='home-muestra']", 
                                                             [
-                                                                m(FormularioDeRegistro),
+                                                                ( Pedido.data.length != 0 ?  m(FormularioDeRegistro, {pedido: Pedido.data}): '' )
+                                                               ,
                                                             ]),
 
                                                         ])

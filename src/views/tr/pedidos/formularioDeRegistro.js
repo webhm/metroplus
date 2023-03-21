@@ -22,6 +22,10 @@ const FormularioDeRegistro = {
   habilitarCampos: false,
   listaPrescripcion: [],
   errorPrescripcion: "",
+  datosGuardados: [],
+  errorGuardar: "",
+  datosPorSecuencial:[],
+  errorDatosPorSecuencial: "",
   cargarFrecuenciaCardiaca: function (numeroDeAtendimiento) {
     m.request({
       method: "GET",
@@ -183,19 +187,87 @@ const FormularioDeRegistro = {
       })
       .catch(function (error) {
         FormularioDeRegistro.errorPrescripcion = error;
+        alert(FormularioDeRegistro.errorPrescripcion);
         //terapiaRespiratoriaController.habilitarCampos = true;
         //alert(terapiaRespiratoriaController.error);
         //alert(terapiaRespiratoriaController.error);
       });
   },
+
+  guardar: (formularioTerapiaRespiratoria) => {
+    m.request({
+      method: "POST",
+      url: "https://api.hospitalmetropolitano.org/t/v1/tr/formularios",
+      body: formularioTerapiaRespiratoria,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
+    })
+      .then(function (result) {
+        //resultado = result;
+        /* if (result.status) {
+          terapiaRespiratoriaController.datosEnviadosDelFormulario = result;
+        }else{
+          terapiaRespiratoriaController.error = result.error;
+          alert(terapiaRespiratoriaController.error);
+        } */
+        /* if (result.status) {
+          FormularioDeRegistro.datosGuardados = result;
+          window.location.href = window.location.href;
+        } */
+        FormularioDeRegistro.datosGuardados = result;
+        //FormularioDeRegistro.bloquearCamposCuandoSeGuarda = true;
+        window.location.href = window.location.href;
+        //FormularioDeRegistro.bloquearCamposCuandoSeGuarda = true;
+        
+      })
+      .catch(function (error) {
+        //terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
+        
+        FormularioDeRegistro.errorGuardar = error;
+        alert(FormularioDeRegistro.errorGuardar);
+      });
+  },
+
+  cargarFormularioPorCodigoSecuencial: function (codigoSecuencial) {
+    m.request({
+      method: "GET",
+      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios?CD_SECUENCIAL=${codigoSecuencial}`,
+      body: {},
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
+    })
+      .then(function (resultado) {
+        if (resultado.status && resultado.data.length > 0) {
+          FormularioDeRegistro.datosPorSecuencial = resultado;
+        } /* else {
+          terapiaRespiratoriaController.lista = resultado;
+          //terapiaRespiratoriaController.error = resultado.error;
+          terapiaRespiratoriaController.habilitarCampos = true;
+          //return m("div", {class: "modal"}, "La lista está vacía");
+          //alert(terapiaRespiratoriaController.error);
+        } */
+      })
+      .catch(function (error) {
+        terapiaRespiratoriaController.errorDatosPorSecuencial = error;
+        //terapiaRespiratoriaController.habilitarCampos = true;
+        //alert(terapiaRespiratoriaController.error);
+      });
+  },
   oninit: (_data) => {
-    FormularioDeRegistro.cargarFrecuenciaCardiaca(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarPeso(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarEscalaDelDolor(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFrecuenciaCardiaca(10090); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFrecuenciaRespiratoria(10090); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarPeso(10090); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarEscalaDelDolor(10090); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFechaActual();
     FormularioDeRegistro.cargarHoraActual();
     FormularioDeRegistro.cargarPrescripcion(1918); // 1918 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFormularioPorCodigoSecuencial(_data.attrs.pedido.AT_MV); // 1918 // _data.attrs.pedido.AT_MV
     //console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
     /* terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV);
     terapiaRespiratoriaController.cargarPeso(_data.attrs.pedido.AT_MV);
@@ -236,11 +308,11 @@ const FormularioDeRegistro = {
               type: "number",
               id: "inputFrecuenciaCardiaca",
               placeholder: "Frecuencia Cardiaca",
-              readonly: "readonly",
-              value:
-                FormularioDeRegistro.listaDeFrecuenciaCardiaca.length > 0
-                  ? FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE
-                  : "",
+              readonly: "readonly", 
+              value: FormularioDeRegistro.listaDeFrecuenciaCardiaca.data.length > 0
+                  ? FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE == null ? "" : FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE
+                  : ""
+                  ,
               /* value:
                 terapiaRespiratoriaController.listaDeFrecuenciaCardiaca.data[0]
                   .VALUE, */
@@ -270,10 +342,8 @@ const FormularioDeRegistro = {
                 terapiaRespiratoriaController.listaDeFrecuenciaRespiratoria
                   .data[0].VALUE, */
               //value: obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE != undefined ? obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE : '',
-              value:
-                FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length > 0
-                  ? FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0]
-                      .VALUE
+              value: FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data.length > 0
+                  ? FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0].VALUE == null ? "" : FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0].VALUE
                   : "",
             }),
           ]),
@@ -286,9 +356,8 @@ const FormularioDeRegistro = {
               placeholder: "Peso",
               readonly: "readonly",
               //value: obtenerDatos.listaDePeso.data[0].VALUE != undefined ? obtenerDatos.listaDePeso.data[0].VALUE : '',
-              value:
-                FormularioDeRegistro.listaDePeso.length > 0
-                  ? FormularioDeRegistro.listaDePeso.data[0].VALUE
+              value: FormularioDeRegistro.listaDePeso.data.length > 0
+                  ? FormularioDeRegistro.listaDePeso.data[0].VALUE == null ? "" : FormularioDeRegistro.listaDePeso.data[0].VALUE
                   : "",
             }),
           ]),
@@ -302,9 +371,8 @@ const FormularioDeRegistro = {
               id: "inputEscalaDolor",
               placeholder: "Escala Dolor",
               readonly: "readonly",
-              value:
-                FormularioDeRegistro.listaEscalaDelDolor.length > 0
-                  ? FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE
+              value: FormularioDeRegistro.listaEscalaDelDolor.data.length > 0
+                  ? FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE === null ? "" : FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE
                   : "",
             }),
           ]),
@@ -379,7 +447,7 @@ const FormularioDeRegistro = {
             type: "text",
             id: "inputHora",
             placeholder: "Hora",
-            value: FormularioDeRegistro.horaActual,
+            value: FormularioDeRegistro.horaActual ,
             readonly: "readonly",
           }),
         ]),
@@ -770,11 +838,6 @@ const FormularioDeRegistro = {
             class: "form-control",
             id: "textAreaObservacionClinica",
             rows: "3",
-            //disabled: obtenerDatos.habilitarCampos,
-            /* value: terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA != undefined ?
-            terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA : '' : '', */
-            //value: terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA : '',
-            //value: terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA,
           }),
         ]),
         m("div", { class: "form-group" }, [
@@ -813,23 +876,18 @@ const FormularioDeRegistro = {
                 return parseInt(palabraAEnviar);
               };
               const formulario = {
-                CD_FORMULARIO: 25,
-                CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
-                FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
-                USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
-                CD_PRE_MED: valorPrescripcion() /* `${
-                  vnode.dom["inputPrescripcion"].options[
-                    vnode.dom["inputPrescripcion"].selectedIndex
-                  ].text
-                }` */,
-                // 10,
-                CD_SECUENCIAL: `${vnode.dom["inputCod"].value}`, //"SEQ_TERAPIA_RESPIRATORIA.nextval",//"SEQ_TERAPIA_RESPIRATORIA.nextval", // Aqui poner un secuencial
-                FRECUENCIA_CARDIACA: `${vnode.dom["inputFrecuenciaCardiaca"].value}`,
-                FRECUENCIA_RESPIRATORIA: `${vnode.dom["inputFrecuenciaRespiratoria"].value}`,
+                CD_FORMULARIO: 17,
+                FRECUENCIA_CARDIACA: `'${vnode.dom["inputFrecuenciaCardiaca"].value}'`,
+                FRECUENCIA_RESPIRATORIA: `'${vnode.dom["inputFrecuenciaRespiratoria"].value}'`,
                 PESO: `'${vnode.dom["inputPeso"].value}'`,
                 ESCALA_DOLOR: `'${vnode.dom["inputEscalaDolor"].value}'`,
+                CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
+                USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
+                // ----------------------------------
+                CD_PRE_MED: valorPrescripcion(),
+                CD_SECUENCIAL: `${vnode.dom["inputCod"].value}`, 
+                FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
                 HORA_REGISTRO: `'${vnode.dom["inputHora"].value}'`,
-                //FRECUENCIA_DIARIA: `'${vnode.dom['inputFrecuenciaAlDia'].text}'`,
                 FRECUENCIA_DIARIA: `'${
                   vnode.dom["inputFrecuenciaAlDia"].options[
                     vnode.dom["inputFrecuenciaAlDia"].selectedIndex
@@ -874,19 +932,16 @@ const FormularioDeRegistro = {
                 PANEL_VIRAL: isPanelViralSelected ? "'true'" : "'false'",
                 OBSERVACION_CLINICA: `'${vnode.dom["textAreaObservacionClinica"].value}'`,
                 CRITERIO_CLINICO: `'${vnode.dom["textAreaCriterio"].value}'`,
-                //CD_PRE_MED: 10, // Este es la la información de la prescripción
                 MONITOREO_TERAPIA_POSTERIOR: `'${
                   vnode.dom["inputMonitoreoPosterior"].options[
                     vnode.dom["inputMonitoreoPosterior"].selectedIndex
                   ].text
                 }'`,
                 CANTIDAD_MONITOREO_TERAPIA_POS: `'${vnode.dom["inputMonitoreoPosterior2"].value}'`,
-
-                // Falta monitoreo posterior y cantidad de monitoreo posterior
               };
               console.log(formulario);
               console.log(Pedido.data.AT_MV);
-              obtenerDatos.guardar(formulario);
+              FormularioDeRegistro.guardar(formulario);
               //alert("Guardar");
               //alert("Guardar");
               //terapiaRespiratoriaController.guardar(formulario);
@@ -902,11 +957,9 @@ const FormularioDeRegistro = {
             type: "button",
             //disabled: obtenerDatos.habilitarCampos,
             onclick: function () {
+              console.log(FormularioDeRegistro.datosPorSecuencial.data);
+              console.log(FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV);
               console.log(Pedido.data.AT_MV);
-              //console.log(terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL);
-              console.log(
-                FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE
-              );
             },
           },
           "Eliminar"

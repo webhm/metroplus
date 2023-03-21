@@ -8,16 +8,17 @@ let isEsputoSelected = false;
 let isPanelViralSelected = false;
 let isRadioSelected = false;
 
-
 const FormularioDeRegistro = {
-   listaDeFrecuenciaCardiaca: [],
-   errorCargandoFrecuenciaCardiaca: "",
-   listaDeFrecuenciaRespiratoria: [],
-   errorCargandoFrecuenciaRespiratoria: "",
-   listaDePeso: [],
-   errorCargaDePeso: "",
-   listaEscalaDelDolor: [],
+  listaDeFrecuenciaCardiaca: [],
+  errorCargandoFrecuenciaCardiaca: "",
+  listaDeFrecuenciaRespiratoria: [],
+  errorCargandoFrecuenciaRespiratoria: "",
+  listaDePeso: [],
+  errorCargaDePeso: "",
+  listaEscalaDelDolor: [],
   errorCargaDeEscalaDelDolor: "",
+  fechaActual: "",
+  horaActual: "",
   cargarFrecuenciaCardiaca: function (numeroDeAtendimiento) {
     m.request({
       method: "GET",
@@ -65,9 +66,8 @@ const FormularioDeRegistro = {
     })
       .then(function (resultado) {
         if (resultado.status) {
-          FormularioDeRegistro.listaDeFrecuenciaRespiratoria =
-            resultado;
-            console.log(FormularioDeRegistro.listaDeFrecuenciaRespiratoria);
+          FormularioDeRegistro.listaDeFrecuenciaRespiratoria = resultado;
+          console.log(FormularioDeRegistro.listaDeFrecuenciaRespiratoria);
         } /* else {
           FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria = resultado.error;
           alert(FormularioDeRegistro.error);
@@ -119,7 +119,7 @@ const FormularioDeRegistro = {
       .then(function (resultado) {
         if (resultado.status) {
           FormularioDeRegistro.listaEscalaDelDolor = resultado;
-          console.log(FormularioDeRegistro.listaEscalaDelDolor)
+          console.log(FormularioDeRegistro.listaEscalaDelDolor);
         } /* else {
           terapiaRespiratoriaController.error = resultado.error;
           alert(terapiaRespiratoriaController.error);
@@ -129,7 +129,6 @@ const FormularioDeRegistro = {
         FormularioDeRegistro.errorCargaDeEscalaDelDolor = error;
         alert(FormularioDeRegistro.errorCargaDeEscalaDelDolor);
       });
-    
   },
 
   cargarFechaActual: function () {
@@ -139,7 +138,8 @@ const FormularioDeRegistro = {
     const anio = fechaActual.getFullYear();
 
     const fechaFormateada = `${dia}/${mes}/${anio}`;
-    terapiaRespiratoriaController.fechaActual = fechaFormateada;
+    FormularioDeRegistro.fechaActual = fechaFormateada;
+    console.log(FormularioDeRegistro.fechaActual);
   },
 
   cargarHoraActual: function () {
@@ -149,15 +149,16 @@ const FormularioDeRegistro = {
     const segundos = fechaActual.getSeconds();
 
     const horaFormateada = `${hora}:${minutos}:${segundos}`;
-    terapiaRespiratoriaController.horaActual = horaFormateada;
+    FormularioDeRegistro.horaActual = horaFormateada;
+    console.log(FormularioDeRegistro.horaActual);
   },
   oninit: (_data) => {
-
-    
     FormularioDeRegistro.cargarFrecuenciaCardiaca(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarPeso(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarEscalaDelDolor(54563); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFechaActual();
+    FormularioDeRegistro.cargarHoraActual();
     //console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
     /* terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV);
     terapiaRespiratoriaController.cargarPeso(_data.attrs.pedido.AT_MV);
@@ -173,26 +174,35 @@ const FormularioDeRegistro = {
     //console.log(`Número de pedido: ${Pedido.data.AT_MV}`);
 
     //terapiaRespiratoriaController.cargarFormularioPorCodigoSecuencial(54563);
-   // terapiaRespiratoriaController.cargarFormularioPorCodigoSecuencial(_data.attrs.pedido.AT_MV);
+    // terapiaRespiratoriaController.cargarFormularioPorCodigoSecuencial(_data.attrs.pedido.AT_MV);
 
     FormularioDeRegistro.usuarioConectado = Encrypt.getDataUser(); // Obtener el nombre de usuario
   },
   usuarioConectado: [],
   view: (vnode) => {
-
-
-    if(FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 && FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 && FormularioDeRegistro.listaDePeso.length !== 0){
+    if (
+      FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 &&
+      FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 &&
+      FormularioDeRegistro.listaDePeso.length !== 0
+    ) {
       return m("form", [
         m("div", { class: "form-row" }, [
           m("div", { class: "form-group col-md-4" }, [
-            m("label", { for: "inputFrecuenciaCardiaca" }, "Frecuencia Cardiaca"),
+            m(
+              "label",
+              { for: "inputFrecuenciaCardiaca" },
+              "Frecuencia Cardiaca"
+            ),
             m("input", {
               class: "form-control",
               type: "number",
               id: "inputFrecuenciaCardiaca",
               placeholder: "Frecuencia Cardiaca",
               readonly: "readonly",
-              value: FormularioDeRegistro.listaDeFrecuenciaCardiaca.length > 0 ?FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE : '',
+              value:
+                FormularioDeRegistro.listaDeFrecuenciaCardiaca.length > 0
+                  ? FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE
+                  : "",
               /* value:
                 terapiaRespiratoriaController.listaDeFrecuenciaCardiaca.data[0]
                   .VALUE, */
@@ -222,7 +232,11 @@ const FormularioDeRegistro = {
                 terapiaRespiratoriaController.listaDeFrecuenciaRespiratoria
                   .data[0].VALUE, */
               //value: obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE != undefined ? obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE : '',
-              value: FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length > 0 ? FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0].VALUE : '',
+              value:
+                FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length > 0
+                  ? FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0]
+                      .VALUE
+                  : "",
             }),
           ]),
           m("div", { class: "form-group col-md-4" }, [
@@ -234,7 +248,10 @@ const FormularioDeRegistro = {
               placeholder: "Peso",
               readonly: "readonly",
               //value: obtenerDatos.listaDePeso.data[0].VALUE != undefined ? obtenerDatos.listaDePeso.data[0].VALUE : '',
-              value: FormularioDeRegistro.listaDePeso.length > 0 ? FormularioDeRegistro.listaDePeso.data[0].VALUE : '',
+              value:
+                FormularioDeRegistro.listaDePeso.length > 0
+                  ? FormularioDeRegistro.listaDePeso.data[0].VALUE
+                  : "",
             }),
           ]),
         ]),
@@ -247,7 +264,10 @@ const FormularioDeRegistro = {
               id: "inputEscalaDolor",
               placeholder: "Escala Dolor",
               readonly: "readonly",
-              value: FormularioDeRegistro.listaEscalaDelDolor.length > 0 ? FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE : '',
+              value:
+                FormularioDeRegistro.listaEscalaDelDolor.length > 0
+                  ? FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE
+                  : "",
             }),
           ]),
           m("div", { class: "form-group col-md-4" }, [
@@ -280,15 +300,15 @@ const FormularioDeRegistro = {
             /* {
               id: "inputPrescripcion",
             }, */
-            { class: "custom-select", id: "inputPrescripcion" },
+            { class: "custom-select", id: "inputPrescripcion" }
             //obtenerDatos.lista.data.map(function (prescripcion) {
-              //return m(
-                //"option",
-                // { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
-                //`${prescripcion.CODIGO} ${prescripcion.FECHA}`
-                /* " ",
+            //return m(
+            //"option",
+            // { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
+            //`${prescripcion.CODIGO} ${prescripcion.FECHA}`
+            /* " ",
                 prescripcion.FECHA */
-              //);
+            //);
             //})
           ),
         ]),
@@ -310,7 +330,7 @@ const FormularioDeRegistro = {
             type: "text",
             id: "inputFecha",
             placeholder: "Fecha",
-            value: FormularioDeRegistro.fechaActual(),
+            value: FormularioDeRegistro.fechaActual,
             readonly: "readonly",
           }),
         ]),
@@ -445,7 +465,10 @@ const FormularioDeRegistro = {
                     if (selectValue === "1") {
                       inputTerapiaExpansiva2.removeAttribute("readonly");
                     } else {
-                      inputTerapiaExpansiva2.setAttribute("readonly", "readonly");
+                      inputTerapiaExpansiva2.setAttribute(
+                        "readonly",
+                        "readonly"
+                      );
                       inputTerapiaExpansiva2.value = "";
                     }
                   },
@@ -468,7 +491,7 @@ const FormularioDeRegistro = {
                   m("option", { value: "5" }, "Ejercicios respiratorios"),
                 ]
               ),
-  
+
               m("input", {
                 class: "form-control",
                 type: "number",
@@ -483,7 +506,7 @@ const FormularioDeRegistro = {
             ]),
           ])
         ),
-  
+
         m(
           "div",
           { class: "form-row" },
@@ -551,7 +574,10 @@ const FormularioDeRegistro = {
                     if (selectValue === "1") {
                       inputMonitoreoPrevio2.removeAttribute("readonly");
                     } else {
-                      inputMonitoreoPrevio2.setAttribute("readonly", "readonly");
+                      inputMonitoreoPrevio2.setAttribute(
+                        "readonly",
+                        "readonly"
+                      );
                       inputMonitoreoPrevio2.value = "";
                     }
                   },
@@ -581,7 +607,11 @@ const FormularioDeRegistro = {
           "div",
           { class: "form-row" },
           m("div", { class: "form-group col-md-12" }, [
-            m("label", { for: "inputMonitoreoPosterior" }, "Monitoreo Posterior"),
+            m(
+              "label",
+              { for: "inputMonitoreoPosterior" },
+              "Monitoreo Posterior"
+            ),
             m("div", { class: "input-group" }, [
               m(
                 "select",
@@ -730,32 +760,30 @@ const FormularioDeRegistro = {
             disabled: obtenerDatos.habilitarCampos,
             onclick: function () {
               const valorPrescripcion = () => {
-                  const valor = `${
-                    vnode.dom["inputPrescripcion"].options[
-                      vnode.dom["inputPrescripcion"].selectedIndex
-                    ].text
-                  }`;
-                  let palabraAEnviar = "";
-                  for (const key in valor) {
-                    if (valor[key] === " ") {
-                      break;
-                    }
-                    palabraAEnviar += valor[key];
+                const valor = `${
+                  vnode.dom["inputPrescripcion"].options[
+                    vnode.dom["inputPrescripcion"].selectedIndex
+                  ].text
+                }`;
+                let palabraAEnviar = "";
+                for (const key in valor) {
+                  if (valor[key] === " ") {
+                    break;
                   }
-                  return parseInt(palabraAEnviar);
-                
-  
+                  palabraAEnviar += valor[key];
+                }
+                return parseInt(palabraAEnviar);
               };
               const formulario = {
                 CD_FORMULARIO: 25,
                 CD_ATENDIMENTO: `${Pedido.data.AT_MV}`,
                 FECHA_REGISTRO: `to_date('${vnode.dom["inputFecha"].value}','DD-MM-YY')`,
                 USUARIO: `'${vnode.dom["inputUsuario"].value}'`,
-                CD_PRE_MED: valorPrescripcion(), /* `${
+                CD_PRE_MED: valorPrescripcion() /* `${
                   vnode.dom["inputPrescripcion"].options[
                     vnode.dom["inputPrescripcion"].selectedIndex
                   ].text
-                }` */
+                }` */,
                 // 10,
                 CD_SECUENCIAL: `${vnode.dom["inputCod"].value}`, //"SEQ_TERAPIA_RESPIRATORIA.nextval",//"SEQ_TERAPIA_RESPIRATORIA.nextval", // Aqui poner un secuencial
                 FRECUENCIA_CARDIACA: `${vnode.dom["inputFrecuenciaCardiaca"].value}`,
@@ -769,7 +797,7 @@ const FormularioDeRegistro = {
                     vnode.dom["inputFrecuenciaAlDia"].selectedIndex
                   ].text
                 }'`,
-  
+
                 TERAPIA_AEROSOL: `'${
                   vnode.dom["inputTerapiaAerosolMedicina"].options[
                     vnode.dom["inputTerapiaAerosolMedicina"].selectedIndex
@@ -815,7 +843,7 @@ const FormularioDeRegistro = {
                   ].text
                 }'`,
                 CANTIDAD_MONITOREO_TERAPIA_POS: `'${vnode.dom["inputMonitoreoPosterior2"].value}'`,
-  
+
                 // Falta monitoreo posterior y cantidad de monitoreo posterior
               };
               console.log(formulario);
@@ -838,19 +866,17 @@ const FormularioDeRegistro = {
             onclick: function () {
               console.log(Pedido.data.AT_MV);
               //console.log(terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL);
-              console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
+              console.log(
+                FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE
+              );
             },
           },
           "Eliminar"
         ),
       ]);
-    }else{
-      return [
-        m('p', 'procesandoooo-...')
-      ]
+    } else {
+      return [m("p", "procesandoooo-...")];
     }
-
-
   },
 };
 

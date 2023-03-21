@@ -19,6 +19,9 @@ const FormularioDeRegistro = {
   errorCargaDeEscalaDelDolor: "",
   fechaActual: "",
   horaActual: "",
+  habilitarCampos: false,
+  listaPrescripcion: [],
+  errorPrescripcion: "",
   cargarFrecuenciaCardiaca: function (numeroDeAtendimiento) {
     m.request({
       method: "GET",
@@ -152,13 +155,47 @@ const FormularioDeRegistro = {
     FormularioDeRegistro.horaActual = horaFormateada;
     console.log(FormularioDeRegistro.horaActual);
   },
+
+  cargarPrescripcion: function (numeroDeAtendimiento) {
+    m.request({
+      method: "GET",
+      url: `https://api.hospitalmetropolitano.org/t/v1/tr/formularios/sv?PARAM=PRESC&&CD_ATENDIMENTO=${numeroDeAtendimiento}`,
+      body: {},
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
+      },
+    })
+      .then(function (resultado) {
+        if (resultado.status && resultado.data.length > 0) {
+          FormularioDeRegistro.listaPrescripcion = resultado;
+          console.log(FormularioDeRegistro.listaPrescripcion);
+          //terapiaRespiratoriaController.habilitarCampos = true;
+        } else {
+          FormularioDeRegistro.listaPrescripcion = [];
+          //FormularioDeRegistro.lista = resultado;
+          //terapiaRespiratoriaController.error = resultado.error;
+          //FormularioDeRegistro.habilitarCampos = true;
+          //return m("div", {class: "modal"}, "La lista está vacía");
+          //alert(terapiaRespiratoriaController.error);
+        }
+      })
+      .catch(function (error) {
+        FormularioDeRegistro.errorPrescripcion = error;
+        //terapiaRespiratoriaController.habilitarCampos = true;
+        //alert(terapiaRespiratoriaController.error);
+        //alert(terapiaRespiratoriaController.error);
+      });
+  },
   oninit: (_data) => {
     FormularioDeRegistro.cargarFrecuenciaCardiaca(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarPeso(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarEscalaDelDolor(54563); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarEscalaDelDolor(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFechaActual();
     FormularioDeRegistro.cargarHoraActual();
+    FormularioDeRegistro.cargarPrescripcion(1918); // 1918 // _data.attrs.pedido.AT_MV
     //console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
     /* terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV);
     terapiaRespiratoriaController.cargarPeso(_data.attrs.pedido.AT_MV);
@@ -181,9 +218,10 @@ const FormularioDeRegistro = {
   usuarioConectado: [],
   view: (vnode) => {
     if (
-      FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 &&
-      FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 &&
-      FormularioDeRegistro.listaDePeso.length !== 0
+      // FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 &&
+      // FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 &&
+      // FormularioDeRegistro.listaDePeso.length !== 0 &&
+      FormularioDeRegistro.listaPrescripcion.length !== 0
     ) {
       return m("form", [
         m("div", { class: "form-row" }, [
@@ -300,16 +338,16 @@ const FormularioDeRegistro = {
             /* {
               id: "inputPrescripcion",
             }, */
-            { class: "custom-select", id: "inputPrescripcion" }
-            //obtenerDatos.lista.data.map(function (prescripcion) {
-            //return m(
-            //"option",
-            // { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
-            //`${prescripcion.CODIGO} ${prescripcion.FECHA}`
+            { class: "custom-select", id: "inputPrescripcion" },
+            FormularioDeRegistro.listaPrescripcion.data.map(function (prescripcion) {
+            return m(
+            "option",
+            { value: `${prescripcion.CODIGO} ${prescripcion.FECHA}` },
+            `${prescripcion.CODIGO} ${prescripcion.FECHA}`
             /* " ",
                 prescripcion.FECHA */
-            //);
-            //})
+            );
+            })
           ),
         ]),
         m("div", { class: "form-group" }, [
@@ -351,7 +389,7 @@ const FormularioDeRegistro = {
             "select",
             {
               class: "custom-select",
-              disabled: obtenerDatos.habilitarCampos,
+              //disabled: obtenerDatos.habilitarCampos,
               id: "inputFrecuenciaAlDia",
             },
             [
@@ -387,7 +425,7 @@ const FormularioDeRegistro = {
                 "select",
                 {
                   class: "custom-select",
-                  disabled: obtenerDatos.habilitarCampos,
+                  //disabled: obtenerDatos.habilitarCampos,
                   id: "inputTerapiaAerosolMedicina",
                 },
                 [
@@ -401,7 +439,7 @@ const FormularioDeRegistro = {
                 "select",
                 {
                   class: "custom-select",
-                  disabled: obtenerDatos.habilitarCampos,
+                  //disabled: obtenerDatos.habilitarCampos,
                   //disabled: true,
                   id: "inputDosisTerapiaAerosol",
                 },
@@ -432,7 +470,7 @@ const FormularioDeRegistro = {
             "select",
             {
               class: "custom-select",
-              disabled: obtenerDatos.habilitarCampos,
+              //disabled: obtenerDatos.habilitarCampos,
               id: "inputHigieneBroncoPulmonar",
             },
             [
@@ -472,7 +510,7 @@ const FormularioDeRegistro = {
                       inputTerapiaExpansiva2.value = "";
                     }
                   },
-                  disabled: obtenerDatos.habilitarCampos,
+                  //disabled: obtenerDatos.habilitarCampos,
                 },
                 [
                   m("option", "Seleccione..."),
@@ -517,7 +555,7 @@ const FormularioDeRegistro = {
                 "select",
                 {
                   class: "custom-select",
-                  disabled: obtenerDatos.habilitarCampos,
+                  //disabled: obtenerDatos.habilitarCampos,
                   id: "Oxinoterapia",
                 },
                 [
@@ -538,7 +576,7 @@ const FormularioDeRegistro = {
                 id: "inputOxinoterapia2",
                 placeholder: "Oxinoterapia",
                 //readonly: "readonly",
-                disabled: obtenerDatos.habilitarCampos,
+                //disabled: obtenerDatos.habilitarCampos,
                 maxlength: 10,
                 /* disabled: obtenerDatos.bloquearCamposCuandoSeGuarda, */
                 oninput: function (event) {
@@ -564,7 +602,7 @@ const FormularioDeRegistro = {
                 "select",
                 {
                   class: "custom-select",
-                  disabled: obtenerDatos.habilitarCampos,
+                  //disabled: obtenerDatos.habilitarCampos,
                   id: "inputMonitoreoPrevio",
                   onchange: function (event) {
                     let selectValue = event.target.value;
@@ -617,7 +655,7 @@ const FormularioDeRegistro = {
                 "select",
                 {
                   class: "custom-select",
-                  disabled: obtenerDatos.habilitarCampos,
+                  //disabled: obtenerDatos.habilitarCampos,
                   id: "inputMonitoreoPosterior",
                   onchange: function (event) {
                     let selectValue = event.target.value;
@@ -676,7 +714,7 @@ const FormularioDeRegistro = {
                 id: "inputSuccion",
                 placeholder: "Frecuencia Cardiaca",
                 //readonly: "readonly",
-                disabled: obtenerDatos.habilitarCampos,
+                //disabled: obtenerDatos.habilitarCampos,
                 maxlength: 50,
                 oninput: function (event) {
                   event.target.value = event.target.value.slice(0, 50);
@@ -693,7 +731,7 @@ const FormularioDeRegistro = {
                 class: "custom-control-input",
                 type: "checkbox",
                 id: "checkboxEsputo",
-                disabled: obtenerDatos.habilitarCampos,
+                //disabled: obtenerDatos.habilitarCampos,
                 onclick: function (event) {
                   isEsputoSelected = event.target.checked;
                 },
@@ -709,7 +747,7 @@ const FormularioDeRegistro = {
                 class: "custom-control-input",
                 type: "checkbox",
                 id: "checkboxPanelViral",
-                disabled: obtenerDatos.habilitarCampos,
+                //disabled: obtenerDatos.habilitarCampos,
                 onclick: function (event) {
                   isPanelViralSelected = event.target.checked;
                 },
@@ -732,7 +770,7 @@ const FormularioDeRegistro = {
             class: "form-control",
             id: "textAreaObservacionClinica",
             rows: "3",
-            disabled: obtenerDatos.habilitarCampos,
+            //disabled: obtenerDatos.habilitarCampos,
             /* value: terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA != undefined ?
             terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA : '' : '', */
             //value: terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? terapiaRespiratoriaController.datosPorSecuencial.data[0].OBSERVACION_CLINICA : '',
@@ -749,7 +787,7 @@ const FormularioDeRegistro = {
             class: "form-control",
             id: "textAreaCriterio",
             rows: "3",
-            disabled: obtenerDatos.habilitarCampos,
+            //disabled: obtenerDatos.habilitarCampos,
           }),
         ]),
         m(
@@ -757,7 +795,7 @@ const FormularioDeRegistro = {
           {
             class: "btn btn-primary",
             type: "button",
-            disabled: obtenerDatos.habilitarCampos,
+            //disabled: obtenerDatos.habilitarCampos,
             onclick: function () {
               const valorPrescripcion = () => {
                 const valor = `${
@@ -862,7 +900,7 @@ const FormularioDeRegistro = {
             class: "btn btn-primary",
             //type: "submit",
             type: "button",
-            disabled: obtenerDatos.habilitarCampos,
+            //disabled: obtenerDatos.habilitarCampos,
             onclick: function () {
               console.log(Pedido.data.AT_MV);
               //console.log(terapiaRespiratoriaController.datosPorSecuencial.data[0].CD_SECUENCIAL);
@@ -875,7 +913,9 @@ const FormularioDeRegistro = {
         ),
       ]);
     } else {
-      return [m("p", "procesandoooo-...")];
+      return m("div", {"class":"alert alert-danger","role":"alert"}, 
+      "Lo sentimos, no se puede visualizar el formulario porque no tiene prescripción"
+    )
     }
   },
 };

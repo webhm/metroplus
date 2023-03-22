@@ -14,13 +14,13 @@ const Uploads = {
         fetch('https://api.hospitalmetropolitano.org/t/v1/procesos/tr/uploads?idTR=' + AuthTR.id, {
             method: "POST",
             body: postData,
-        }).then(function (response) {
+        }).then(function(response) {
             return response.json();
-        }).then(function (data) {
+        }).then(function(data) {
             console.log('data = ', data);
             alert('Proceso realizado con éxito.')
 
-        }).catch(function (err) {
+        }).catch(function(err) {
             console.error(err);
         });
 
@@ -42,59 +42,45 @@ const Uploads = {
                 Uploads.files.length == 0 ? [
                     m('p', 'No existe archivos.')
                 ] : Uploads.files.length > 0 ? [
-                    Uploads.files.map(function (_v, _i, _contentData) {
+                    Uploads.files.map(function(_v, _i, _contentData) {
 
                         return [
 
                             m("div.col-6.col-sm-4.col-md-3.col-xl-3.mg-b-5.mg-t-5",
-                                m("div.card.card-file",
-                                    [
-                                        m("div.dropdown-file",
-                                            [
-                                                m("a.dropdown-link[href=''][data-toggle='dropdown']",
-                                                    m("svg.feather.feather-more-vertical[xmlns='http://www.w3.org/2000/svg'][width='24'][height='24'][viewBox='0 0 24 24'][fill='none'][stroke='currentColor'][stroke-width='2'][stroke-linecap='round'][stroke-linejoin='round']",
-                                                        [
-                                                            m("circle[cx='12'][cy='12'][r='1']"),
-                                                            m("circle[cx='12'][cy='5'][r='1']"),
-                                                            m("circle[cx='12'][cy='19'][r='1']")
-                                                        ]
-                                                    )
-                                                ),
-                                                m("div.dropdown-menu.dropdown-menu-right",
-                                                    [
-
-
-                                                        m("a.dropdown-item.download[href='" + _v.url + "'][target='_blank']",
-                                                            [
-                                                                m("svg.feather.feather-download[xmlns='http://www.w3.org/2000/svg'][width='24'][height='24'][viewBox='0 0 24 24'][fill='none'][stroke='currentColor'][stroke-width='2'][stroke-linecap='round'][stroke-linejoin='round']",
-                                                                    [
-                                                                        m("path[d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4']"),
-                                                                        m("polyline[points='7 10 12 15 17 10']"),
-                                                                        m("line[x1='12'][y1='15'][x2='12'][y2='3']")
-                                                                    ]
-                                                                ),
-                                                                "Descargar"
-                                                            ]
-                                                        ),
-
-                                                    ]
-                                                )
-                                            ]
+                                m("div.card.card-file", [
+                                    m("div.dropdown-file", [
+                                        m("a.dropdown-link[href=''][data-toggle='dropdown']",
+                                            m("svg.feather.feather-more-vertical[xmlns='http://www.w3.org/2000/svg'][width='24'][height='24'][viewBox='0 0 24 24'][fill='none'][stroke='currentColor'][stroke-width='2'][stroke-linecap='round'][stroke-linejoin='round']", [
+                                                m("circle[cx='12'][cy='12'][r='1']"),
+                                                m("circle[cx='12'][cy='5'][r='1']"),
+                                                m("circle[cx='12'][cy='19'][r='1']")
+                                            ])
                                         ),
-                                        m("div.card-file-thumb.tx-danger",
-                                            m("i.far.fa-file-pdf")
+                                        m("div.dropdown-menu.dropdown-menu-right", [
+
+
+                                            m("a.dropdown-item.download[href='" + _v.url + "'][target='_blank']", [
+                                                m("svg.feather.feather-download[xmlns='http://www.w3.org/2000/svg'][width='24'][height='24'][viewBox='0 0 24 24'][fill='none'][stroke='currentColor'][stroke-width='2'][stroke-linecap='round'][stroke-linejoin='round']", [
+                                                    m("path[d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4']"),
+                                                    m("polyline[points='7 10 12 15 17 10']"),
+                                                    m("line[x1='12'][y1='15'][x2='12'][y2='3']")
+                                                ]),
+                                                "Descargar"
+                                            ]),
+
+                                        ])
+                                    ]),
+                                    m("div.card-file-thumb.tx-danger",
+                                        m("i.far.fa-file-pdf")
+                                    ),
+                                    m("div.card-body", [
+                                        m(".d-inline.tx-5",
+                                            _v.name
                                         ),
-                                        m("div.card-body",
-                                            [
-                                                m(".d-inline.tx-5",
-                                                    _v.name
-                                                ),
 
-                                            ]
-                                        )
+                                    ])
 
-                                    ]
-                                )
+                                ])
                             ),
 
 
@@ -185,30 +171,30 @@ const Observaciones = {
             destroy: true,
             columns: false,
             aoColumnDefs: [{
-                mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                },
-                visible: false,
-                aTargets: [0],
-                width: "1%",
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: false,
+                    aTargets: [0],
+                    width: "1%",
 
-                orderable: true,
-            }, {
-                mRender: function (data, type, row, meta) {
-                    return "";
+                    orderable: true,
+                }, {
+                    mRender: function(data, type, row, meta) {
+                        return "";
+                    },
+                    visible: true,
+                    width: "99%",
+                    aTargets: [1],
+                    orderable: false,
                 },
-                visible: true,
-                width: "99%",
-                aTargets: [1],
-                orderable: false,
-            },
 
             ],
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { },
-            drawCallback: function (settings) {
-                settings.aoData.map(function (_v, _i) {
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+            drawCallback: function(settings) {
+                settings.aoData.map(function(_v, _i) {
                     m.mount(_v.anCells[1], {
-                        view: function () {
+                        view: function() {
                             return m("div.demo-static-toast.wd-100p",
                                 m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
                                     "style": { "max-width": "none" }
@@ -291,29 +277,29 @@ const AuthTR = {
         AuthTR.activos = [];
         AuthTR.loader = true;
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id",
-            body: {
-                idTR: AuthTR.id,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id",
+                body: {
+                    idTR: AuthTR.id,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
                     AuthTR.loader = false;
                     AuthTR.data = result.data;
                     if (AuthTR.data.files !== false) {
                         Uploads.files = AuthTR.data.files;
                     }
-                    setTimeout(function () { Observaciones.fetch(); }, 100);
+                    setTimeout(function() { Observaciones.fetch(); }, 100);
                 } else {
                     AuthTR.error = result.message;
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
                 AuthTR.fetch();
             })
 
@@ -322,18 +308,18 @@ const AuthTR = {
         AuthTR.activos = [];
         AuthTR.loader = true;
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id-up",
-            body: {
-                idTR: AuthTR.id,
-                status: AuthTR.status,
-                obs: Observaciones.observaciones
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id-up",
+                body: {
+                    idTR: AuthTR.id,
+                    status: AuthTR.status,
+                    obs: Observaciones.observaciones
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
                     alert('Proceso realizado con éxito.');
                     window.location.reload();
@@ -342,7 +328,7 @@ const AuthTR = {
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
                 AuthTR.fetch();
             })
 
@@ -353,9 +339,9 @@ const AuthTR = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("contabilidad") }),
             m(SidebarTRoja, { oncreate: SidebarTRoja.setPage(32) }),
             m("div.content.content-components", {
-                style: { "margin-right": "0px" }
+                    style: { "margin-right": "0px" }
 
-            },
+                },
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
                 }, [
@@ -400,16 +386,21 @@ const AuthTR = {
                                 }, [
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
                                         m("span.pd-6.wd-100p.wd-md-20p.tx-15", {
-                                            class: "badge badge-success mg-b-2 mg-r-2",
+                                            class: (AuthTR.data.status < 0 ? "badge badge-danger mg-b-2 mg-r-2" : "badge badge-success mg-b-2 mg-r-2"),
                                         }, [
                                             m("i.fas.fa-file-alt.mg-r-5"),
                                         ], [
                                             (AuthTR.data.status == 1 ? 'Ingresada' : ''),
                                             (AuthTR.data.status == 2 ? 'Autorizado' : ''),
+                                            (AuthTR.data.status == -2 ? 'Rechazada' : ''),
                                             (AuthTR.data.status == 3 ? 'En Revisón Técnica' : ''),
+                                            (AuthTR.data.status == -3 ? 'Rechazada' : ''),
                                             (AuthTR.data.status == 4 ? 'En Revisón Contable' : ''),
+                                            (AuthTR.data.status == -4 ? 'Rechazada' : ''),
                                             (AuthTR.data.status == 5 ? 'Aprobada' : ''),
-                                            (AuthTR.data.status == -5 ? 'Rechazada' : '')
+                                            (AuthTR.data.status == -5 ? 'Rechazada' : ''),
+                                            (AuthTR.data.status >= 5 ? 'Aprobada' : '')
+
 
                                         ]),
 
@@ -436,13 +427,13 @@ const AuthTR = {
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6", "width": "25%" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6", "width": "25%" }
+                                                            },
                                                             "Fecha de Solicitud:"
                                                         ),
                                                         m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
 
                                                             m("input", { value: moment().format("dddd, DD-MM-Y"), "class": "form-control tx-semibold tx-15 tx-danger", "type": "text" })
 
@@ -455,14 +446,14 @@ const AuthTR = {
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Categoría:"
                                                         ),
                                                         m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -476,14 +467,14 @@ const AuthTR = {
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Sub. Categoría:"
                                                         ),
                                                         m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -509,13 +500,13 @@ const AuthTR = {
                                                 m("tbody", [
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Nombre:"
                                                         ),
                                                         m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -525,14 +516,14 @@ const AuthTR = {
                                                     ]),
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Marca:"
                                                         ),
                                                         m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -543,13 +534,13 @@ const AuthTR = {
                                                     ]),
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Modelo:"
                                                         ),
                                                         m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -564,14 +555,14 @@ const AuthTR = {
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Serie:"
                                                         ),
                                                         m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -591,8 +582,8 @@ const AuthTR = {
                                                     ]),
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Motivo de Baja:"
                                                         ),
                                                         m("td[colspan='7']", {
@@ -618,8 +609,8 @@ const AuthTR = {
                                                     ]),
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Acción Sugerida:"
                                                         ),
                                                         m("td[colspan='7']", {
@@ -646,14 +637,14 @@ const AuthTR = {
 
                                                     m("tr", [
                                                         m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Destino Final:"
                                                         ),
                                                         m("td[colspan='7']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                            },
 
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
@@ -669,13 +660,13 @@ const AuthTR = {
                                                     m("tr", [
 
                                                         m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
                                                             "Responsable:"
                                                         ),
                                                         m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
                                                             m("input", {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
@@ -701,14 +692,14 @@ const AuthTR = {
                                                     m("tr.d-print-none", [
 
                                                         m("td[colspan='10']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        },
+                                                            },
                                                             m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
                                                                 m("li.nav-item",
                                                                     m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-file-alt.pd-1.mg-r-2"),
 
                                                                         " Adjuntos ",
@@ -717,11 +708,10 @@ const AuthTR = {
                                                                         ] : [])
                                                                     )
                                                                 ),
-                                                                m("li.nav-item", {
-                                                                },
+                                                                m("li.nav-item", {},
                                                                     m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth0'][role='tab'][aria-controls='auth0']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                         " Observaciones ",
@@ -731,11 +721,11 @@ const AuthTR = {
                                                                     )
                                                                 ),
                                                                 m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 1 ? '' : 'd-none')
-                                                                },
-                                                                    m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth1'][role='tab'][aria-controls='auth1']", {
-                                                                        style: { "color": "#476ba3" }
+                                                                        class: (AuthTR.data.status == 1 ? '' : 'd-none')
                                                                     },
+                                                                    m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth1'][role='tab'][aria-controls='auth1']", {
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                         " Autorización "
@@ -743,11 +733,11 @@ const AuthTR = {
                                                                 ),
 
                                                                 m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 2 ? '' : 'd-none')
-                                                                },
-                                                                    m("a.nav-link[id='home-auth2'][data-toggle='tab'][href='#auth2'][role='tab'][aria-controls='auth2']", {
-                                                                        style: { "color": "#476ba3" }
+                                                                        class: (AuthTR.data.status == 2 ? '' : 'd-none')
                                                                     },
+                                                                    m("a.nav-link[id='home-auth2'][data-toggle='tab'][href='#auth2'][role='tab'][aria-controls='auth2']", {
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                         " Revisión Técnica "
@@ -755,12 +745,12 @@ const AuthTR = {
                                                                 ),
 
                                                                 m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 3 ? '' : 'd-none')
+                                                                        class: (AuthTR.data.status == 3 ? '' : 'd-none')
 
-                                                                },
-                                                                    m("a.nav-link[id='home-auth3'][data-toggle='tab'][href='#auth3'][role='tab'][aria-controls='auth3']", {
-                                                                        style: { "color": "#476ba3" }
                                                                     },
+                                                                    m("a.nav-link[id='home-auth3'][data-toggle='tab'][href='#auth3'][role='tab'][aria-controls='auth3']", {
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                         " Revisión Contable "
@@ -768,26 +758,25 @@ const AuthTR = {
                                                                 ),
 
                                                                 m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 4 ? '' : 'd-none')
+                                                                        class: (AuthTR.data.status == 4 ? '' : 'd-none')
 
-                                                                },
-                                                                    m("a.nav-link[id='home-auth4'][data-toggle='tab'][href='#auth4'][role='tab'][aria-controls='auth4']", {
-                                                                        style: { "color": "#476ba3" }
                                                                     },
+                                                                    m("a.nav-link[id='home-auth4'][data-toggle='tab'][href='#auth4'][role='tab'][aria-controls='auth4']", {
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                         " Aprobación Gerencia Contable "
                                                                     )
                                                                 ),
 
-                                                                m("li.nav-item",
-                                                                    {
+                                                                m("li.nav-item", {
                                                                         class: (AuthTR.data.status >= 5 ? '' : 'd-none')
 
                                                                     },
                                                                     m("a.nav-link[id='home-auth5'][data-toggle='tab'][href='#auth5'][role='tab'][aria-controls='auth5']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
                                                                         " USSA "
@@ -804,7 +793,7 @@ const AuthTR = {
 
                                                         m("td[colspan='9']", {
 
-                                                        },
+                                                            },
                                                             m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
                                                                 m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
                                                                     m(Uploads),
@@ -826,24 +815,24 @@ const AuthTR = {
                                                                             "Autorización",
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
+                                                                            oninput: function(e) { Observaciones.observaciones = e.target.value; },
                                                                             value: Observaciones.observaciones,
                                                                         }),
 
                                                                         m("div.mg-0.mg-t-5.text-right", [
 
                                                                             m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = 2;
                                                                                     AuthTR.updateStatus();
 
                                                                                 },
                                                                             }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                                m("i.fas.fa-paper-plane.mg-r-5", )
                                                                             ], "Autorizado"),
 
                                                                             m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = -2;
                                                                                     AuthTR.updateStatus();
                                                                                 },
@@ -862,24 +851,24 @@ const AuthTR = {
                                                                             "Autorización",
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
+                                                                            oninput: function(e) { Observaciones.observaciones = e.target.value; },
                                                                             value: Observaciones.observaciones,
                                                                         }),
 
                                                                         m("div.mg-0.mg-t-5.text-right", [
 
                                                                             m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = 3;
                                                                                     AuthTR.updateStatus();
                                                                                 },
                                                                             }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                                m("i.fas.fa-paper-plane.mg-r-5", )
                                                                             ], "Autorizado"),
 
                                                                             m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 3;
+                                                                                onclick: function() {
+                                                                                    AuthTR.status = -3;
                                                                                     AuthTR.updateStatus();
                                                                                 },
                                                                             }, [], "Rechazar"),
@@ -896,22 +885,22 @@ const AuthTR = {
                                                                             "Revisión Contabilidad",
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
+                                                                            oninput: function(e) { Observaciones.observaciones = e.target.value; },
                                                                             value: Observaciones.observaciones,
                                                                         }),
                                                                         m("div.mg-0.mg-t-5.text-right", [
 
                                                                             m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = 4;
                                                                                     AuthTR.updateStatus();
                                                                                 },
                                                                             }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                                m("i.fas.fa-paper-plane.mg-r-5", )
                                                                             ], "Aprobado"),
 
                                                                             m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = -4;
                                                                                     AuthTR.updateStatus();
                                                                                 },
@@ -930,22 +919,22 @@ const AuthTR = {
                                                                             "Aprobación Gerencia Contable",
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
+                                                                            oninput: function(e) { Observaciones.observaciones = e.target.value; },
                                                                             value: Observaciones.observaciones,
                                                                         }),
                                                                         m("div.mg-0.mg-t-5.text-right", [
 
                                                                             m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = 5;
                                                                                     AuthTR.updateStatus();
                                                                                 },
                                                                             }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                                m("i.fas.fa-paper-plane.mg-r-5", )
                                                                             ], "Aprobado"),
 
                                                                             m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = -5;
                                                                                     AuthTR.updateStatus();
                                                                                 },
@@ -964,18 +953,18 @@ const AuthTR = {
                                                                             "USSA",
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
+                                                                            oninput: function(e) { Observaciones.observaciones = e.target.value; },
                                                                             value: Observaciones.observaciones,
                                                                         }),
                                                                         m("div.mg-0.mg-t-5.text-right", [
 
                                                                             m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
+                                                                                onclick: function() {
                                                                                     AuthTR.status = 6;
                                                                                     AuthTR.updateStatus();
                                                                                 },
                                                                             }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
+                                                                                m("i.fas.fa-paper-plane.mg-r-5", )
                                                                             ], "Guardar"),
 
 

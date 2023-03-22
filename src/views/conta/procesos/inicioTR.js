@@ -14,7 +14,7 @@ const FOR005 = {
         let page = 0;
 
         if (Formulario.num == 0) {
-            setTimeout(function () {
+            setTimeout(function() {
                 Formulario.num = Formulario.data.length;
                 Formulario.parseFetch();
                 m.redraw.sync();
@@ -36,7 +36,7 @@ const FOR005 = {
             ),
         ] : [
 
-            FOR005.secs.map(function (_v, _i, _contentData) {
+            FOR005.secs.map(function(_v, _i, _contentData) {
 
                 if (_v.name == 'prescripciones_texto') {
 
@@ -92,9 +92,9 @@ const FOR005 = {
                                     ),
                                     m("th.tx-right[colspan='2'][scope='col']",
                                         m("a.tx-right.tx-semibold", {
-                                            href: urlFor,
-                                            target: "_blank"
-                                        },
+                                                href: urlFor,
+                                                target: "_blank"
+                                            },
                                             m('i.fas.fa-print.mg-r-2'),
                                             " Imprirmir  "
 
@@ -246,10 +246,10 @@ const FOR005 = {
                                     ),
                                     m("th[colspan='1'][scope='row']", { "style": { "padding": "0", "background-color": "#eef9c8" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                            "FIRMAR AL PIE DE",
-                                            m("br"),
-                                            "CADA PRESCRIPCIÓN"
-                                        ]
+                                                "FIRMAR AL PIE DE",
+                                                m("br"),
+                                                "CADA PRESCRIPCIÓN"
+                                            ]
 
                                         )
                                     ),
@@ -275,21 +275,21 @@ const FOR005 = {
                                     ),
                                     m("th[colspan='4'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                            "FARMACOTERAPIA E INDICACIONES",
-                                            m("br"),
-                                            "(PARA ENFERMERÍA Y OTRO PERSONAL)"
+                                                "FARMACOTERAPIA E INDICACIONES",
+                                                m("br"),
+                                                "(PARA ENFERMERÍA Y OTRO PERSONAL)"
 
-                                        ]
+                                            ]
 
                                         )
                                     ),
                                     m("th[colspan='2'][scope='row']", { "style": { "padding": "0", "background-color": "#edfbf5" } },
                                         m("div.m-0.p-0.tx-bold.text-center.", [
-                                            "ADMINISTR.",
-                                            m("br"),
-                                            "FÁRMACOS INSUMOS"
+                                                "ADMINISTR.",
+                                                m("br"),
+                                                "FÁRMACOS INSUMOS"
 
-                                        ]
+                                            ]
 
                                         )
                                     ),
@@ -338,11 +338,11 @@ const Formulario = {
     error: "",
     parseDoc: (_data) => {
 
-        Object.keys(_data.data).map(function (_v, _i, _contentData) {
+        Object.keys(_data.data).map(function(_v, _i, _contentData) {
             FOR005.secs.push(_data.data[_v])
         })
 
-        return FOR005.secs.map(function (_v, _i, _contentData) {
+        return FOR005.secs.map(function(_v, _i, _contentData) {
 
 
 
@@ -435,7 +435,7 @@ const Formulario = {
     parseFetch: () => {
         FOR005.secs = [];
 
-        return Formulario.data.map(function (_v, _i, _contentData) {
+        return Formulario.data.map(function(_v, _i, _contentData) {
             Formulario.parseDoc(Formulario.data[_i])
 
         })
@@ -447,14 +447,14 @@ const Formulario = {
         Formulario.data = [];
         Formulario.error = "";
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/t/v1/formulario?nhcl=" + Formulario.nhc + "&adm=" + Formulario.adm,
 
-            headers: {
-                "Authorization": localStorage.accessToken,
-            },
-        })
-            .then(function (result) {
+                headers: {
+                    "Authorization": localStorage.accessToken,
+                },
+            })
+            .then(function(result) {
                 if (result.length !== 0) {
                     Formulario.data = result;
                     Formulario.num = 0;
@@ -464,8 +464,8 @@ const Formulario = {
                 }
 
             })
-            .catch(function (e) {
-                setTimeout(function () { Formulario.fetch(); }, 5000);
+            .catch(function(e) {
+                setTimeout(function() { Formulario.fetch(); }, 5000);
 
             })
     },
@@ -568,13 +568,13 @@ const InicioTR = {
         InicioTR.activos = [];
         InicioTR.loader = true;
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
                     InicioTR.loader = false;
                     InicioTR.activos = result.data;
@@ -583,7 +583,7 @@ const InicioTR = {
                 }
 
             })
-            .catch(function (e) {
+            .catch(function(e) {
                 InicioTR.fetch();
             })
 
@@ -595,26 +595,26 @@ const InicioTR = {
         console.log('dd => ', InicioTR.data);
 
         m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/nueva",
-            body: {
-                fecha: moment().format('DD-MM-YYYY'),
-                accion_sugerida: InicioTR.data.accion_sugerida,
-                categoria: InicioTR.data.categoria,
-                marca: InicioTR.data.marca,
-                modelo: InicioTR.data.modelo,
-                motivo_baja: InicioTR.data.motivo_baja,
-                nombre: InicioTR.data.nombre,
-                serie: InicioTR.data.serie,
-                sub_categoria: InicioTR.data.sub_categoria,
-                usuario: InicioTR.data.usuario,
-                destino_final: InicioTR.data.destino_final,
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "POST",
+                url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/nueva",
+                body: {
+                    fecha: moment().format('DD-MM-YYYY'),
+                    accion_sugerida: InicioTR.data.accion_sugerida,
+                    categoria: InicioTR.data.categoria,
+                    marca: InicioTR.data.marca,
+                    modelo: InicioTR.data.modelo,
+                    motivo_baja: InicioTR.data.motivo_baja,
+                    nombre: InicioTR.data.nombre,
+                    serie: InicioTR.data.serie,
+                    sub_categoria: InicioTR.data.sub_categoria,
+                    usuario: InicioTR.data.usuario,
+                    destino_final: InicioTR.data.destino_final,
+                },
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 if (result.status) {
                     alert('Proceso realizado con éxito');
                     alert('Tarjeta Roja N°: ' + result.idTR);
@@ -624,11 +624,12 @@ const InicioTR = {
                     InicioTR.error = result.message;
                 }
             })
-            .catch(function (e) {
+            .catch(function(e) {
                 InicioTR.fetch();
             })
 
     },
+
 
     view: (_data) => {
 
@@ -667,85 +668,71 @@ const InicioTR = {
                         "Inicio:"
                     ),
                     m("div", [
-                        m("div.row.tx-14",
-                            [
-                                m("div.col-sm-4",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.ht-sm-300.d-flex.flex-column.justify-content-end",
-                                        [
-                                            m("div.mg-b-25",
-                                                m('i.fas.fa-search.tx-100.tx-success')
-                                            ),
-                                            m("h5.tx-inverse.mg-b-20",
-                                                "Consultar Status"
-                                            ),
-                                            m("p.mg-b-20",
-                                                "Nueva Tarjeta Roja Beta v1.0"
-                                            ),
-                                            m("a.tx-medium", {
-                                                href: "/contabilidad/proceso/tarjeta-roja/consultar"
-                                            },
-                                                [
-                                                    "Ir a Consultar Status ",
-                                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                                ]
-                                            )
-                                        ]
-                                    )
-                                ),
+                        m("div.row.tx-14", [
+                            m("div.col-sm-4",
+                                m("div.bg-white.bd.pd-20.pd-lg-30.ht-sm-300.d-flex.flex-column.justify-content-end", [
+                                    m("div.mg-b-25",
+                                        m('i.fas.fa-search.tx-100.tx-success')
+                                    ),
+                                    m("h5.tx-inverse.mg-b-20",
+                                        "Consultar Status"
+                                    ),
+                                    m("p.mg-b-20",
+                                        "Nueva Tarjeta Roja Beta v1.0"
+                                    ),
+                                    m("a.tx-medium", {
+                                        href: "/contabilidad/proceso/tarjeta-roja/consultar"
+                                    }, [
+                                        "Ir a Consultar Status",
+                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                    ])
+                                ])
+                            ),
 
-                                m("div.col-sm-4",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.ht-sm-300.d-flex.flex-column.justify-content-end",
-                                        [
-                                            m("div.mg-b-25",
-                                                m('i.fas.fa-file.tx-100.tx-primary')
+                            m("div.col-sm-4",
+                                m("div.bg-white.bd.pd-20.pd-lg-30.ht-sm-300.d-flex.flex-column.justify-content-end", [
+                                    m("div.mg-b-25",
+                                        m('i.fas.fa-file.tx-100.tx-primary')
 
-                                            ),
-                                            m("h5.tx-inverse.mg-b-20",
-                                                "Nueva Tarjeta"
-                                            ),
-                                            m("p.mg-b-20",
-                                                "Nueva Tarjeta Roja Beta v1.0"
-                                            ),
-                                            m("a.tx-medium", {
-                                                href: "/contabilidad/proceso/tarjeta-roja/nueva"
+                                    ),
+                                    m("h5.tx-inverse.mg-b-20",
+                                        "Nueva Tarjeta"
+                                    ),
+                                    m("p.mg-b-20",
+                                        "Nueva Tarjeta Roja Beta v1.0"
+                                    ),
+                                    m("a.tx-medium", {
+                                        href: "/contabilidad/proceso/tarjeta-roja/nueva"
 
-                                            },
-                                                [
-                                                    "Ir a Nueva Tarjeta",
-                                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                                ]
-                                            )
-                                        ]
-                                    )
-                                ),
-                                m("div.col-sm-4",
-                                    m("div.bg-white.bd.pd-20.pd-lg-30.ht-sm-300.d-flex.flex-column.justify-content-end",
-                                        [
-                                            m("div.mg-b-25",
-                                                m('i.fas.fa-check.tx-100.tx-primary')
+                                    }, [
+                                        "Ir a Nueva Tarjeta",
+                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                    ])
+                                ])
+                            ),
+                            m("div.col-sm-4",
+                                m("div.bg-white.bd.pd-20.pd-lg-30.ht-sm-300.d-flex.flex-column.justify-content-end", [
+                                    m("div.mg-b-25",
+                                        m('i.fas.fa-check.tx-100.tx-primary')
 
-                                            ),
-                                            m("h5.tx-inverse.mg-b-20",
-                                                "Autorizaciones"
-                                            ),
-                                            m("p.mg-b-20",
-                                                "Nueva Tarjeta Roja Beta v1.0"
-                                            ),
-                                            m("a.tx-medium", {
-                                                href: "/contabilidad/proceso/tarjeta-roja/autorizaciones"
+                                    ),
+                                    m("h5.tx-inverse.mg-b-20",
+                                        "Autorizaciones"
+                                    ),
+                                    m("p.mg-b-20",
+                                        "Nueva Tarjeta Roja Beta v1.0"
+                                    ),
+                                    m("a.tx-medium", {
+                                        href: "/contabilidad/proceso/tarjeta-roja/autorizaciones"
 
-                                            },
-                                                [
-                                                    "Ir Autorizaciones",
-                                                    m("i.icon.ion-md-arrow-forward.mg-l-5")
-                                                ]
-                                            )
-                                        ]
-                                    )
-                                )
+                                    }, [
+                                        "Ir Autorizaciones",
+                                        m("i.icon.ion-md-arrow-forward.mg-l-5")
+                                    ])
+                                ])
+                            )
 
-                            ]
-                        )
+                        ])
 
                     ]),
                     m("h6.tx-light.mg-t-20.mg-b-10",

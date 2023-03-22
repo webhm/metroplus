@@ -503,72 +503,7 @@ const Formulario = {
     },
 }
 
-const Uploads = {
-    data: [],
-    detalle: [],
-    error: "",
-    showFor: "",
-    fetch: () => {
-        Uploads.data = [];
-        Uploads.error = "";
-        m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/ev-paciente",
-            body: {
-                numeroHistoriaClinica: NuevaTRoja.data.CD_PACIENTE + '01'
-            },
-            headers: {
-                "Authorization": localStorage.accessToken,
-            },
-        })
-            .then(function (result) {
 
-
-
-                if (result.status) {
-                    Uploads.data = result.data;
-                    Formulario.adm = Uploads.data[0].ADM;
-                    Formulario.nhc = Uploads.data[0].NHCL;
-                    Formulario.fetch();
-                } else {
-                    Uploads.error = result.message;
-                }
-
-            })
-            .catch(function (e) {
-                setTimeout(function () { Uploads.fetch(); }, 5000);
-
-            })
-    },
-    oncreate: () => {
-        const upload = new FileUploadWithPreview.FileUploadWithPreview("myFirstImage", {
-            text: {
-                label: '',
-                chooseFile: 'Elejir archiv...',
-                browse: 'Explorar',
-                selectedCount: 'archivos seleccionados.'
-            },
-            maxFileCount: 4,
-            showDeleteButtonOnImages: true,
-            multiple: true
-
-        });
-        upload.clearButton.title = "Vaciar";
-
-
-        console.log("upload", upload);
-    },
-
-    view: () => {
-
-        return [
-            m(".ht-auto.custom-file-container[data-upload-id='myFirstImage']")
-        ];
-
-
-
-    },
-}
 
 
 
@@ -601,6 +536,7 @@ const DestinoFinal = {
 
 
 const NuevaTRoja = {
+    id: null,
     data: [],
     activos: [],
     examenes: [],
@@ -678,7 +614,9 @@ const NuevaTRoja = {
             .then(function (result) {
                 if (result.status) {
                     alert('Proceso realizado con éxito');
-                    window.location.reload();
+                    alert('Tarjeta Roja N°: HM-' + result.idTR);
+                    NuevaTRoja.id = result.idTR;
+                    m.route.set('/contabilidad/proceso/tarjeta-roja/status/?tr=' + NuevaTRoja.id + '&track=view');
                 } else {
                     NuevaTRoja.error = result.message;
                 }
@@ -724,326 +662,336 @@ const NuevaTRoja = {
 
 
                                         m('div.table-responsive', [
-                                            m("table.table.table-bordered.table-sm.tx-12", [
-                                                m("thead",
 
-                                                    m("tr.bg-litecoin.op-9.tx-white", [
-                                                        m("th[scope='col'][colspan='10']",
-                                                            "DATOS SOLICITUD:"
-                                                        ),
+                                            m('form', {
+                                            }, [
+                                                m("table.table.table-bordered.table-sm.tx-12", [
+                                                    m("thead",
 
-                                                    ])
-                                                ),
-                                                m("tbody", [
-                                                    m("tr", [
+                                                        m("tr.bg-litecoin.op-9.tx-white", [
+                                                            m("th[scope='col'][colspan='10']",
+                                                                "DATOS SOLICITUD:"
+                                                            ),
 
-                                                        m("th.tx-semibold.tx-14[colspan='4'][width='20%']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Fecha de Solicitud:"
-                                                        ),
-                                                        m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
+                                                        ])
+                                                    ),
+                                                    m("tbody", [
+                                                        m("tr", [
 
-                                                            m("input", { value: moment().format("dddd, DD-MM-Y"), "class": "form-control tx-semibold tx-15 tx-danger", "type": "text" })
+                                                            m("th.tx-semibold.tx-14[colspan='4'][width='20%']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Fecha de Solicitud:"
+                                                            ),
+                                                            m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
 
-
-                                                        ),
-
-                                                    ]),
-
-                                                    m("tr", [
-
-                                                        m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Categoría:"
-                                                        ),
-                                                        m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.categoria = e.target.options[e.target.options.selectedIndex].value;
-                                                                    NuevaTRoja.data.id_categoria = e.target.options[e.target.options.selectedIndex].id;
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), NuevaTRoja.activos.activos.map(x =>
-                                                                m('option', {
-                                                                    id: x.cod_class,
-                                                                    value: x.class,
-                                                                }, x.class)
-                                                            ))
-                                                        )
+                                                                m("input", { value: moment().format("dddd, DD-MM-Y"), "class": "form-control tx-semibold tx-15 tx-danger", "type": "text" })
 
 
-                                                    ]),
-                                                    m("tr", [
+                                                            ),
 
-                                                        m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Sub. Categoría:"
-                                                        ),
-                                                        m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        ]),
 
-                                                        },
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.id_sub_categoria = e.target.options[e.target.options.selectedIndex].id;
-                                                                    NuevaTRoja.data.sub_categoria = e.target.options[e.target.options.selectedIndex].value;
-                                                                    console.log('data => ', NuevaTRoja.data);
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), NuevaTRoja.activos.subActivos.map(x =>
-                                                            (x.cod_class == NuevaTRoja.data.id_categoria ? [
-                                                                m('option', {
-                                                                    value: x.class,
-                                                                    id: x.cod_class
-                                                                },
-                                                                    x.class
-                                                                )
-                                                            ] : [])
-                                                            ))
-                                                        )
+                                                        m("tr", [
+
+                                                            m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Categoría:"
+                                                            ),
+                                                            m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                                m('select.tx-semibold', {
+                                                                    onchange: (e) => {
+                                                                        NuevaTRoja.data.categoria = e.target.options[e.target.options.selectedIndex].value;
+                                                                        NuevaTRoja.data.id_categoria = e.target.options[e.target.options.selectedIndex].id;
+                                                                    },
+                                                                    class: "custom-select"
+                                                                }, m('option', 'Seleccione...'), NuevaTRoja.activos.activos.map(x =>
+                                                                    m('option', {
+                                                                        id: x.cod_class,
+                                                                        value: x.class,
+                                                                    }, x.class)
+                                                                ))
+                                                            )
 
 
-                                                    ]),
+                                                        ]),
+                                                        m("tr", [
+
+                                                            m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Sub. Categoría:"
+                                                            ),
+                                                            m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                                m('select.tx-semibold', {
+                                                                    onchange: (e) => {
+                                                                        NuevaTRoja.data.id_sub_categoria = e.target.options[e.target.options.selectedIndex].id;
+                                                                        NuevaTRoja.data.sub_categoria = e.target.options[e.target.options.selectedIndex].value;
+                                                                        console.log('data => ', NuevaTRoja.data);
+                                                                    },
+                                                                    class: "custom-select"
+                                                                }, m('option', 'Seleccione...'), NuevaTRoja.activos.subActivos.map(x =>
+                                                                (x.cod_class == NuevaTRoja.data.id_categoria ? [
+                                                                    m('option', {
+                                                                        value: x.class,
+                                                                        id: x.cod_class
+                                                                    },
+                                                                        x.class
+                                                                    )
+                                                                ] : [])
+                                                                ))
+                                                            )
 
 
-                                                ]),
-                                                m("thead",
-
-                                                    m("tr.bg-litecoin.op-9.tx-white", [
-                                                        m("th[scope='col'][colspan='10']",
-                                                            "DATOS DEL EQUIPO:"
-                                                        ),
-
-                                                    ])
-                                                ),
-                                                m("tbody", [
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Nombre:"
-                                                        ),
-                                                        m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
-                                                            m("input", {
-                                                                "class": "form-control tx-semibold tx-14",
-                                                                "type": "text",
-                                                                "placeholder": "Nombre",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.nombre = e.target.value;
-                                                                }
-                                                            })
-                                                        )
-                                                    ]),
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Marca:"
-                                                        ),
-                                                        m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-                                                            m("input", {
-                                                                "class": "form-control tx-semibold tx-14",
-                                                                "type": "text",
-                                                                "placeholder": "Marca",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.marca = e.target.value;
-                                                                }
-                                                            })
-
-                                                        ),
-                                                    ]),
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Modelo:"
-                                                        ),
-                                                        m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
-                                                            m("input", {
-                                                                "class": "form-control tx-semibold tx-14",
-                                                                "type": "text",
-                                                                "placeholder": "Modelo",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.modelo = e.target.value;
-                                                                }
-                                                            })
-                                                        )
-
-
-                                                    ]),
-
-                                                    m("tr", [
-
-                                                        m("th.tx-semibold.tx-14[colspan='1']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Serie:"
-                                                        ),
-                                                        m("td[colspan='9']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-                                                            m("input", {
-                                                                "class": "form-control tx-semibold tx-14",
-                                                                "type": "text",
-                                                                "placeholder": "Serie",
-                                                                oninput: (e) => {
-                                                                    NuevaTRoja.data.serie = e.target.value;
-                                                                }
-                                                            })
-
-                                                        ),
-
-
-
-                                                    ]),
-
-                                                    m("tr.bg-litecoin.op-9.tx-white", [
-                                                        m("th[scope='col'][colspan='10']",
-                                                            "MOTIVO DE BAJA:"
-                                                        )
-                                                    ]),
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Motivo de Baja:"
-                                                        ),
-                                                        m("td[colspan='7']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        }, [
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.id_motivo_baja = e.target.options[e.target.options.selectedIndex].id;
-                                                                    NuevaTRoja.data.motivo_baja = e.target.options[e.target.options.selectedIndex].value;
-                                                                    console.log('data => ', NuevaTRoja.data);
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), [
-                                                                { label: 'NO SE UTILIZA', value: 'NO_SE_UTILIZA' },
-                                                                { label: 'RENOVACIÓN', value: 'RENOVACION' },
-                                                                { label: 'RENOVACIÓN EQUIPO DE COMPUTO', value: 'RENOVACION_EQ_COMPUTO' },
-                                                                { label: 'DAÑO', value: 'DAÑO' },
-                                                                { label: 'PERDIDA', value: 'PERDIDA' }
-                                                            ].map(x =>
-                                                                m('option', {
-                                                                    id: x.value,
-                                                                    value: x.label
-                                                                }, x.label)
-                                                            ))
                                                         ]),
 
 
                                                     ]),
+                                                    m("thead",
 
-                                                    m("tr.bg-litecoin.op-9.tx-white.", [
-                                                        m("th[scope='col'][colspan='10']",
-                                                            "ACCIÓN SUGERIDA:"
-                                                        ),
+                                                        m("tr.bg-litecoin.op-9.tx-white", [
+                                                            m("th[scope='col'][colspan='10']",
+                                                                "DATOS DEL EQUIPO:"
+                                                            ),
 
-                                                    ]),
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Acción Sugerida:"
-                                                        ),
-                                                        m("td[colspan='7']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                        ])
+                                                    ),
+                                                    m("tbody", [
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='1']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Nombre:"
+                                                            ),
+                                                            m("td[colspan='9']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+                                                                m("input", {
+                                                                    "class": "form-control tx-semibold tx-14",
+                                                                    "type": "text",
+                                                                    "placeholder": "Nombre",
+                                                                    oninput: (e) => {
+                                                                        NuevaTRoja.data.nombre = e.target.value;
+                                                                    }
+                                                                })
+                                                            )
+                                                        ]),
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='1']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Marca:"
+                                                            ),
+                                                            m("td[colspan='9']", {
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                        }, [
-                                                            m('select.tx-semibold', {
-                                                                onchange: (e) => {
-                                                                    NuevaTRoja.data.accion_sugerida = e.target.value;
-                                                                },
-                                                                class: "custom-select"
-                                                            }, m('option', 'Seleccione...'), NuevaTRoja.activos.motivos.map(x =>
-                                                            (x.motivo_baja == NuevaTRoja.data.id_motivo_baja ? [m('option', {
-                                                                value: x.accion_sugerida
-                                                            }, x.accion_sugerida.replace('_', ' '))] : [])
-                                                            ))
+                                                            },
+                                                                m("input", {
+                                                                    "class": "form-control tx-semibold tx-14",
+                                                                    "type": "text",
+                                                                    "placeholder": "Marca",
+                                                                    oninput: (e) => {
+                                                                        NuevaTRoja.data.marca = e.target.value;
+                                                                    }
+                                                                })
+
+                                                            ),
+                                                        ]),
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='1']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Modelo:"
+                                                            ),
+                                                            m("td[colspan='9']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+                                                                m("input", {
+                                                                    "class": "form-control tx-semibold tx-14",
+                                                                    "type": "text",
+                                                                    "placeholder": "Modelo",
+                                                                    oninput: (e) => {
+                                                                        NuevaTRoja.data.modelo = e.target.value;
+                                                                    }
+                                                                })
+                                                            )
+
+
                                                         ]),
 
+                                                        m("tr", [
 
-                                                    ]),
-                                                    m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
-                                                        m("th[scope='col'][colspan='10']",
-                                                            "OBSERVACIÓN:"
-                                                        ),
+                                                            m("th.tx-semibold.tx-14[colspan='1']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Serie:"
+                                                            ),
+                                                            m("td[colspan='9']", {
+                                                                style: { "background-color": "#eaeff5" }
 
-                                                    ]),
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Observación:"
-                                                        ),
-                                                        m("td[colspan='7']", {
-                                                            style: { "background-color": "#eaeff5" }
+                                                            },
+                                                                m("input", {
+                                                                    "class": "form-control tx-semibold tx-14",
+                                                                    "type": "text",
+                                                                    "placeholder": "Serie",
+                                                                    oninput: (e) => {
+                                                                        NuevaTRoja.data.serie = e.target.value;
+                                                                    }
+                                                                })
 
-                                                        },
-                                                            m('div.tx-justify', {}, NuevaTRoja.activos.motivos.map(x =>
-                                                            (x.motivo_baja == NuevaTRoja.data.id_motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
-                                                                m('p.tx-15.tx-semibold.tx-danger', x.obs)
-                                                            ] : [])
-                                                            ))
-                                                        ),
-                                                    ]),
-
-                                                    m("tr", [
-                                                        m("th.tx-semibold.tx-14[colspan='3']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Destino Final:"
-                                                        ),
-                                                        m("td[colspan='7']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-
-                                                            m('div', {}, NuevaTRoja.activos.motivos.map(x =>
-                                                            (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
-                                                                m(DestinoFinal, { destino_final: x.destino_final })
-                                                            ] : [])
-                                                            ))
-
-                                                        ),
+                                                            ),
 
 
-                                                    ]),
-                                                    m("tr", [
 
-                                                        m("th.tx-semibold.tx-14[colspan='4']", {
-                                                            style: { "background-color": "#a8bed6" }
-                                                        },
-                                                            "Responsable:"
-                                                        ),
-                                                        m("td[colspan='6']", {
-                                                            style: { "background-color": "#eaeff5" }
-                                                        },
-                                                            (NuevaTRoja.data.usuario !== undefined ? [
-                                                                m("div.input-group", [
-                                                                    m("input.form-control[type='text'][disabled='disabled'][placeholder='Usuario Responsable']", {
-                                                                        value: NuevaTRoja.data.usuario,
-                                                                    }),
-                                                                    m("div.input-group-append",
-                                                                        m("button.btn.btn-primary[type='button']", {
+                                                        ]),
+
+                                                        m("tr.bg-litecoin.op-9.tx-white", [
+                                                            m("th[scope='col'][colspan='10']",
+                                                                "MOTIVO DE BAJA:"
+                                                            )
+                                                        ]),
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Motivo de Baja:"
+                                                            ),
+                                                            m("td[colspan='7']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            }, [
+                                                                m('select.tx-semibold', {
+                                                                    onchange: (e) => {
+                                                                        NuevaTRoja.data.id_motivo_baja = e.target.options[e.target.options.selectedIndex].id;
+                                                                        NuevaTRoja.data.motivo_baja = e.target.options[e.target.options.selectedIndex].value;
+                                                                        console.log('data => ', NuevaTRoja.data);
+                                                                    },
+                                                                    class: "custom-select"
+                                                                }, m('option', 'Seleccione...'), [
+                                                                    { label: 'NO SE UTILIZA', value: 'NO_SE_UTILIZA' },
+                                                                    { label: 'RENOVACIÓN', value: 'RENOVACION' },
+                                                                    { label: 'RENOVACIÓN EQUIPO DE COMPUTO', value: 'RENOVACION_EQ_COMPUTO' },
+                                                                    { label: 'DAÑO', value: 'DAÑO' },
+                                                                    { label: 'PERDIDA', value: 'PERDIDA' }
+                                                                ].map(x =>
+                                                                    m('option', {
+                                                                        id: x.value,
+                                                                        value: x.label
+                                                                    }, x.label)
+                                                                ))
+                                                            ]),
+
+
+                                                        ]),
+
+                                                        m("tr.bg-litecoin.op-9.tx-white.", [
+                                                            m("th[scope='col'][colspan='10']",
+                                                                "ACCIÓN SUGERIDA:"
+                                                            ),
+
+                                                        ]),
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Acción Sugerida:"
+                                                            ),
+                                                            m("td[colspan='7']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            }, [
+                                                                m('select.tx-semibold', {
+                                                                    onchange: (e) => {
+                                                                        NuevaTRoja.data.accion_sugerida = e.target.value;
+                                                                    },
+                                                                    class: "custom-select"
+                                                                }, m('option', 'Seleccione...'), NuevaTRoja.activos.motivos.map(x =>
+                                                                (x.motivo_baja == NuevaTRoja.data.id_motivo_baja ? [m('option', {
+                                                                    value: x.accion_sugerida
+                                                                }, x.accion_sugerida.replace('_', ' '))] : [])
+                                                                ))
+                                                            ]),
+
+
+                                                        ]),
+                                                        m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                                            m("th[scope='col'][colspan='10']",
+                                                                "OBSERVACIÓN:"
+                                                            ),
+
+                                                        ]),
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Observación:"
+                                                            ),
+                                                            m("td[colspan='7']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                                m('div.tx-justify', {}, NuevaTRoja.activos.motivos.map(x =>
+                                                                (x.motivo_baja == NuevaTRoja.data.id_motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
+                                                                    m('p.tx-15.tx-semibold.tx-danger', x.obs)
+                                                                ] : [])
+                                                                ))
+                                                            ),
+                                                        ]),
+
+                                                        m("tr", [
+                                                            m("th.tx-semibold.tx-14[colspan='3']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Destino Final:"
+                                                            ),
+                                                            m("td[colspan='7']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+
+                                                                m('div', {}, NuevaTRoja.activos.motivos.map(x =>
+                                                                (x.motivo_baja == NuevaTRoja.data.motivo_baja && x.accion_sugerida == NuevaTRoja.data.accion_sugerida ? [
+                                                                    m(DestinoFinal, { destino_final: x.destino_final })
+                                                                ] : [])
+                                                                ))
+
+                                                            ),
+
+
+                                                        ]),
+                                                        m("tr", [
+
+                                                            m("th.tx-semibold.tx-14[colspan='4']", {
+                                                                style: { "background-color": "#a8bed6" }
+                                                            },
+                                                                "Responsable:"
+                                                            ),
+                                                            m("td[colspan='6']", {
+                                                                style: { "background-color": "#eaeff5" }
+                                                            },
+                                                                m('p.mg-b-0', '*Ingrese Usuario y Contraseña de Directorio Activo (AD), THConmigo etc.'),
+                                                                (NuevaTRoja.data.usuario !== undefined ? [
+                                                                    m("div.input-group", [
+
+                                                                        m("textarea[rows='3']", {
+                                                                            "class": "form-control tx-semibold tx-14",
+                                                                            "disabled": "disabled",
+                                                                        },
+                                                                            NuevaTRoja.data.usuario
+                                                                        ),
+
+                                                                    ]),
+                                                                    m("div.input-group.mg-t-5",
+                                                                        m("button.btn.btn-primary.btn-block.tx-semibold[type='button']", {
                                                                             onclick: (e) => {
                                                                                 NuevaTRoja.sendDataTR();
 
@@ -1052,15 +1000,15 @@ const NuevaTRoja = {
                                                                             "Enviar"
                                                                         )
                                                                     )
-                                                                ])
-                                                            ] : [
-                                                                m("div",
-                                                                    (NuevaTRoja.autorizado ? [
-                                                                        m("div.input-group", [
-                                                                            m("input.form-control[type='text'][placeholder='Correo Electrónico'][autofocus='true']"),
-                                                                            m("input.form-control[type='password'][placeholder='Contraseña']"),
-                                                                            m("div.input-group-append",
-                                                                                m("button.btn.btn-primary[type='button']", {
+                                                                ] : [
+                                                                    m("div",
+                                                                        (NuevaTRoja.autorizado ? [
+                                                                            m("div.input-group", [
+                                                                                m("input.form-control[type='text'][placeholder='Correo Electrónico'][autofocus='true']"),
+                                                                                m("input.form-control[type='password'][placeholder='Contraseña']"),
+                                                                            ]),
+                                                                            m("div.input-group.mg-t-5",
+                                                                                m("button.btn.btn-primary.btn-block[type='button']", {
                                                                                     onclick: (e) => {
                                                                                         alert('Usuario validado con éxito');
                                                                                         NuevaTRoja.data.usuario = 'CHANG CHAVEZ MARTIN FRANCISCO - ANALISTA PROGRAMADOR ERP-MV SOUL - IMPLEMENTACION ERP MV SOUL (009333000)';
@@ -1069,82 +1017,83 @@ const NuevaTRoja = {
                                                                                     "Validar"
                                                                                 )
                                                                             )
+                                                                        ] : [
+                                                                            m("button.btn.btn-xs.btn-block.btn-outline-light[type='button']", {
+                                                                                onclick: (e) => {
+                                                                                    NuevaTRoja.autorizado = true;
+                                                                                }
+                                                                            },
+                                                                                m("i.fas.fa-edit.pd-1.mg-r-2"),
+                                                                                "Firma de Responsabilidad"
+                                                                            ),
                                                                         ])
-                                                                    ] : [
-                                                                        m("button.btn.btn-xs.btn-block.btn-outline-light[type='button']", {
-                                                                            onclick: (e) => {
-                                                                                NuevaTRoja.autorizado = true;
-                                                                            }
-                                                                        },
-                                                                            m("i.fas.fa-edit.pd-1.mg-r-2"),
-                                                                            "Firma de Responsabilidad"
-                                                                        ),
-                                                                    ])
 
 
-                                                                )
-                                                            ])
-
-
-
-
-
-
-                                                        ),
-
-                                                    ]),
-                                                    // INCLUIR AREA DE DEST Y DESTINO FINAL.
-                                                    m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
-                                                        m("th[scope='col'][colspan='10']",
-                                                            "ADJUNTOS:"
-                                                        ),
-
-                                                    ]),
-                                                    m("tr.d-print-none", [
-
-                                                        m("td[colspan='10']", {
-                                                            style: { "background-color": "#eaeff5" }
-
-                                                        },
-                                                            m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
-                                                                m("li.nav-item",
-                                                                    m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                        m("i.fas.fa-file-alt.pd-1.mg-r-2"),
-
-                                                                        " Adjuntos "
                                                                     )
-                                                                ),
+                                                                ])
 
 
-                                                            ]),
-                                                        ),
 
 
-                                                    ]),
-                                                    m("tr.d-print-none", [
 
-                                                        m("td[colspan='9']", {
 
-                                                        },
-                                                            m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
-                                                                m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
-                                                                    m(Uploads),
+                                                            ),
+
+                                                        ]),
+                                                        // INCLUIR AREA DE DEST Y DESTINO FINAL.
+                                                        m("tr.d-print-none.bg-litecoin.op-9.tx-white.", [
+                                                            m("th[scope='col'][colspan='10']",
+                                                                "ADJUNTOS:"
+                                                            ),
+
+                                                        ]),
+                                                        m("tr.d-print-none", [
+
+                                                            m("td[colspan='10']", {
+                                                                style: { "background-color": "#eaeff5" }
+
+                                                            },
+                                                                m("ul.nav.nav-tabs[id='myTab'][role='tablist']", [
+                                                                    m("li.nav-item",
+                                                                        m("a.nav-link[id='home-tab'][data-toggle='tab'][href='#home'][role='tab'][aria-controls='home'][aria-selected='true']", {
+                                                                            style: { "color": "#476ba3" }
+                                                                        },
+                                                                            m("i.fas.fa-file-alt.pd-1.mg-r-2"),
+
+                                                                            " Adjuntos "
+                                                                        )
+                                                                    ),
+
+
                                                                 ]),
+                                                            ),
 
 
-                                                            ])
-                                                        ),
+                                                        ]),
+                                                        m("tr.d-print-none", [
+
+                                                            m("td[colspan='9']", {
+
+                                                            },
+                                                                m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
+                                                                    m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
+                                                                        m('p.tx-semibold', 'Una vez generada su información podrá adjuntar archivos a esta solicitud.'),
+                                                                    ]),
 
 
-                                                    ]),
-                                                    m("tr.d-print-none", [
+                                                                ])
+                                                            ),
 
-                                                    ]),
 
+                                                        ]),
+                                                        m("tr.d-print-none", [
+
+                                                        ]),
+
+                                                    ])
                                                 ])
                                             ])
+
                                         ]),
 
 
@@ -1169,6 +1118,103 @@ const NuevaTRoja = {
 
                 ])
             ),
+            m("div.section-nav", [
+                m("label.nav-label",
+                    "Nueva Tarjeta Roja"
+                ),
+                m("div.mg-t-10.mg-b-10.bg-white", {
+
+                },
+
+                    m('a', {
+                        href: '/contabilidad/proceso/tarjeta-roja/buscar'
+
+                    }, [
+                        m("div.mg-t-10.bg-white",
+                            m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                                m("h6.lh-5.mg-b-5",
+                                    "Consultar Status"
+                                ),
+
+                            ]),
+                            m("div.card-body.pd-0", [
+                                m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                    m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                        m('i.fas.fa-search.tx-40.tx-success')
+                                    ),
+                                    m("div", [
+
+                                        m("divv.lh-0.tx-gray-300", 'Tarjeta Roja')
+                                    ])
+
+                                ]),
+
+                            ])
+                        )
+
+                    ]),
+                    m('a', {
+                        href: '/contabilidad/proceso/tarjeta-roja/nueva'
+
+                    }, [
+                        m("div.mg-t-10.bg-white",
+                            m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                                m("h6.lh-5.mg-b-5",
+                                    "Nueva Tarjeta"
+                                ),
+
+                            ]),
+                            m("div.card-body.pd-0", [
+                                m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                    m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                        m('i.fas.fa-file.tx-40.tx-primary')
+                                    ),
+                                    m("div", [
+
+                                        m("divv.lh-0.tx-gray-300", 'Tarjeta Roja')
+                                    ])
+
+                                ]),
+
+                            ])
+                        )
+
+                    ]),
+                    m('a', {
+                        href: '/contabilidad/proceso/tarjeta-roja/autorizaciones'
+
+                    }, [
+                        m("div.mg-t-10.bg-white",
+                            m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                                m("h6.lh-5.mg-b-5",
+                                    "Autorizaciones"
+                                ),
+
+                            ]),
+                            m("div.card-body.pd-0", [
+                                m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                    m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                        m('i.fas.fa-check.tx-40.tx-primary')
+                                    ),
+                                    m("div", [
+
+                                        m("divv.lh-0.tx-gray-300", 'Tarjeta Roja')
+                                    ])
+
+                                ]),
+
+                            ])
+                        )
+
+                    ]),
+                    m('br')
+
+
+
+
+                ),
+
+            ])
 
         ];
 

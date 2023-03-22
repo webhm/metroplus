@@ -63,6 +63,8 @@ import DetalleCita from '../views/imagen/agenda/detalleCita'
 import NuevaCita from '../views/imagen/agenda/nuevaCita'
 import AuthTR from '../views/conta/procesos/autorizarTR'
 import AutorizacionesTR from '../views/conta/procesos/autorizacionesTR'
+import StatusTR from '../views/conta/procesos/statusTR'
+import InicioTR from '../views/conta/procesos/inicioTR'
 
 
 
@@ -327,7 +329,9 @@ const Routes = {
     '/contabilidad': Conta, //Conta
     '/contabilidad/proceso/tarjeta-roja': TRoja, //TRoja
     '/contabilidad/proceso/tarjeta-roja/nueva': NuevaTRoja, // TRPedido
-    '/contabilidad/proceso/tarjeta-roja/id': AuthTR, // Autorizar Pedido
+    '/contabilidad/proceso/tarjeta-roja/id': AuthTR, // Autorizar Pedido,
+    '/contabilidad/proceso/tarjeta-roja/status': StatusTR, // Autorizar Pedido,
+    '/contabilidad/proceso/tarjeta-roja/inicio': InicioTR, // Autorizar Pedido
     '/contabilidad/proceso/tarjeta-roja/autorizaciones': {
         oninit: (_data) => {
             App.isAuth('contabilidad', 33);

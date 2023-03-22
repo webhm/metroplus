@@ -1,6 +1,5 @@
 import m from 'mithril';
-import HeaderPrivate from '../../layout/header-private';
-import SidebarTRoja from './sidebarTRoja';
+import HeadPublic from '../../layout/header-public';
 
 
 const Uploads = {
@@ -11,7 +10,7 @@ const Uploads = {
     uploadService: (e) => {
         let postData = new FormData($('#uploadForm')[0]);
 
-        fetch('https://api.hospitalmetropolitano.org/t/v1/procesos/tr/uploads?idTR=' + AuthTR.id, {
+        fetch('https://api.hospitalmetropolitano.org/t/v1/procesos/tr/uploads?idTR=' + StatusTR.id, {
             method: "POST",
             body: postData,
         }).then(function (response) {
@@ -190,15 +189,13 @@ const Observaciones = {
                 },
                 visible: false,
                 aTargets: [0],
-                width: "1%",
-
                 orderable: true,
             }, {
                 mRender: function (data, type, row, meta) {
                     return "";
                 },
                 visible: true,
-                width: "99%",
+                width: "100%",
                 aTargets: [1],
                 orderable: false,
             },
@@ -209,7 +206,7 @@ const Observaciones = {
                 settings.aoData.map(function (_v, _i) {
                     m.mount(_v.anCells[1], {
                         view: function () {
-                            return m("div.demo-static-toast.wd-100p",
+                            return m("div.demo-static-toast",
                                 m(".toast[role='alert'][aria-live='assertive'][aria-atomic='true']", {
                                     "style": { "max-width": "none" }
                                 }, [
@@ -221,7 +218,7 @@ const Observaciones = {
                                             moment.unix(_v._aData.timestamp).format("DD-MM-YYYY HH:mm")
                                         ),
                                     ]),
-                                    m("div.toast-body.small",
+                                    m("div.toast-body.tx-14",
                                         _v._aData.log
                                     )
                                 ])
@@ -243,7 +240,7 @@ const Observaciones = {
         table.rows.add(Observaciones.data).draw();
     },
     fetch: () => {
-        Observaciones.data = AuthTR.data.comments;
+        Observaciones.data = StatusTR.data.comments;
         Observaciones.loadObservaciones();
     },
 
@@ -267,34 +264,33 @@ const DestinoFinal = {
 
 
 
-const AuthTR = {
+const StatusTR = {
     id: '',
-    status: 0,
     data: [],
     activos: [],
     examenes: [],
     error: '',
-    numeroAuthTR: '',
+    numeroStatusTR: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
     autorizado: false,
     oninit: (_data) => {
 
 
-        AuthTR.id = _data.attrs.tr;
+        StatusTR.id = _data.attrs.tr;
 
-        AuthTR.fetch();
+        StatusTR.fetch();
 
 
     },
     fetch: () => {
-        AuthTR.activos = [];
-        AuthTR.loader = true;
+        StatusTR.activos = [];
+        StatusTR.loader = true;
         m.request({
             method: "POST",
             url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id",
             body: {
-                idTR: AuthTR.id,
+                idTR: StatusTR.id,
             },
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -302,88 +298,133 @@ const AuthTR = {
         })
             .then(function (result) {
                 if (result.status) {
-                    AuthTR.loader = false;
-                    AuthTR.data = result.data;
-                    if (AuthTR.data.files !== false) {
-                        Uploads.files = AuthTR.data.files;
+                    StatusTR.loader = false;
+                    StatusTR.data = result.data;
+                    if (StatusTR.data.files !== false) {
+                        Uploads.files = StatusTR.data.files;
                     }
                     setTimeout(function () { Observaciones.fetch(); }, 100);
                 } else {
-                    AuthTR.error = result.message;
+                    StatusTR.error = result.message;
                 }
-
             })
             .catch(function (e) {
-                AuthTR.fetch();
+                StatusTR.fetch();
             })
 
     },
-    updateStatus: () => {
-        AuthTR.activos = [];
-        AuthTR.loader = true;
-        m.request({
-            method: "POST",
-            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/id-up",
-            body: {
-                idTR: AuthTR.id,
-                status: AuthTR.status,
-                obs: Observaciones.observaciones
-            },
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
-                if (result.status) {
-                    alert('Proceso realizado con éxito.');
-                    window.location.reload();
-                } else {
-                    AuthTR.error = result.message;
-                }
 
-            })
-            .catch(function (e) {
-                AuthTR.fetch();
-            })
-
-    },
     view: (_data) => {
 
         return [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("contabilidad") }),
-            m(SidebarTRoja, { oncreate: SidebarTRoja.setPage(32) }),
+            m(HeadPublic),
+            m("div.section-nav", [
+                m("label.nav-label",
+                    "Nueva Tarjeta Roja"
+                ),
+                m("div.mg-t-10.mg-b-10.bg-white", {
+
+                },
+
+                    m('a', {
+                        href: '/contabilidad/proceso/tarjeta-roja/buscar'
+
+                    }, [
+                        m("div.mg-t-10.bg-white",
+                            m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                                m("h6.lh-5.mg-b-5",
+                                    "Consultar Status"
+                                ),
+
+                            ]),
+                            m("div.card-body.pd-0", [
+                                m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                    m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                        m('i.fas.fa-search.tx-40.tx-success')
+                                    ),
+                                    m("div", [
+
+                                        m("divv.lh-0.tx-gray-300", 'Tarjeta Roja')
+                                    ])
+
+                                ]),
+
+                            ])
+                        )
+
+                    ]),
+                    m('a', {
+                        href: '/contabilidad/proceso/tarjeta-roja/nueva'
+
+                    }, [
+                        m("div.mg-t-10.bg-white",
+                            m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                                m("h6.lh-5.mg-b-5",
+                                    "Nueva Tarjeta"
+                                ),
+
+                            ]),
+                            m("div.card-body.pd-0", [
+                                m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                    m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                        m('i.fas.fa-file.tx-40.tx-primary')
+                                    ),
+                                    m("div", [
+
+                                        m("divv.lh-0.tx-gray-300", 'Tarjeta Roja')
+                                    ])
+
+                                ]),
+
+                            ])
+                        )
+
+                    ]),
+                    m('a', {
+                        href: '/contabilidad/proceso/tarjeta-roja/autorizaciones'
+
+                    }, [
+                        m("div.mg-t-10.bg-white",
+                            m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [
+                                m("h6.lh-5.mg-b-5",
+                                    "Autorizaciones"
+                                ),
+
+                            ]),
+                            m("div.card-body.pd-0", [
+                                m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
+                                    m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
+                                        m('i.fas.fa-check.tx-40.tx-primary')
+                                    ),
+                                    m("div", [
+
+                                        m("divv.lh-0.tx-gray-300", 'Tarjeta Roja')
+                                    ])
+
+                                ]),
+
+                            ])
+                        )
+
+                    ]),
+                    m('br')
+
+
+
+
+                ),
+
+            ]),
             m("div.content.content-components", {
-                style: { "margin-right": "0px" }
+                style: { "margin-left": "0px" }
 
             },
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
                 }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/contabilidad" }, [
-                                " Contabilidad "
-                            ])
 
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/contabilidad/proceso/tarjeta-roja" }, [
-                                " Tarjeta Roja "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Nueva Tarjeta Roja"
-                        ),
-
-                    ]),
                     m("h1.df-title.mg-t-20.mg-b-10",
-                        "Nueva Tarjeta Roja: "
+                        "Status Tarjeta Roja N°: HM-" + StatusTR.id
                     ),
 
 
@@ -393,35 +434,31 @@ const AuthTR = {
 
 
 
-                            (AuthTR.data.length !== 0 ? [
+                            (StatusTR.data.length !== 0 ? [
                                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", {
 
 
                                 }, [
                                     m("div.bg-white.bd.pd-20.pd-lg-30.d-flex.flex-column.justify-content-end", [
+
+
                                         m("span.pd-6.wd-100p.wd-md-20p.tx-15", {
-                                            class: "badge badge-success mg-b-2 mg-r-2",
+                                            class: (StatusTR.data.status == -5 ? "badge badge-danger mg-b-2 mg-r-2" : "badge badge-success mg-b-2 mg-r-2"),
                                         }, [
                                             m("i.fas.fa-file-alt.mg-r-5"),
                                         ], [
-                                            (AuthTR.data.status == 1 ? 'Ingresada' : ''),
-                                            (AuthTR.data.status == 2 ? 'Autorizado' : ''),
-                                            (AuthTR.data.status == 3 ? 'En Revisón Técnica' : ''),
-                                            (AuthTR.data.status == 4 ? 'En Revisón Contable' : ''),
-                                            (AuthTR.data.status == 5 ? 'Aprobada' : ''),
-                                            (AuthTR.data.status == -5 ? 'Rechazada' : '')
+                                            (StatusTR.data.status == 1 ? 'Ingresada' : ''),
+                                            (StatusTR.data.status == 2 ? 'Autorizado' : ''),
+                                            (StatusTR.data.status == 3 ? 'En Revisón Técnica' : ''),
+                                            (StatusTR.data.status == 4 ? 'En Revisón Contable' : ''),
+                                            (StatusTR.data.status == 5 ? 'Aprobada' : ''),
+                                            (StatusTR.data.status == -5 ? 'Rechazada' : '')
 
                                         ]),
 
 
-                                        m("span.pd-6.wd-100p.wd-md-20p", {
-                                            class: "badge badge-danger mg-b-2 mg-r-2",
-                                        }, [
-                                            m("i.fas.fa-file-alt.mg-r-5"),
-                                        ], "FOR TARJETA ROJA"),
 
-
-                                        m('div.table-responsive', [
+                                        m('div.', [
                                             m("table.table.table-bordered.table-sm.tx-12", [
                                                 m("thead",
 
@@ -467,7 +504,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.categoria
+                                                                value: StatusTR.data.categoria
                                                             })
                                                         )
 
@@ -488,7 +525,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.sub_categoria
+                                                                value: StatusTR.data.sub_categoria
                                                             })
                                                         )
 
@@ -520,7 +557,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.nombre
+                                                                value: StatusTR.data.nombre
                                                             }))
                                                     ]),
                                                     m("tr", [
@@ -537,7 +574,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.marca
+                                                                value: StatusTR.data.marca
                                                             })
                                                         ),
                                                     ]),
@@ -554,7 +591,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.modelo
+                                                                value: StatusTR.data.modelo
                                                             })
                                                         )
 
@@ -576,7 +613,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.serie
+                                                                value: StatusTR.data.serie
                                                             })
                                                         ),
 
@@ -603,7 +640,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.motivo_baja
+                                                                value: StatusTR.data.motivo_baja
                                                             })
                                                         ]),
 
@@ -630,7 +667,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.accion_sugerida
+                                                                value: StatusTR.data.accion_sugerida
                                                             })
                                                         ]),
 
@@ -659,7 +696,7 @@ const AuthTR = {
                                                                 "class": "form-control tx-semibold tx-14",
                                                                 "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.destino_final
+                                                                value: StatusTR.data.destino_final
                                                             })
 
                                                         ),
@@ -676,12 +713,13 @@ const AuthTR = {
                                                         m("td[colspan='6']", {
                                                             style: { "background-color": "#eaeff5" }
                                                         },
-                                                            m("input", {
+
+                                                            m("textarea[rows='3']", {
                                                                 "class": "form-control tx-semibold tx-14",
-                                                                "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.usuario
-                                                            })
+                                                            },
+                                                                StatusTR.data.usuario
+                                                            )
 
 
 
@@ -719,80 +757,17 @@ const AuthTR = {
                                                                 ),
                                                                 m("li.nav-item", {
                                                                 },
-                                                                    m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth0'][role='tab'][aria-controls='auth0']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
-
-                                                                        " Observaciones ",
-                                                                        (AuthTR.data.comments.length !== 0 ? [
-                                                                            m('span.mg-l-5.tx-14.tx-semibold.badge.badge-danger', AuthTR.data.comments.length)
-                                                                        ] : [])
-                                                                    )
-                                                                ),
-                                                                m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 1 ? '' : 'd-none')
-                                                                },
                                                                     m("a.nav-link[id='home-auth1'][data-toggle='tab'][href='#auth1'][role='tab'][aria-controls='auth1']", {
                                                                         style: { "color": "#476ba3" }
                                                                     },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
-                                                                        " Autorización "
+                                                                        " Observaciones ",
+                                                                        (StatusTR.data.comments.length !== 0 ? [
+                                                                            m('span.mg-l-5.tx-14.tx-semibold.badge.badge-danger', StatusTR.data.comments.length)
+                                                                        ] : [])
                                                                     )
-                                                                ),
-
-                                                                m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 2 ? '' : 'd-none')
-                                                                },
-                                                                    m("a.nav-link[id='home-auth2'][data-toggle='tab'][href='#auth2'][role='tab'][aria-controls='auth2']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
-
-                                                                        " Revisión Técnica "
-                                                                    )
-                                                                ),
-
-                                                                m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 3 ? '' : 'd-none')
-
-                                                                },
-                                                                    m("a.nav-link[id='home-auth3'][data-toggle='tab'][href='#auth3'][role='tab'][aria-controls='auth3']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
-
-                                                                        " Revisión Contable "
-                                                                    )
-                                                                ),
-
-                                                                m("li.nav-item", {
-                                                                    class: (AuthTR.data.status == 4 ? '' : 'd-none')
-
-                                                                },
-                                                                    m("a.nav-link[id='home-auth4'][data-toggle='tab'][href='#auth4'][role='tab'][aria-controls='auth4']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
-
-                                                                        " Aprobación Gerencia Contable "
-                                                                    )
-                                                                ),
-
-                                                                m("li.nav-item",
-                                                                    {
-                                                                        class: (AuthTR.data.status >= 5 ? '' : 'd-none')
-
-                                                                    },
-                                                                    m("a.nav-link[id='home-auth5'][data-toggle='tab'][href='#auth5'][role='tab'][aria-controls='auth5']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                        m("i.fas.fa-edit.pd-1.mg-r-2"),
-
-                                                                        " USSA "
-                                                                    )
-                                                                ),
+                                                                )
 
 
                                                             ]),
@@ -807,9 +782,9 @@ const AuthTR = {
                                                         },
                                                             m(".tab-content.bd.bd-gray-300.bd-t-0[id='myTab']", [
                                                                 m(".tab-pane.fade[id='home'][role='tabpanel'][aria-labelledby='home-tab']", [
-                                                                    m(Uploads),
+                                                                    m(Uploads)
                                                                 ]),
-                                                                m(".tab-pane.fade[id='auth0'][role='tabpanel'][aria-labelledby='home-auth0']", [
+                                                                m(".tab-pane.fade[id='auth1'][role='tabpanel'][aria-labelledby='home-auth1']", [
 
                                                                     m("p.mg-5", [
                                                                         m("span.badge.badge-light.wd-100p.tx-14",
@@ -817,174 +792,6 @@ const AuthTR = {
                                                                         ),
                                                                         m("table.table.table-sm[id='table-observaciones'][width='100%']")
                                                                     ]),
-
-                                                                ]),
-                                                                m(".tab-pane.fade[id='auth1'][role='tabpanel'][aria-labelledby='home-auth1']", [
-
-                                                                    m("p.mg-5", [
-                                                                        m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Autorización",
-                                                                        ),
-                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
-                                                                            value: Observaciones.observaciones,
-                                                                        }),
-
-                                                                        m("div.mg-0.mg-t-5.text-right", [
-
-                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 2;
-                                                                                    AuthTR.updateStatus();
-
-                                                                                },
-                                                                            }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
-                                                                            ], "Autorizado"),
-
-                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = -2;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [], "Rechazar"),
-
-
-                                                                        ]),
-                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
-
-                                                                    ]),
-
-                                                                ]),
-                                                                m(".tab-pane.fade[id='auth2'][role='tabpanel'][aria-labelledby='home-auth2']", [
-                                                                    m("p.mg-5", [
-                                                                        m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Autorización",
-                                                                        ),
-                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
-                                                                            value: Observaciones.observaciones,
-                                                                        }),
-
-                                                                        m("div.mg-0.mg-t-5.text-right", [
-
-                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 3;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
-                                                                            ], "Autorizado"),
-
-                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 3;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [], "Rechazar"),
-
-
-                                                                        ]),
-                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
-
-                                                                    ]),
-                                                                ]),
-                                                                m(".tab-pane.fade[id='auth3'][role='tabpanel'][aria-labelledby='home-auth3']", [
-                                                                    m("p.mg-5", [
-                                                                        m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Revisión Contabilidad",
-                                                                        ),
-                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
-                                                                            value: Observaciones.observaciones,
-                                                                        }),
-                                                                        m("div.mg-0.mg-t-5.text-right", [
-
-                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 4;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
-                                                                            ], "Aprobado"),
-
-                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = -4;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [], "Rechazado"),
-
-
-                                                                        ]),
-                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
-
-                                                                    ]),
-
-                                                                ]),
-                                                                m(".tab-pane.fade[id='auth4'][role='tabpanel'][aria-labelledby='home-auth4']", [
-                                                                    m("p.mg-5", [
-                                                                        m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Aprobación Gerencia Contable",
-                                                                        ),
-                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
-                                                                            value: Observaciones.observaciones,
-                                                                        }),
-                                                                        m("div.mg-0.mg-t-5.text-right", [
-
-                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 5;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
-                                                                            ], "Aprobado"),
-
-                                                                            m("button.btn.btn-xs.btn-danger.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = -5;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [], "Rechazado"),
-
-
-                                                                        ]),
-                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
-
-                                                                    ]),
-
-                                                                ]),
-                                                                m(".tab-pane.fade[id='auth5'][role='tabpanel'][aria-labelledby='home-auth5']", [
-                                                                    m("p.mg-5", [
-                                                                        m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "USSA",
-                                                                        ),
-                                                                        m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
-                                                                            oninput: function (e) { Observaciones.observaciones = e.target.value; },
-                                                                            value: Observaciones.observaciones,
-                                                                        }),
-                                                                        m("div.mg-0.mg-t-5.text-right", [
-
-                                                                            m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                                                                onclick: function () {
-                                                                                    AuthTR.status = 6;
-                                                                                    AuthTR.updateStatus();
-                                                                                },
-                                                                            }, [
-                                                                                m("i.fas.fa-paper-plane.mg-r-5",)
-                                                                            ], "Guardar"),
-
-
-
-                                                                        ]),
-                                                                        m("hr.wd-100p.mg-t-5.mg-b-5"),
-
-                                                                    ]),
-
                                                                 ]),
 
 
@@ -1025,6 +832,7 @@ const AuthTR = {
                 ])
             ),
 
+
         ];
 
 
@@ -1034,4 +842,4 @@ const AuthTR = {
 };
 
 
-export default AuthTR;
+export default StatusTR;

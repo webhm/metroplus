@@ -189,7 +189,7 @@ const FormularioDeRegistro = {
           console.log(FormularioDeRegistro.listaPrescripcion);
           //terapiaRespiratoriaController.habilitarCampos = true;
         } else {
-          FormularioDeRegistro.listaPrescripcion = [];
+          //FormularioDeRegistro.listaPrescripcion = [];
           FormularioDeRegistro.errorPrescripcion += "Prescripción ";
           //FormularioDeRegistro.lista = resultado;
           //terapiaRespiratoriaController.error = resultado.error;
@@ -267,7 +267,7 @@ const FormularioDeRegistro = {
         } */
       })
       .catch(function (error) {
-        terapiaRespiratoriaController.errorDatosPorSecuencial = error;
+        FormularioDeRegistro.errorDatosPorSecuencial = error;
         //terapiaRespiratoriaController.habilitarCampos = true;
         //alert(terapiaRespiratoriaController.error);
       });
@@ -340,6 +340,7 @@ const FormularioDeRegistro = {
     FormularioDeRegistro.cargarHoraActual();
     FormularioDeRegistro.cargarPrescripcion(1918); // 1918 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFormularioPorCodigoSecuencial(_data.attrs.pedido.AT_MV); // 1918 // _data.attrs.pedido.AT_MV
+    console.log(_data.attrs.pedido.AT_MV);
     //console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
     /* terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV);
     terapiaRespiratoriaController.cargarPeso(_data.attrs.pedido.AT_MV);
@@ -362,6 +363,7 @@ const FormularioDeRegistro = {
   usuarioConectado: [],
   view: (vnode) => {
     if (
+      //-------------
        FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 &&
        FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 &&
        FormularioDeRegistro.listaDePeso.length !== 0 &&
@@ -413,7 +415,7 @@ const FormularioDeRegistro = {
               /* value:
                 terapiaRespiratoriaController.listaDeFrecuenciaRespiratoria
                   .data[0].VALUE, */
-              //value: obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE != undefined ? obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE : '',
+              /* value: obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE != undefined ? obtenerDatos.listaDeFrecuenciaRespiratoria.data[0].VALUE : '', */
               value: FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data.length > 0
                   ? FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0].VALUE == null ? "" : FormularioDeRegistro.listaDeFrecuenciaRespiratoria.data[0].VALUE
                   : "",
@@ -427,7 +429,7 @@ const FormularioDeRegistro = {
               id: "inputPeso",
               placeholder: "Peso",
               readonly: "readonly",
-              //value: obtenerDatos.listaDePeso.data[0].VALUE != undefined ? obtenerDatos.listaDePeso.data[0].VALUE : '',
+              /* value: obtenerDatos.listaDePeso.data[0].VALUE != undefined ? obtenerDatos.listaDePeso.data[0].VALUE : '', */
               value: FormularioDeRegistro.listaDePeso.data.length > 0
                   ? FormularioDeRegistro.listaDePeso.data[0].VALUE == null ? "" : FormularioDeRegistro.listaDePeso.data[0].VALUE
                   : "",
@@ -938,7 +940,7 @@ const FormularioDeRegistro = {
             class: "form-control",
             id: "textAreaCriterio",
             rows: "3",
-            /* value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CRITERIO_CLINICO : "" : "", */
+           /*  value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CRITERIO_CLINICO : "" : "", */
             //disabled: obtenerDatos.habilitarCampos,
           }),
         ]),
@@ -1141,7 +1143,8 @@ const FormularioDeRegistro = {
             //disabled: obtenerDatos.habilitarCampos,
             onclick: function () {
               //console.log(FormularioDeRegistro.datosPorSecuencial.data);
-              console.log(FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CRITERIO_CLINICO : "" : "") ;
+              /* console.log(FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CRITERIO_CLINICO : "" : "") ; */
+              console.log(FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV)
               /* console.log(FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CRITERIO_CLINICO : ""); */
               //console.log(Pedido.data.AT_MV);
               /* console.log(FormularioDeRegistro.datosPorSecuencial.data.length > 0);
@@ -1170,9 +1173,13 @@ const FormularioDeRegistro = {
           "Eliminar Verdadero"
         ),
       ]);
-    } else {
+    }else if (FormularioDeRegistro.datosPorSecuencial.length !==0 && FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV){
+      return m(FormularioDeRegistro),
+              m("div", {"class":"alert alert-danger","role":"alert"},
+              `Lo sentimos ya existe un registro para este paciente`,)
+    }else {
       return m("div", {"class":"alert alert-danger","role":"alert"}, 
-      `Lo sentimos hace falta datos de ${FormularioDeRegistro.errorCargandoFrecuenciaCardiaca}${FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria}${FormularioDeRegistro.errorCargaDePeso}${FormularioDeRegistro.errorCargaDeEscalaDelDolor}`,
+      `Lo sentimos hace falta datos de ${FormularioDeRegistro.errorCargandoFrecuenciaCardiaca}${FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria}${FormularioDeRegistro.errorCargaDePeso}${FormularioDeRegistro.errorCargaDeEscalaDelDolor}${FormularioDeRegistro.errorPrescripcion}`,
       m("div.pd-10.wd-100p",
                 m("div.placeholder-paragraph", [
                     m("div.line"),

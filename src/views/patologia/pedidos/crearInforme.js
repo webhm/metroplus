@@ -1,23 +1,25 @@
-import m from 'mithril';
 import HeaderPrivate from '../../layout/header-private';
 import SidebarPato from '../sidebarPato';
 import BreadCrumb from '../../layout/breadcrumb';
 import informeModel from '../../../models/informeModel';
 import informeAnatomico from './informeAnatomico';
 
-var informeModelo = informeModel;
+let informeModelo = informeModel;
 
 const crearInforme = {
-    oninit: (datos) => { 
-        if (datos.attrs.numeroPedido !== undefined) {
-            informeModelo.numeroPedido = datos.attrs.numeroPedido;
+    oninit: (vnode) => { 
+        if (vnode.attrs.numeroPedido !== undefined) {
+            informeModelo.numeroPedido = vnode.attrs.numeroPedido;
         } 
-        if (datos.attrs.numeroAtencion !== undefined) {
-            informeModelo.numeroAtencion = datos.attrs.numeroAtencion;
+        if (vnode.attrs.numeroAtencion !== undefined) {
+            informeModelo.numeroAtencion = vnode.attrs.numeroAtencion;
         }
-        if (datos.attrs.numeroHistoriaClinica !== undefined) {
-            informeModelo.numeroHistoriaClinica = datos.attrs.numeroHistoriaClinica;
-        }           
+        if (vnode.attrs.numeroHistoriaClinica !== undefined) {
+            informeModelo.numeroHistoriaClinica = vnode.attrs.numeroHistoriaClinica;
+        }
+        if (vnode.attrs.medico !== undefined) {
+            muestraModelo.medico = vnode.attrs.medico;
+        }  
     },
     view: () => {
         return [
@@ -38,24 +40,17 @@ const crearInforme = {
                                         "style": { "cursor": "pointer" },
                                         title: "Cerrar",
                                         onclick: () => {
-                                            m.route.set("/patologia/pedido?numeroHistoriaClinica=" + informeModelo.numeroHistoriaClinica + "&numeroAtencion=" + informeModelo.numeroAtencion + "&numeroPedido=" + informeModelo.numeroPedido)
+                                            m.route.set("/patologia/pedido?numeroHistoriaClinica=" + informeModelo.numeroHistoriaClinica + 
+                                                                                "&numeroAtencion=" + informeModelo.numeroAtencion + 
+                                                                                  "&numeroPedido=" + informeModelo.numeroPedido +
+                                                                                        "&medico=" + informeModelo.medico)
                                         }
                                     }
                                 )
                             )),
-                        m("table.table", [
-                            m("tr", [
-                                m("th", m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                                    style: "width: 100%", 
-                                    onclick: function() {
-                                        m.mount(document.querySelector("#crear-informe"), informeAnatomico);
-                                    }
-                                }, "ANATÓMICO")),
-                                m("th", m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {style: "width: 100%", onclick: function() {}}, "MOLECULAR")),
-                                m("th", m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {style: "width: 100%", onclick: function() {}}, "CITÓLOGICO")),                    
-                            ])
+                        m("form#crear-informe", [
+                            m(informeAnatomico)
                         ]),
-                        m("form#crear-informe"),
                     ]),
                 ])
             )

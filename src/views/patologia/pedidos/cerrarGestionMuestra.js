@@ -1,5 +1,3 @@
-import m from 'mithril';
-
 const cerrarGestionMuestra = {
     view: () => {
         return [

@@ -1,14 +1,12 @@
-import m from 'mithril';
-
-var muestraModel = {
+let muestraModel = {
     listado: [],
     examenes: [],
-    examenesAsociados: [],
-    secuencialMuestra: '',
     error: '',
+    secuencialMuestra: '',
     numeroPedido: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
+    medico: '',
 
     cargarListado: function(numeropedidomv) {
         m.request({
@@ -44,41 +42,13 @@ var muestraModel = {
             },
         })
         .then(function(result) {
-            if (result.status) {
-                muestraModel.data = result.data;                
-                muestraModel.examenes = result.examenes.map(function(examen) {
-                    return {
-                        'ID': parseInt(Math.random() * 1000),
-                        'EXAMEN': examen.EXAMEN,
-                        'OBS_EXAMEN': examen.OBS_EXAMEN,
-                        'STATUS': examen.STATUS
-                    }
-                });
+            if (result.status) {              
+                muestraModel.examenes = result.examenes;
             } else {
                 muestraModel.error = result.message;
             }
         })
         .catch(function(e) {
-            muestraModel.error = error;
-            alert(muestraModel.error);
-        })
-    },
-
-    cargarExamenesAsociados: (numeropedidomv) => {
-        m.request({
-            method: "GET",
-            url: "http://localhost:8000/api/v1/asociacionexamenes?nopedidomv=" + numeropedidomv,
-            body: {},
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                "Accept": "application/json",
-                "Authorization": localStorage.accessToken,
-            },
-        })
-        .then(function(result) {
-            muestraModel.examenesAsociados = result.data;
-        })
-        .catch(function(error) {
             muestraModel.error = error;
             alert(muestraModel.error);
         })
@@ -157,8 +127,7 @@ var muestraModel = {
                 "Authorization": localStorage.accessToken,
             },
         })
-        .then(function(result) {
-            muestraModel.examenesAsociados = result.data;
+        .then(function() {
             muestraModel.cargarListado(muestraModel.numeroPedido);
         })
         .catch(function(error) {
@@ -177,8 +146,7 @@ var muestraModel = {
                 "Authorization": localStorage.accessToken,
             },
         })
-        .then(function(result) {
-            muestraModel.examenesAsociados = result.data;
+        .then(function() {
             muestraModel.cargarListado(muestraModel.numeroPedido);
         })
         .catch(function(error) {

@@ -7,7 +7,7 @@ import BreadCrumb from '../../layout/breadcrumb';
 import listadoMuestras from './listadoMuestras';
 import crearMuestra from './crearMuestra';
 import cerrarGestionMuestra from './cerrarGestionMuestra';
-import listadoMuestrasInforme from './listadoMuestrasInforme';
+import listadoInformes from './listadoInformes';
 
 const FOR005 = {
     secs: [],
@@ -584,6 +584,7 @@ const PedidoPatologia = {
     numeroPedido: '',
     numeroAtencion: '',
     numeroHistoriaClinica: '',
+    medico: '',
 
     oninit: (_data) => {
 
@@ -594,12 +595,14 @@ const PedidoPatologia = {
                 PedidoPatologia.numeroPedido = _data.attrs.numeroPedido;
                 PedidoPatologia.numeroAtencion = _data.attrs.numeroAtencion;
                 PedidoPatologia.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
+                PedidoPatologia.medico = _data.attrs.medico
                 PedidoPatologia.fetch();
             } else {
                 if (PedidoPatologia.numeroPedido !== _data.attrs.numeroPedido) {
                     PedidoPatologia.numeroPedido = _data.attrs.numeroPedido;
                     PedidoPatologia.numeroAtencion = _data.attrs.numeroAtencion;
                     PedidoPatologia.numeroHistoriaClinica = _data.attrs.numeroHistoriaClinica;
+                    PedidoPatologia.medico = _data.attrs.medico
                     PedidoPatologia.fetch();
                 }
             }
@@ -766,7 +769,7 @@ const PedidoPatologia = {
                                                     m("td[colspan='4']", {
                                                             style: { "background-color": "#eaeff5" }
                                                         },
-                                                        PedidoPatologia.data.MED_MV,
+                                                        PedidoPatologia.medico,
                                                     ),
                                                     m("th", {
                                                             style: { "background-color": "#a8bed6" }
@@ -911,20 +914,12 @@ const PedidoPatologia = {
                                                                 m("a.nav-link[id='informes-tab'][data-toggle='tab'][href='#informes'][role='tab'][aria-controls='seguimiento'][aria-selected='true']", {
                                                                         style: { "color": "#476ba3" },
                                                                         onclick: () => {
-                                                                            listadoMuestrasInforme.oninit({"attrs": {"numeroPedido": PedidoPatologia.numeroPedido}});
-                                                                            m.redraw(listadoMuestrasInforme);
+                                                                            listadoInformes.oninit({"attrs": {"numeroPedido": PedidoPatologia.numeroPedido}});
+                                                                            m.redraw(listadoInformes);
                                                                         }
                                                                     },
                                                                     m("i.fas.fa-book.pd-1.mg-r-2"),
                                                                     " INFORMES"
-                                                                )
-                                                            ),
-                                                            m("li.nav-item",
-                                                                m("a.nav-link[id='reportes-tab'][data-toggle='tab'][href='#reportes'][role='tab'][aria-controls='seguimiento'][aria-selected='true']", {
-                                                                        style: { "color": "#476ba3" }
-                                                                    },
-                                                                    m("i.fas.fa-archive.pd-1.mg-r-2"),
-                                                                    " REPORTES"
                                                                 )
                                                             ),
                                                         ]),
@@ -957,14 +952,16 @@ const PedidoPatologia = {
                                                                     "numeroPedido": PedidoPatologia.numeroPedido,
                                                                     "numeroAtencion": PedidoPatologia.numeroAtencion,
                                                                     "numeroHistoriaClinica": PedidoPatologia.numeroHistoriaClinica,
+                                                                    "medico": PedidoPatologia.medico
                                                                 }),
                                                             ]),
-                                                            m(".tab-pane.fade[id='informes'][role='tabpanel'][aria-labelledby='informes-tab']", [
-                                                                m(listadoMuestrasInforme, { 
+                                                            m(".tab-pane.fade[id='informes'][role='tabpanel'][aria-labelledby='informes-tab']", [                                                            
+                                                                m(listadoInformes, { 
                                                                     "numeroPedido": PedidoPatologia.numeroPedido,
                                                                     "numeroAtencion": PedidoPatologia.numeroAtencion,
                                                                     "numeroHistoriaClinica": PedidoPatologia.numeroHistoriaClinica,
-                                                                }),
+                                                                    "medico": PedidoPatologia.medico
+                                                                }),                                                            
                                                             ]),
                                                         ])
                                                     ),

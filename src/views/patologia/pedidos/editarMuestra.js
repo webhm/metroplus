@@ -2,38 +2,57 @@ import muestraModel from '../../../models/muestraModel';
 import muestraValida from './muestraValida';
 
 let muestraModelo = muestraModel;
+let muestra = null;
 
-const crearMuestra = {
-    oninit: () => { 
-        muestraModelo.generarSecuencial();
-    },
+const editarMuestra = {
+    oninit: (vnode) => {
+        if (vnode.attrs.muestra !== undefined) {
+            muestra = vnode.attrs.muestra;
+        } 
+    },  
+    oncreate: (vnode) => {
+        if (muestra && muestra.valida === "0") {
+            m.mount(document.querySelector("#observacionesnovalida"), {
+                view: (vnode) => {
+                    return m("textarea.form-control[id='inputobservacionesnovalida'][placeholder='Observaciones'][title='Observaciones']", {
+                        style: "min-height: 100px",
+                        rows: 4,
+                        value: muestra.observacionesmuestranovalida
+                    })
+                }
+            });
+        } else {
+            m.mount(document.querySelector("#observacionesnovalida"), null)  
+        }
+    },       
     view: (vnode) => {
-        return m("form#crear-muestra", [
+        return m("form#editar-muestra", [
             m("table.table", [
                 m("tr", [
-                    m("th.tx-12", "ID MUESTRA"),
+                    m("th.tx-12", "ID"),
                     m("td.tx-12", [
                         m("input.form-control[id='inputmuestraid'][type='text']", { 
                             disabled: true, 
-                            value: muestraModelo.secuencialMuestra,
+                            value: muestra.id
                         }),
                     ]),
                 ]),
                 m("tr.muestradescripcion", [
-                    m("th.tx-12", "Descripción de la Muestra"),
+                    m("th.tx-12", "Descripción"),
                     m("td.tx-12", [
-                        m("textarea.form-control[id='inputmuestradescripcion'][placeholder='Descripción de la Muestra'][title='Descripción de la Muestra']", {
+                        m("textarea.form-control[id='inputmuestradescripcion'][placeholder='Descripción'][title='Descripción']", {
                             style: "min-height: 100px",
                             rows: 4,
+                            value: muestra.descripcion
                         })
                     ]),
-                ]),                               
-                m("tr", [
-                    m(muestraValida),
+                ]),                                                                                                  
+                m("tr", [  
+                    m(muestraValida, {muestra: muestra}),                  
                     m("td.tx-12", [
-                        m('div#observacionesnovalida'),
+                        m('div#observacionesnovalida'), 
                         m("button.btn.btn-xs.btn-primary.mg-l-2.tx-semibold[type='button']", {
-                            onclick: function() { 
+                            onclick: function() {
                                 if (vnode.dom['inputmuestradescripcion'].value.length === 0) {
                                     muestraModelo.error = "El campo Descripción es Requerido";
                                     alert(muestraModelo.error);
@@ -44,19 +63,20 @@ const crearMuestra = {
                                     vnode.dom['inputobservacionesnovalida'].focus();
                                 } else {
                                     let muestra = {
+                                        id: parseInt(vnode.dom['inputmuestraid'].value),
                                         nopedidomv: parseInt(muestraModel.numeroPedido),
                                         noatencionmv: parseInt(muestraModel.numeroAtencion),
-                                        nohistoriaclinicamv: parseInt(muestraModel.numeroHistoriaClinica), 
-                                        idestadopedido: 1,                                       
+                                        nohistoriaclinicamv: parseInt(muestraModel.numeroHistoriaClinica),
                                         descripcion: vnode.dom['inputmuestradescripcion'].value,
-                                        valida: vnode.dom['checkvalida'].checked ? 1 : 0,
+                                        valida:  vnode.dom['checkvalida'].checked ? 1 : 0,
                                         observacionesmuestranovalida: vnode.dom['checkvalida'].checked ? null : vnode.dom['inputobservacionesnovalida'].value
                                     }
-                                    muestraModelo.guardar(muestra);
+                                    muestraModelo.actualizar(muestra);
                                     m.mount(document.querySelector("#gestion-muestras"), null);
                                     m.mount(document.querySelector("#cerrar-gestion-muestras"), null);
-                                }},
-                                style: {'margin': '6px 0'}
+                                }
+                            },
+                            style: {'margin': '6px 0'}
                         }, [
                             m("i.fas.fa-save.mg-r-5", )
                         ], "Guardar"
@@ -68,4 +88,4 @@ const crearMuestra = {
     }
 }
 
-export default crearMuestra;
+export default editarMuestra;

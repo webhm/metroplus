@@ -8,7 +8,7 @@ const tablePatologiaPedidos = {
     oncreate: () => {
         PatologiaPedidos.loadPedidos();
         if (PatologiaPedidos.searchField.length !== 0) {
-            var table = $('#table-PatologiaPedidos').DataTable();
+            let table = $('#table-PatologiaPedidos').DataTable();
             table.search(PatologiaPedidos.searchField).draw();
         }
     },
@@ -196,7 +196,7 @@ const PatologiaPedidos = {
     },
     loadPedidos: () => {
         $.fn.dataTable.ext.errMode = "none";
-        var table = $("#table-PatologiaPedidos").DataTable({
+        let table = $("#table-PatologiaPedidos").DataTable({
             data: PatologiaPedidos.pedidos,
             dom: 'ltp',
             responsive: true,
@@ -342,6 +342,7 @@ const PatologiaPedidos = {
                                             numeroHistoriaClinica: aData.CD_PACIENTE,
                                             numeroAtencion: aData.AT_MV,
                                             numeroPedido: aData.CD_PRE_MED,
+                                            medico: aData.MED_MV,
                                             track: "view",
                                         });
                                     },
@@ -391,7 +392,7 @@ const PatologiaPedidos = {
             });
     },
     reloadData: () => {
-        var table = $('#table-PatologiaPedidos').DataTable();
+        let table = $('#table-PatologiaPedidos').DataTable();
         table.clear();
         table.rows.add(PatologiaPedidos.pedidos).draw();
     },

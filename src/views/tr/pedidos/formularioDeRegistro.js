@@ -717,7 +717,7 @@ const FormularioDeRegistro = {
               id: "inputFrecuenciaAlDia",
             },
             [
-              m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].FRECUENCIA_DIARIA : "Seleccione..." : "Seleccione..."),
+              m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].FRECUENCIA_DIARIA : "" : ""),
               //m("option", "Seleccione..."),
               m("option", { value: "1" }, "En este momento"),
               m("option", { value: "2" }, "Una vez"),
@@ -754,7 +754,7 @@ const FormularioDeRegistro = {
                   id: "inputTerapiaAerosolMedicina",
                 },
                 [
-                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_AEROSOL : "Seleccione..." : "Seleccione..."),
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_AEROSOL : "" : ""),
                   //m("option", "Seleccione..."),
                   m("option", { value: "1" }, "Nebulización"),
                   m("option", { value: "2" }, "Ultrasonido"),
@@ -770,7 +770,7 @@ const FormularioDeRegistro = {
                   id: "inputDosisTerapiaAerosol",
                 },
                 [
-                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].DOSIS_TERAPIA_AEROSOL : "Seleccione..." : "Seleccione..."),
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].DOSIS_TERAPIA_AEROSOL : "" : ""),
                   //m("option", "Seleccione..."),
                   m("option", { value: "1" }, "Salbumatol"),
                   m("option", { value: "2" }, "Bromuro de ipratropio"),
@@ -801,7 +801,7 @@ const FormularioDeRegistro = {
               id: "inputHigieneBroncoPulmonar",
             },
             [
-              m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].HIGIENE_BRONCO_PULMONA : "Seleccione..." : "Seleccione..."),
+              m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].HIGIENE_BRONCO_PULMONA : "" : ""),
               //m("option", "Seleccione..."),
               m("option", { value: "1" }, "Drenaje postural"),
               m("option", { value: "2" }, "Percusiones"),
@@ -841,7 +841,7 @@ const FormularioDeRegistro = {
                   //disabled: obtenerDatos.habilitarCampos,
                 },
                 [
-                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_EXPANSIVA : "Seleccione..." : "Seleccione..."),
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_EXPANSIVA : "" : ""),
                   //m("option", "Seleccione..."),
                   m("option", { value: "1" }, "Incentivo respiratorio"),
                   m(
@@ -890,7 +890,7 @@ const FormularioDeRegistro = {
                   id: "Oxinoterapia",
                 },
                 [
-                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].OXIGENO_TERAPIA : "Seleccione..." : "Seleccione..."),
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].OXIGENO_TERAPIA : "" : ""),
                   //m("option", "Seleccione..."),
                   m(
                     "option",
@@ -949,7 +949,7 @@ const FormularioDeRegistro = {
                   },
                 },
                 [
-                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA : "Seleccione..." : "Seleccione..."),
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA : "" : ""),
                   //m("option", "Seleccione..."),
                   m("option", { value: "1" }, "Saturación O2(%)"),
                   m("option", { value: "2" }, "Ventilación mecánica"),
@@ -1005,7 +1005,7 @@ const FormularioDeRegistro = {
                   },
                 },
                 [
-                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA_POSTERIOR : "Seleccione..." : "Seleccione..."),
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA_POSTERIOR : "" : ""),
                   //m("option", "Seleccione..."),
                   m("option", { value: "1" }, "Saturación O2(%)"),
                   m("option", { value: "2" }, "Ventilación mecánica"),
@@ -1529,7 +1529,7 @@ const FormularioDeRegistro = {
             },
             [
               /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].FRECUENCIA_DIARIA : "Seleccione..." : "Seleccione..."), */
-              m("option", "Seleccione..."),
+              m("option", ""),
               m("option", { value: "1" }, "En este momento"),
               m("option", { value: "2" }, "Una vez"),
               m("option", { value: "3" }, "Dos veces"),
@@ -1566,7 +1566,7 @@ const FormularioDeRegistro = {
                 },
                 [
                   /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_AEROSOL : "Seleccione..." : "Seleccione..."), */
-                  m("option", "Seleccione..."),
+                  m("option", ""),
                   m("option", { value: "1" }, "Nebulización"),
                   m("option", { value: "2" }, "Ultrasonido"),
                   m("option", { value: "3" }, "Inhaladores dosis medida"),
@@ -1582,7 +1582,7 @@ const FormularioDeRegistro = {
                 },
                 [
                   /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].DOSIS_TERAPIA_AEROSOL : "Seleccione..." : "Seleccione..."), */
-                  m("option", "Seleccione..."),
+                  m("option", ""),
                   m("option", { value: "1" }, "Salbumatol"),
                   m("option", { value: "2" }, "Bromuro de ipratropio"),
                   m("option", { value: "3" }, "N acetilcisteina"),
@@ -1613,7 +1613,7 @@ const FormularioDeRegistro = {
             },
             [
               /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].HIGIENE_BRONCO_PULMONA : "Seleccione..." : "Seleccione..."), */
-              m("option", "Seleccione..."),
+              m("option", ""),
               m("option", { value: "1" }, "Drenaje postural"),
               m("option", { value: "2" }, "Percusiones"),
               m("option", { value: "3" }, "Vibraciones"),
@@ -1653,7 +1653,7 @@ const FormularioDeRegistro = {
                 },
                 [
                   /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_EXPANSIVA : "Seleccione..." : "Seleccione..."), */
-                  m("option", "Seleccione..."),
+                  m("option", ""),
                   m("option", { value: "1" }, "Incentivo respiratorio"),
                   m(
                     "option",
@@ -1701,7 +1701,7 @@ const FormularioDeRegistro = {
                 },
                 [
                   /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].OXIGENO_TERAPIA : "Seleccione..." : "Seleccione..."), */
-                  m("option", "Seleccione..."),
+                  m("option", ""),
                   m(
                     "option",
                     { value: "1" },
@@ -1765,7 +1765,7 @@ const FormularioDeRegistro = {
                 },
                 [
                   /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA : "Seleccione..." : "Seleccione..."), */
-                  m("option", "Seleccione..."),
+                  m("option", ""),
                   m("option", { value: "1" }, "Saturación O2(%)"),
                   m("option", { value: "2" }, "Ventilación mecánica"),
                   m("option", { value: "3" }, "Ventilación no invasiva"),
@@ -1820,7 +1820,7 @@ const FormularioDeRegistro = {
                 },
                 [
                   /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA_POSTERIOR : "Seleccione..." : "Seleccione..."), */
-                  m("option", "Seleccione..."),
+                  m("option", ""),
                   m("option", { value: "1" }, "Saturación O2(%)"),
                   m("option", { value: "2" }, "Ventilación mecánica"),
                   m("option", { value: "3" }, "Ventilación no invasiva"),
@@ -2040,7 +2040,7 @@ const FormularioDeRegistro = {
         //m(Modal),
       ]);
     }else {
-      return m("div", {"class":"alert alert-danger","role":"alert"}, 
+      return m("div", {"class":"alert alert-success","role":"alert"}, 
       `Lo sentimos hace falta datos de ${FormularioDeRegistro.errorCargandoFrecuenciaCardiaca}${FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria}${FormularioDeRegistro.errorCargaDePeso}${FormularioDeRegistro.errorCargaDeEscalaDelDolor}${FormularioDeRegistro.errorPrescripcion}`,
       m("div.pd-10.wd-100p",
                 m("div.placeholder-paragraph", [

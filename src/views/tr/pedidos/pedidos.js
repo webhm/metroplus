@@ -121,7 +121,6 @@ const tablePedidosTR = {
         }
 
     },
-
     view: () => {
         return m("div.row.animated.fadeInUp", {}, [
 
@@ -379,7 +378,7 @@ const PedidosTR = {
                 },
                 {
                     mRender: function(data, type, full) {
-                        return full.CD_PRE_MED;
+                        return full.AT_MV;
                     },
                     visible: false,
                     aTargets: [1],
@@ -455,7 +454,7 @@ const PedidosTR = {
                                         ),
                                     ),
                                     m("div.pd-2.tx-medium.mg-l-auto", { "style": { "background-color": "rgb(168, 190, 214)" } },
-                                        _i._aData.EDAD + " - " + _i._aData.PESO + " - " + _i._aData.ALTURA + "."
+                                        (_i._aData.EDAD  == null ? 'No Disponible ' : _i._aData.EDAD + " "), (_i._aData.PESO == null ? 'No Disponible' :  _i._aData.PESO+ " "), (_i._aData.ALTURA == null ? 'No Disponible ' : _i._aData.ALTURA + ".")
                                     )
                                 ]),
                                 m("div.d-flex.mg-b-20", { "style": { "background-color": "rgb(234, 239, 245)" } }, [
@@ -554,7 +553,8 @@ const PedidosTR = {
 
         m.request({
                 method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/terapia-respiratoria/pedidos" + _queryString,
+                //url: "https://api.hospitalmetropolitano.org/t/v1/terapia-respiratoria/pedidos" + _queryString,
+                url: "https://api.hospitalmetropolitano.org/t/v1/terapia-respiratoria/trn/pedidos" + _queryString,
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },

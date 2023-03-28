@@ -132,7 +132,7 @@ const checkEsputo = {
           
           //isEsputoSelected = event.target.checked;
           isEsputoSelecteModified = event.target.checked;
-          alert(isEsputoSelecteModified);
+          //alert(isEsputoSelecteModified);
           //checkEsputo.esputoModified = event.target.checked;
           //alert(isEsputoSelected);
           //alert(checkEsputo.esputoModified);
@@ -508,15 +508,15 @@ const FormularioDeRegistro = {
   },
 
   oninit: (_data) => {
-    FormularioDeRegistro.cargarFrecuenciaCardiaca(10090); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarFrecuenciaRespiratoria(10090); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarPeso(10090); // 10090 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarEscalaDelDolor(10090); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFrecuenciaCardiaca(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarPeso(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarEscalaDelDolor(_data.attrs.pedido.AT_MV); // 10090 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFechaActual();
     FormularioDeRegistro.cargarHoraActual();
-    FormularioDeRegistro.cargarPrescripcion(1918); // 1918 // _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarPrescripcion(_data.attrs.pedido.AT_MV); // 1918 // _data.attrs.pedido.AT_MV
     FormularioDeRegistro.cargarFormularioPorCodigoSecuencial(_data.attrs.pedido.AT_MV);// _data.attrs.pedido.AT_MV
-    console.log(_data.attrs.pedido.AT_MV);
+    //console.log(_data.attrs.pedido.AT_MV);
     //console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
     /* terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV);
     terapiaRespiratoriaController.cargarPeso(_data.attrs.pedido.AT_MV);
@@ -540,9 +540,9 @@ const FormularioDeRegistro = {
     return false;
 }, */
   usuarioConectado: [],
-  oncreate: (el) => {
+  /* oncreate: (el) => {
     console.log(el)
-  },
+  }, */
   view: (vnode) => {
     if (FormularioDeRegistro.datosPorSecuencial.length !==0 && FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV){
       return m("form", {
@@ -1046,7 +1046,7 @@ const FormularioDeRegistro = {
                 class: "form-control",
                 type: "text",
                 id: "inputSuccion",
-                placeholder: "Frecuencia Cardiaca",
+                placeholder: "Succión",
                 //passive: true,
                 //readonly: "readonly",
                 //disabled: obtenerDatos.habilitarCampos,
@@ -1859,7 +1859,7 @@ const FormularioDeRegistro = {
                 class: "form-control",
                 type: "text",
                 id: "inputSuccion",
-                placeholder: "Frecuencia Cardiaca",
+                placeholder: "Succión",
                 //readonly: "readonly",
                 //disabled: obtenerDatos.habilitarCampos,
                 maxlength: 50,

@@ -622,7 +622,7 @@ const Pedido = {
         Pedido.loader = true;
         m.request({
                 method: "POST",
-                url: "https://api.hospitalmetropolitano.org/t/v1/status-pedido-tr",
+                url: "https://api.hospitalmetropolitano.org/t/v1/trn/status-pedido-tr",
                 body: {
                     numeroPedido: Pedido.numeroPedido,
                 },

@@ -1040,23 +1040,29 @@ const FormularioDeRegistro = {
           "div",
           { class: "form-row" },
           m("div", { class: "form-group col-md-12" }, [
-            m("label", { for: "inputSuccion" }, "Succión"),
+            m("label", { for: "inputSuccion" }, "Oxinoterapia"),
             m("div", { class: "input-group" }, [
-              m("input", {
-                class: "form-control",
-                type: "text",
-                id: "inputSuccion",
-                placeholder: "Succión",
-                //passive: true,
-                //readonly: "readonly",
-                //disabled: obtenerDatos.habilitarCampos,
-                maxlength: 50,
-                /* oninput: function (event) {
-                  event.target.value = event.target.value.slice(0, 50);
-                  
-                }, */
-                value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].SUCCION_TERAPIA : "" : ""
-              }),
+              m(
+                "select",
+                {
+                  class: "custom-select",
+                  //disabled: obtenerDatos.habilitarCampos,
+                  id: "inputSuccion",
+                },
+                [
+                  m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].SUCCION_TERAPIA : "" : ""),
+                  //m("option", "Seleccione..."),
+                  m(
+                    "option",
+                    { value: "1" },
+                    "Nasotraqueal"
+                  ),
+                  m("option", { value: "2" }, "Traqueal"),
+                  m("option", { value: "2" }, "Otrotraqueal"),
+                  m("option", { value: "3" }, "Lavado Nasal"),
+                  m("option", { value: "4" }, "Subglótica"),
+                ]
+              ),
             ]),
           ])
         ),
@@ -1309,7 +1315,12 @@ const FormularioDeRegistro = {
                   ].text
                 }`,
                 CANTIDAD_MONITOREO_TERAPIA: soloLongitudDe10(vnode.dom["inputMonitoreoPrevio2"].value),
-                SUCCION_TERAPIA: `${vnode.dom["inputSuccion"].value}`,
+                //SUCCION_TERAPIA: `${vnode.dom["inputSuccion"].value}`,
+                SUCCION_TERAPIA: `${
+                  vnode.dom["inputSuccion"].options[
+                    vnode.dom["inputSuccion"].selectedIndex
+                  ].text
+                }`,
                 ESPUTO: isEsputoSelecteModified === "" ? FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO : isEsputoSelecteModified ? "true" : "false",
                 PANEL_VIRAL: isPanelViralSelectedModified === "" ?FormularioDeRegistro.datosPorSecuencial.data[0].PANEL_VIRAL : isPanelViralSelectedModified ? "true" : "false",//isPanelViralSelected ? "true" : "false",
                 OBSERVACION_CLINICA: `${vnode.dom["textAreaObservacionClinica"].value}`,

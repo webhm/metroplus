@@ -1849,25 +1849,36 @@ const FormularioDeRegistro = {
           //readonly: "readonly",
           disabled: obtenerDatos.habilitarCampos
         }), */
+        
+        /* ----------------- */
         m(
           "div",
           { class: "form-row" },
           m("div", { class: "form-group col-md-12" }, [
             m("label", { for: "inputSuccion" }, "Succión"),
             m("div", { class: "input-group" }, [
-              m("input", {
-                class: "form-control",
-                type: "text",
-                id: "inputSuccion",
-                placeholder: "Succión",
-                //readonly: "readonly",
-                //disabled: obtenerDatos.habilitarCampos,
-                maxlength: 50,
-                oninput: function (event) {
-                  event.target.value = event.target.value.slice(0, 50);
+              m(
+                "select",
+                {
+                  class: "custom-select",
+                  //disabled: obtenerDatos.habilitarCampos,
+                  id: "inputSuccion",
                 },
-                /* value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].SUCCION_TERAPIA : "" : "" */
-              }),
+                [
+                  /* m("option", FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].OXIGENO_TERAPIA : "Seleccione..." : "Seleccione..."), */
+                  m("option", ""),
+                  m(
+                    "option",
+                    { value: "1" },
+                    "Fracción inspirada de oxígeno (FiO2)%"
+                  ),
+                  m("option", { value: "2" }, "Nasotraqueal"),
+                  m("option", { value: "3" }, "Traqueal"),
+                  m("option", { value: "4" }, "Otrotraqueal"),
+                  m("option", { value: "4" }, "Lavado nasal"),
+                  m("option", { value: "4" }, "Subglótica"),
+                ]
+              ),
             ]),
           ])
         ),
@@ -2011,7 +2022,12 @@ const FormularioDeRegistro = {
                   ].text
                 }'`,
                 CANTIDAD_MONITOREO_TERAPIA: `'${vnode.dom["inputMonitoreoPrevio2"].value}'`,
-                SUCCION_TERAPIA: `'${vnode.dom["inputSuccion"].value}'`,
+                //SUCCION_TERAPIA: `'${vnode.dom["inputSuccion"].value}'`,
+                SUCCION_TERAPIA: `'${
+                  vnode.dom["inputSuccion"].options[
+                    vnode.dom["inputSuccion"].selectedIndex
+                  ].text
+                }'`,
                 ESPUTO: isEsputoSelected ? "'true'" : "'false'",
                 PANEL_VIRAL: isPanelViralSelected ? "'true'" : "'false'",
                 OBSERVACION_CLINICA: `'${vnode.dom["textAreaObservacionClinica"].value}'`,

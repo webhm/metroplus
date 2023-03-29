@@ -253,7 +253,14 @@ const BuscadorPacientes = {
                                 m("button.btn.btn-sm.btn-block.btn-primary[type='button']", {
                                     onclick: () => {
                                         Cita.nhc = _i._aData.CD_PACIENTE;
+                                        Cita.patientId = _i._aData.CD_PACIENTE;
                                         Cita.paciente = _i._aData.NM_PACIENTE;
+                                        Cita.patientName = _i._aData.NM_PACIENTE;
+                                        Cita.phoneNumber = '0998785402';
+                                        Cita.sexType = 'MALE';
+                                        Cita.dateBirth = '1993-08-01';
+                                        Cita.email = 'mchangcnt@gmail.com';
+
                                         AgendaImagen.buscarPacientes = !AgendaImagen.buscarPacientes;
                                     }
                                 },
@@ -680,7 +687,6 @@ const BuscadorItems = {
 }
 
 
-
 const Cita = {};
 
 const AgendaImagen = {
@@ -1069,12 +1075,14 @@ const AgendaImagen = {
 
                 Cita.loader = false;
 
+                console.log(res)
+
                 if (res) {
 
-                    alert(res.message);
-                    $('#modalCreateEvent').modal('hide');
-                    AgendaImagen.reloadFetchAgendaImagen();
-                    resetObj(Cita);
+                    // alert(res.message);
+                    // $('#modalCreateEvent').modal('hide');
+                    //  AgendaImagen.reloadFetchAgendaImagen();
+                    //  resetObj(Cita);
 
                 } else {
                     alert(res);
@@ -1141,60 +1149,57 @@ const AgendaImagen = {
                         m("div.calendar-inline", [
                             m("div[id='calendarInline']")
                         ]),
-                        m("div.pd-0[id='accordion']",
-                            [
-                                m("h6.bg-white",
-                                    "Áreas/Salas"
-                                ),
-                                m("div",
-                                    [
-                                        m('div', [
+                        m("div.pd-0[id='accordion']", [
+                            m("h6.bg-white",
+                                "Áreas/Salas"
+                            ),
+                            m("div", [
+                                m('div', [
 
-                                            m("nav.calendar-nav.pd-0", [
-                                                m("a.discover.show[href='']", [
-                                                    m("span"),
-                                                    "  Sala 1 "
-                                                ]),
-                                                m("a.meetup.show[href='']", [
-                                                    m("span"),
-                                                    " Sala 2"
-                                                ]),
+                                    m("nav.calendar-nav.pd-0", [
+                                        m("a.discover.show[href='']", [
+                                            m("span"),
+                                            "  Sala 1 "
+                                        ]),
+                                        m("a.meetup.show[href='']", [
+                                            m("span"),
+                                            " Sala 2"
+                                        ]),
 
-                                            ])
-                                        ])
-                                    ]
-
-                                ),
-                                m("h6.bg-white",
-                                    "Médicos/Prestadores"
-                                ),
-                                m("div",
-                                    "..."
-                                ),
-                                m("h6.bg-white",
-                                    "Configuración"
-                                ),
-                                m("div",
-                                    m('div', [
-
-                                        m("nav.calendar-nav.pd-0", [
-                                            m("a.calendar.show[href='/imagen/agendamiento/configuracion'][target='_blank']", [
-                                                m("span"),
-                                                " Ir a Configuración "
-                                            ]),
-
-                                        ])
                                     ])
-                                ),
-                                m("h6.bg-white",
-                                    "ApiDate Beta v1.0"
-                                ),
-                                m("div",
-                                    "Dirección de Sistemas"
-                                )
-
+                                ])
                             ]
-                        ),
+
+                            ),
+                            m("h6.bg-white",
+                                "Médicos/Prestadores"
+                            ),
+                            m("div",
+                                "..."
+                            ),
+                            m("h6.bg-white",
+                                "Configuración"
+                            ),
+                            m("div",
+                                m('div', [
+
+                                    m("nav.calendar-nav.pd-0", [
+                                        m("a.calendar.show[href='/imagen/agendamiento/configuracion'][target='_blank']", [
+                                            m("span"),
+                                            " Ir a Configuración "
+                                        ]),
+
+                                    ])
+                                ])
+                            ),
+                            m("h6.bg-white",
+                                "ApiDate Beta v1.0"
+                            ),
+                            m("div",
+                                "Dirección de Sistemas"
+                            )
+
+                        ]),
                     ])
                 ]),
                 m("div.calendar-content", [

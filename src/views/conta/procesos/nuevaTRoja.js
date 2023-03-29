@@ -560,6 +560,9 @@ const NuevaTRoja = {
     numeroAtencion: '',
     numeroHistoriaClinica: '',
     autorizado: false,
+    user: '',
+    pass: '',
+    loaderFirma: false,
     oninit: () => {
         NuevaTRoja.fetch();
         moment.lang("es", {
@@ -618,6 +621,7 @@ const NuevaTRoja = {
                 serie: NuevaTRoja.data.serie,
                 sub_categoria: NuevaTRoja.data.sub_categoria,
                 usuario: NuevaTRoja.data.usuario,
+                email: NuevaTRoja.data.email,
                 destino_final: NuevaTRoja.data.destino_final,
             },
             headers: {
@@ -639,6 +643,37 @@ const NuevaTRoja = {
             })
 
     },
+    firmarTR: () => {
+
+        NuevaTRoja.loader = true;
+
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr/login-user",
+            body: {
+                user: NuevaTRoja.user,
+                pass: NuevaTRoja.pass,
+            },
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
+                NuevaTRoja.loader = false;
+
+
+                if (result.status && result.data.length !== 0) {
+                    alert('Usuario autenticado con éxito.');
+                    NuevaTRoja.data.usuario = result.data.NOMBRE + ' - ' + result.data.CARGO + ' - ' + result.data.AREA + ' - ' + result.data.CENTRO_COSTO;
+                    NuevaTRoja.data.email = result.data.EMAIL;
+                } else {
+                    alert(result.message);
+                }
+            })
+            .catch(function (e) {
+                NuevaTRoja.firmarTR();
+            })
+    },
 
     view: (_data) => {
 
@@ -659,7 +694,7 @@ const NuevaTRoja = {
 
 
 
-                            (NuevaTRoja.activos.length !== 0 ? [
+                            (!NuevaTRoja.loader ? [
                                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", {
 
 
@@ -1019,14 +1054,21 @@ const NuevaTRoja = {
                                                                     m("div",
                                                                         (NuevaTRoja.autorizado ? [
                                                                             m("div.input-group", [
-                                                                                m("input.form-control[type='text'][placeholder='Correo Electrónico'][autofocus='true']"),
-                                                                                m("input.form-control[type='password'][placeholder='Contraseña']"),
+                                                                                m("input.form-control[type='text'][placeholder='Correo Electrónico'][autofocus='true']", {
+                                                                                    oninput: (e) => {
+                                                                                        NuevaTRoja.user = e.target.value;
+                                                                                    }
+                                                                                }),
+                                                                                m("input.form-control[type='password'][placeholder='Contraseña']", {
+                                                                                    oninput: (e) => {
+                                                                                        NuevaTRoja.pass = e.target.value;
+                                                                                    }
+                                                                                }),
                                                                             ]),
                                                                             m("div.input-group.mg-t-5",
                                                                                 m("button.btn.btn-primary.btn-block[type='button']", {
                                                                                     onclick: (e) => {
-                                                                                        alert('Usuario validado con éxito');
-                                                                                        NuevaTRoja.data.usuario = 'YUQUILEMA MUÑOZ MOISES - ASISTENTE CONTABLE - ACTIVOS FIJOS - CONTABILIDAD (005295000)';
+                                                                                        NuevaTRoja.firmarTR();
                                                                                     }
                                                                                 },
                                                                                     "Validar"

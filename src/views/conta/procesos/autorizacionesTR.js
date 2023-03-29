@@ -496,7 +496,7 @@ const AutorizacionesTR = {
                             m("td.tx-center", {
                                 onclick: () => {
                                     m.route.set("/contabilidad/proceso/tarjeta-roja/id/", {
-                                        tr: aData.id,
+                                        tr: aData.id.padStart(5, '0'),
                                         track: "view",
                                     });
                                 },

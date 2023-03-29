@@ -135,42 +135,42 @@ const tableConsultarTr = {
                         m("h5.mg-b-0",
                             "Tarjeta Roja:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                    oncreate: (el) => {
-                                        if (ConsultarTr.idFiltro == 1) {
-                                            el.dom.innerHTML = 'Autorizaciones de Hoy';
-                                        }
-                                        if (ConsultarTr.idFiltro == 2) {
-                                            el.dom.innerHTML = 'Autorizaciones Pendientes';
-                                        }
-                                        if (ConsultarTr.idFiltro == 3) {
-                                            el.dom.innerHTML = 'En Revisión Técnica';
-                                        }
-                                        if (ConsultarTr.idFiltro == 4) {
-                                            el.dom.innerHTML = 'En Revisión CT';
-                                        }
-                                        if (ConsultarTr.idFiltro == 5) {
-                                            el.dom.innerHTML = 'En Revisión GC';
-                                        }
+                                oncreate: (el) => {
+                                    if (ConsultarTr.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Autorizaciones de Hoy';
+                                    }
+                                    if (ConsultarTr.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Autorizaciones Pendientes';
+                                    }
+                                    if (ConsultarTr.idFiltro == 3) {
+                                        el.dom.innerHTML = 'En Revisión Técnica';
+                                    }
+                                    if (ConsultarTr.idFiltro == 4) {
+                                        el.dom.innerHTML = 'En Revisión CT';
+                                    }
+                                    if (ConsultarTr.idFiltro == 5) {
+                                        el.dom.innerHTML = 'En Revisión GC';
+                                    }
 
-                                    },
-                                    onupdate: (el) => {
-                                        if (ConsultarTr.idFiltro == 1) {
-                                            el.dom.innerHTML = 'Autorizaciones de Hoy';
-                                        }
-                                        if (ConsultarTr.idFiltro == 2) {
-                                            el.dom.innerHTML = 'Autorizaciones Pendientes';
-                                        }
-                                        if (ConsultarTr.idFiltro == 3) {
-                                            el.dom.innerHTML = 'En Revisión Técnica';
-                                        }
-                                        if (ConsultarTr.idFiltro == 4) {
-                                            el.dom.innerHTML = 'En Revisión CT';
-                                        }
-                                        if (ConsultarTr.idFiltro == 5) {
-                                            el.dom.innerHTML = 'En Revisión GC';
-                                        }
+                                },
+                                onupdate: (el) => {
+                                    if (ConsultarTr.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Autorizaciones de Hoy';
+                                    }
+                                    if (ConsultarTr.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Autorizaciones Pendientes';
+                                    }
+                                    if (ConsultarTr.idFiltro == 3) {
+                                        el.dom.innerHTML = 'En Revisión Técnica';
+                                    }
+                                    if (ConsultarTr.idFiltro == 4) {
+                                        el.dom.innerHTML = 'En Revisión CT';
+                                    }
+                                    if (ConsultarTr.idFiltro == 5) {
+                                        el.dom.innerHTML = 'En Revisión GC';
                                     }
                                 }
+                            }
 
                             )
 
@@ -180,16 +180,16 @@ const tableConsultarTr = {
                                 class: (ConsultarTr.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
-                                        title: "Desde"
-                                    },
+                                    title: "Desde"
+                                },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Desde:')
                                 ),
                                 m("div.link-03", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Desde"
-                                    },
+                                    style: { "cursor": "pointer" },
+                                    title: "Desde"
+                                },
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
                                             el.dom.value = (ConsultarTr.idFiltro !== 1 ? moment(moment(ConsultarTr.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -207,16 +207,16 @@ const tableConsultarTr = {
                                     })
                                 ),
                                 m("div.link-03", {
-                                        title: "Hasta"
-                                    },
+                                    title: "Hasta"
+                                },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Hasta:')
                                 ),
                                 m("div.link-03", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Hasta"
-                                    },
+                                    style: { "cursor": "pointer" },
+                                    title: "Hasta"
+                                },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
                                             el.dom.value = (ConsultarTr.idFiltro !== 1 ? moment(moment(ConsultarTr.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -236,9 +236,9 @@ const tableConsultarTr = {
                             ]),
                             m("div.dropdown.dropleft", [
                                 m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Filtrar"
-                                    },
+                                    style: { "cursor": "pointer" },
+                                    title: "Filtrar"
+                                },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -272,7 +272,7 @@ const tableConsultarTr = {
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function(e) { ConsultarTr.searchField = e.target.value; },
+                                oninput: function (e) { ConsultarTr.searchField = e.target.value; },
                                 value: ConsultarTr.searchField,
                             })
                         ),
@@ -356,81 +356,81 @@ const ConsultarTr = {
             ],
             destroy: true,
             columns: [{
-                    title: "N°:",
-                },
-                {
-                    title: "Fecha:",
-                },
-                {
-                    title: "Motivo de Baja:",
-                },
-                {
-                    title: "Usuario:",
-                },
-                {
-                    title: "Status:",
-                },
-                {
-                    title: "Opciones:",
-                },
+                title: "N°:",
+            },
+            {
+                title: "Fecha:",
+            },
+            {
+                title: "Motivo de Baja:",
+            },
+            {
+                title: "Usuario:",
+            },
+            {
+                title: "Status:",
+            },
+            {
+                title: "Opciones:",
+            },
 
 
             ],
             aoColumnDefs: [{
-                    mRender: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    },
-                    visible: true,
-                    aTargets: [0],
-                    orderable: false,
+                mRender: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return full.fecha;
-                    },
-                    visible: true,
-                    aTargets: [1],
-                    orderable: false,
+                visible: true,
+                aTargets: [0],
+                orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.fecha;
+                },
+                visible: true,
+                aTargets: [1],
+                orderable: false,
+
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.motivo_baja;
+                },
+                visible: true,
+                aTargets: [2],
+                orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.usuario;
+                },
+                visible: true,
+                aTargets: [3],
+                orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return 'OPCIONES';
 
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return full.motivo_baja;
-                    },
-                    visible: true,
-                    aTargets: [2],
-                    orderable: false,
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return full.usuario;
-                    },
-                    visible: true,
-                    aTargets: [3],
-                    orderable: false,
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return 'OPCIONES';
+                visible: true,
+                aTargets: [4],
+                orderable: false,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return 'OPCIONES';
 
-                    },
-                    visible: true,
-                    aTargets: [4],
-                    orderable: false,
                 },
-                {
-                    mRender: function(data, type, full) {
-                        return 'OPCIONES';
-
-                    },
-                    visible: true,
-                    aTargets: [5],
-                    orderable: false,
-                },
+                visible: true,
+                aTargets: [5],
+                orderable: false,
+            },
 
 
             ],
-            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
                 m.mount(nRow, {
                     view: () => {
@@ -454,9 +454,9 @@ const ConsultarTr = {
                                 ),
                             ),
                             m("td", { "style": {} }, [
-                                    aData.usuario
+                                aData.usuario
 
-                                ]
+                            ]
 
                             ),
 
@@ -464,28 +464,28 @@ const ConsultarTr = {
 
                             (aData.status == 1 ? [
                                 m("td.tx-white.tx-semibold.tx-center", {
-                                        style: { "background-color": "#ffc107" }
-                                    },
+                                    style: { "background-color": "#ffc107" }
+                                },
                                     "Pendiente"
                                 )
                             ] : [
                                 m("td.tx-white.tx-semibold.tx-center", {
-                                        style: { "background-color": "#0d9448" }
-                                    },
+                                    style: { "background-color": "#0d9448" }
+                                },
                                     "Gestionando"
                                 )
                             ]),
 
 
                             m("td.tx-center", {
-                                    onclick: () => {
-                                        m.route.set("/contabilidad/proceso/tarjeta-roja/status/", {
-                                            tr: aData.id,
-                                            track: "view",
-                                        });
-                                    },
-                                    "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                                onclick: () => {
+                                    m.route.set("/contabilidad/proceso/tarjeta-roja/status/", {
+                                        tr: aData.id.padStart(5, '0'),
+                                        track: "view",
+                                    });
                                 },
+                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                            },
                                 " Ver Detalle "
 
                             )
@@ -497,7 +497,7 @@ const ConsultarTr = {
                     },
                 });
             },
-            drawCallback: function(settings) {
+            drawCallback: function (settings) {
 
                 ConsultarTr.loader = false;
 
@@ -509,7 +509,7 @@ const ConsultarTr = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function(e) {
+        $('#searchField').keyup(function (e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -527,18 +527,18 @@ const ConsultarTr = {
         }
 
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr" + _queryString,
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/t/v1/procesos/tr" + _queryString,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 ConsultarTr.loader = false;
                 ConsultarTr.pedidos = result.data;
             })
-            .catch(function(e) {
-                setTimeout(function() { ConsultarTr.fetch(); }, 2000);
+            .catch(function (e) {
+                setTimeout(function () { ConsultarTr.fetch(); }, 2000);
             });
 
 
@@ -584,11 +584,11 @@ const ConsultarTr = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", [
-                                    m("div.placeholder-paragraph", [
-                                        m("div.line"),
-                                        m("div.line")
-                                    ])
-                                ]
+                                m("div.placeholder-paragraph", [
+                                    m("div.line"),
+                                    m("div.line")
+                                ])
+                            ]
 
 
                             ),
@@ -690,7 +690,7 @@ const ConsultarTr = {
                 ),
                 m("div.mg-t-10.bg-white", {
 
-                    },
+                },
 
                     m("div.mg-t-10.bg-white",
                         m("div.card-header.pd-t-20.pd-b-0.bd-b-0", [

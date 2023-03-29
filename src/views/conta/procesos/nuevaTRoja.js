@@ -529,8 +529,12 @@ const DestinoFinal = {
 
                 }
             })
-        } else if (_data.attrs.destino_final == 'PRO_LEGAL' || _data.attrs.destino_final == 'ENV_GES_AMB') {
-            return m('h4.tx-semibold', 'N/A');
+        } else if (_data.attrs.destino_final == 'PRO_LEGAL') {
+            return m('h4.tx-semibold', 'Legalización');
+        } else if (_data.attrs.destino_final == 'RET_COLABORADOR') {
+            return m('h4.tx-semibold', 'Entrega Colaborador');
+        } else if (_data.attrs.destino_final == 'ENV_GES_AMB') {
+            return m('h4.tx-semibold', 'Envío a Gestor Ambiental');
         } else {
             return m('select.tx-semibold', {
                 onchange: (e) => {

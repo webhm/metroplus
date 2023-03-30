@@ -60,6 +60,14 @@ const iMdodule = {
             _data.children[0].icon = "fas fa-user-md";
             _data.children[0].modulo = 'Terapia Respiratoria';
             _data.children[0].href = 'terapia-respiratoria';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'terapia-fisica') {
+            _data.children[0].icon = "fas fa-user-md";
+            _data.children[0].modulo = 'Terapia Física';
+            _data.children[0].href = 'terapia-fisica';
+        } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'cardiologia') {
+            _data.children[0].icon = "fas fa-user-md";
+            _data.children[0].modulo = 'Cardiología';
+            _data.children[0].href = 'cardiologia';
         } else if (_data.children[0].modulo !== undefined && _data.children[0].modulo == 'neurofisiologia') {
             _data.children[0].icon = "fas fa-user-md";
             _data.children[0].modulo = 'Neurofisiología';
@@ -140,7 +148,7 @@ const ModulesAccess = {
 
             return [
 
-                Object.keys(_data.modulesAccess).map(function(_v, _i, _contentData) {
+                Object.keys(_data.modulesAccess).map(function (_v, _i, _contentData) {
 
                     if (_data.modulesAccess[_v].length !== 0) {
 
@@ -227,7 +235,7 @@ const Inicio = {
             ]),
             m("div.content.content-components", {
 
-                },
+            },
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
                 }, [
@@ -285,7 +293,7 @@ function loadCustomPage() {
     }
 
     showNavbarActiveSub()
-    $(window).resize(function() {
+    $(window).resize(function () {
         showNavbarActiveSub()
     })
 
@@ -294,7 +302,7 @@ function loadCustomPage() {
 
 
     // Showing sub menu of navbar menu while hiding other siblings
-    $('.navbar-menu .with-sub .nav-link').on('click', function(e) {
+    $('.navbar-menu .with-sub .nav-link').on('click', function (e) {
         e.preventDefault();
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
@@ -305,7 +313,7 @@ function loadCustomPage() {
     })
 
     // Closing dropdown menu of navbar menu
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing nav sub menu of header when clicking outside of it
@@ -317,24 +325,24 @@ function loadCustomPage() {
         }
     })
 
-    $('#mainMenuClose').on('click', function(e) {
+    $('#mainMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('navbar-nav-show');
     });
 
-    $('#sidebarMenuOpen').on('click', function(e) {
+    $('#sidebarMenuOpen').on('click', function (e) {
         e.preventDefault();
         $('body').addClass('sidebar-show');
     })
 
     // Navbar Search
-    $('#navbarSearch').on('click', function(e) {
+    $('#navbarSearch').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').addClass('visible');
         $('.backdrop').addClass('show');
     })
 
-    $('#navbarSearchClose').on('click', function(e) {
+    $('#navbarSearchClose').on('click', function (e) {
         e.preventDefault();
         $('.navbar-search').removeClass('visible');
         $('.backdrop').removeClass('show');
@@ -352,7 +360,7 @@ function loadCustomPage() {
 
 
         // Showing sub menu in sidebar
-        $('.sidebar-nav .with-sub').on('click', function(e) {
+        $('.sidebar-nav .with-sub').on('click', function (e) {
             e.preventDefault();
             $(this).parent().toggleClass('show');
 
@@ -361,18 +369,18 @@ function loadCustomPage() {
     }
 
 
-    $('#mainMenuOpen').on('click touchstart', function(e) {
+    $('#mainMenuOpen').on('click touchstart', function (e) {
         e.preventDefault();
         $('body').addClass('navbar-nav-show');
     })
 
-    $('#sidebarMenuClose').on('click', function(e) {
+    $('#sidebarMenuClose').on('click', function (e) {
         e.preventDefault();
         $('body').removeClass('sidebar-show');
     })
 
     // hide sidebar when clicking outside of it
-    $(document).on('click touchstart', function(e) {
+    $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
         // closing of sidebar menu when clicking outside of it

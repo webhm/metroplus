@@ -507,7 +507,7 @@ const Formulario = {
 const DestinoFinal = {
     view: (_data) => {
 
-        console.log(_data.attrs.destino_final)
+
 
         if (_data.attrs.destino_final == 'ALMACENAR') {
             return m("input", {
@@ -530,11 +530,23 @@ const DestinoFinal = {
                 }
             })
         } else if (_data.attrs.destino_final == 'PRO_LEGAL') {
-            return m('h4.tx-semibold', 'Legalización');
+            return m('h4.tx-semibold', {
+                oncreate: () => {
+                    NuevaTRoja.data.destino_final = 'PRO_LEGAL';
+                }
+            }, 'Legalización');
         } else if (_data.attrs.destino_final == 'RET_COLABORADOR') {
-            return m('h4.tx-semibold', 'Entrega Colaborador');
+            return m('h4.tx-semibold', {
+                oncreate: () => {
+                    NuevaTRoja.data.destino_final = 'RET_COLABORADOR';
+                }
+            }, 'Entrega Colaborador');
         } else if (_data.attrs.destino_final == 'ENV_GES_AMB') {
-            return m('h4.tx-semibold', 'Envío a Gestor Ambiental');
+            return m('h4.tx-semibold', {
+                oncreate: () => {
+                    NuevaTRoja.data.destino_final = 'ENV_GES_AMB';
+                }
+            }, 'Envío a Gestor Ambiental');
         } else {
             return m('select.tx-semibold', {
                 onchange: (e) => {
@@ -605,6 +617,59 @@ const NuevaTRoja = {
     },
     sendDataTR: () => {
 
+
+
+        if (NuevaTRoja.data.accion_sugerida == undefined || NuevaTRoja.data.accion_sugerida.length == 0) {
+            alert('Todos los campos son obligatorios (accion_sugerida).');
+            throw 'Todos los campos son obligatorios (accion_sugerida).';
+        }
+
+        if (NuevaTRoja.data.categoria == undefined || NuevaTRoja.data.categoria.length == 0) {
+            alert('Todos los campos son obligatorios (categoria).');
+            throw 'Todos los campos son obligatorios (categoria).';
+        }
+
+        if (NuevaTRoja.data.marca == undefined || NuevaTRoja.data.marca.length == 0) {
+            alert('Todos los campos son obligatorios (marca).');
+            throw 'Todos los campos son obligatorios (marca).';
+        }
+
+        if (NuevaTRoja.data.modelo == undefined || NuevaTRoja.data.modelo.length == 0) {
+            alert('Todos los campos son obligatorios (modelo).');
+            throw 'Todos los campos son obligatorios (modelo).';
+        }
+
+        if (NuevaTRoja.data.motivo_baja == undefined || NuevaTRoja.data.motivo_baja.length == 0) {
+            alert('Todos los campos son obligatorios (motivo_baja).');
+            throw 'Todos los campos son obligatorios (motivo_baja).';
+        }
+
+        if (NuevaTRoja.data.nombre == undefined || NuevaTRoja.data.nombre.length == 0) {
+            alert('Todos los campos son obligatorios (nombre).');
+            throw 'Todos los campos son obligatorios (nombre).';
+        }
+
+        if (NuevaTRoja.data.serie == undefined || NuevaTRoja.data.serie.length == 0) {
+            alert('Todos los campos son obligatorios (serie).');
+            throw 'Todos los campos son obligatorios (serie).';
+        }
+
+        if (NuevaTRoja.data.sub_categoria == undefined || NuevaTRoja.data.sub_categoria.length == 0) {
+            alert('Todos los campos son obligatorios (sub_categoria).');
+            throw 'Todos los campos son obligatorios (sub_categoria).';
+        }
+
+        if (NuevaTRoja.data.destino_final == undefined || NuevaTRoja.data.destino_final.length == 0) {
+            alert('Todos los campos son obligatorios (destino_final).');
+            throw 'Todos los campos son obligatorios (destino_final).';
+        }
+
+
+        if (NuevaTRoja.data.usuario == undefined || NuevaTRoja.data.usuario.length == 0) {
+            alert('No existe firma de responsabilidad.');
+            throw 'No existe firma de responsabilidad';
+        }
+
         NuevaTRoja.loader = true;
 
         m.request({
@@ -623,6 +688,7 @@ const NuevaTRoja = {
                 usuario: NuevaTRoja.data.usuario,
                 email: NuevaTRoja.data.email,
                 destino_final: NuevaTRoja.data.destino_final,
+                centro_costo: NuevaTRoja.data.centro_costo
             },
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -645,7 +711,7 @@ const NuevaTRoja = {
     },
     firmarTR: () => {
 
-        NuevaTRoja.loader = true;
+        NuevaTRoja.loaderFirma = true;
 
         m.request({
             method: "POST",
@@ -659,13 +725,13 @@ const NuevaTRoja = {
             },
         })
             .then(function (result) {
-                NuevaTRoja.loader = false;
-
+                NuevaTRoja.loaderFirma = false;
 
                 if (result.status && result.data.length !== 0) {
                     alert('Usuario autenticado con éxito.');
                     NuevaTRoja.data.usuario = result.data.NOMBRE + ' - ' + result.data.CARGO + ' - ' + result.data.AREA + ' - ' + result.data.CENTRO_COSTO;
                     NuevaTRoja.data.email = result.data.EMAIL;
+                    NuevaTRoja.data.centro_costo = result.data.CENTRO_COSTO;
                 } else {
                     alert(result.message);
                 }
@@ -674,7 +740,6 @@ const NuevaTRoja = {
                 NuevaTRoja.firmarTR();
             })
     },
-
     view: (_data) => {
 
         return [
@@ -1053,8 +1118,18 @@ const NuevaTRoja = {
                                                                 ] : [
                                                                     m("div",
                                                                         (NuevaTRoja.autorizado ? [
-                                                                            m("div.input-group", [
-                                                                                m("input.form-control[type='text'][placeholder='Correo Electrónico'][autofocus='true']", {
+
+                                                                            m("div.pd-t-10", {
+                                                                                class: NuevaTRoja.loaderFirma ? '' : 'd-none'
+                                                                            }, [
+                                                                                m("div.placeholder-paragraph.wd-100p.pd-5", [
+                                                                                    m("div.line"),
+                                                                                ])
+                                                                            ]),
+                                                                            m("div.input-group", {
+                                                                                class: NuevaTRoja.loaderFirma ? 'd-none' : ''
+                                                                            }, [
+                                                                                m("input.form-control[type='text'][placeholder='Usuario'][autofocus='true']", {
                                                                                     oninput: (e) => {
                                                                                         NuevaTRoja.user = e.target.value;
                                                                                     }
@@ -1064,16 +1139,21 @@ const NuevaTRoja = {
                                                                                         NuevaTRoja.pass = e.target.value;
                                                                                     }
                                                                                 }),
-                                                                            ]),
-                                                                            m("div.input-group.mg-t-5",
-                                                                                m("button.btn.btn-primary.btn-block[type='button']", {
-                                                                                    onclick: (e) => {
-                                                                                        NuevaTRoja.firmarTR();
-                                                                                    }
-                                                                                },
-                                                                                    "Validar"
+                                                                                m("div.input-group.mg-t-5",
+                                                                                    m("button.btn.btn-primary.btn-block[type='button']", {
+                                                                                        onclick: (e) => {
+                                                                                            if (NuevaTRoja.user.length !== 0 && NuevaTRoja.pass.length !== 0) {
+                                                                                                NuevaTRoja.firmarTR();
+                                                                                            } else {
+                                                                                                alert('Usuario y Contraseña son obligatorios.');
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                        "Validar"
+                                                                                    )
                                                                                 )
-                                                                            )
+                                                                            ]),
+
                                                                         ] : [
                                                                             m("button.btn.btn-xs.btn-block.btn-outline-light[type='button']", {
                                                                                 onclick: (e) => {

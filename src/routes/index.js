@@ -67,6 +67,8 @@ import StatusTR from '../views/conta/procesos/statusTR'
 import InicioTR from '../views/conta/procesos/inicioTR'
 import ConsultarTr from '../views/conta/procesos/consultarTR'
 import HeadPublic from '../views/layout/header-public'
+import TerapiaFisica from '../views/tf/tf'
+import Cardio from '../views/cardio/cardio'
 
 
 
@@ -652,6 +654,8 @@ const Routes = {
             }
         }
     }, // NeuroPedido
+    '/cardiologia': Cardio, // Cardio
+    '/terapia-fisica': TerapiaFisica, // TerapiaFisica
     '/terapia-respiratoria': TerapiaRespiratoria, // TerapiaRespiratoria
     '/terapia-respiratoria/pedido/': {
         onmatch: (_data) => {

@@ -1,4 +1,4 @@
-import sidebarTf from '../sidebarTf';
+import sidebarBcoSangre from '../sidebarBcosangre';
 import Notificaciones from '../../../models/notificaciones';
 import m from 'mithril';
 
@@ -111,12 +111,12 @@ function Stopwatch() {
     };
 };
 
-const tablePedidosTF = {
+const tablePedidosBcoSangre = {
     oncreate: () => {
-        PedidosTF.loadPedidos();
-        if (PedidosTF.searchField.length !== 0) {
-            var table = $('#table-pedidos').DataTable();
-            table.search(PedidosTF.searchField).draw();
+        PedidosBcoSangre.loadPedidos();
+        if (PedidosBcoSangre.searchField.length !== 0) {
+            let table = $('#table-pedidos').DataTable();
+            table.search(PedidosBcoSangre.searchField).draw();
         }
 
     },
@@ -126,45 +126,43 @@ const tablePedidosTF = {
 
             m("div.col-12", [
 
-
-
                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
                         m("h5.mg-b-0",
-                            "Pedidos de Terapia Física:",
+                            "Pedidos de Banco de Sangre:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
                                     oncreate: (el) => {
-                                        if (PedidosTF.idFiltro == 1) {
+                                        if (PedidosBcoSangre.idFiltro == 1) {
                                             el.dom.innerHTML = 'Pedidos de Hoy';
                                         }
-                                        if (PedidosTF.idFiltro == 2) {
+                                        if (PedidosBcoSangre.idFiltro == 2) {
                                             el.dom.innerHTML = 'Pedidos entre Fechas';
                                         }
-                                        if (PedidosTF.idFiltro == 3) {
+                                        if (PedidosBcoSangre.idFiltro == 3) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
                                         }
-                                        if (PedidosTF.idFiltro == 4) {
+                                        if (PedidosBcoSangre.idFiltro == 4) {
                                             el.dom.innerHTML = 'Pedidos de C. Externa';
                                         }
-                                        if (PedidosTF.idFiltro == 5) {
+                                        if (PedidosBcoSangre.idFiltro == 5) {
                                             el.dom.innerHTML = 'Pedidos de Hospitalización';
                                         }
                                     },
                                     onupdate: (el) => {
-                                        if (PedidosTF.idFiltro == 1) {
+                                        if (PedidosBcoSangre.idFiltro == 1) {
                                             el.dom.innerHTML = 'Pedidos de Hoy';
                                         }
-                                        if (PedidosTF.idFiltro == 2) {
+                                        if (PedidosBcoSangre.idFiltro == 2) {
                                             el.dom.innerHTML = 'Pedidos entre Fechas';
                                         }
-                                        if (PedidosTF.idFiltro == 3) {
+                                        if (PedidosBcoSangre.idFiltro == 3) {
                                             el.dom.innerHTML = 'Pedidos de Emergencia';
                                         }
-                                        if (PedidosTF.idFiltro == 4) {
+                                        if (PedidosBcoSangre.idFiltro == 4) {
                                             el.dom.innerHTML = 'Pedidos de C. Externa';
                                         }
-                                        if (PedidosTF.idFiltro == 5) {
+                                        if (PedidosBcoSangre.idFiltro == 5) {
                                             el.dom.innerHTML = 'Pedidos de Hospitalización';
                                         }
                                     }
@@ -175,7 +173,7 @@ const tablePedidosTF = {
                         ),
                         m("div.d-flex.tx-14", [
                             m('.', {
-                                class: (PedidosTF.idFiltro == 1 ? 'd-none' : 'd-flex')
+                                class: (PedidosBcoSangre.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
                                         title: "Desde"
@@ -191,14 +189,14 @@ const tablePedidosTF = {
 
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
-                                            el.dom.value = (PedidosTF.idFiltro !== 1 ? moment(moment(PedidosTF.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                            el.dom.value = (PedidosBcoSangre.idFiltro !== 1 ? moment(moment(PedidosBcoSangre.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
                                         },
                                         onchange: (el) => {
-                                            PedidosTF.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            PedidosTF.loader = true;
-                                            PedidosTF.pedidos = [];
-                                            PedidosTF.fetchPedidos();
-                                            m.route.set("/terapia-respiratoria/pedidos?idFiltro=" + PedidosTF.idFiltro + "&fechaDesde=" + PedidosTF.fechaDesde + "&fechaHasta=" + PedidosTF.fechaHasta);
+                                            PedidosBcoSangre.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            PedidosBcoSangre.loader = true;
+                                            PedidosBcoSangre.pedidos = [];
+                                            PedidosBcoSangre.fetchPedidos();
+                                            m.route.set("/terapia-respiratoria/pedidos?idFiltro=" + PedidosBcoSangre.idFiltro + "&fechaDesde=" + PedidosBcoSangre.fechaDesde + "&fechaHasta=" + PedidosBcoSangre.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -218,14 +216,14 @@ const tablePedidosTF = {
                                     },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
-                                            el.dom.value = (PedidosTF.idFiltro !== 1 ? moment(moment(PedidosTF.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                            el.dom.value = (PedidosBcoSangre.idFiltro !== 1 ? moment(moment(PedidosBcoSangre.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
                                         },
                                         onchange: (el) => {
-                                            PedidosTF.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
-                                            PedidosTF.loader = true;
-                                            PedidosTF.pedidos = [];
-                                            PedidosTF.fetchPedidos();
-                                            m.route.set("/terapia-respiratoria/pedidos?idFiltro=" + PedidosTF.idFiltro + "&fechaDesde=" + PedidosTF.fechaDesde + "&fechaHasta=" + PedidosTF.fechaHasta);
+                                            PedidosBcoSangre.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            PedidosBcoSangre.loader = true;
+                                            PedidosBcoSangre.pedidos = [];
+                                            PedidosBcoSangre.fetchPedidos();
+                                            m.route.set("/terapia-respiratoria/pedidos?idFiltro=" + PedidosBcoSangre.idFiltro + "&fechaDesde=" + PedidosBcoSangre.fechaDesde + "&fechaHasta=" + PedidosBcoSangre.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -247,16 +245,16 @@ const tablePedidosTF = {
                                     m(m.route.Link, { class: 'dropdown-item', href: "/terapia-respiratoria/pedidos/?idFiltro=1" }, [
                                         "Pedidos de Hoy"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/terapia-respiratoria/pedidos/?idFiltro=2&fechaDesde=" + PedidosTF.fechaDesde + "&fechaHasta=" + PedidosTF.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/terapia-respiratoria/pedidos/?idFiltro=2&fechaDesde=" + PedidosBcoSangre.fechaDesde + "&fechaHasta=" + PedidosBcoSangre.fechaHasta }, [
                                         "Pedidos entre Fechas"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/terapia-respiratoria/pedidos/?idFiltro=3&fechaDesde=" + PedidosTF.fechaDesde + "&fechaHasta=" + PedidosTF.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/terapia-respiratoria/pedidos/?idFiltro=3&fechaDesde=" + PedidosBcoSangre.fechaDesde + "&fechaHasta=" + PedidosBcoSangre.fechaHasta }, [
                                         "Pedidos de Emergencia"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/terapia-respiratoria/pedidos/?idFiltro=4&fechaDesde=" + PedidosTF.fechaDesde + "&fechaHasta=" + PedidosTF.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/terapia-respiratoria/pedidos/?idFiltro=4&fechaDesde=" + PedidosBcoSangre.fechaDesde + "&fechaHasta=" + PedidosBcoSangre.fechaHasta }, [
                                         "Pedidos de C. Externa"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/terapia-respiratoria/pedidos/?idFiltro=5&fechaDesde=" + PedidosTF.fechaDesde + "&fechaHasta=" + PedidosTF.fechaHasta }, [
+                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/terapia-respiratoria/pedidos/?idFiltro=5&fechaDesde=" + PedidosBcoSangre.fechaDesde + "&fechaHasta=" + PedidosBcoSangre.fechaHasta }, [
                                         "Pedidos de Hospitalización"
                                     ]),
 
@@ -265,14 +263,14 @@ const tablePedidosTF = {
                         ])
                     ]),
                     m("div.col-sm-12.filemgr-content-header", {
-                        class: (PedidosTF.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
+                        class: (PedidosBcoSangre.idFiltro == 1 ? "mg-t-35" : "mg-t-40")
                     }, [
                         m("i[data-feather='search']"),
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function(e) { PedidosTF.searchField = e.target.value; },
-                                value: PedidosTF.searchField,
+                                oninput: function(e) { PedidosBcoSangre.searchField = e.target.value; },
+                                value: PedidosBcoSangre.searchField,
                             })
                         ),
 
@@ -288,7 +286,7 @@ const tablePedidosTF = {
     }
 };
 
-const PedidosTF = {
+const PedidosBcoSangre = {
     notificaciones: [],
     pedidos: [],
     showBitacora: "",
@@ -301,28 +299,28 @@ const PedidosTF = {
     error: "",
     oninit: (_data) => {
 
-        sidebarTf.page = "";
+        sidebarBcoSangre.page = "";
 
-        if (PedidosTF.pedidos.length == 0) {
+        if (PedidosBcoSangre.pedidos.length == 0) {
 
 
-            PedidosTF.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
-            PedidosTF.fechaHasta = moment().format('DD-MM-YYYY');
-            PedidosTF.loader = true;
-            PedidosTF.pedidos = [];
-            PedidosTF.fetchPedidos();
+            PedidosBcoSangre.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+            PedidosBcoSangre.fechaHasta = moment().format('DD-MM-YYYY');
+            PedidosBcoSangre.loader = true;
+            PedidosBcoSangre.pedidos = [];
+            PedidosBcoSangre.fetchPedidos();
 
         }
 
     },
     oncreate: (_data) => {
-        Notificaciones.suscribirCanal('MetroPlus-Terapia-Fisica');
+        Notificaciones.suscribirCanal('MetroPlus-Bco-Sangre');
     },
     loadPedidos: () => {
 
         $.fn.dataTable.ext.errMode = "none";
         var table = $("#table-pedidos").DataTable({
-            data: PedidosTF.pedidos,
+            data: PedidosBcoSangre.pedidos,
             dom: 'ltp',
             language: {
                 searchPlaceholder: "Buscar...",
@@ -476,28 +474,18 @@ const PedidosTF = {
                             ),
 
 
-
                             m("td.tx-center", {
+                                    onclick: () => {
+                                        m.route.set("/cardiologia/pedido/", {
+                                            numeroHistoriaClinica: aData.CD_PACIENTE,
+                                            numeroAtencion: aData.AT_MV,
+                                            numeroPedido: aData.CD_PRE_MED,
+                                            track: "view",
+                                        });
+                                    },
                                     "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
                                 },
-
-                                m(m.route.Link, {
-                                    href: "/terapia-fisica/pedido/",
-                                    class: 'tx-dark',
-                                    target: '_blank',
-                                    params: {
-                                        numeroHistoriaClinica: aData.CD_PACIENTE,
-                                        numeroAtencion: aData.AT_MV,
-                                        numeroPedido: aData.CD_PRE_MED,
-                                        track: "view",
-                                    },
-                                }, [
-                                    " Ver Pedido "
-
-                                ]),
-
-
-
+                                " Ver Pedido "
 
                             )
 
@@ -512,7 +500,7 @@ const PedidosTF = {
             },
             drawCallback: function(settings) {
 
-                PedidosTF.loader = false;
+                PedidosBcoSangre.loader = false;
 
             },
         });
@@ -532,25 +520,25 @@ const PedidosTF = {
 
         let _queryString = '';
 
-        if (PedidosTF.idFiltro == 1) {
-            _queryString = '?idFiltro=' + PedidosTF.idFiltro;
+        if (PedidosBcoSangre.idFiltro == 1) {
+            _queryString = '?idFiltro=' + PedidosBcoSangre.idFiltro;
         } else {
-            _queryString = '?idFiltro=' + PedidosTF.idFiltro + '&fechaDesde=' + PedidosTF.fechaDesde + '&fechaHasta=' + PedidosTF.fechaHasta;
+            _queryString = '?idFiltro=' + PedidosBcoSangre.idFiltro + '&fechaDesde=' + PedidosBcoSangre.fechaDesde + '&fechaHasta=' + PedidosBcoSangre.fechaHasta;
         }
 
         m.request({
                 method: "GET",
-                url: "https://api.hospitalmetropolitano.org/t/v1/terapia-fisica/pedidos" + _queryString,
+                url: "https://api.hospitalmetropolitano.org/t/v1/bco-sangre/pedidos" + _queryString,
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
             })
             .then(function(result) {
-                PedidosTF.loader = false;
-                PedidosTF.pedidos = result.data;
+                PedidosBcoSangre.loader = false;
+                PedidosBcoSangre.pedidos = result.data;
             })
             .catch(function(e) {
-                setTimeout(function() { PedidosTF.fetchPedidos(); }, 2000);
+                setTimeout(function() { PedidosBcoSangre.fetchPedidos(); }, 2000);
             });
 
 
@@ -558,12 +546,12 @@ const PedidosTF = {
     reloadData: () => {
         var table = $('#table-pedidos').DataTable();
         table.clear();
-        table.rows.add(PedidosTF.pedidos).draw();
+        table.rows.add(PedidosBcoSangre.pedidos).draw();
     },
     view: (_data) => {
 
-        return PedidosTF.loader ? [
-            m(sidebarTf, { oncreate: sidebarTf.setPage(41) }),
+        return PedidosBcoSangre.loader ? [
+            m(sidebarBcoSangre, { oncreate: sidebarBcoSangre.setPage(19) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -575,8 +563,8 @@ const PedidosTF = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/terapia-fisica" }, [
-                                " Terapia Física "
+                            m(m.route.Link, { href: "/bco-sangre" }, [
+                                " Banco de Sangre "
                             ])
 
                         ),
@@ -614,8 +602,8 @@ const PedidosTF = {
                 ])
             ),
 
-        ] : PedidosTF.error.length !== 0 ? [
-            m(sidebarTf, { oncreate: sidebarTf.setPage(41) }),
+        ] : PedidosBcoSangre.error.length !== 0 ? [
+            m(sidebarBcoSangre, { oncreate: sidebarBcoSangre.setPage(19) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -627,8 +615,8 @@ const PedidosTF = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/terapia-fisica" }, [
-                                " Terapia Física "
+                            m(m.route.Link, { href: "/bco-sangre" }, [
+                                " Banco de Sangre "
                             ])
 
                         ),
@@ -652,8 +640,8 @@ const PedidosTF = {
                 ])
             ),
 
-        ] : !PedidosTF.loader && PedidosTF.pedidos.length !== 0 ? [
-            m(sidebarTf, { oncreate: sidebarTf.setPage(41) }),
+        ] : !PedidosBcoSangre.loader && PedidosBcoSangre.pedidos.length !== 0 ? [
+            m(sidebarBcoSangre, { oncreate: sidebarBcoSangre.setPage(19) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -665,8 +653,8 @@ const PedidosTF = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/terapia-fisica" }, [
-                                " Terapia Física "
+                            m(m.route.Link, { href: "/bco-sangre" }, [
+                                " Banco de Sangre "
                             ])
 
                         ),
@@ -678,7 +666,7 @@ const PedidosTF = {
                     m("h1.df-title.mg-t-20.mg-b-10",
                         "Recepción de Pedidos:"
                     ),
-                    m(tablePedidosTF)
+                    m(tablePedidosBcoSangre)
 
 
 
@@ -704,7 +692,7 @@ const PedidosTF = {
                         m("div.card-body.pd-0", [
                             m("div.pd-t-10.pd-b-0.pd-x-20.d-flex.align-items-baseline", [
                                 m("h1.tx-normal.tx-rubik.mg-b-0.mg-r-5",
-                                    PedidosTF.pedidos.length
+                                    PedidosBcoSangre.pedidos.length
                                 ),
                                 m("div.tx-18", [
 
@@ -722,8 +710,8 @@ const PedidosTF = {
 
             ])
 
-        ] : !PedidosTF.loader && PedidosTF.pedidos.length == 0 ? [
-            m(sidebarTf, { oncreate: sidebarTf.setPage(41) }),
+        ] : !PedidosBcoSangre.loader && PedidosBcoSangre.pedidos.length == 0 ? [
+            m(sidebarBcoSangre, { oncreate: sidebarBcoSangre.setPage(19) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -735,8 +723,8 @@ const PedidosTF = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/terapia-fisica" }, [
-                                " Terapia Física "
+                            m(m.route.Link, { href: "/bco-sangre" }, [
+                                " Banco de Sangre "
                             ])
 
                         ),
@@ -768,7 +756,7 @@ const PedidosTF = {
                 ])
             ),
         ] : [
-            m(sidebarTf, { oncreate: sidebarTf.setPage(41) }),
+            m(sidebarBcoSangre, { oncreate: sidebarBcoSangre.setPage(19) }),
             m("div.content.content-components",
                 m("div.container.mg-l-0.mg-r-0", {
                     style: { "max-width": "100%" }
@@ -780,8 +768,8 @@ const PedidosTF = {
                             ])
                         ),
                         m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/terapia-fisica" }, [
-                                " Terapia Física "
+                            m(m.route.Link, { href: "/bco-sangre" }, [
+                                " Banco de Sangre "
                             ])
 
                         ),
@@ -820,4 +808,4 @@ const PedidosTF = {
 };
 
 
-export default PedidosTF;
+export default PedidosBcoSangre;

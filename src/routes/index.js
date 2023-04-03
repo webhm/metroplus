@@ -69,6 +69,11 @@ import ConsultarTr from '../views/conta/procesos/consultarTR'
 import HeadPublic from '../views/layout/header-public'
 import TerapiaFisica from '../views/tf/tf'
 import Cardio from '../views/cardio/cardio'
+import PedidosTF from '../views/tf/pedidos/pedidos'
+import PedidosCardio from '../views/cardio/pedidos/pedidos'
+import BcoSangre from '../views/bcosangre/bcosangre'
+import PedidosBcoSangre from '../views/bcosangre/pedidos/pedidos'
+import PedidoTF from '../views/tf/pedidos/pedido'
 
 
 
@@ -580,7 +585,65 @@ const Routes = {
         },
 
     }, //TRPedidos
-    '/bco-sangre/pedidos': BSPedidos, //BSPedidos
+    '/bco-sangre': BcoSangre, //BcoSangre   
+    '/bco-sangre/pedidos': {
+        oninit: (_data) => {
+            App.isAuth('bco-sangre', 19);
+            document.title = "Recepción de Pedidos | " + App.title;
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/bco-sangre/pedidos/', { idFiltro: 1 })
+            }
+            PedidosBcoSangre.idFiltro = _data.attrs.idFiltro;
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== PedidosBcoSangre.idFiltro && PedidosBcoSangre.idFiltro !== 1 && PedidosBcoSangre.fechaDesde !== undefined) {
+                PedidosBcoSangre.idFiltro = _data.attrs.idFiltro;
+                PedidosBcoSangre.fechaDesde = _data.attrs.fechaDesde;
+                PedidosBcoSangre.fechaHasta = _data.attrs.fechaHasta;
+                PedidosBcoSangre.loader = true;
+                PedidosBcoSangre.pedidos = [];
+                PedidosBcoSangre.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    PedidosBcoSangre.idFiltro = _data.attrs.idFiltro;
+                    PedidosBcoSangre.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    PedidosBcoSangre.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (PedidosBcoSangre.pedidos.length == 0) {
+                        PedidosBcoSangre.loader = true;
+                        PedidosBcoSangre.pedidos = [];
+                        PedidosBcoSangre.fetchPedidos();
+                    } else {
+                        PedidosBcoSangre.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("bco-sangre") }),
+                m(PedidosBcoSangre),
+            ];
+        },
+    }, //PedidosBcoSangre
     '/neurofisiologia': Neuro, //Neuro
     '/neurofisiologia/pedidos': {
         oninit: (_data) => {
@@ -655,7 +718,144 @@ const Routes = {
         }
     }, // NeuroPedido
     '/cardiologia': Cardio, // Cardio
+    '/cardiologia/pedidos': {
+        oninit: (_data) => {
+
+            App.isAuth('cardiologia', 42);
+
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/cardiologia/pedidos/', { idFiltro: 1 })
+            }
+
+            PedidosCardio.idFiltro = _data.attrs.idFiltro;
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== PedidosCardio.idFiltro && PedidosCardio.idFiltro !== 1 && PedidosCardio.fechaDesde !== undefined) {
+                PedidosCardio.idFiltro = _data.attrs.idFiltro;
+                PedidosCardio.fechaDesde = _data.attrs.fechaDesde;
+                PedidosCardio.fechaHasta = _data.attrs.fechaHasta;
+                PedidosCardio.loader = true;
+                PedidosCardio.pedidos = [];
+                PedidosCardio.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    PedidosCardio.idFiltro = _data.attrs.idFiltro;
+                    PedidosCardio.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    PedidosCardio.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (PedidosCardio.pedidos.length == 0) {
+                        PedidosCardio.loader = true;
+                        PedidosCardio.pedidos = [];
+                        PedidosCardio.fetchPedidos();
+                    } else {
+                        PedidosCardio.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("cardiologia") }),
+                m(PedidosCardio),
+            ];
+        },
+
+    }, // PedidosCardio,
     '/terapia-fisica': TerapiaFisica, // TerapiaFisica
+    '/terapia-fisica/pedidos': {
+        oninit: (_data) => {
+
+            App.isAuth('terapia-fisica', 41);
+
+            document.title = "Recepción de Pedidos | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && _data.attrs.fechaDesde == undefined) {
+                return m.route.set('/terapia-fisica/pedidos/', { idFiltro: 1 })
+            }
+
+            PedidosTF.idFiltro = _data.attrs.idFiltro;
+
+        },
+        onupdate: (_data) => {
+
+            if (_data.attrs.idFiltro !== PedidosTF.idFiltro && PedidosTF.idFiltro !== 1 && PedidosTF.fechaDesde !== undefined) {
+                PedidosTF.idFiltro = _data.attrs.idFiltro;
+                PedidosTF.fechaDesde = _data.attrs.fechaDesde;
+                PedidosTF.fechaHasta = _data.attrs.fechaHasta;
+                PedidosTF.loader = true;
+                PedidosTF.pedidos = [];
+                PedidosTF.fetchPedidos();
+            } else {
+
+                if (_data.attrs.idFiltro == 1) {
+
+                    moment.lang("es", {
+                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+                            "_"
+                        ),
+                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
+                            "_"
+                        ),
+                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
+                            "_"
+                        ),
+                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+                    });
+
+                    PedidosTF.idFiltro = _data.attrs.idFiltro;
+                    PedidosTF.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    PedidosTF.fechaHasta = moment().format('DD-MM-YYYY');
+                    if (PedidosTF.pedidos.length == 0) {
+                        PedidosTF.loader = true;
+                        PedidosTF.pedidos = [];
+                        PedidosTF.fetchPedidos();
+                    } else {
+                        PedidosTF.loader = false;
+                    }
+                }
+            }
+
+
+        },
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("terapia-fisica") }),
+                m(PedidosTF),
+            ];
+        },
+
+    }, // PedidosTF,
+    '/terapia-fisica/pedido': {
+        onmatch: (_data) => {
+            if (_data.numeroPedido !== undefined) {
+                return PedidoTF;
+            } else {
+                return m.route.SKIP;
+            }
+        }
+    },
     '/terapia-respiratoria': TerapiaRespiratoria, // TerapiaRespiratoria
     '/terapia-respiratoria/pedido/': {
         onmatch: (_data) => {

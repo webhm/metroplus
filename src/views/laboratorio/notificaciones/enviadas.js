@@ -136,43 +136,27 @@ const tableNotificacionesEnviadasLab = {
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
                         m("h5.mg-b-0",
-                            "NotificacionesEnviadasLab de Laboratorio:",
+                            "Notificaciones Enviadas:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                    oncreate: (el) => {
-                                        if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hoy';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab entre Fechas';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 3) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Emergencia';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 4) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de C. Externa';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 5) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hospitalización';
-                                        }
-                                    },
-                                    onupdate: (el) => {
-                                        if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hoy';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab entre Fechas';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 3) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Emergencia';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 4) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de C. Externa';
-                                        }
-                                        if (NotificacionesEnviadasLab.idFiltro == 5) {
-                                            el.dom.innerHTML = 'NotificacionesEnviadasLab de Hospitalización';
-                                        }
+                                oncreate: (el) => {
+                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
                                     }
+                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
+                                    }
+
+                                },
+                                onupdate: (el) => {
+                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
+                                    }
+                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
+                                    }
+
                                 }
+                            }
 
                             )
 
@@ -182,16 +166,16 @@ const tableNotificacionesEnviadasLab = {
                                 class: (NotificacionesEnviadasLab.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
-                                        title: "Desde"
-                                    },
+                                    title: "Desde"
+                                },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Desde:')
                                 ),
                                 m("div.link-03", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Desde"
-                                    },
+                                    style: { "cursor": "pointer" },
+                                    title: "Desde"
+                                },
 
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
@@ -210,16 +194,16 @@ const tableNotificacionesEnviadasLab = {
                                     })
                                 ),
                                 m("div.link-03", {
-                                        title: "Hasta"
-                                    },
+                                    title: "Hasta"
+                                },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Hasta:')
                                 ),
                                 m("div.link-03", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Hasta"
-                                    },
+                                    style: { "cursor": "pointer" },
+                                    title: "Hasta"
+                                },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
                                             el.dom.value = (NotificacionesEnviadasLab.idFiltro !== 1 ? moment(moment(NotificacionesEnviadasLab.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -239,9 +223,9 @@ const tableNotificacionesEnviadasLab = {
                             ]),
                             m("div.dropdown.dropleft", [
                                 m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                        style: { "cursor": "pointer" },
-                                        title: "Filtrar"
-                                    },
+                                    style: { "cursor": "pointer" },
+                                    title: "Filtrar"
+                                },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -249,20 +233,12 @@ const tableNotificacionesEnviadasLab = {
                                         "FILTROS:"
                                     ),
                                     m(m.route.Link, { class: 'dropdown-item', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=1" }, [
-                                        "NotificacionesEnviadasLab de Hoy"
+                                        "Notificaciones de Hoy"
                                     ]),
                                     m(m.route.Link, { class: 'dropdown-item', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=2&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
-                                        "NotificacionesEnviadasLab entre Fechas"
+                                        "Notificaciones entre Fechas"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=3&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
-                                        "NotificacionesEnviadasLab de Emergencia"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=4&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
-                                        "NotificacionesEnviadasLab de C. Externa"
-                                    ]),
-                                    m(m.route.Link, { class: 'dropdown-item d-none', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=5&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
-                                        "NotificacionesEnviadasLab de Hospitalización"
-                                    ]),
+
 
                                 ])
                             ])
@@ -275,7 +251,7 @@ const tableNotificacionesEnviadasLab = {
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function(e) { NotificacionesEnviadasLab.searchField = e.target.value; },
+                                oninput: function (e) { NotificacionesEnviadasLab.searchField = e.target.value; },
                                 value: NotificacionesEnviadasLab.searchField,
                             })
                         ),
@@ -378,174 +354,160 @@ const NotificacionesEnviadasLab = {
                 [0, "Desc"]
             ],
             destroy: true,
-            columns: false,
-            aoColumnDefs: [{
-                    mRender: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    },
-                    visible: false,
-                    aTargets: [0],
-                    orderable: true,
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return full.CD_PRE_MED;
-                    },
-                    visible: false,
-                    aTargets: [1],
-                    orderable: false,
-
-                },
-                {
-                    mRender: function(data, type, full) {
-                        return full.CD_PACIENTE;
-
-                    },
-                    visible: false,
-                    aTargets: [2],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.NM_PACIENTE;
-
-                    },
-                    visible: false,
-                    aTargets: [3],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return full.MED_MV;
-
-                    },
-                    visible: false,
-                    aTargets: [4],
-                    orderable: false,
-
-                }, {
-                    mRender: function(data, type, full) {
-                        return "";
-
-                    },
-                    visible: true,
-                    aTargets: [5],
-                    orderable: false,
-
-                },
+            columns: [{
+                title: "Tipo: ",
+            },
+            {
+                title: "Fecha y Hora: ",
+            },
+            {
+                title: "Pedido N°: ",
+            },
+            {
+                title: "Paciente: ",
+            },
+            {
+                title: "Médico: ",
+            },
+            {
+                title: "Opciones: ",
+            },
 
 
             ],
-            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            aoColumnDefs: [{
+                mRender: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                visible: true,
+                aTargets: [0],
+                orderable: true,
+            },
+            {
+                mRender: function (data, type, full) {
+                    return full.CD_PRE_MED;
+                },
+                visible: true,
+                aTargets: [1],
+                orderable: false,
 
             },
-            drawCallback: function(settings) {
+            {
+                mRender: function (data, type, full) {
+                    return full.CD_PACIENTE;
+
+                },
+                visible: true,
+                aTargets: [2],
+                orderable: false,
+
+            }, {
+                mRender: function (data, type, full) {
+                    return full.NM_PACIENTE;
+
+                },
+                visible: true,
+                aTargets: [3],
+                orderable: false,
+
+            }, {
+                mRender: function (data, type, full) {
+                    return full.MED_MV;
+
+                },
+                visible: true,
+                aTargets: [4],
+                orderable: false,
+
+            }, {
+                mRender: function (data, type, full) {
+                    return "";
+
+                },
+                visible: true,
+                aTargets: [5],
+                orderable: false,
+
+            },
+
+
+            ],
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+                m.mount(nRow, {
+                    view: () => {
+                        return [
+                            m("td.wd-5p", {
+                                class: 'bg-primary',
+                                title: aData.origen
+
+                            }, [
+                                m("span.badge.badge-pill.badge-primary.mg-b-1",
+                                    'R'
+                                )
+
+                            ]),
+                            m("td.wd-15p",
+
+                                m('.d-inline.mg-r-5', aData.fechaExamen + ' ' + aData.horaExamen),
+
+                            ),
+                            m("td.tx-center", { "style": {} },
+                                m("span.tx-semibold.tx-dark.tx-15.wd-100p.mg-b-1",
+                                    aData.sc
+                                ),
+                            ),
+                            m("td", { "style": {} }, [
+                                m('.d-inline.mg-r-5', aData.origen),
+                                m('br'),
+                                'PTE: ' + aData.apellidosPaciente + ' ' + aData.nombresPaciente,
+                            ]
+
+                            ),
+                            m("td",
+                                'MED: ' + aData.medico
+
+                            ),
+
+
+
+                            m("td.tx-center", {
+                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                            },
+
+                                m(m.route.Link, {
+                                    href: "/terapia-fisica/pedido/",
+                                    class: 'tx-dark',
+                                    target: '_blank',
+                                    params: {
+                                        numeroHistoriaClinica: aData.CD_PACIENTE,
+                                        numeroAtencion: aData.AT_MV,
+                                        numeroPedido: aData.CD_PRE_MED,
+                                        track: "view",
+                                    },
+                                }, [
+                                    " Ver Pedido "
+
+                                ]),
+
+
+
+
+                            )
+
+
+
+
+
+                        ];
+                    },
+                });
+
+
+            },
+            drawCallback: function (settings) {
 
                 NotificacionesEnviadasLab.loader = false;
-
-                settings.aoData.map(function(_i) {
-
-                    $(_i.anCells[5]).css("padding", "0");
-
-                    m.mount(_i.anCells[5], {
-                        view: function() {
-                            return ((_i._aData.SECTOR == 'EMERGENCIA') ? [
-                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
-                                    m("div.avatar.tx-center",
-                                        m("i.fas.fa-file-alt.tx-30", {
-                                            title: "Ver Pedido",
-                                            style: { "color": "#325a98", "cursor": "pointer" },
-                                            onclick: () => {
-
-                                                m.route.set("/imagen/pedido/", {
-                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
-                                                    numeroAtencion: _i._aData.AT_MV,
-                                                    numeroPedido: _i._aData.CD_PRE_MED,
-                                                    track: "view",
-                                                });
-
-                                            }
-                                        })
-                                    ),
-                                    m("div.pd-sm-l-10", [
-                                        m("p.tx-medium.tx-13.mg-b-2",
-                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
-                                        ),
-                                        m("p.tx-medium.tx-14.mg-b-2",
-                                            "PTE: " + _i._aData.NM_PACIENTE
-                                        ),
-                                        m("p.tx-medium.mg-b-2",
-                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
-                                        ),
-                                        m("small.tx-12.tx-light.mg-b-0",
-                                            "MEDICO: " + _i._aData.MED_MV
-                                        )
-                                    ]),
-                                    m("div.mg-l-auto.text-right", [
-                                        m("p.tx-medium.mg-b-2",
-                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
-                                        ),
-                                        m("small.tx-12.tx-danger.mg-b-0",
-                                            _i._aData.SECTOR
-                                        ),
-                                        m("p.tx-12.tx-danger.mg-b-0",
-                                            _i._aData.UBICACION
-                                        )
-                                    ])
-                                ])
-
-                            ] : [
-                                m("div.d-inline.list-group-item.d-flex.pd-sm", [
-                                    m("div.avatar.tx-center",
-                                        m("i.fas.fa-file-alt.tx-30", {
-                                            title: "Ver Pedido",
-                                            style: { "color": "#325a98", "cursor": "pointer" },
-                                            onclick: () => {
-
-
-                                                m.route.set("/imagen/pedido/", {
-                                                    numeroHistoriaClinica: _i._aData.CD_PACIENTE,
-                                                    numeroAtencion: _i._aData.AT_MV,
-                                                    numeroPedido: _i._aData.CD_PRE_MED,
-                                                    track: "view",
-                                                });
-                                            }
-                                        })
-                                    ),
-                                    m("div.pd-sm-l-10", [
-                                        m("p.tx-medium.tx-13.mg-b-2",
-                                            "N° PRESCRIPCION MV: " + _i._aData.CD_PRE_MED
-                                        ),
-                                        m("p.tx-medium.tx-14.mg-b-2",
-                                            "PTE: " + _i._aData.NM_PACIENTE
-                                        ),
-                                        m("p.tx-medium.mg-b-2",
-                                            "Edad: " + _i._aData.EDAD + " Peso: " + _i._aData.PESO + "Kg. Altura: " + _i._aData.ALTURA + "m."
-                                        ),
-                                        m("small.tx-12.tx-light.mg-b-0",
-                                            "MEDICO: " + _i._aData.MED_MV
-                                        )
-                                    ]),
-                                    m("div.mg-l-auto.text-right", [
-                                        m("p.tx-medium.mg-b-2",
-                                            _i._aData.FECHA_PEDIDO + " " + _i._aData.HORA_PEDIDO
-                                        ),
-                                        m("small.tx-12.tx-primary.mg-b-0",
-                                            _i._aData.SECTOR
-                                        ),
-                                        m("p.tx-12.tx-primary.mg-b-0",
-                                            _i._aData.UBICACION
-                                        )
-                                    ])
-                                ])
-                            ])
-                        }
-                    });
-
-                })
-
-
-
 
             },
         });
@@ -554,7 +516,7 @@ const NotificacionesEnviadasLab = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function(e) {
+        $('#searchField').keyup(function (e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -572,18 +534,18 @@ const NotificacionesEnviadasLab = {
         }
 
         m.request({
-                method: "GET",
-                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-            .then(function(result) {
+            method: "GET",
+            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (result) {
                 NotificacionesEnviadasLab.loader = false;
                 NotificacionesEnviadasLab.NotificacionesEnviadasLab = result.data;
             })
-            .catch(function(e) {
-                setTimeout(function() { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
+            .catch(function (e) {
+                setTimeout(function () { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
             });
 
 
@@ -599,11 +561,9 @@ const NotificacionesEnviadasLab = {
         return NotificacionesEnviadasLab.loader ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                    style: { "margin-right": "0px" }
-                },
+            m("div.content.content-components",
                 m("div.container", {
-                    style: { "max-width": "none" }
+                    style: { "max-width": "100%" }
                 }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
@@ -630,11 +590,11 @@ const NotificacionesEnviadasLab = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", [
-                                    m("div.placeholder-paragraph", [
-                                        m("div.line"),
-                                        m("div.line")
-                                    ])
-                                ]
+                                m("div.placeholder-paragraph", [
+                                    m("div.line"),
+                                    m("div.line")
+                                ])
+                            ]
 
 
                             ),
@@ -654,11 +614,9 @@ const NotificacionesEnviadasLab = {
         ] : NotificacionesEnviadasLab.error.length !== 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                    style: { "margin-right": "0px" }
-                },
+            m("div.content.content-components",
                 m("div.container", {
-                    style: { "max-width": "none" }
+                    style: { "max-width": "100%" }
                 }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
@@ -696,7 +654,9 @@ const NotificacionesEnviadasLab = {
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components",
-                m("div.container", [
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
                             m(m.route.Link, { href: "/" }, [
@@ -730,11 +690,9 @@ const NotificacionesEnviadasLab = {
         ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                    style: { "margin-right": "0px" }
-                },
+            m("div.content.content-components",
                 m("div.container", {
-                    style: { "max-width": "none" }
+                    style: { "max-width": "100%" }
                 }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
@@ -778,11 +736,9 @@ const NotificacionesEnviadasLab = {
         ] : [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                    style: { "margin-right": "0px" }
-                },
+            m("div.content.content-components",
                 m("div.container", {
-                    style: { "max-width": "none" }
+                    style: { "max-width": "100%" }
                 }, [
                     m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
                         m("li.breadcrumb-item",
@@ -821,8 +777,7 @@ const NotificacionesEnviadasLab = {
 
 
 
-                ])
-            ),
+                ])),
         ];
 
 

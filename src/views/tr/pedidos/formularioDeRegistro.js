@@ -29,7 +29,7 @@ const inputOxinoterapia = {
         class: "form-control",
         type: "number",
         id: "inputOxinoterapia2",
-        placeholder: "Oxinoterapia",
+        placeholder: "Oxigenoterapia",
         //readonly: "readonly",
         //disabled: obtenerDatos.habilitarCampos,
         //maxlength: 10,
@@ -880,7 +880,7 @@ const FormularioDeRegistro = {
           "div",
           { class: "form-row" },
           m("div", { class: "form-group col-md-12" }, [
-            m("label", { for: "inputOxinoterapia" }, "Oxinoterapia"),
+            m("label", { for: "inputOxinoterapia" }, "Oxigenoterapia"),
             m("div", { class: "input-group" }, [
               m(
                 "select",
@@ -1040,7 +1040,7 @@ const FormularioDeRegistro = {
           "div",
           { class: "form-row" },
           m("div", { class: "form-group col-md-12" }, [
-            m("label", { for: "inputSuccion" }, "Oxinoterapia"),
+            m("label", { for: "inputSuccion" }, "Succión"),
             m("div", { class: "input-group" }, [
               m(
                 "select",
@@ -1701,7 +1701,7 @@ const FormularioDeRegistro = {
           "div",
           { class: "form-row" },
           m("div", { class: "form-group col-md-12" }, [
-            m("label", { for: "inputOxinoterapia" }, "Oxinoterapia"),
+            m("label", { for: "inputOxinoterapia" }, "Oxigenoterapia"),
             m("div", { class: "input-group" }, [
               m(
                 "select",
@@ -1728,7 +1728,7 @@ const FormularioDeRegistro = {
                 class: "form-control",
                 type: "number",
                 id: "inputOxinoterapia2",
-                placeholder: "Oxinoterapia",
+                placeholder: "Oxigenoterapia",
                 //readonly: "readonly",
                 //disabled: obtenerDatos.habilitarCampos,
                 maxlength: 10,

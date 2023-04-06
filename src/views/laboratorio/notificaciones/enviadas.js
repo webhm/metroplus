@@ -138,25 +138,25 @@ const tableNotificacionesEnviadasLab = {
                         m("h5.mg-b-0",
                             "Notificaciones Enviadas:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
-                                oncreate: (el) => {
-                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
-                                    }
+                                    oncreate: (el) => {
+                                        if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                            el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
+                                        }
 
-                                },
-                                onupdate: (el) => {
-                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
-                                    }
+                                    },
+                                    onupdate: (el) => {
+                                        if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                            el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
+                                        }
+                                        if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                            el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
+                                        }
 
+                                    }
                                 }
-                            }
 
                             )
 
@@ -166,16 +166,16 @@ const tableNotificacionesEnviadasLab = {
                                 class: (NotificacionesEnviadasLab.idFiltro == 1 ? 'd-none' : 'd-flex')
                             }, [
                                 m("div.link-03", {
-                                    title: "Desde"
-                                },
+                                        title: "Desde"
+                                    },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Desde:')
                                 ),
                                 m("div.link-03", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Desde"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Desde"
+                                    },
 
                                     m("input.tx-light.pd-4[type='date'][id='desde']", {
                                         oncreate: (el) => {
@@ -194,16 +194,16 @@ const tableNotificacionesEnviadasLab = {
                                     })
                                 ),
                                 m("div.link-03", {
-                                    title: "Hasta"
-                                },
+                                        title: "Hasta"
+                                    },
                                     m(".tx-10.pd-r-0", {
                                         style: { "padding-top": "10px" }
                                     }, 'Hasta:')
                                 ),
                                 m("div.link-03", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Hasta"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Hasta"
+                                    },
                                     m("input.tx-light.pd-4[type='date'][id='hasta']", {
                                         oncreate: (el) => {
                                             el.dom.value = (NotificacionesEnviadasLab.idFiltro !== 1 ? moment(moment(NotificacionesEnviadasLab.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
@@ -223,9 +223,9 @@ const tableNotificacionesEnviadasLab = {
                             ]),
                             m("div.dropdown.dropleft", [
                                 m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
-                                    style: { "cursor": "pointer" },
-                                    title: "Filtrar"
-                                },
+                                        style: { "cursor": "pointer" },
+                                        title: "Filtrar"
+                                    },
                                     m("i.fas.fa-filter.tx-18.pd-5")
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
@@ -251,7 +251,7 @@ const tableNotificacionesEnviadasLab = {
                         m("div.search-form",
                             m("input.form-control[type='search'][placeholder='Buscar'][id='searchField']", {
 
-                                oninput: function (e) { NotificacionesEnviadasLab.searchField = e.target.value; },
+                                oninput: function(e) { NotificacionesEnviadasLab.searchField = e.target.value; },
                                 value: NotificacionesEnviadasLab.searchField,
                             })
                         ),
@@ -355,84 +355,84 @@ const NotificacionesEnviadasLab = {
             ],
             destroy: true,
             columns: [{
-                title: "Tipo: ",
-            },
-            {
-                title: "Fecha y Hora: ",
-            },
-            {
-                title: "Pedido N°: ",
-            },
-            {
-                title: "Paciente: ",
-            },
-            {
-                title: "Médico: ",
-            },
-            {
-                title: "Opciones: ",
-            },
+                    title: "Tipo: ",
+                },
+                {
+                    title: "Fecha y Hora: ",
+                },
+                {
+                    title: "Pedido N°: ",
+                },
+                {
+                    title: "Paciente: ",
+                },
+                {
+                    title: "Médico: ",
+                },
+                {
+                    title: "Opciones: ",
+                },
 
 
             ],
             aoColumnDefs: [{
-                mRender: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
+                    mRender: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    visible: true,
+                    aTargets: [0],
+                    orderable: true,
                 },
-                visible: true,
-                aTargets: [0],
-                orderable: true,
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.CD_PRE_MED;
-                },
-                visible: true,
-                aTargets: [1],
-                orderable: false,
-
-            },
-            {
-                mRender: function (data, type, full) {
-                    return full.CD_PACIENTE;
+                {
+                    mRender: function(data, type, full) {
+                        return full.CD_PRE_MED;
+                    },
+                    visible: true,
+                    aTargets: [1],
+                    orderable: false,
 
                 },
-                visible: true,
-                aTargets: [2],
-                orderable: false,
+                {
+                    mRender: function(data, type, full) {
+                        return full.CD_PACIENTE;
 
-            }, {
-                mRender: function (data, type, full) {
-                    return full.NM_PACIENTE;
+                    },
+                    visible: true,
+                    aTargets: [2],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.NM_PACIENTE;
+
+                    },
+                    visible: true,
+                    aTargets: [3],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return full.MED_MV;
+
+                    },
+                    visible: true,
+                    aTargets: [4],
+                    orderable: false,
+
+                }, {
+                    mRender: function(data, type, full) {
+                        return "";
+
+                    },
+                    visible: true,
+                    aTargets: [5],
+                    orderable: false,
 
                 },
-                visible: true,
-                aTargets: [3],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return full.MED_MV;
-
-                },
-                visible: true,
-                aTargets: [4],
-                orderable: false,
-
-            }, {
-                mRender: function (data, type, full) {
-                    return "";
-
-                },
-                visible: true,
-                aTargets: [5],
-                orderable: false,
-
-            },
 
 
             ],
-            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
                 m.mount(nRow, {
                     view: () => {
@@ -458,10 +458,10 @@ const NotificacionesEnviadasLab = {
                                 ),
                             ),
                             m("td", { "style": {} }, [
-                                m('.d-inline.mg-r-5', aData.origen),
-                                m('br'),
-                                'PTE: ' + aData.apellidosPaciente + ' ' + aData.nombresPaciente,
-                            ]
+                                    m('.d-inline.mg-r-5.tx-uppercase', aData.origen),
+                                    m('br'),
+                                    'PTE: ' + aData.apellidosPaciente + ' ' + aData.nombresPaciente,
+                                ]
 
                             ),
                             m("td",
@@ -471,22 +471,17 @@ const NotificacionesEnviadasLab = {
 
 
 
-                            m("td.tx-center", {
-                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                            },
+                            m("td.tx-center.tx-15", {
+                                    "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
+                                },
 
                                 m(m.route.Link, {
-                                    href: "/terapia-fisica/pedido/",
+                                    href: aData.urlfile,
                                     class: 'tx-dark',
                                     target: '_blank',
-                                    params: {
-                                        numeroHistoriaClinica: aData.CD_PACIENTE,
-                                        numeroAtencion: aData.AT_MV,
-                                        numeroPedido: aData.CD_PRE_MED,
-                                        track: "view",
-                                    },
+
                                 }, [
-                                    " Ver Pedido "
+                                    " Ver Log "
 
                                 ]),
 
@@ -505,7 +500,7 @@ const NotificacionesEnviadasLab = {
 
 
             },
-            drawCallback: function (settings) {
+            drawCallback: function(settings) {
 
                 NotificacionesEnviadasLab.loader = false;
 
@@ -516,7 +511,7 @@ const NotificacionesEnviadasLab = {
             minimumResultsForSearch: Infinity
         });
 
-        $('#searchField').keyup(function (e) {
+        $('#searchField').keyup(function(e) {
 
             table.search($('#searchField').val()).draw();
         });
@@ -534,18 +529,18 @@ const NotificacionesEnviadasLab = {
         }
 
         m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+            .then(function(result) {
                 NotificacionesEnviadasLab.loader = false;
                 NotificacionesEnviadasLab.NotificacionesEnviadasLab = result.data;
             })
-            .catch(function (e) {
-                setTimeout(function () { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
+            .catch(function(e) {
+                setTimeout(function() { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
             });
 
 
@@ -590,11 +585,11 @@ const NotificacionesEnviadasLab = {
                         m("div.col-12", [
 
                             m("div.table-loader.wd-100p", [
-                                m("div.placeholder-paragraph", [
-                                    m("div.line"),
-                                    m("div.line")
-                                ])
-                            ]
+                                    m("div.placeholder-paragraph", [
+                                        m("div.line"),
+                                        m("div.line")
+                                    ])
+                                ]
 
 
                             ),

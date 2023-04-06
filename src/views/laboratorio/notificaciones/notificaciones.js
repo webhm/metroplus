@@ -100,7 +100,7 @@ const NotificacionesLab = {
                                     ]),
 
                                 ]),
-                                m("li", {
+                                m("li.d-none", {
                                     "class": "list-item bg-white wd-100p",
                                     "style": { "cursor": "pointer" },
                                     onclick: () => {
@@ -123,7 +123,7 @@ const NotificacionesLab = {
 
                                 ]),
 
-                                m("li", {
+                                m("li.d-none", {
                                     "class": "list-item bg-white wd-100p",
                                     "style": { "cursor": "pointer" },
                                     onclick: () => {

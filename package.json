@@ -28,6 +28,8 @@
         "localstorage-slim": "^2.3.0",
         "mithril": "^2.2.2",
         "pdfobject": "^2.2.8",
+        "pretty-print-json": "^2.0.0",
+        "qrcode": "^1.5.1",
         "xml-js": "^1.6.11"
     },
     "devDependencies": {

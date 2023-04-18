@@ -1,6 +1,8 @@
 import SidebarLab from '../sidebarLab';
 import Notificaciones from '../../../models/notificaciones';
 import HeaderPrivate from '../../layout/header-private';
+import qrcode from "qrcode";
+import { prettyPrintJson } from 'pretty-print-json';
 
 
 import m from 'mithril';
@@ -313,6 +315,7 @@ const NotificacionesEnviadasLab = {
 
     oncreate: (_data) => {
         Notificaciones.suscribirCanal('MetroPlus-NotificacionesEnviadasLab');
+
     },
 
     loadNotificacionesEnviadasLab: () => {
@@ -437,7 +440,7 @@ const NotificacionesEnviadasLab = {
                 m.mount(nRow, {
                     view: () => {
                         return [
-                            m("td.wd-5p", {
+                            m("td.wd-5p.tx-13", {
                                 class: 'bg-primary',
                                 title: aData.origen
 
@@ -447,17 +450,17 @@ const NotificacionesEnviadasLab = {
                                 )
 
                             ]),
-                            m("td.wd-15p",
+                            m("td.wd-15p.tx-13",
 
                                 m('.d-inline.mg-r-5', aData.fechaExamen + ' ' + aData.horaExamen),
 
                             ),
-                            m("td.tx-center", { "style": {} },
+                            m("td.tx-center.tx-13", { "style": {} },
                                 m("span.tx-semibold.tx-dark.tx-15.wd-100p.mg-b-1",
-                                    aData.sc
+                                    aData.sc.slice(2)
                                 ),
                             ),
-                            m("td", { "style": {} }, [
+                            m("td.tx-13", { "style": {} }, [
                                 m('.d-inline.mg-r-5.tx-uppercase', aData.origen),
                                 m('br'),
                                 'PTE: ' + aData.apellidosPaciente + ' ' + aData.nombresPaciente,
@@ -471,19 +474,85 @@ const NotificacionesEnviadasLab = {
 
 
 
-                            m("td.tx-center.tx-15", {
-                                "style": { "background-color": "rgb(168, 190, 214)", "cursor": "pointer" }
-                            },
+                            m("td.tx-center.tx-15.wd-15p",
 
-                                m(m.route.Link, {
-                                    href: aData.urlfile,
-                                    class: 'tx-dark',
-                                    target: '_blank',
 
-                                }, [
-                                    " Ver Log "
 
-                                ]),
+                                m(".btn-group.btn-group-sm[role='group']", [
+                                    m('button.btn.btn-secondary.tx-12', {
+                                        onclick: () => {
+
+                                            let modal = $('#modalViewLogs');
+                                            modal.modal('show');
+
+                                            let dataLog = {
+                                                numeroHistoriaClinica: aData.numeroHistoriaClinica,
+                                                apellidosPaciente: aData.apellidosPaciente,
+                                                nombresPaciente: aData.nombresPaciente,
+                                                sc: aData.sc,
+                                                fechaExamen: aData.fechaExamen,
+                                                horaExamen: aData.horaExamen,
+                                                origen: aData.origen,
+                                                servicio: aData.servicio,
+                                                medico: aData.medico,
+                                                motivo: aData.motivo,
+                                                ultimaValidacion: aData.ultimaValidacion,
+                                                ultimoFiltrado: aData.ultimoFiltrado,
+                                                reglasFiltrosEnvio: aData.reglasFiltrosEnvio,
+                                                correosElectronicos: aData.correosElectronicos,
+                                                logsEnvio: aData.logsEnvio,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            };
+
+                                            let elem = document.getElementById('logRes');
+                                            elem.innerHTML = prettyPrintJson.toHtml(dataLog);
+
+
+                                        }
+
+                                    }, [
+                                        " Ver Logs "
+                                    ]),
+                                    m('button.btn.btn-secondary.tx-12', {
+                                        onclick: () => {
+
+                                            let modal = $('#modalViewQR');
+                                            modal.modal('show');
+
+                                            let canvasElement = document.querySelector('canvas.qr');
+                                            qrcode.toCanvas(canvasElement, aData.urlResultado);
+
+                                        }
+
+                                    }, [
+                                        " Ver QR "
+                                    ]),
+                                    m(m.route.Link, {
+                                        href: aData.urlResultado,
+                                        class: 'button btn btn-secondary tx-12',
+                                        target: '_blank',
+
+                                    }, [
+                                        " Link Resultado "
+
+                                    ])
+
+
+
+                                ])
 
 
 
@@ -698,6 +767,54 @@ const NotificacionesEnviadasLab = {
 
                 ])
             ),
+            m(".modal.calendar-modal-event[id='modalViewQR'][role='dialog'][aria-hidden='true']",
+                m(".modal-dialog.modal-dialog-centered.modal-sm[role='document']",
+                    m("div.modal-content", [
+                        m("div.modal-header.bg-primary", [
+                            m("h6.event-title", 'QR Resultado:'),
+                            m("nav.nav.nav-modal-event", [
+                                m("a.nav-link[href='#'][data-dismiss='modal']",
+                                    m("i[data-feather='x']")
+                                )
+                            ])
+                        ]),
+                        m("div.modal-body", [
+                            m("div.row.row-sm", [
+                                m("div.col-sm-12", [
+                                    m("label.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                        "*Escanee con su télefono para continuar."
+                                    ),
+                                    m("p.event-start-date.tx-center", [
+                                        m('canvas.qr.wd-100p')
+                                    ])
+                                ]),
+
+                            ]),
+
+                        ])
+                    ])
+                )
+            ),
+            m(".modal.calendar-modal-event[id='modalViewLogs'][role='dialog'][aria-hidden='true']",
+                m(".modal-dialog.modal-dialog-centered.modal-xl[role='document']",
+                    m("div.modal-content", [
+                        m("div.modal-header.bg-primary", [
+                            m("h6.event-title", 'Logs Resultado:'),
+                            m("nav.nav.nav-modal-event", [
+                                m("a.nav-link[href='#'][data-dismiss='modal']",
+                                    m("i[data-feather='x']")
+                                )
+                            ])
+                        ]),
+                        m("div.modal-body", [
+                            m("div.row.row-sm", [
+                                m("pre.json-container[id='logRes']"),
+                            ]),
+
+                        ])
+                    ])
+                )
+            )
 
 
         ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0 ? [

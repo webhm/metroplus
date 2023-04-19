@@ -138,7 +138,6 @@ const tableNotificacionesEnviadasLab = {
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
                         m("h5.mg-b-0",
-                            "Notificaciones Enviadas:",
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
                                 oncreate: (el) => {
                                     if (NotificacionesEnviadasLab.idFiltro == 1) {
@@ -228,7 +227,14 @@ const tableNotificacionesEnviadasLab = {
                                     style: { "cursor": "pointer" },
                                     title: "Filtrar"
                                 },
-                                    m("i.fas.fa-filter.tx-18.pd-5")
+                                    m("i.fas.fa-filter.tx-18.pd-5"),
+                                    m("div.link-03", {
+                                        title: "Filtros"
+                                    },
+                                        m(".tx-10.pd-r-0", {
+                                            style: { "padding-top": "10px" }
+                                        }, 'Filtros')
+                                    ),
                                 ),
                                 m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
@@ -281,6 +287,9 @@ const NotificacionesEnviadasLab = {
     idFiltro: 0,
     loader: false,
     error: "",
+    totalEnviadas: 0,
+    totalPCR: 0,
+
     oninit: (_data) => {
 
         SidebarLab.page = "";
@@ -354,7 +363,7 @@ const NotificacionesEnviadasLab = {
             },
             cache: false,
             order: [
-                [0, "Desc"]
+                [1, "Desc"]
             ],
             destroy: true,
             columns: [{
@@ -384,47 +393,47 @@ const NotificacionesEnviadasLab = {
                 },
                 visible: true,
                 aTargets: [0],
-                orderable: true,
+                orderable: false,
             },
             {
                 mRender: function (data, type, full) {
-                    return full.CD_PRE_MED;
+                    return full.fechaExamen + ' ' + full.horaExamen;
                 },
                 visible: true,
                 aTargets: [1],
-                orderable: false,
+                orderable: true,
 
             },
             {
                 mRender: function (data, type, full) {
-                    return full.CD_PACIENTE;
+                    return full.sc;
 
                 },
                 visible: true,
                 aTargets: [2],
-                orderable: false,
+                orderable: true,
 
             }, {
                 mRender: function (data, type, full) {
-                    return full.NM_PACIENTE;
+                    return full.numeroHistoriaClinica;
 
                 },
                 visible: true,
                 aTargets: [3],
-                orderable: false,
+                orderable: true,
 
             }, {
                 mRender: function (data, type, full) {
-                    return full.MED_MV;
+                    return full.apellidosPaciente + ' ' + full.nombresPaciente;
 
                 },
                 visible: true,
                 aTargets: [4],
-                orderable: false,
+                orderable: true,
 
             }, {
                 mRender: function (data, type, full) {
-                    return "";
+                    return full.medico;
 
                 },
                 visible: true,
@@ -437,38 +446,45 @@ const NotificacionesEnviadasLab = {
             ],
             fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
+                if (aData._PCR == 1) {
+                    Notificaciones.totalPCR = (Notificaciones.totalPCR + 1);
+                }
+
                 m.mount(nRow, {
                     view: () => {
                         return [
-                            m("td.wd-5p.tx-13", {
+                            m("td.tx-13", {
                                 class: 'bg-primary',
+                                style: { width: '1%' },
                                 title: aData.origen
 
                             }, [
-                                m("span.badge.badge-pill.badge-primary.mg-b-1",
+                                m("span.badge.badge-pill.badge-primary.tx-12",
                                     'R'
                                 )
 
                             ]),
-                            m("td.wd-15p.tx-13",
-
+                            m("td.wd-20p.tx-13",
+                                m('.d-inline.mg-r-5', 'Fecha Examen:'),
+                                m('br'),
                                 m('.d-inline.mg-r-5', aData.fechaExamen + ' ' + aData.horaExamen),
 
+
                             ),
-                            m("td.tx-center.tx-13", { "style": {} },
+                            m("td.wd-5p.tx-center.tx-13", { "style": {} },
                                 m("span.tx-semibold.tx-dark.tx-15.wd-100p.mg-b-1",
                                     aData.sc.slice(2)
                                 ),
                             ),
-                            m("td.tx-13", { "style": {} }, [
+                            m("td.wd-20p.tx-13", { "style": {} }, [
                                 m('.d-inline.mg-r-5.tx-uppercase', aData.origen),
                                 m('br'),
-                                'PTE: ' + aData.apellidosPaciente + ' ' + aData.nombresPaciente,
+                                aData.apellidosPaciente + ' ' + aData.nombresPaciente,
                             ]
 
                             ),
-                            m("td",
-                                'MED: ' + aData.medico
+                            m("td.wd-20p.tx-13",
+                                aData.medico
 
                             ),
 
@@ -571,7 +587,19 @@ const NotificacionesEnviadasLab = {
             },
             drawCallback: function (settings) {
 
+                settings.aoData.map(function (_v, _i) {
+                    if (_v._aData._PCR == 1) {
+                        NotificacionesEnviadasLab.totalPCR++
+                    }
+                })
+
                 NotificacionesEnviadasLab.loader = false;
+                NotificacionesEnviadasLab.totalEnviadas = (settings.aoData.length - NotificacionesEnviadasLab.totalPCR);
+
+
+
+                m.redraw();
+
 
             },
         });
@@ -625,7 +653,9 @@ const NotificacionesEnviadasLab = {
         return NotificacionesEnviadasLab.loader ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "100%" }
                 }, [
@@ -684,7 +714,9 @@ const NotificacionesEnviadasLab = {
         ] : NotificacionesEnviadasLab.error.length !== 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "100%" }
                 }, [
@@ -729,7 +761,9 @@ const NotificacionesEnviadasLab = {
         ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length !== 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "100%" }
                 }, [
@@ -759,6 +793,71 @@ const NotificacionesEnviadasLab = {
                     m("h1.df-title.mg-t-20.mg-b-10",
                         "Notificaciones Enviadas"
                     ),
+                    m("table", { "class": "table table-borderless table-sm tx-13 tx-nowrap mg-b-0" },
+                        [
+                            m("thead",
+                                m("tr", { "class": "tx-10 tx-spacing-1 tx-color-03 tx-uppercase" },
+                                    [
+
+                                        m("th",
+                                            "Enviadas"
+                                        ),
+                                        m("th", { "class": "text-right" },
+                                            "Total"
+                                        ),
+                                        m("th", { "class": "text-right" },
+                                            "FECHA ÚLTIMO ENVÍO"
+                                        ),
+                                        m("th", { "class": "text-right" },
+                                            "ACTUALIZACIÓN EN"
+                                        )
+                                    ]
+                                )
+                            ),
+                            m("tbody",
+                                [
+                                    m("tr",
+                                        [
+
+                                            m("td", { "class": "tx-medium" },
+                                                "CONSULTA EXTERNA"
+                                            ),
+                                            m("td", { "class": "text-right" },
+                                                NotificacionesEnviadasLab.totalEnviadas
+                                            ),
+                                            m("td", { "class": "text-right" },
+                                                "40.95%"
+                                            ),
+                                            m("td[rowspan='2']", { "class": "text-right" },
+                                                m("h3", { "class": "tx-spacing--1 mg-b-0" },
+                                                    [
+                                                        "20s ",
+
+                                                    ]
+                                                )
+                                            )
+                                        ]
+                                    ),
+                                    m("tr",
+                                        [
+
+                                            m("td", { "class": "tx-medium" },
+                                                "PCR"
+                                            ),
+                                            m("td", { "class": "text-right" },
+                                                NotificacionesEnviadasLab.totalPCR
+                                            ),
+                                            m("td", { "class": "text-right" },
+                                                "47.58%"
+                                            ),
+
+                                        ]
+                                    ),
+
+                                ]
+                            )
+                        ]
+                    ),
                     m(tableNotificacionesEnviadasLab)
 
 
@@ -782,7 +881,7 @@ const NotificacionesEnviadasLab = {
                             m("div.row.row-sm", [
                                 m("div.col-sm-12", [
                                     m("label.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                        "*Escanee con su télefono para continuar."
+                                        "*Escanee con su teléfono para continuar."
                                     ),
                                     m("p.event-start-date.tx-center", [
                                         m('canvas.qr.wd-100p')
@@ -820,7 +919,9 @@ const NotificacionesEnviadasLab = {
         ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0 ? [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "100%" }
                 }, [
@@ -873,7 +974,9 @@ const NotificacionesEnviadasLab = {
         ] : [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components",
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
                 m("div.container", {
                     style: { "max-width": "100%" }
                 }, [

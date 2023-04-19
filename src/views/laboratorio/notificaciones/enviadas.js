@@ -53,12 +53,7 @@ function Stopwatch() {
         view() {
             return [
                 m("div.mg-b-0", [
-                    m("div.d-flex.align-items-center.justify-content-between.mg-b-5", [
-                        m("h6.tx-uppercase.tx-10.tx-spacing-1.tx-color-02.tx-semibold.mg-b-0",
-                            "Actualización en:"
-                        ),
 
-                    ]),
                     m("div.d-flex.justify-content-between.mg-b-5", [
                         m("h5.tx-normal.tx-rubik.mg-b-0",
                             model.seconds + "s."
@@ -137,26 +132,39 @@ const tableNotificacionesEnviadasLab = {
                 m("div.table-content.col-12.pd-r-0.pd-l-0.pd-b-20.", [
 
                     m("div.d-flex.align-items-center.justify-content-between.mg-b-80.mg-t-10", [
+
                         m("h5.mg-b-0",
+                            'Notificaciones: ',
                             m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
                                 oncreate: (el) => {
                                     if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
+                                        el.dom.innerHTML = 'Enviadas de Hoy';
                                     }
+
                                     if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
+                                        el.dom.innerHTML = 'Enviadas entre Fechas';
                                     }
+
+                                    if (NotificacionesEnviadasLab.idFiltro == 3) {
+                                        el.dom.innerHTML = 'Enviadas PCR';
+                                    }
+
 
                                 },
                                 onupdate: (el) => {
                                     if (NotificacionesEnviadasLab.idFiltro == 1) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas de Hoy';
-                                    }
-                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
-                                        el.dom.innerHTML = 'Notificaciones Enviadas entre Fechas';
+                                        el.dom.innerHTML = 'Enviadas de Hoy';
                                     }
 
+                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Enviadas entre Fechas';
+                                    }
+
+                                    if (NotificacionesEnviadasLab.idFiltro == 3) {
+                                        el.dom.innerHTML = 'Enviadas PCR';
+                                    }
                                 }
+
                             }
 
                             )
@@ -187,7 +195,7 @@ const tableNotificacionesEnviadasLab = {
                                             NotificacionesEnviadasLab.loader = true;
                                             NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
                                             NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
-                                            m.route.set("/imagen/NotificacionesEnviadasLab?idFiltro=" + NotificacionesEnviadasLab.idFiltro + "&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta);
+                                            m.route.set("/laboratorio/notificaciones/enviadas?idFiltro=" + NotificacionesEnviadasLab.idFiltro + "&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -214,7 +222,7 @@ const tableNotificacionesEnviadasLab = {
                                             NotificacionesEnviadasLab.loader = true;
                                             NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
                                             NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
-                                            m.route.set("/imagen/NotificacionesEnviadasLab?idFiltro=" + NotificacionesEnviadasLab.idFiltro + "&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta);
+                                            m.route.set("/laboratorio/notificaciones/enviadas?idFiltro=" + NotificacionesEnviadasLab.idFiltro + "&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta);
                                         },
                                         style: {
                                             "border": "transparent"
@@ -240,11 +248,14 @@ const tableNotificacionesEnviadasLab = {
                                     m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
                                         "FILTROS:"
                                     ),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=1" }, [
-                                        "Notificaciones de Hoy"
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/notificaciones/enviadas/?idFiltro=1" }, [
+                                        "Notificaciones Enviadas de Hoy"
                                     ]),
-                                    m(m.route.Link, { class: 'dropdown-item', href: "/imagen/NotificacionesEnviadasLab/?idFiltro=2&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
-                                        "Notificaciones entre Fechas"
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/notificaciones/enviadas/?idFiltro=2&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
+                                        "Notificaciones Enviadas entre Fechas"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/notificaciones/enviadas/?idFiltro=3&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
+                                        "Notificaciones Enviadas PCR"
                                     ]),
 
 
@@ -291,40 +302,12 @@ const NotificacionesEnviadasLab = {
     totalPCR: 0,
 
     oninit: (_data) => {
-
         SidebarLab.page = "";
-
-        if (NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0) {
-
-            moment.lang("es", {
-                months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
-                    "_"
-                ),
-                monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
-                    "_"
-                ),
-                weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
-                    "_"
-                ),
-                weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
-                weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
-            });
-
-
-
-            NotificacionesEnviadasLab.fechaDesde = moment().subtract(2, 'days').format('DD-MM-YYYY');
-            NotificacionesEnviadasLab.fechaHasta = moment().format('DD-MM-YYYY');
-            NotificacionesEnviadasLab.loader = true;
-            NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
-            NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
-
-        }
 
     },
 
     oncreate: (_data) => {
         Notificaciones.suscribirCanal('MetroPlus-NotificacionesEnviadasLab');
-
     },
 
     loadNotificacionesEnviadasLab: () => {
@@ -446,21 +429,22 @@ const NotificacionesEnviadasLab = {
             ],
             fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
-                if (aData._PCR == 1) {
-                    Notificaciones.totalPCR = (Notificaciones.totalPCR + 1);
-                }
+
+
 
                 m.mount(nRow, {
                     view: () => {
                         return [
                             m("td.tx-13", {
-                                class: 'bg-primary',
+                                class: (aData._PCR == 1 ? 'bg-danger' : 'bg-primary'),
                                 style: { width: '1%' },
                                 title: aData.origen
 
                             }, [
-                                m("span.badge.badge-pill.badge-primary.tx-12",
-                                    'R'
+                                m("span.tx-12.badge.badge-pill", {
+                                    class: (aData._PCR == 1 ? 'badge-danger' : 'badge-primary'),
+                                },
+                                    (aData._PCR == 1 ? 'U' : 'R'),
                                 )
 
                             ]),
@@ -468,6 +452,11 @@ const NotificacionesEnviadasLab = {
                                 m('.d-inline.mg-r-5', 'Fecha Examen:'),
                                 m('br'),
                                 m('.d-inline.mg-r-5', aData.fechaExamen + ' ' + aData.horaExamen),
+                                m('br'),
+                                m('.d-inline.mg-r-5', 'Fecha Envío:'),
+                                m('br'),
+                                m('.d-inline.mg-r-5', (aData.fechaEnvio ? aData.fechaEnvio : 'N/D')),
+
 
 
                             ),
@@ -587,19 +576,17 @@ const NotificacionesEnviadasLab = {
             },
             drawCallback: function (settings) {
 
+
+                NotificacionesEnviadasLab.totalPCR = 0;
                 settings.aoData.map(function (_v, _i) {
                     if (_v._aData._PCR == 1) {
                         NotificacionesEnviadasLab.totalPCR++
                     }
+
                 })
 
-                NotificacionesEnviadasLab.loader = false;
                 NotificacionesEnviadasLab.totalEnviadas = (settings.aoData.length - NotificacionesEnviadasLab.totalPCR);
-
-
-
                 m.redraw();
-
 
             },
         });
@@ -617,28 +604,44 @@ const NotificacionesEnviadasLab = {
     },
     fetchNotificacionesEnviadasLab: () => {
 
-        let _queryString = '';
+        if (NotificacionesEnviadasLab.idFiltro !== undefined) {
 
-        if (NotificacionesEnviadasLab.idFiltro == 1) {
-            _queryString = '&idFiltro=' + NotificacionesEnviadasLab.idFiltro;
-        } else {
-            _queryString = '&idFiltro=' + NotificacionesEnviadasLab.idFiltro + '&fechaDesde=' + NotificacionesEnviadasLab.fechaDesde + '&fechaHasta=' + NotificacionesEnviadasLab.fechaHasta;
-        }
 
-        m.request({
-            method: "GET",
-            url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-            .then(function (result) {
-                NotificacionesEnviadasLab.loader = false;
-                NotificacionesEnviadasLab.NotificacionesEnviadasLab = result.data;
+            NotificacionesEnviadasLab.reloadData();
+
+            let _queryString = '';
+
+            if (NotificacionesEnviadasLab.idFiltro == 1) {
+                _queryString = '&idFiltro=' + NotificacionesEnviadasLab.idFiltro;
+            } else {
+                _queryString = '&idFiltro=' + NotificacionesEnviadasLab.idFiltro + '&fechaDesde=' + NotificacionesEnviadasLab.fechaDesde + '&fechaHasta=' + NotificacionesEnviadasLab.fechaHasta;
+            }
+
+            m.request({
+                method: "GET",
+                url: "https://api.hospitalmetropolitano.org/nss/v1/listar/ordenes?type=enviadas" + _queryString,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
             })
-            .catch(function (e) {
-                setTimeout(function () { NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab(); }, 2000);
-            });
+                .then(function (result) {
+
+                    NotificacionesEnviadasLab.loader = false;
+
+                    if (result.data.length == 0) {
+                        NotificacionesEnviadasLab.error = 'No existe resultados.';
+                    } else {
+                        NotificacionesEnviadasLab.error = '';
+                        NotificacionesEnviadasLab.NotificacionesEnviadasLab = result.data;
+                    }
+
+                })
+                .catch(function (e) {
+                    NotificacionesEnviadasLab.error = e;
+                });
+
+
+        }
 
 
     },
@@ -650,7 +653,381 @@ const NotificacionesEnviadasLab = {
 
     view: (_data) => {
 
-        return NotificacionesEnviadasLab.loader ? [
+        return !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.error.length !== 0 ? [
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/laboratorio" }, [
+                                " Laboratorio "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
+                                " Notificaciones de Laboratorio "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Notificaciones Enviadas"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Notificaciones Enviadas"
+                    ),
+                    m("table", { "class": "table table-borderless table-sm tx-13 tx-nowrap mg-b-0" }, [
+                        m("thead",
+                            m("tr", { "class": "tx-10 tx-spacing-1 tx-color-03 tx-uppercase" }, [
+
+                                m("th",
+                                    "Enviadas"
+                                ),
+                                m("th", { "class": "text-right" },
+                                    "Total"
+                                ),
+
+                                m("th", { "class": "text-right" },
+                                    "ACTUALIZACIÓN EN"
+                                )
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+
+                                m("td", { "class": "tx-medium" },
+                                    "CONSULTA EXTERNA"
+                                ),
+                                m("td", { "class": "text-right" },
+                                    NotificacionesEnviadasLab.totalEnviadas
+                                ),
+
+                                m("td[rowspan='2']", { "class": "text-right" },
+                                    m(Stopwatch)
+                                )
+                            ]),
+                            m("tr", [
+
+                                m("td", { "class": "tx-medium" },
+                                    "PCR"
+                                ),
+                                m("td", { "class": "text-right" },
+                                    NotificacionesEnviadasLab.totalPCR
+                                ),
+
+
+
+                            ]),
+
+                        ])
+                    ]),
+
+                    m("div.d-flex.align-items-center.justify-content-between.mg-b-20.mg-t-10", [
+
+                        m("h5.mg-b-0",
+                            'Notificaciones: ',
+                            m("span.badge.badge-primary.tx-semibold.pd-l-10.pd-r-10.mg-l-5.tx-15", {
+                                oncreate: (el) => {
+                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Enviadas de Hoy';
+                                    }
+
+                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Enviadas entre Fechas';
+                                    }
+
+                                    if (NotificacionesEnviadasLab.idFiltro == 3) {
+                                        el.dom.innerHTML = 'Enviadas PCR';
+                                    }
+
+
+                                },
+                                onupdate: (el) => {
+                                    if (NotificacionesEnviadasLab.idFiltro == 1) {
+                                        el.dom.innerHTML = 'Enviadas de Hoy';
+                                    }
+
+                                    if (NotificacionesEnviadasLab.idFiltro == 2) {
+                                        el.dom.innerHTML = 'Enviadas entre Fechas';
+                                    }
+
+                                    if (NotificacionesEnviadasLab.idFiltro == 3) {
+                                        el.dom.innerHTML = 'Enviadas PCR';
+                                    }
+                                }
+
+                            }
+
+                            )
+
+                        ),
+                        m("div.d-flex.tx-14", [
+                            m('.', {
+                                class: (NotificacionesEnviadasLab.idFiltro == 1 ? 'd-none' : 'd-flex')
+                            }, [
+                                m("div.link-03", {
+                                    title: "Desde"
+                                },
+                                    m(".tx-10.pd-r-0", {
+                                        style: { "padding-top": "10px" }
+                                    }, 'Desde:')
+                                ),
+                                m("div.link-03", {
+                                    style: { "cursor": "pointer" },
+                                    title: "Desde"
+                                },
+
+                                    m("input.tx-light.pd-4[type='date'][id='desde']", {
+                                        oncreate: (el) => {
+                                            el.dom.value = (NotificacionesEnviadasLab.idFiltro !== 1 ? moment(moment(NotificacionesEnviadasLab.fechaDesde, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                        },
+                                        onchange: (el) => {
+                                            NotificacionesEnviadasLab.fechaDesde = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            NotificacionesEnviadasLab.loader = true;
+                                            NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
+                                            NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
+                                            m.route.set("/laboratorio/notificaciones/enviadas?idFiltro=" + NotificacionesEnviadasLab.idFiltro + "&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta);
+                                        },
+                                        style: {
+                                            "border": "transparent"
+                                        }
+                                    })
+                                ),
+                                m("div.link-03", {
+                                    title: "Hasta"
+                                },
+                                    m(".tx-10.pd-r-0", {
+                                        style: { "padding-top": "10px" }
+                                    }, 'Hasta:')
+                                ),
+                                m("div.link-03", {
+                                    style: { "cursor": "pointer" },
+                                    title: "Hasta"
+                                },
+                                    m("input.tx-light.pd-4[type='date'][id='hasta']", {
+                                        oncreate: (el) => {
+                                            el.dom.value = (NotificacionesEnviadasLab.idFiltro !== 1 ? moment(moment(NotificacionesEnviadasLab.fechaHasta, 'DD-MM-YYYY')).format('YYYY-MM-DD') : '');
+                                        },
+                                        onchange: (el) => {
+                                            NotificacionesEnviadasLab.fechaHasta = moment(moment(el.target.value, 'YYYY-MM-DD')).format('DD-MM-YYYY');
+                                            NotificacionesEnviadasLab.loader = true;
+                                            NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
+                                            NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
+                                            m.route.set("/laboratorio/notificaciones/enviadas?idFiltro=" + NotificacionesEnviadasLab.idFiltro + "&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta);
+                                        },
+                                        style: {
+                                            "border": "transparent"
+                                        }
+                                    })
+                                )
+                            ]),
+                            m("div.dropdown.dropleft", [
+                                m("div.link-03.lh-0.mg-l-5[id='dropdownMenuButton'][data-toggle='dropdown'][aria-haspopup='true'][aria-expanded='false']", {
+                                    style: { "cursor": "pointer" },
+                                    title: "Filtrar"
+                                },
+                                    m("i.fas.fa-filter.tx-18.pd-5"),
+                                    m("div.link-03", {
+                                        title: "Filtros"
+                                    },
+                                        m(".tx-10.pd-r-0", {
+                                            style: { "padding-top": "10px" }
+                                        }, 'Filtros')
+                                    ),
+                                ),
+                                m(".dropdown-menu.tx-13[aria-labelledby='dropdownMenuButton']", [
+                                    m("h6.dropdown-header.tx-uppercase.tx-12.tx-bold.tx-inverse",
+                                        "FILTROS:"
+                                    ),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/notificaciones/enviadas/?idFiltro=1" }, [
+                                        "Notificaciones Enviadas de Hoy"
+                                    ]),
+                                    m(m.route.Link, {
+                                        class: 'dropdown-item',
+                                        href: "/laboratorio/notificaciones/enviadas/?idFiltro=2&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta,
+
+                                    }, [
+                                        "Notificaciones Enviadas entre Fechas"
+                                    ]),
+                                    m(m.route.Link, { class: 'dropdown-item', href: "/laboratorio/notificaciones/enviadas/?idFiltro=3&fechaDesde=" + NotificacionesEnviadasLab.fechaDesde + "&fechaHasta=" + NotificacionesEnviadasLab.fechaHasta }, [
+                                        "Notificaciones Enviadas PCR"
+                                    ]),
+
+
+                                ])
+                            ])
+                        ])
+                    ]),
+                    m("div.row.animated.fadeInUp", [
+
+                        m("div.col-12", [
+                            m(".alert.alert-danger[role='alert']",
+                                "No existe información disponible."
+                            )
+
+
+                        ])
+                    ]),
+
+
+
+
+
+
+                ])
+            ),
+
+        ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length !== 0 ? [
+            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
+            m("div.content.content-components", {
+                style: { "margin-right": "0px" }
+            },
+                m("div.container", {
+                    style: { "max-width": "100%" }
+                }, [
+                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/" }, [
+                                " MetroPlus "
+                            ])
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/laboratorio" }, [
+                                " Laboratorio "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item",
+                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
+                                " Notificaciones de Laboratorio "
+                            ])
+
+                        ),
+                        m("li.breadcrumb-item.active[aria-current='page']",
+                            "Notificaciones Enviadas"
+                        ),
+
+                    ]),
+                    m("h1.df-title.mg-t-20.mg-b-10",
+                        "Notificaciones Enviadas"
+                    ),
+                    m("table", { "class": "table table-borderless table-sm tx-13 tx-nowrap mg-b-0" }, [
+                        m("thead",
+                            m("tr", { "class": "tx-10 tx-spacing-1 tx-color-03 tx-uppercase" }, [
+
+                                m("th",
+                                    "Enviadas"
+                                ),
+                                m("th", { "class": "text-right" },
+                                    "Total"
+                                ),
+
+                                m("th", { "class": "text-right" },
+                                    "ACTUALIZACIÓN EN"
+                                )
+                            ])
+                        ),
+                        m("tbody", [
+                            m("tr", [
+
+                                m("td", { "class": "tx-medium" },
+                                    "CONSULTA EXTERNA"
+                                ),
+                                m("td", { "class": "text-right" },
+                                    NotificacionesEnviadasLab.totalEnviadas
+                                ),
+
+                                m("td[rowspan='2']", { "class": "text-right" },
+                                    m(Stopwatch)
+                                )
+                            ]),
+                            m("tr", [
+
+                                m("td", { "class": "tx-medium" },
+                                    "PCR"
+                                ),
+                                m("td", { "class": "text-right" },
+                                    NotificacionesEnviadasLab.totalPCR
+                                ),
+
+
+
+                            ]),
+
+                        ])
+                    ]),
+                    m(tableNotificacionesEnviadasLab)
+
+
+
+
+
+                ])
+            ),
+            m(".modal.calendar-modal-event[id='modalViewQR'][role='dialog'][aria-hidden='true']",
+                m(".modal-dialog.modal-dialog-centered.modal-sm[role='document']",
+                    m("div.modal-content", [
+                        m("div.modal-header.bg-primary", [
+                            m("h6.event-title", 'QR Resultado:'),
+                            m("nav.nav.nav-modal-event", [
+                                m("a.nav-link[href='#'][data-dismiss='modal']",
+                                    m("i[data-feather='x']")
+                                )
+                            ])
+                        ]),
+                        m("div.modal-body", [
+                            m("div.row.row-sm", [
+                                m("div.col-sm-12", [
+                                    m("label.tx-11.tx-medium.tx-spacing-1.tx-color-03",
+                                        "*Escanee con su teléfono para continuar."
+                                    ),
+                                    m("p.event-start-date.tx-center", [
+                                        m('canvas.qr.wd-100p')
+                                    ])
+                                ]),
+
+                            ]),
+
+                        ])
+                    ])
+                )
+            ),
+            m(".modal.calendar-modal-event[id='modalViewLogs'][role='dialog'][aria-hidden='true']",
+                m(".modal-dialog.modal-dialog-centered.modal-xl[role='document']",
+                    m("div.modal-content", [
+                        m("div.modal-header.bg-primary", [
+                            m("h6.event-title", 'Logs Resultado:'),
+                            m("nav.nav.nav-modal-event", [
+                                m("a.nav-link[href='#'][data-dismiss='modal']",
+                                    m("i[data-feather='x']")
+                                )
+                            ])
+                        ]),
+                        m("div.modal-body", [
+                            m("div.row.row-sm", [
+                                m("pre.json-container[id='logRes']"),
+                            ]),
+
+                        ])
+                    ])
+                )
+            )
+
+
+        ] : [
             m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
             m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
             m("div.content.content-components", {
@@ -710,320 +1087,6 @@ const NotificacionesEnviadasLab = {
 
                 ])
             ),
-
-        ] : NotificacionesEnviadasLab.error.length !== 0 ? [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
-                m("div.container", {
-                    style: { "max-width": "100%" }
-                }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
-                                " Notificaciones de Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Notificaciones Enviadas"
-                        ),
-
-                    ]),
-                    m("h1.df-title.mg-t-20.mg-b-10",
-                        "Notificaciones Enviadas"
-                    ),
-                    m("div.row.animated.fadeInUp", [
-
-                        m('p', 'No existe infrmac dd ncin')
-                    ]),
-
-
-
-
-
-                ])
-            ),
-
-        ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length !== 0 ? [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
-                m("div.container", {
-                    style: { "max-width": "100%" }
-                }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
-                                " Notificaciones de Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Notificaciones Enviadas"
-                        ),
-
-                    ]),
-                    m("h1.df-title.mg-t-20.mg-b-10",
-                        "Notificaciones Enviadas"
-                    ),
-                    m("table", { "class": "table table-borderless table-sm tx-13 tx-nowrap mg-b-0" },
-                        [
-                            m("thead",
-                                m("tr", { "class": "tx-10 tx-spacing-1 tx-color-03 tx-uppercase" },
-                                    [
-
-                                        m("th",
-                                            "Enviadas"
-                                        ),
-                                        m("th", { "class": "text-right" },
-                                            "Total"
-                                        ),
-                                        m("th", { "class": "text-right" },
-                                            "FECHA ÚLTIMO ENVÍO"
-                                        ),
-                                        m("th", { "class": "text-right" },
-                                            "ACTUALIZACIÓN EN"
-                                        )
-                                    ]
-                                )
-                            ),
-                            m("tbody",
-                                [
-                                    m("tr",
-                                        [
-
-                                            m("td", { "class": "tx-medium" },
-                                                "CONSULTA EXTERNA"
-                                            ),
-                                            m("td", { "class": "text-right" },
-                                                NotificacionesEnviadasLab.totalEnviadas
-                                            ),
-                                            m("td", { "class": "text-right" },
-                                                "40.95%"
-                                            ),
-                                            m("td[rowspan='2']", { "class": "text-right" },
-                                                m("h3", { "class": "tx-spacing--1 mg-b-0" },
-                                                    [
-                                                        "20s ",
-
-                                                    ]
-                                                )
-                                            )
-                                        ]
-                                    ),
-                                    m("tr",
-                                        [
-
-                                            m("td", { "class": "tx-medium" },
-                                                "PCR"
-                                            ),
-                                            m("td", { "class": "text-right" },
-                                                NotificacionesEnviadasLab.totalPCR
-                                            ),
-                                            m("td", { "class": "text-right" },
-                                                "47.58%"
-                                            ),
-
-                                        ]
-                                    ),
-
-                                ]
-                            )
-                        ]
-                    ),
-                    m(tableNotificacionesEnviadasLab)
-
-
-
-
-
-                ])
-            ),
-            m(".modal.calendar-modal-event[id='modalViewQR'][role='dialog'][aria-hidden='true']",
-                m(".modal-dialog.modal-dialog-centered.modal-sm[role='document']",
-                    m("div.modal-content", [
-                        m("div.modal-header.bg-primary", [
-                            m("h6.event-title", 'QR Resultado:'),
-                            m("nav.nav.nav-modal-event", [
-                                m("a.nav-link[href='#'][data-dismiss='modal']",
-                                    m("i[data-feather='x']")
-                                )
-                            ])
-                        ]),
-                        m("div.modal-body", [
-                            m("div.row.row-sm", [
-                                m("div.col-sm-12", [
-                                    m("label.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                        "*Escanee con su teléfono para continuar."
-                                    ),
-                                    m("p.event-start-date.tx-center", [
-                                        m('canvas.qr.wd-100p')
-                                    ])
-                                ]),
-
-                            ]),
-
-                        ])
-                    ])
-                )
-            ),
-            m(".modal.calendar-modal-event[id='modalViewLogs'][role='dialog'][aria-hidden='true']",
-                m(".modal-dialog.modal-dialog-centered.modal-xl[role='document']",
-                    m("div.modal-content", [
-                        m("div.modal-header.bg-primary", [
-                            m("h6.event-title", 'Logs Resultado:'),
-                            m("nav.nav.nav-modal-event", [
-                                m("a.nav-link[href='#'][data-dismiss='modal']",
-                                    m("i[data-feather='x']")
-                                )
-                            ])
-                        ]),
-                        m("div.modal-body", [
-                            m("div.row.row-sm", [
-                                m("pre.json-container[id='logRes']"),
-                            ]),
-
-                        ])
-                    ])
-                )
-            )
-
-
-        ] : !NotificacionesEnviadasLab.loader && NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0 ? [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
-                m("div.container", {
-                    style: { "max-width": "100%" }
-                }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
-                                " Notificaciones de Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Notificaciones Enviadas"
-                        ),
-
-
-                    ]),
-                    m("h1.df-title.mg-t-20.mg-b-10",
-                        "Notificaciones Enviadas"
-                    ),
-                    m("div.row.animated.fadeInUp", [
-
-                        m("div.col-12", [
-
-                            m(".alert.alert-danger[role='alert']",
-                                "No existe información disponible."
-                            )
-
-
-                        ])
-                    ]),
-
-
-
-
-
-
-                ])
-            ),
-        ] : [
-            m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
-            m(SidebarLab, { oncreate: SidebarLab.setPage(15) }),
-            m("div.content.content-components", {
-                style: { "margin-right": "0px" }
-            },
-                m("div.container", {
-                    style: { "max-width": "100%" }
-                }, [
-                    m("ol.breadcrumb.df-breadcrumbs.mg-b-10", [
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/" }, [
-                                " MetroPlus "
-                            ])
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio" }, [
-                                " Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item",
-                            m(m.route.Link, { href: "/laboratorio/notificaciones" }, [
-                                " Notificaciones de Laboratorio "
-                            ])
-
-                        ),
-                        m("li.breadcrumb-item.active[aria-current='page']",
-                            "Notificaciones Enviadas"
-                        ),
-
-                    ]),
-                    m("h1.df-title.mg-t-20.mg-b-10",
-                        "Notificaciones Enviadas"
-                    ),
-                    m("div.row.animated.fadeInUp", [
-
-                        m("div.col-12", [
-
-                            m("p", " Error interno."
-
-                            ),
-
-
-                        ])
-                    ]),
-
-
-
-
-
-
-                ])),
         ];
 
 

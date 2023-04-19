@@ -100,6 +100,7 @@ const Routes = {
     '/laboratorio': Laboratorio, //Laboratorio
     '/laboratorio/lisa/pedidos/ingresados': {
         oninit: (_data) => {
+
             App.isAuth('laboratorio', 16);
             document.title = "Recepción de Pedidos | " + App.title;
 
@@ -122,33 +123,18 @@ const Routes = {
                 LisaPedidosIngresados.fetchPedidosIngresados();
             } else {
 
-                if (_data.attrs.idFiltro == 1) {
-
-                    moment.lang("es", {
-                        months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
-                            "_"
-                        ),
-                        monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
-                            "_"
-                        ),
-                        weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
-                            "_"
-                        ),
-                        weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
-                        weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
-                    });
-
-                    LisaPedidosIngresados.idFiltro = _data.attrs.idFiltro;
-                    LisaPedidosIngresados.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
-                    LisaPedidosIngresados.fechaHasta = moment().format('DD-MM-YYYY');
-                    if (LisaPedidosIngresados.pedidos.length == 0) {
-                        LisaPedidosIngresados.loader = true;
-                        LisaPedidosIngresados.pedidos = [];
-                        LisaPedidosIngresados.fetchPedidosIngresados();
-                    } else {
-                        LisaPedidosIngresados.loader = false;
-                    }
+                LisaPedidosIngresados.idFiltro = _data.attrs.idFiltro;
+                LisaPedidosIngresados.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                LisaPedidosIngresados.fechaHasta = moment().format('DD-MM-YYYY');
+                if (LisaPedidosIngresados.pedidos.length == 0) {
+                    LisaPedidosIngresados.loader = true;
+                    LisaPedidosIngresados.pedidos = [];
+                    LisaPedidosIngresados.fetchPedidosIngresados();
+                } else {
+                    LisaPedidosIngresados.loader = false;
                 }
+
+
             }
 
 
@@ -172,7 +158,80 @@ const Routes = {
     }, //LisaPedido
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
-    '/laboratorio/notificaciones/enviadas': NotificacionesEnviadasLab, //NotificacionesEnviadasLab
+    '/laboratorio/notificaciones/enviadas': {
+        oninit: (_data) => {
+
+            App.isAuth('laboratorio', 15);
+            document.title = "Notificaciones Enviadas | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && (_data.attrs.fechaDesde == undefined || _data.attrs.fechaHasta == undefined)) {
+
+                return m.route.set('/laboratorio/notificaciones/enviadas/', { idFiltro: 1 })
+
+            } else {
+
+                if (_data.attrs.fechaDesde == undefined && _data.attrs.fechaHasta == undefined) {
+                    NotificacionesEnviadasLab.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    NotificacionesEnviadasLab.fechaHasta = moment().format('DD-MM-YYYY');
+                } else {
+
+                    if (_data.attrs.fechaDesde !== undefined && _data.attrs.fechaHasta !== undefined) {
+                        NotificacionesEnviadasLab.fechaDesde = _data.attrs.fechaDesde;
+                        NotificacionesEnviadasLab.fechaHasta = _data.attrs.fechaHasta;
+                    } else {
+                        return m.route.set('/laboratorio/notificaciones/enviadas/', { idFiltro: 1 })
+                    }
+
+                    NotificacionesEnviadasLab.fechaDesde = _data.attrs.fechaDesde;
+                    NotificacionesEnviadasLab.fechaHasta = _data.attrs.fechaHasta;
+                }
+
+
+                if (NotificacionesEnviadasLab.NotificacionesEnviadasLab.length == 0 && NotificacionesEnviadasLab.error.length == 0) {
+
+                    NotificacionesEnviadasLab.idFiltro = _data.attrs.idFiltro;
+                    NotificacionesEnviadasLab.loader = true;
+                    NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
+                    NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
+
+                }
+
+            }
+
+
+        },
+        onupdate: (_data) => {
+
+
+            if (_data.attrs.fechaDesde == undefined && _data.attrs.fechaHasta == undefined) {
+                NotificacionesEnviadasLab.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                NotificacionesEnviadasLab.fechaHasta = moment().format('DD-MM-YYYY');
+            } else {
+                NotificacionesEnviadasLab.fechaDesde = _data.attrs.fechaDesde;
+                NotificacionesEnviadasLab.fechaHasta = _data.attrs.fechaHasta;
+            }
+
+
+            if (_data.attrs.idFiltro !== NotificacionesEnviadasLab.idFiltro) {
+
+
+                NotificacionesEnviadasLab.idFiltro = _data.attrs.idFiltro;
+                NotificacionesEnviadasLab.loader = true;
+                NotificacionesEnviadasLab.NotificacionesEnviadasLab = [];
+                NotificacionesEnviadasLab.fetchNotificacionesEnviadasLab();
+
+            }
+
+
+        },
+
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+                m(NotificacionesEnviadasLab),
+            ];
+        },
+    }, //NotificacionesEnviadasLab
     '/laboratorio/notificaciones/pendientes': NotificacionesPendientesLab, //NotificacionesPendientesLab
     '/laboratorio/notificaciones/error': NotificacionesErroresLab, //NotificacionesErroresLab
     '/laboratorio/flebotomista': {

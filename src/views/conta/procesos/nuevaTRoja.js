@@ -577,19 +577,7 @@ const NuevaTRoja = {
     loaderFirma: false,
     oninit: () => {
         NuevaTRoja.fetch();
-        moment.lang("es", {
-            months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
-                "_"
-            ),
-            monthsShort: "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split(
-                "_"
-            ),
-            weekdays: "Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado".split(
-                "_"
-            ),
-            weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
-            weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
-        });
+
     },
     fetch: () => {
         NuevaTRoja.activos = [];
@@ -679,6 +667,7 @@ const NuevaTRoja = {
                 fecha: moment().format('DD-MM-YYYY'),
                 accion_sugerida: NuevaTRoja.data.accion_sugerida,
                 categoria: NuevaTRoja.data.categoria,
+                area: NuevaTRoja.data.area,
                 marca: NuevaTRoja.data.marca,
                 modelo: NuevaTRoja.data.modelo,
                 motivo_baja: NuevaTRoja.data.motivo_baja,
@@ -799,7 +788,7 @@ const NuevaTRoja = {
                                                                 style: { "background-color": "#eaeff5" }
                                                             },
 
-                                                                m("input", { value: moment().format("dddd, DD-MM-Y"), "class": "form-control tx-semibold tx-15 tx-danger", "type": "text" })
+                                                                m("input", { value: moment().format("dddd, DD-MM-Y"), "class": "form-control tx-semibold tx-15 tx-danger", "type": "text", "disabled": "disabled" })
 
 
                                                             ),
@@ -848,14 +837,15 @@ const NuevaTRoja = {
                                                                     onchange: (e) => {
                                                                         NuevaTRoja.data.id_sub_categoria = e.target.options[e.target.options.selectedIndex].id;
                                                                         NuevaTRoja.data.sub_categoria = e.target.options[e.target.options.selectedIndex].value;
-                                                                        console.log('data => ', NuevaTRoja.data);
+                                                                        NuevaTRoja.data.area = e.target.options[e.target.options.selectedIndex].dataset.area;
                                                                     },
                                                                     class: "custom-select"
                                                                 }, m('option', 'Seleccione...'), NuevaTRoja.activos.subActivos.map(x =>
                                                                 (x.cod_class == NuevaTRoja.data.id_categoria ? [
                                                                     m('option', {
-                                                                        value: x.class,
-                                                                        id: x.cod_class
+                                                                        'value': x.class,
+                                                                        'id': x.cod_class,
+                                                                        'data-area': x.area
                                                                     },
                                                                         x.class
                                                                     )
@@ -968,14 +958,14 @@ const NuevaTRoja = {
 
                                                         m("tr.bg-litecoin.op-9.tx-white", [
                                                             m("th[scope='col'][colspan='10']",
-                                                                "MOTIVO DE BAJA:"
+                                                                "MOTIVO DE SOLICITUD:"
                                                             )
                                                         ]),
                                                         m("tr", [
                                                             m("th.tx-semibold.tx-14[colspan='3']", {
                                                                 style: { "background-color": "#a8bed6" }
                                                             },
-                                                                "Motivo de Baja:"
+                                                                "Motivo de Solicitud:"
                                                             ),
                                                             m("td[colspan='7']", {
                                                                 style: { "background-color": "#eaeff5" }

@@ -734,7 +734,7 @@ const NotificacionesEnviadasLab = {
                         ])
                     ]),
 
-                    m("div.d-flex.align-items-center.justify-content-between.mg-b-20.mg-t-10", [
+                    m("div.d-flex.align-items-center.justify-content-between.mg-b-40.mg-t-10", [
 
                         m("h5.mg-b-0",
                             'Notificaciones: ',

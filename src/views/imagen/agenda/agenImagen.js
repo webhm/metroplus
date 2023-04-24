@@ -885,6 +885,10 @@ const AgendaImagen = {
                     Cita.comentarios = calEvent.description;
                     Cita.ubicacion = calEvent.ubicacion;
                     Cita.tipoCita = 1;
+                    Cita.hashCita = calEvent.hashCita;
+                    Cita.newHashCita = calEvent.start.format('YYYY-MM-DD HH:mm') + '.' + calEvent.end.format('YYYY-MM-DD HH:mm')
+
+                    console.log('Cita', Cita)
 
 
                     let modal = $('#modalUpdateEvent');
@@ -894,6 +898,7 @@ const AgendaImagen = {
 
                 },
                 eventResize: function (calEvent) {
+
 
                     Cita.id = calEvent.id;
                     Cita.start = calEvent.start.format('dddd, DD-MM-YYYY HH:mm');
@@ -946,6 +951,11 @@ const AgendaImagen = {
                 Cita.start = calEvent.start;
                 Cita.end = calEvent.end;
                 Cita.paciente = calEvent.title;
+                Cita.estudio = calEvent.estudio;
+                Cita.prestador = calEvent.prestador;
+
+
+                console.log(calEvent)
 
                 let modal = $('#modalCalendarEvent');
 
@@ -957,6 +967,8 @@ const AgendaImagen = {
 
                 //styling
                 modal.find('.modal-header').css('backgroundColor', (calEvent.source.borderColor) ? calEvent.source.borderColor : calEvent.borderColor);
+
+                m.redraw();
 
             });
 
@@ -1040,6 +1052,117 @@ const AgendaImagen = {
             });
 
     },
+    reAgendarCita: () => {
+
+        Cita.loader = true;
+
+        /*
+               availableServiceId: 0,
+                    covenantId: 2,
+                    covenantPlanId: 2,
+                    dateBirth: "1962-03-23",
+                    email: "mariobe7@hotmail.com",
+                    id: Cita.id,
+                    isFitting: true,
+                    markingTypeId: 0,
+                    patientId: Cita.nhc,
+                    patientName: Cita.paciente,
+                    phoneNumber: "0999721820",
+                    scheduleFormType: "PERSONALLY",
+                    schedulingItemId: 428,
+                    sexType: "MALE",
+                    specialityId: 66,
+                    statusScheduleType: "M"
+        */
+
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/v2/date/citas/update",
+            body: Cita,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (res) {
+
+                Cita.loader = false;
+
+                console.log(res)
+
+                if (res.status) {
+
+                    alert(res.message);
+                    $('#modalCreateEvent').modal('hide');
+                    AgendaImagen.reloadFetchAgendaImagen();
+                    resetObj(Cita);
+
+                } else {
+                    alert(res.message);
+                }
+
+            })
+            .catch(function (e) {
+                alert(e);
+
+            });
+
+    },
+
+    cancelarCita: () => {
+
+        Cita.loader = true;
+
+        /*
+               availableServiceId: 0,
+                    covenantId: 2,
+                    covenantPlanId: 2,
+                    dateBirth: "1962-03-23",
+                    email: "mariobe7@hotmail.com",
+                    id: Cita.id,
+                    isFitting: true,
+                    markingTypeId: 0,
+                    patientId: Cita.nhc,
+                    patientName: Cita.paciente,
+                    phoneNumber: "0999721820",
+                    scheduleFormType: "PERSONALLY",
+                    schedulingItemId: 428,
+                    sexType: "MALE",
+                    specialityId: 66,
+                    statusScheduleType: "M"
+        */
+
+        m.request({
+            method: "POST",
+            url: "https://api.hospitalmetropolitano.org/v2/date/citas/delete",
+            body: Cita,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(function (res) {
+
+                Cita.loader = false;
+
+                console.log(res)
+
+                if (res.status) {
+
+                    alert(res.message);
+                    $('#modalCreateEvent').modal('hide');
+                    AgendaImagen.reloadFetchAgendaImagen();
+                    resetObj(Cita);
+
+                } else {
+                    alert(res.message);
+                }
+
+            })
+            .catch(function (e) {
+                alert(e);
+
+            });
+
+    },
     agendarCita: () => {
 
         Cita.loader = true;
@@ -1077,23 +1200,24 @@ const AgendaImagen = {
 
                 console.log(res)
 
-                if (res) {
+                if (res.status) {
 
-                    // alert(res.message);
-                    // $('#modalCreateEvent').modal('hide');
-                    //  AgendaImagen.reloadFetchAgendaImagen();
-                    //  resetObj(Cita);
+                    alert(res.message);
+                    $('#modalCreateEvent').modal('hide');
+                    AgendaImagen.reloadFetchAgendaImagen();
+                    resetObj(Cita);
 
                 } else {
-                    alert(res);
+                    alert(res.message);
                 }
 
             })
-            .catch(function (e) { });
+            .catch(function (e) {
+                alert(e);
+
+            });
 
     },
-
-
     view: (_data) => {
 
         return AgendaImagen.loader ? [
@@ -2010,7 +2134,7 @@ const AgendaImagen = {
                             m("button.btn.btn-primary.mg-r-5", {
                                 onclick: () => {
 
-                                    AgendaImagen.agendarCita();
+                                    AgendaImagen.reAgendarCita();
                                 }
                             },
                                 "Reagendar Cita"
@@ -2028,12 +2152,7 @@ const AgendaImagen = {
                         m("div.modal-header", [
                             m("h6.event-title"),
                             m("nav.nav.nav-modal-event", [
-                                m("a.nav-link[href='#']",
-                                    m("i[data-feather='external-link']")
-                                ),
-                                m("a.nav-link[href='#']",
-                                    m("i[data-feather='trash-2']")
-                                ),
+
                                 m("a.nav-link[href='#'][data-dismiss='modal']",
                                     m("i[data-feather='x']")
                                 )
@@ -2043,23 +2162,39 @@ const AgendaImagen = {
                             m("div.row.row-sm", [
                                 m("div.col-sm-6", [
                                     m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                        "Start Date"
+                                        "Fecha Inicio"
                                     ),
                                     m("p.event-start-date")
                                 ]),
                                 m("div.col-sm-6", [
                                     m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                        "End Date"
+                                        "Fecha Final"
                                     ),
                                     m("p.event-end-date")
                                 ])
                             ]),
                             m("label.tx-uppercase.tx-sans.tx-11.tx-medium.tx-spacing-1.tx-color-03",
-                                "Description"
+                                "Descripción:"
                             ),
+                            m("p.mg-b-40", [
+                                Cita.paciente,
+                                m('br'),
+                                Cita.estudio,
+                                m('br'),
+                                Cita.prestador,
+                                m('br'),
+                            ]),
                             m("p.event-desc.tx-gray-900.mg-b-40"),
+                            m("button.btn.btn-danger.mg-r-5", {
+                                onclick: () => {
+
+                                    AgendaImagen.cancelarCita();
+                                }
+                            },
+                                "Cancelar Cita"
+                            ),
                             m("a.btn.btn-secondary.pd-x-20[href=''][data-dismiss='modal']",
-                                "Close"
+                                "Cerrar"
                             )
                         ])
                     ])

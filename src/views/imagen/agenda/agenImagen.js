@@ -869,9 +869,7 @@ const AgendaImagen = {
                     element.css('borderLeftColor', eBorderColor);
                 },
                 eventDrop: function (calEvent) {
-                    console.log(2, calEvent)
-                    console.log(2.1, moment(calEvent.start).format('LLL'))
-                    console.log(2.2, moment(calEvent.end).format('LLL'))
+
 
                     Cita.id = calEvent.id;
                     Cita.start = calEvent.start.format('dddd, DD-MM-YYYY HH:mm');
@@ -887,9 +885,6 @@ const AgendaImagen = {
                     Cita.tipoCita = 1;
                     Cita.hashCita = calEvent.hashCita;
                     Cita.newHashCita = calEvent.start.format('YYYY-MM-DD HH:mm') + '.' + calEvent.end.format('YYYY-MM-DD HH:mm')
-
-                    console.log('Cita', Cita)
-
 
                     let modal = $('#modalUpdateEvent');
                     modal.modal('show');

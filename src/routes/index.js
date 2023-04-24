@@ -74,6 +74,7 @@ import PedidosCardio from '../views/cardio/pedidos/pedidos'
 import BcoSangre from '../views/bcosangre/bcosangre'
 import PedidosBcoSangre from '../views/bcosangre/pedidos/pedidos'
 import PedidoTF from '../views/tf/pedidos/pedido'
+import NotificacionesPorEnviarLab from '../views/laboratorio/notificaciones/porenviar'
 
 
 
@@ -158,6 +159,80 @@ const Routes = {
     }, //LisaPedido
     '/laboratorio/notificaciones': NotificacionesLab, //NotificacionesLab
     '/laboratorio/notificaciones/filtros': FiltrosLab, //FiltrosLab
+    '/laboratorio/notificaciones/porenviar': {
+        oninit: (_data) => {
+
+            App.isAuth('laboratorio', 15);
+            document.title = "Notificaciones por Enviar | " + App.title;
+
+            if (_data.attrs.idFiltro == undefined && (_data.attrs.fechaDesde == undefined || _data.attrs.fechaHasta == undefined)) {
+
+                return m.route.set('/laboratorio/notificaciones/porenviar/', { idFiltro: 1 })
+
+            } else {
+
+                if (_data.attrs.fechaDesde == undefined && _data.attrs.fechaHasta == undefined) {
+                    NotificacionesPorEnviarLab.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                    NotificacionesPorEnviarLab.fechaHasta = moment().format('DD-MM-YYYY');
+                } else {
+
+                    if (_data.attrs.fechaDesde !== undefined && _data.attrs.fechaHasta !== undefined) {
+                        NotificacionesPorEnviarLab.fechaDesde = _data.attrs.fechaDesde;
+                        NotificacionesPorEnviarLab.fechaHasta = _data.attrs.fechaHasta;
+                    } else {
+                        return m.route.set('/laboratorio/notificaciones/enviadas/', { idFiltro: 1 })
+                    }
+
+                    NotificacionesPorEnviarLab.fechaDesde = _data.attrs.fechaDesde;
+                    NotificacionesPorEnviarLab.fechaHasta = _data.attrs.fechaHasta;
+                }
+
+
+                if (NotificacionesPorEnviarLab.NotificacionesPorEnviarLab.length == 0 && NotificacionesPorEnviarLab.error.length == 0) {
+
+                    NotificacionesPorEnviarLab.idFiltro = _data.attrs.idFiltro;
+                    NotificacionesPorEnviarLab.loader = true;
+                    NotificacionesPorEnviarLab.NotificacionesPorEnviarLab = [];
+                    NotificacionesPorEnviarLab.fetchNotificacionesPorEnviarLab();
+
+                }
+
+            }
+
+
+        },
+        onupdate: (_data) => {
+
+
+            if (_data.attrs.fechaDesde == undefined && _data.attrs.fechaHasta == undefined) {
+                NotificacionesPorEnviarLab.fechaDesde = moment().subtract(1, 'days').format('DD-MM-YYYY');
+                NotificacionesPorEnviarLab.fechaHasta = moment().format('DD-MM-YYYY');
+            } else {
+                NotificacionesPorEnviarLab.fechaDesde = _data.attrs.fechaDesde;
+                NotificacionesPorEnviarLab.fechaHasta = _data.attrs.fechaHasta;
+            }
+
+
+            if (_data.attrs.idFiltro !== NotificacionesPorEnviarLab.idFiltro) {
+
+
+                NotificacionesPorEnviarLab.idFiltro = _data.attrs.idFiltro;
+                NotificacionesPorEnviarLab.loader = true;
+                NotificacionesPorEnviarLab.NotificacionesPorEnviarLab = [];
+                NotificacionesPorEnviarLab.fetchNotificacionesPorEnviarLab();
+
+            }
+
+
+        },
+
+        view: (_data) => {
+            return [
+                m(HeaderPrivate, { oncreate: HeaderPrivate.setPage("laboratorio") }),
+                m(NotificacionesPorEnviarLab),
+            ];
+        },
+    }, //NotificacionesPorEnviarLab
     '/laboratorio/notificaciones/enviadas': {
         oninit: (_data) => {
 

@@ -471,7 +471,7 @@ const StatusTR = {
                                                             style: { "background-color": "#eaeff5" }
                                                         },
 
-                                                            m("input", { value: StatusTR.data.fecha, "class": "form-control tx-semibold tx-15 tx-danger", "type": "text", "disabled": "disabled" })
+                                                            m("input.disabled", { value: StatusTR.data.fecha, "class": "form-control tx-semibold tx-15 tx-danger", "type": "text", "disabled": "disabled" })
 
 
                                                         ),

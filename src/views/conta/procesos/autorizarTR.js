@@ -397,9 +397,9 @@ const AuthTR = {
                                             (AuthTR.data.status == 1 ? 'Ingresada' : ''),
                                             (AuthTR.data.status == 2 ? 'Autorizado' : ''),
                                             (AuthTR.data.status == -2 ? 'Rechazada' : ''),
-                                            (AuthTR.data.status == 3 ? 'En Revisón Técnica' : ''),
+                                            (AuthTR.data.status == 3 ? 'En Revisión Técnica' : ''),
                                             (AuthTR.data.status == -3 ? 'Rechazada' : ''),
-                                            (AuthTR.data.status == 4 ? 'En Revisón Contable' : ''),
+                                            (AuthTR.data.status == 4 ? 'En Revisión Contable' : ''),
                                             (AuthTR.data.status == -4 ? 'Rechazada' : ''),
                                             (AuthTR.data.status == -5 ? 'Rechazada' : ''),
                                             (AuthTR.data.status >= 5 ? 'Aprobada' : '')
@@ -670,12 +670,14 @@ const AuthTR = {
                                                         m("td[colspan='6']", {
                                                             style: { "background-color": "#eaeff5" }
                                                         },
-                                                            m("input", {
+
+
+                                                            m("textarea[rows='3']", {
                                                                 "class": "form-control tx-semibold tx-14",
-                                                                "type": "text",
                                                                 "disabled": "disabled",
-                                                                value: AuthTR.data.usuario
-                                                            })
+                                                            },
+                                                                AuthTR.data.usuario
+                                                            )
 
 
 
@@ -731,7 +733,7 @@ const AuthTR = {
                                                                     },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
-                                                                        " Autorización "
+                                                                        " Revisión "
                                                                     )
                                                                 ),
 
@@ -743,7 +745,7 @@ const AuthTR = {
                                                                     },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
-                                                                        " Revisión Técnica "
+                                                                        " Revisión  "
                                                                     )
                                                                 ),
 
@@ -756,7 +758,7 @@ const AuthTR = {
                                                                     },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
-                                                                        " Revisión Contable "
+                                                                        " Revisión  "
                                                                     )
                                                                 ),
 
@@ -769,7 +771,7 @@ const AuthTR = {
                                                                     },
                                                                         m("i.fas.fa-edit.pd-1.mg-r-2"),
 
-                                                                        " Aprobación Gerencia Contable "
+                                                                        " Revisión "
                                                                     )
                                                                 ),
 
@@ -815,7 +817,16 @@ const AuthTR = {
 
                                                                     m("p.mg-5", [
                                                                         m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Autorización",
+                                                                            'Status: ',
+                                                                            (AuthTR.data.status == 1 ? 'Ingresada' : ''),
+                                                                            (AuthTR.data.status == 2 ? 'Autorizado' : ''),
+                                                                            (AuthTR.data.status == -2 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 3 ? 'En Revisión Técnica' : ''),
+                                                                            (AuthTR.data.status == -3 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 4 ? 'En Revisión Contable' : ''),
+                                                                            (AuthTR.data.status == -4 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == -5 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status >= 5 ? 'Aprobada' : '')
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
                                                                             oninput: function (e) { Observaciones.observaciones = e.target.value; },
@@ -851,7 +862,16 @@ const AuthTR = {
                                                                 m(".tab-pane.fade[id='auth2'][role='tabpanel'][aria-labelledby='home-auth2']", [
                                                                     m("p.mg-5", [
                                                                         m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Revisión Técnica",
+                                                                            'Status: ',
+                                                                            (AuthTR.data.status == 1 ? 'Ingresada' : ''),
+                                                                            (AuthTR.data.status == 2 ? 'Autorizado' : ''),
+                                                                            (AuthTR.data.status == -2 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 3 ? 'En Revisión Técnica' : ''),
+                                                                            (AuthTR.data.status == -3 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 4 ? 'En Revisión Contable' : ''),
+                                                                            (AuthTR.data.status == -4 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == -5 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status >= 5 ? 'Aprobada' : '')
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
                                                                             oninput: function (e) { Observaciones.observaciones = e.target.value; },
@@ -885,7 +905,16 @@ const AuthTR = {
                                                                 m(".tab-pane.fade[id='auth3'][role='tabpanel'][aria-labelledby='home-auth3']", [
                                                                     m("p.mg-5", [
                                                                         m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Revisión Contabilidad",
+                                                                            'Status: ',
+                                                                            (AuthTR.data.status == 1 ? 'Ingresada' : ''),
+                                                                            (AuthTR.data.status == 2 ? 'Autorizado' : ''),
+                                                                            (AuthTR.data.status == -2 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 3 ? 'En Revisión Técnica' : ''),
+                                                                            (AuthTR.data.status == -3 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 4 ? 'En Revisión Contable' : ''),
+                                                                            (AuthTR.data.status == -4 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == -5 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status >= 5 ? 'Aprobada' : '')
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
                                                                             oninput: function (e) { Observaciones.observaciones = e.target.value; },
@@ -919,7 +948,16 @@ const AuthTR = {
                                                                 m(".tab-pane.fade[id='auth4'][role='tabpanel'][aria-labelledby='home-auth4']", [
                                                                     m("p.mg-5", [
                                                                         m("span.badge.badge-light.wd-100p.tx-14",
-                                                                            "Aprobación Gerencia Contable",
+                                                                            'Status: ',
+                                                                            (AuthTR.data.status == 1 ? 'Ingresada' : ''),
+                                                                            (AuthTR.data.status == 2 ? 'Autorizado' : ''),
+                                                                            (AuthTR.data.status == -2 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 3 ? 'En Revisión Técnica' : ''),
+                                                                            (AuthTR.data.status == -3 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == 4 ? 'En Revisión Contable' : ''),
+                                                                            (AuthTR.data.status == -4 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status == -5 ? 'Rechazada' : ''),
+                                                                            (AuthTR.data.status >= 5 ? 'Aprobada' : '')
                                                                         ),
                                                                         m("textarea.form-control.mg-t-5[rows='5'][placeholder='Observaciones']", {
                                                                             oninput: function (e) { Observaciones.observaciones = e.target.value; },

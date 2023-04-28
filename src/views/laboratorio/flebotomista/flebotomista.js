@@ -692,11 +692,9 @@ const Flebotomista = {
                                     class: (aData.sector == 'EMERGENCIA' ? "tx-danger" : "tx-primary")
                                 }, aData.sector),
                                 m('br'),
-                                m('.d-inline.tx-18.tx-semibold', {
-                                }, 'PTE: ' + aData.paciente),
+                                m('.d-inline.tx-18.tx-semibold', {}, 'PTE: ' + aData.paciente),
                                 m('br'),
-                                m('.d-inline', {
-                                }, 'MED: ' + aData.descPrestadorSolicitante),
+                                m('.d-inline', {}, 'MED: ' + aData.descPrestadorSolicitante),
 
 
 
@@ -705,20 +703,24 @@ const Flebotomista = {
                             ),
 
 
-                            (aData.tipoOperacion == 'I' ? [m("td.tx-white.tx-semibold.tx-center", {
-                                title: 'Status Toma de Muestras',
-                                style: { "background-color": (aData.muestrasProcesadas == 0 ? "#ffc107" : "#0d9448") }
-                            },
-                                (aData.muestrasProcesadas == 0 ? "Muestras Pendientes" : "Muestras Completo")
-                            ),] : [""]),
+                            (aData.tipoOperacion == 'I' ? [
+                                m("td.tx-semibold.tx-center", {
+                                    title: 'Status Toma de Muestras',
+                                    style: {
+                                        "background-color": (aData.muestrasProcesadas == 0 ? "#ffc107" : "#0d9448")
+                                    }
+                                },
+                                    (aData.muestrasProcesadas == 0 ? "Muestras Pendientes" : "Muestras Completo")
+                                ),
+                            ] : [""]),
 
 
-                            m("td.tx-center", {
+                            m("td.tx-center.bg-primary", {
                                 "style": { "cursor": "pointer" }
                             }, [
-                                m('br'),
+
                                 m(m.route.Link, {
-                                    class: 'pd-10 tx-semibold d-inline tx-18',
+                                    class: 'tx-18',
                                     href: "/laboratorio/flebotomista/pedido/",
                                     target: '_blank',
                                     params: {
@@ -729,7 +731,9 @@ const Flebotomista = {
                                         track: "view",
                                     }
                                 }, [
-                                    " Ver "
+                                    m("button.btn.btn-primary[type='button']",
+                                        " Ver "
+                                    )
                                 ])
                             ]
 

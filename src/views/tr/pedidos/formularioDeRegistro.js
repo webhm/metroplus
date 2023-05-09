@@ -3,7 +3,7 @@ import terapiaRespiratoriaController from "./Models/obtenerDatos";
 import Pedido from "./pedido";
 import Encrypt from "../../../models/encrypt";
 
-const obtenerDatos = terapiaRespiratoriaController;
+//const obtenerDatos = terapiaRespiratoriaController;
 let isEsputoSelected = false;
 let isEsputoModifiedSelected = false;
 let isPanelViralSelected = false;
@@ -15,17 +15,12 @@ let isPanelViralSelectedModified = "";
 /* let esputo = FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO === "true" ? true : false
 let esputoModified = esputo */
 
-
-//let EsputoModified = 
-
-
-
-
+//let EsputoModified =
 
 const inputOxinoterapia = {
   view: () => {
     return [
-      m("input", { 
+      m("input", {
         class: "form-control",
         type: "number",
         id: "inputOxinoterapia2",
@@ -35,16 +30,21 @@ const inputOxinoterapia = {
         //maxlength: 10,
         maxlength: 10,
         oncreate: (el) => {
-          el.dom.value = FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_OXIGENO_TERAPIA : null : null;
+          el.dom.value =
+            FormularioDeRegistro.datosPorSecuencial.data.length > 0
+              ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                  .CD_SECUENCIAL === Pedido.data.AT_MV
+                ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                    .CANTIDAD_OXIGENO_TERAPIA
+                : null
+              : null;
         },
-      
-        
+
         /* value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_OXIGENO_TERAPIA : null : null, */
-        
       }),
-    ]
-  }
-}
+    ];
+  },
+};
 
 const inputTerapiaExpansiva = {
   view: () => {
@@ -61,12 +61,22 @@ const inputTerapiaExpansiva = {
         }, */
         /* value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_EXPANSIVA === 'Incentivo respiratorio' ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_TERAPIA_EXPANSIVA : null : null  : null, */
         oncreate: (el) => {
-          el.dom.value = FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].TERAPIA_EXPANSIVA === 'Incentivo respiratorio' ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_TERAPIA_EXPANSIVA : null : null  : null;
+          el.dom.value =
+            FormularioDeRegistro.datosPorSecuencial.data.length > 0
+              ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                  .CD_SECUENCIAL === Pedido.data.AT_MV
+                ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                    .TERAPIA_EXPANSIVA === "Incentivo respiratorio"
+                  ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                      .CANTIDAD_TERAPIA_EXPANSIVA
+                  : null
+                : null
+              : null;
         },
-        }),
-    ]
-  }
-}
+      }),
+    ];
+  },
+};
 
 const inputMonitoreoPrevio = {
   view: () => {
@@ -82,13 +92,23 @@ const inputMonitoreoPrevio = {
           event.target.value = event.target.value.slice(0, 10);
         }, */
         oncreate: (el) => {
-          el.dom.value = FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA === 'Saturación O2(%)' ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_MONITOREO_TERAPIA : null : null  : null;
+          el.dom.value =
+            FormularioDeRegistro.datosPorSecuencial.data.length > 0
+              ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                  .CD_SECUENCIAL === Pedido.data.AT_MV
+                ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                    .MONITOREO_TERAPIA === "Saturación O2(%)"
+                  ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                      .CANTIDAD_MONITOREO_TERAPIA
+                  : null
+                : null
+              : null;
         },
         /* value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA === 'Saturación O2(%)' ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_TERAPIA_EXPANSIVA : null : null  : null, */
       }),
-    ]
-  }
-}
+    ];
+  },
+};
 
 const inputMonitoreoPosterior = {
   view: () => {
@@ -104,13 +124,23 @@ const inputMonitoreoPosterior = {
           event.target.value = event.target.value.slice(0, 10);
         }, */
         oncreate: (el) => {
-          el.dom.value = FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA_POSTERIOR === "Saturación O2(%)" ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_MONITOREO_TERAPIA_POS : null : null  : null;
+          el.dom.value =
+            FormularioDeRegistro.datosPorSecuencial.data.length > 0
+              ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                  .CD_SECUENCIAL === Pedido.data.AT_MV
+                ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                    .MONITOREO_TERAPIA_POSTERIOR === "Saturación O2(%)"
+                  ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                      .CANTIDAD_MONITOREO_TERAPIA_POS
+                  : null
+                : null
+              : null;
         },
         // value: FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].MONITOREO_TERAPIA_POSTERIOR === "Saturación O2(%)" ? FormularioDeRegistro.datosPorSecuencial.data[0].CANTIDAD_MONITOREO_TERAPIA_POS : null : null  : null,
       }),
-    ]
-  }
-}
+    ];
+  },
+};
 
 const checkEsputo = {
   view: () => {
@@ -119,17 +149,26 @@ const checkEsputo = {
         class: "custom-control-input",
         type: "checkbox",
         id: "checkboxEsputo",
-        //disabled: obtenerDatos.habilitarCampos,    
+        //disabled: obtenerDatos.habilitarCampos,
         oncreate: (el) => {
-          el.dom.checked = FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO === "true" ? "checked": "" : "" : "";
-        },       
+          el.dom.checked =
+            FormularioDeRegistro.datosPorSecuencial.data.length > 0
+              ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                  .CD_SECUENCIAL === Pedido.data.AT_MV
+                ? FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO ===
+                  "true"
+                  ? "checked"
+                  : ""
+                : ""
+              : "";
+        },
         /* checked:FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO === "true" ? "checked": "" : "" : "", */
         /* FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO === "true" ? true : false;
           isEsputoModifiedSelected = FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO === "true" ? true : false;
           isEsputoModifiedSelected = event.target.checked; */
         onclick: function (event) {
           /* isEsputoSelected = FormularioDeRegistro.datosPorSecuencial.data[0].ESPUTO === "true" ? true : false; */
-          
+
           //isEsputoSelected = event.target.checked;
           isEsputoSelecteModified = event.target.checked;
           //alert(isEsputoSelecteModified);
@@ -138,9 +177,9 @@ const checkEsputo = {
           //alert(checkEsputo.esputoModified);
         },
       }),
-    ]
-  }
-}
+    ];
+  },
+};
 
 const checkPanelViral = {
   view: () => {
@@ -154,20 +193,29 @@ const checkPanelViral = {
           isPanelViralSelectedModified = event.target.checked;
         },
         oncreate: (el) => {
-          el.dom.checked = FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].PANEL_VIRAL === "true" ? "checked": "" : "" : "";
-        }, 
+          el.dom.checked =
+            FormularioDeRegistro.datosPorSecuencial.data.length > 0
+              ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                  .CD_SECUENCIAL === Pedido.data.AT_MV
+                ? FormularioDeRegistro.datosPorSecuencial.data[0]
+                    .PANEL_VIRAL === "true"
+                  ? "checked"
+                  : ""
+                : ""
+              : "";
+        },
         /* checked:FormularioDeRegistro.datosPorSecuencial.data.length > 0 ? FormularioDeRegistro.datosPorSecuencial.data[0].CD_SECUENCIAL === Pedido.data.AT_MV ? FormularioDeRegistro.datosPorSecuencial.data[0].PANEL_VIRAL === "true" ? "checked": "" : "" : "", */
       }),
-    ]
-  }
-}
+    ];
+  },
+};
 
 const tesImout = {
   view: () => {
     return [
       m("div", { class: "form-group col-md-4" }, [
         m("label", { for: "inputUsuario" }, "Usuario"),
-        m("input",  {
+        m("input", {
           class: "form-control",
           type: "text",
           id: "inputUsuario",
@@ -177,10 +225,10 @@ const tesImout = {
             el.dom.value = FormularioDeRegistro.usuarioConectado.user.user;
           },
         }),
-      ])
-    ]
-  }
-}
+      ]),
+    ];
+  },
+};
 const FormularioDeRegistro = {
   listaDeFrecuenciaCardiaca: [],
   errorCargandoFrecuenciaCardiaca: "",
@@ -197,7 +245,7 @@ const FormularioDeRegistro = {
   errorPrescripcion: "",
   datosGuardados: [],
   errorGuardar: "",
-  datosPorSecuencial:[],
+  datosPorSecuencial: [],
   errorDatosPorSecuencial: "",
   datosActualizados: [],
   errorDatosActualizados: "",
@@ -215,12 +263,17 @@ const FormularioDeRegistro = {
       },
     })
       .then(function (resultado) {
-        if (resultado.status && resultado.data.length > 0 && resultado.data[0].VALUE != null) {
+        if (
+          resultado.status &&
+          resultado.data.length > 0 &&
+          resultado.data[0].VALUE != null
+        ) {
           FormularioDeRegistro.listaDeFrecuenciaCardiaca = resultado;
           console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca);
           //m.redraw();
         } else {
-          FormularioDeRegistro.errorCargandoFrecuenciaCardiaca += "Frecuencia Cardiaca ";
+          FormularioDeRegistro.errorCargandoFrecuenciaCardiaca +=
+            "Frecuencia Cardiaca ";
           /* terapiaRespiratoriaController.listaDeFrecuenciaCardiaca = {
             data: [
               {
@@ -250,13 +303,18 @@ const FormularioDeRegistro = {
       },
     })
       .then(function (resultado) {
-        if (resultado.status && resultado.data.length > 0 && resultado.data[0].VALUE != null) {
+        if (
+          resultado.status &&
+          resultado.data.length > 0 &&
+          resultado.data[0].VALUE != null
+        ) {
           FormularioDeRegistro.listaDeFrecuenciaRespiratoria = resultado;
           console.log(FormularioDeRegistro.listaDeFrecuenciaRespiratoria);
-        } else{
-          FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria += "Frecuencia Respiratoria ";
+        } else {
+          FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria +=
+            "Frecuencia Respiratoria ";
         }
-          /* else {
+        /* else {
           FormularioDeRegistro.errorCargandoFrecuenciaRespiratoria = resultado.error;
           alert(FormularioDeRegistro.error);
         } */
@@ -279,10 +337,14 @@ const FormularioDeRegistro = {
       },
     })
       .then(function (resultado) {
-        if (resultado.status && resultado.data.length > 0 && resultado.data[0].VALUE != null) {
+        if (
+          resultado.status &&
+          resultado.data.length > 0 &&
+          resultado.data[0].VALUE != null
+        ) {
           FormularioDeRegistro.listaDePeso = resultado;
           console.log(FormularioDeRegistro.listaDePeso);
-        }else{
+        } else {
           FormularioDeRegistro.errorCargaDePeso += "Peso ";
         } /* else {
           terapiaRespiratoriaController.error = resultado.error;
@@ -307,12 +369,17 @@ const FormularioDeRegistro = {
       },
     })
       .then(function (resultado) {
-        if (resultado.status && resultado.data.length > 0 && resultado.data[0].VALUE != null) {
+        if (
+          resultado.status &&
+          resultado.data.length > 0 &&
+          resultado.data[0].VALUE != null
+        ) {
           FormularioDeRegistro.listaEscalaDelDolor = resultado;
           console.log(FormularioDeRegistro.listaEscalaDelDolor);
-        } else{
-          FormularioDeRegistro.errorCargaDeEscalaDelDolor += "Escala del Dolor ";
-        }/* else {
+        } else {
+          FormularioDeRegistro.errorCargaDeEscalaDelDolor +=
+            "Escala del Dolor ";
+        } /* else {
           terapiaRespiratoriaController.error = resultado.error;
           alert(terapiaRespiratoriaController.error);
         } */
@@ -387,8 +454,8 @@ const FormularioDeRegistro = {
       body: formularioTerapiaRespiratoria,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Accept": "application/json",
-        "Authorization": localStorage.accessToken,
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
       },
     })
       .then(function (result) {
@@ -407,11 +474,10 @@ const FormularioDeRegistro = {
         //FormularioDeRegistro.bloquearCamposCuandoSeGuarda = true;
         window.location.href = window.location.href;
         //FormularioDeRegistro.bloquearCamposCuandoSeGuarda = true;
-        
       })
       .catch(function (error) {
         //terapiaRespiratoriaController.error = `No se pudo enviar los datos ${error}`;
-        
+
         FormularioDeRegistro.errorGuardar = error;
         alert(FormularioDeRegistro.errorGuardar);
       });
@@ -441,7 +507,8 @@ const FormularioDeRegistro = {
         } */
       })
       .catch(function (error) {
-        FormularioDeRegistro.errorDatosPorSecuencial += "Error al cargar los datos";
+        FormularioDeRegistro.errorDatosPorSecuencial +=
+          "Error al cargar los datos";
         //terapiaRespiratoriaController.habilitarCampos = true;
         //alert(terapiaRespiratoriaController.error);
       });
@@ -454,18 +521,17 @@ const FormularioDeRegistro = {
       body: formularioTerapiaRespiratoria, // cuerpo de los datos a enviar,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Accept": "application/json",
-        "Authorization": localStorage.accessToken,
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
       },
     })
       .then(function (result) {
-        if(result.status){
-          FormularioDeRegistro.datosActualizados = result ;
+        if (result.status) {
+          FormularioDeRegistro.datosActualizados = result;
           window.location.href = window.location.href;
-        }else{
+        } else {
           FormularioDeRegistro.errorDatosActualizados = result.message;
         }
-        
       })
       .catch(function (error) {
         //FormularioDeRegistro.errorDatosActualizados = error;
@@ -473,7 +539,8 @@ const FormularioDeRegistro = {
         alert(error); */
         /* console.log(FormularioDeRegistro.errorDatosActualizados);
         console.log(error); */
-        FormularioDeRegistro.errorDatosActualizados += "Error al actualizar los datos";
+        FormularioDeRegistro.errorDatosActualizados +=
+          "Error al actualizar los datos";
       });
   },
 
@@ -484,27 +551,27 @@ const FormularioDeRegistro = {
       body: formularioTerapiaRespiratoria, // cuerpo de los datos a enviar,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Accept": "application/json",
-        "Authorization": localStorage.accessToken,
+        Accept: "application/json",
+        Authorization: localStorage.accessToken,
       },
     })
-    .then(function (result) {
-      if(result.status){
-        FormularioDeRegistro.datosEliminados = result ;
-        window.location.href = window.location.href;
-      }else{
-        FormularioDeRegistro.errorDatosEliminados = result.message;
-      }
-      
-    })
-    .catch(function (error) {
-      //FormularioDeRegistro.errorDatosActualizados = error;
-      /* alert(FormularioDeRegistro.errorDatosActualizados);
+      .then(function (result) {
+        if (result.status) {
+          FormularioDeRegistro.datosEliminados = result;
+          window.location.href = window.location.href;
+        } else {
+          FormularioDeRegistro.errorDatosEliminados = result.message;
+        }
+      })
+      .catch(function (error) {
+        //FormularioDeRegistro.errorDatosActualizados = error;
+        /* alert(FormularioDeRegistro.errorDatosActualizados);
       alert(error); */
-      /* console.log(FormularioDeRegistro.errorDatosEliminados);
+        /* console.log(FormularioDeRegistro.errorDatosEliminados);
       console.log(error); */
-      FormularioDeRegistro.errorDatosEliminados += "Error al eliminar los datos";
-    });
+        FormularioDeRegistro.errorDatosEliminados +=
+          "Error al eliminar los datos";
+      });
   },
 
   oninit: (_data) => {
@@ -515,7 +582,9 @@ const FormularioDeRegistro = {
     FormularioDeRegistro.cargarFechaActual();
     FormularioDeRegistro.cargarHoraActual();
     FormularioDeRegistro.cargarPrescripcion(_data.attrs.pedido.AT_MV); // 1918 // _data.attrs.pedido.AT_MV
-    FormularioDeRegistro.cargarFormularioPorCodigoSecuencial(_data.attrs.pedido.AT_MV);// _data.attrs.pedido.AT_MV
+    FormularioDeRegistro.cargarFormularioPorCodigoSecuencial(
+      _data.attrs.pedido.AT_MV
+    ); // _data.attrs.pedido.AT_MV
     //console.log(_data.attrs.pedido.AT_MV);
     //console.log(FormularioDeRegistro.listaDeFrecuenciaCardiaca.data[0].VALUE);
     /* terapiaRespiratoriaController.cargarFrecuenciaRespiratoria(_data.attrs.pedido.AT_MV);
@@ -544,16 +613,977 @@ const FormularioDeRegistro = {
     console.log(el)
   }, */
   view: (vnode) => {
+    const printFormData = () => {
+      const printWindow = window.open("", "PRINT", "height=800,width=800");
+      const inputEscalaDelDolor =
+        document.getElementById("inputEscalaDolor").value;
+      const inputPeso = document.getElementById("inputPeso").value;
+      const inputAtencion = document.getElementById("inputAtencion").value;
+      const inputUsuario = document.getElementById("inputUsuario").value;
+      const inputCodigo = document.getElementById("inputCod").value;
+      const inputFecha = document.getElementById("inputFecha").value;
+      const inputHora = document.getElementById("inputHora").value;
+
+      const printContent = `
+          <html>
+            <head>
+              <title>Print form</title>
+              <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+              <style type="text/css">
+    @media print {
+        body {
+            font-size: 0.75rem;
+            margin: 0.5rem;
+        }
+    }
+</style>
+
+            </head>
+            <body>
+              <fieldset>
+              <form class="mx-auto">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-12">
+                        <label for="inputEscalaDolor" class="form-label"><b>Escala del Dolor</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor" value="${inputEscalaDelDolor}">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Peso</b></label>
+                        <input type="text" class="form-control" id="inputPeso" value="${inputPeso}" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Atención</b></label>
+                        <input type="text" class="form-control" id="inputAtencion" value="${inputAtencion}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputUsuario" class="form-label"><b>Usuario</b></label>
+                        <input type="text" class="form-control" id="inputUsuario" value="${inputUsuario}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prescripción -->
+            <label for="inputPrescripcion" class="form-label"><b>Prescripción</b></label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="inputPrescripcion">
+                    Codigo-Fecha-Descripción
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="inputPrescripcion">
+                    Codigo-Fecha-Descripción
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="inputPrescripcion">
+                    Codigo-Fecha-Descripción
+            </div>
+            <br>
+            <!-- Código -->
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputCod" class="form-label"><b>Código</b></label>
+                        <input type="text" class="form-control" id="inputCod" value="${inputCodigo}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputFecha" class="form-label"><b>Fecha</b></label>
+                        <input type="text" class="form-control" id="inputFecha" value="${inputFecha}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputHora" class="form-label"><b>Hora</b></label>
+                        <input type="text" class="form-control" id="inputHora" value="${inputHora}">
+                    </div>
+                </div>
+            </div>
+            <!-- Terapia Aerosol Medicina -->
+            <div><label for="inputTerapiaAerosolMedicina" class="form-label"><b> Terapia Aerosol Médicina</b></div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Salbutamol</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="inputPeso" class="form-label"><b>Terapia Aerosol Medicina</b></label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label for="inputPeso" class="form-label"><b>Nebulización</b></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Bromuro de Ipatropio</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label for="inputPeso" class="form-label"><b>Ultrasonido</b></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Clorhidrato de Ambroxol</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label for="inputPeso" class="form-label"><b>Inhaladores Dosis Medida</b></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Hipersal (3,5%)</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Hipersal (7%)</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Dexametasona</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Solución Salina (0,9%)</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Adrenalina Racénica</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-6">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label for="inputPeso" class="form-label"><b>Otros</b></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-6">
+                        <label for="inputEscalaDolor" class="form-label"><b>Dosis</b></label>
+                        <input type="text" class="form-control" id="inputEscalaDolor">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-2">
+                        <label for="inputPrescripcion" class="form-label"><b>Higiene Bronco Pulmonar</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Drenaje postural
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Percusiones
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Vibraciones
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Tos efectiva
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Asistente de tos
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Chaleco Vibroprecutor
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-2">
+                        <!-- Succión -->
+                        <label for="inputPrescripcion" class="form-label"><b>Succión</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Nasotraqueal
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Traqueal
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Orotraqueal
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Lavado Nasal
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Subglótica
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-2">
+                        <!-- Muestra -->
+                        <label for="inputPrescripcion" class="form-label"><b>Muestra</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Esputo
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Isopado
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Secreción Traqueal
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-2">
+                        <!-- Observación clinica -->
+                        <label for="inputPrescripcion" class="form-label"><b>Observación Clinica</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Consciencia
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Intubado
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Estridor
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Sibilancias
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Roncus
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Crepitantes
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Localización
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Cianosis
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Ruido Respiratorio
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Disminuido
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Abolido
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Sonido de la voz
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Edema
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-2">
+                        <label for="inputPrescripcion" class="form-label"><b>Observación Clinica</b></label>
+                        <br>
+                        <label for="inputPrescripcion" class="form-label"><b>&nbsp;&nbsp;&nbsp;Sintomas</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Disnea
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Tos
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Expectoración
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Dolor Torácico
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Hemoptisis
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Fiebre
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-2">
+                        <label for="inputPrescripcion" class="form-label"><b>Observación Clinica</b></label>
+                        <br>
+                        <label for="inputPrescripcion" class="form-label"><b>&nbsp;&nbsp;&nbsp;Signos</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Consciencia
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Intubado
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Estridor
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Sibilancias
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Roncus
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Crepitantes
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Localización
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Cianosis
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Ruido Respiratorio
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Disminuido
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Abolido
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Sonido de la voz
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Edema
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Higiene Bronco Pulmonar -->
+
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-6">
+                        <label for="inputTerapiaAerosolMedicina" class="form-label"><b> Terapia Expansiva</b>
+                        </label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="inputDosisTerapiaAerosol">
+                            <label class="form-check-label" for="inputDosisTerapiaAerosol">
+                                Incentivo Respiratorio
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputDosisTerapiaAerosol">
+                                Presión positiva continua en la vía aérea
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputDosisTerapiaAerosol">
+                                Presión positiva al final de la expiración
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="inputDosisTerapiaAerosol">
+                            <label class="form-check-label" for="inputDosisTerapiaAerosol">
+                                Kinesioterapia del torax
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="inputDosisTerapiaAerosol">
+                            <label class="form-check-label" for="inputDosisTerapiaAerosol">
+                                Ejercicios respiratorios
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-6">
+                        <label for="inputTerapiaAerosolMedicina" class="form-label"><b>Incentivo
+                                respiratorio</b></label>
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Mililitros por segundo</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Centimetros cúbicos por segundo</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <br><br>
+            <!-- Oxigenoterapia -->
+
+            <div class="row">
+                <label for="inputPrescripcion" class="form-label"><b>Oxigenoterapia</b></label>
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Fracción inspirada de oxígeno (FiO2)%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Alto flujo (litro por minuto)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Tienda facial
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Tubo en T
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Cánula nasal
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Mascarrilla
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Heliox
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-4">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="inputPeso" class="form-label"><b>Litros por minuto</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-6">
+                        <br><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Aire Ambiente
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="mb-6">
+
+                        <label for="inputPeso" class="form-label"><b>Porcentaje</b></label>
+                        <input type="text" class="form-control" id="inputPeso" />
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+
+            <!-- Monitoreo Saturación -->
+            <div class="row">
+                <div class="col">
+                    <div class="mb-6">
+                        <label for="inputPrescripcion" class="form-label"><b>Monitoreo</b></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Saturación O2(%)
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Ventilación mecánica
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="inputPrescripcion">
+                                Ventilación no invasiva
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-6">
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Saturación Previa Porcentaje</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Saturación Posterior Porcentaje</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+
+                    </div>
+                    <div class="mb-6">
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Frecuencia Cardiaca Previa Por
+                                    Minuto</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Frecuencia Cardiaca Posterior Por
+                                    Minuto</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+
+                    </div>
+                    <div class="mb-6">
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Frecuencia Respiratoria Posterior Por
+                                    Minuto</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+                        <div class="mb-6">
+                            <label for="inputPeso" class="form-label"><b>Frecuencia Respiratoria Posterior Por
+                                    Minuto</b></label>
+                            <input type="text" class="form-control" id="inputPeso" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <br>
+
+            <br>
+
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-6">
+
+
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-6">
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- Criterio -->
+            <label for="inputPrescripcion" class="form-label"><b>Criterio</b></label>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Criterio" id="floatingTextarea2"
+                    style="height: 100px"></textarea>
+
+                <br>
+                <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+              </fieldset>
+              <script>window.print();</script>
+            </body>
+          </html>
+        `;
+
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+    };
     if (
       //-------------
-       FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 &&
-       FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 &&
-       FormularioDeRegistro.listaDePeso.length !== 0 &&
-      FormularioDeRegistro.listaPrescripcion.length !== 0 //&& //FormularioDeRegistro.datosPorSecuencial.length !== 0
+      //FormularioDeRegistro.listaDeFrecuenciaCardiaca.length !== 0 &&
+      //FormularioDeRegistro.listaDeFrecuenciaRespiratoria.length !== 0 &&
+      FormularioDeRegistro.listaDePeso.length !== 0 &&
+      FormularioDeRegistro.listaPrescripcion.length !== 0 &&//&&
+      FormularioDeRegistro.listaEscalaDelDolor !== 0  
+      //FormularioDeRegistro.datosPorSecuencial.length !== 0
     ) {
       return m("form", [
         m("div", { class: "form-row" }, [
-          m("div", { class: "form-group col-md-3" }, [
+          m("div", { class: "form-group col-md-12" }, [
+            m("label", { for: "inputEscalaDolor" }, "Escala Dolor"),
+            m("input", {
+              class: "form-control",
+              type: "text",
+              id: "inputEscalaDolor",
+              placeholder: "Escala Dolor",
+              readonly: "readonly",
+              value:
+                FormularioDeRegistro.listaEscalaDelDolor.data.length > 0
+                  ? FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE ===
+                    null
+                    ? ""
+                    : FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE
+                  : "",
+            }),
+          ]),
+        ]),
+        m("div", { class: "form-row" }, [
+          m("div", { class: "form-group col-md-4" }, [
             m("label", { for: "inputPeso" }, "Peso"),
             m("input", {
               class: "form-control",
@@ -562,25 +1592,16 @@ const FormularioDeRegistro = {
               placeholder: "Peso",
               readonly: "readonly",
               /* value: obtenerDatos.listaDePeso.data[0].VALUE != undefined ? obtenerDatos.listaDePeso.data[0].VALUE : '', */
-              value: FormularioDeRegistro.listaDePeso.data.length > 0
-                  ? FormularioDeRegistro.listaDePeso.data[0].VALUE == null ? "" : FormularioDeRegistro.listaDePeso.data[0].VALUE
+              value:
+                FormularioDeRegistro.listaDePeso.data.length > 0
+                  ? FormularioDeRegistro.listaDePeso.data[0].VALUE == null
+                    ? ""
+                    : FormularioDeRegistro.listaDePeso.data[0].VALUE
                   : "",
             }),
           ]),
-          m("div", { class: "form-group col-md-3" }, [
-            m("label", { for: "inputEscalaDolor" }, "Escala Dolor"),
-            m("input", {
-              class: "form-control",
-              type: "text",
-              id: "inputEscalaDolor",
-              placeholder: "Escala Dolor",
-              readonly: "readonly",
-              value: FormularioDeRegistro.listaEscalaDelDolor.data.length > 0
-                  ? FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE === null ? "" : FormularioDeRegistro.listaEscalaDelDolor.data[0].VALUE
-                  : "",
-            }),
-          ]),
-          m("div", { class: "form-group col-md-3" }, [
+
+          m("div", { class: "form-group col-md-4" }, [
             m("label", { for: "inputAtencion" }, "Atención"),
             m("input", {
               class: "form-control",
@@ -591,7 +1612,7 @@ const FormularioDeRegistro = {
               value: Pedido.data.AT_MV,
             }),
           ]),
-          m("div", { class: "form-group col-md-3" }, [
+          m("div", { class: "form-group col-md-4" }, [
             m("label", { for: "inputUsuario" }, "Usuario"),
             m("input", {
               class: "form-control",
@@ -608,7 +1629,9 @@ const FormularioDeRegistro = {
           m(
             "div",
             {},
-            FormularioDeRegistro.listaPrescripcion.data.map(function (prescripcion) {
+            FormularioDeRegistro.listaPrescripcion.data.map(function (
+              prescripcion
+            ) {
               return m("div", { class: "form-check" }, [
                 m("input", {
                   type: "checkbox",
@@ -616,12 +1639,19 @@ const FormularioDeRegistro = {
                   id: `${prescripcion.CODIGO}-${prescripcion.FECHA}`,
                   value: `${prescripcion.CODIGO} ${prescripcion.FECHA}`,
                 }),
-                m("label", { class: "form-check-label ml-2", for: `${prescripcion.CODIGO}-${prescripcion.FECHA}` }, `${prescripcion.CODIGO} ${prescripcion.FECHA}`),
+                m(
+                  "label",
+                  {
+                    class: "form-check-label ml-2",
+                    for: `${prescripcion.CODIGO}-${prescripcion.FECHA}`,
+                  },
+                  `${prescripcion.CODIGO} ${prescripcion.FECHA}`
+                ),
               ]);
             })
           ),
         ]),
-        
+
         m("div", { class: "form-group" }, [
           m("label", { for: "inputCod" }, "Cod"),
           m("input", {
@@ -651,870 +1681,1815 @@ const FormularioDeRegistro = {
             type: "text",
             id: "inputHora",
             placeholder: "Hora",
-            value: FormularioDeRegistro.horaActual ,
+            value: FormularioDeRegistro.horaActual,
             readonly: "readonly",
           }),
         ]),
+        m(
+          "label",
+          { class: "form-label", for: "inputPrescripcion" },
+          m("b", "Terapia Aerosol Medicina")
+        ),
         [
-  m("div", {"class":"row"},
-    [
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-4"},
-          [
-            m("label", {"class":"form-label","for":"inputTerapiaAerosolMedicina"}, 
-              m("b", 
-                " Terapia Aerosol Médicina"
-              )
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Salbutamol "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Bromuro de ipratropio "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " N acetilcisteina "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Clorhidrato de ambroxol "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Hipersal (3,5%) "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Hipersal (7%) "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Dexametasona "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Solución salina (0,9%) "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Adrenalina Racénica "
-                )
-              ]
-            ),
-            m("br"),
-            m("br"),
-            m("div", {"class":"col"}, 
-              m("div", {"class":"mb-3"},
-                [
-                  m("label", {"for":""}, 
-                    "Otros"
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Salbutamol")
                   ),
-                  m("input", {"class":"form-control","type":"text","id":"inputEscalaDolor"})
-                ]
-              )
-            )
-          ]
-        )
-      ),
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-4"},
-          [
-            m("label", {"class":"form-label","for":"inputTerapiaAerosolMedicina"}, 
-              m("b", 
-                "Dosis"
+                ])
               )
             ),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("br"),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("br"),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("br"),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("br"),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            ),
-            m("br"),
-            m("div", {"class":"mb-4"}, 
-              m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-            )
-          ]
-        )
-      ),
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-4"},
-          [
-            m("label", {"class":"form-label","for":"inputTerapiaAerosolMedicina"}, 
-              m("b", 
-                "Terapia Aerosol Médicina"
-              )
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputTerapiaAerosolMedicina"}, 
-                  " Nebulización "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputTerapiaAerosolMedicina"}, 
-                  " Ultrasonido "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputTerapiaAerosolMedicina"}, 
-                  " Inhaladores dosis medida "
-                )
-              ]
-            )
-          ]
-        )
-      )
-    ]
-  ), 
-  m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-    m("b", 
-      "Higiene Bronco Pulmonar"
-    )
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Drenaje postural "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Percusiones "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Vibraciones "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Tos efectiva "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Asistente de tos "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Chaleco Vibroprecutor "
-      )
-    ]
-  ), 
-  m("br"), 
-  m("div", {"class":"row"},
-    [
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-6"},
-          [
-            m("label", {"class":"form-label","for":"inputTerapiaAerosolMedicina"}, 
-              m("b", 
-                " Terapia Expansiva"
-              )
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Incentivo Respiratorio "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Presión positiva continua en la vía aérea "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Presión positiva al final de la expiración "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Kinesioterapia del torax "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"inputDosisTerapiaAerosol"}),
-                m("label", {"class":"form-check-label","for":"inputDosisTerapiaAerosol"}, 
-                  " Ejercicios respiratorios "
-                )
-              ]
-            )
-          ]
-        )
-      ),
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-6"},
-          [
-            m("label", {"class":"form-label","for":"inputTerapiaAerosolMedicina"}, 
-              m("b", 
-                "Incentivo respiratorio"
-              )
-            ),
-            m("div", {"class":"mb-6"},
-              [
-                m("label", {"class":"form-label","for":"inputPeso"}, 
-                  m("b", 
-                    "Mililitros por segundo"
-                  )
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
                 ),
-                m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-              ]
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"mb-6"},
-              [
-                m("label", {"class":"form-label","for":"inputPeso"}, 
-                  m("b", 
-                    "Centimetros cúbicos por segundo"
-                  )
+            m("div", { class: "col" }, [
+              m(
+                "label",
+                { class: "form-label", for: "inputPeso" },
+                m("b", "Terapia Aerosol Médicina")
+              ),
+              m("div", { class: "form-check" }, [
+                m("input", {
+                  class: "form-check-input",
+                  type: "checkbox",
+                  value: "",
+                  id: "flexCheckDefault",
+                }),
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPeso" },
+                  m("b", "Nebulización")
                 ),
-                m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-              ]
-            )
-          ]
-        )
-      )
-    ]
-  ), 
-  m("br"), 
-  m("br"), 
-  // Aqui
-  m("div", {"class":"row"},
-    [
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-6"},
-          [
-            m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-              m("b", 
-                "Monitoreo"
+              ]),
+            ]),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Bromuro de Ipatropio")
+                  ),
+                ])
               )
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Saturación O2(%) "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Ventilación mecánica "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "form-check" }, [
+                m("input", {
+                  class: "form-check-input",
+                  type: "checkbox",
+                  value: "",
+                  id: "flexCheckDefault",
+                }),
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPeso" },
+                  m("b", "Ultrasonido")
+                ),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Ventilación no invasiva "
-                )
-              ]
-            )
-          ]
-        )
-      ),
-      m("div", {"class":"col"},
-        [
-          m("div", {"class":"mb-6"},
-            [
-              m("div", {"class":"mb-6"},
-                [
-                  m("label", {"class":"form-label","for":"inputPeso"}, 
-                    m("b", 
-                      "Saturación Previa Porcentaje"
-                    )
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Clorhidrato de Ambroxol")
                   ),
-                  m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-                ]
-              ),
-              m("div", {"class":"mb-6"},
-                [
-                  m("label", {"class":"form-label","for":"inputPeso"}, 
-                    m("b", 
-                      "Saturación Posterior Porcentaje"
-                    )
-                  ),
-                  m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-                ]
+                ])
               )
-            ]
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "form-check" }, [
+                m("input", {
+                  class: "form-check-input",
+                  type: "checkbox",
+                  value: "",
+                  id: "flexCheckDefault",
+                }),
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPeso" },
+                  m("b", "Inhaladores Dosis Medida")
+                ),
+              ])
+            ),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Hipersal (3,5%)")
+                  ),
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m("div", { class: "col" }, m("div", { class: "mb-4" })),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Hipersal (7%)")
+                  ),
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m("div", { class: "col" }, m("div", { class: "mb-4" })),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Dexametasona")
+                  ),
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m("div", { class: "col" }, m("div", { class: "mb-4" })),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Solución Salina (0,9%)")
+                  ),
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m("div", { class: "col" }, m("div", { class: "mb-4" })),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Adrenalina Racénica")
+                  ),
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m("div", { class: "col" }, m("div", { class: "mb-4" })),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-6" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Otros")
+                  ),
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Dosis")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+          ]),
+          m(
+            "label",
+            { class: "form-label", for: "inputPrescripcion" },
+            m("b", "Higiene Bronco Pulmonar")
           ),
-          m("div", {"class":"mb-6"},
-            [
-              m("div", {"class":"mb-6"},
-                [
-                  m("label", {"class":"form-label","for":"inputPeso"}, 
-                    m("b", 
-                      "Frecuencia Cardiaca Previa Por Minuto"
-                    )
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Drenaje postural "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Percusiones "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Vibraciones "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Tos efectiva "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Asistente de tos "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Chaleco Vibroprecutor "
+            ),
+          ]),
+          m("br"),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputTerapiaAerosolMedicina" },
+                  m("b", " Terapia Expansiva")
+                ),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "inputDosisTerapiaAerosol",
+                  }),
+                  m(
+                    "label",
+                    {
+                      class: "form-check-label",
+                      for: "inputDosisTerapiaAerosol",
+                    },
+                    " Incentivo Respiratorio "
                   ),
-                  m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-                ]
-              ),
-              m("div", {"class":"mb-6"},
-                [
-                  m("label", {"class":"form-label","for":"inputPeso"}, 
-                    m("b", 
-                      "Frecuencia Cardiaca Posterior Por Minuto"
-                    )
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    {
+                      class: "form-check-label",
+                      for: "inputDosisTerapiaAerosol",
+                    },
+                    " Presión positiva continua en la vía aérea "
                   ),
-                  m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-                ]
-              )
-            ]
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    {
+                      class: "form-check-label",
+                      for: "inputDosisTerapiaAerosol",
+                    },
+                    " Presión positiva al final de la expiración "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "inputDosisTerapiaAerosol",
+                  }),
+                  m(
+                    "label",
+                    {
+                      class: "form-check-label",
+                      for: "inputDosisTerapiaAerosol",
+                    },
+                    " Kinesioterapia del torax "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "inputDosisTerapiaAerosol",
+                  }),
+                  m(
+                    "label",
+                    {
+                      class: "form-check-label",
+                      for: "inputDosisTerapiaAerosol",
+                    },
+                    " Ejercicios respiratorios "
+                  ),
+                ]),
+              ])
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputTerapiaAerosolMedicina" },
+                  m("b", "Incentivo respiratorio")
+                ),
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Mililitros por segundo")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Centimetros cúbicos por segundo")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+              ])
+            ),
+          ]),
+          m("br"),
+          m("br"),
+          // Aqui
+          m(
+            "label",
+            { class: "form-label", for: "inputPrescripcion" },
+            m("b", "Oxigenoterapia")
           ),
-          m("div", {"class":"mb-6"},
-            [
-              m("div", {"class":"mb-6"},
-                [
-                  m("label", {"class":"form-label","for":"inputPeso"}, 
-                    m("b", 
-                      "Frecuencia Respiratoria Posterior Por Minuto"
-                    )
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Fracción inspirada de oxígeno (FiO2)%")
                   ),
-                  m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-                ]
-              ),
-              m("div", {"class":"mb-6"},
-                [
-                  m("label", {"class":"form-label","for":"inputPeso"}, 
-                    m("b", 
-                      "Frecuencia Respiratoria Posterior Por Minuto"
-                    )
+                ])
+              )
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
+            ),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Alto flujo (litro por minuto)")
                   ),
-                  m("input", {"class":"form-control","type":"text","id":"inputPeso"})
-                ]
-              )
-            ]
-          )
-        ]
-      )
-    ]
-  ), 
-  m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-    m("b", 
-      "Succión"
-    )
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Nasotraqueal "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Traqueal "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Orotraqueal "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Lavado Nasal "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Subglótica "
-      )
-    ]
-  ), 
-  m("br"), 
-  m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-    m("b", 
-      "Muestra"
-    )
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Esputo "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Isopado "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Secreción Traqueal "
-      )
-    ]
-  ), 
-  m("br"), 
-  m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-    m("b", 
-      "Observación Clinica"
-    )
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Consciencia "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Intubado "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Estridor "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Sibilancias "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Roncus "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Crepitantes "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Localización "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Cianosis "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Ruido Respiratorio "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Disminuido "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Abolido "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Sonido de la voz "
-      )
-    ]
-  ), 
-  m("div", {"class":"form-check"},
-    [
-      m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-      m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-        " Edema "
-      )
-    ]
-  ), 
-  m("br"), 
-  m("div", {"class":"row"},
-    [
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-6"},
-          [
-            m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-              m("b", 
-                "Observación Clinica"
+                ])
               )
             ),
-            m("br"),
-            m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-              m("b",
-                [
-                  m.trust("&nbsp;"),
-                  m.trust("&nbsp;"),
-                  m.trust("&nbsp;"),
-                  "Sintomas"
-                ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
+            ),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Tienda Facial")
+                  ),
+                ])
               )
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Disnea "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Tos "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Expectoración "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Dolor Torácico "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Hemoptisis "
-                )
-              ]
-            ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Fiebre "
-                )
-              ]
-            )
-          ]
-        )
-      ),
-      m("div", {"class":"col"}, 
-        m("div", {"class":"mb-6"},
-          [
-            m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-              m("b", 
-                "Observación Clinica"
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Tubo en T")
+                  ),
+                ])
               )
             ),
-            m("br"),
-            m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-              m("b",
-                [
-                  m.trust("&nbsp;"),
-                  m.trust("&nbsp;"),
-                  m.trust("&nbsp;"),
-                  "Signos"
-                ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
+            ),
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Cánula nasal")
+                  ),
+                ])
               )
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Consciencia "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Intubado "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Estridor "
-                )
-              ]
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Mascarilla")
+                  ),
+                ])
+              )
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Sibilancias "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Roncus "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Crepitantes "
-                )
-              ]
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-4" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Heliox")
+                  ),
+                ])
+              )
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Localización "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Cianosis "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-4" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputAtencion" },
+                  m("b", "Litros por minuto")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "number",
+                  id: "inputAtencion",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Ruido Respiratorio "
-                )
-              ]
+          ]),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m(
+                "div",
+                { class: "mb-6" },
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Aire Ambiente")
+                  ),
+                ])
+              )
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Disminuido "
-                )
-              ]
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputEscalaDolor" },
+                  m("b", "Porcentaje")
+                ),
+                m("input", {
+                  class: "form-control",
+                  type: "text",
+                  id: "inputEscalaDolor",
+                }),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Abolido "
-                )
-              ]
+          ]),
+          m("br"),
+          m("br"),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPrescripcion" },
+                  m("b", "Monitoreo")
+                ),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Saturación O2(%) "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Ventilación mecánica "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Ventilación no invasiva "
+                  ),
+                ]),
+              ])
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Sonido de la voz "
-                )
-              ]
+            m("div", { class: "col" }, [
+              m("div", { class: "mb-6" }, [
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Saturación Previa Porcentaje")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Saturación Posterior Porcentaje")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+              ]),
+              m("div", { class: "mb-6" }, [
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Frecuencia Cardiaca Previa Por Minuto")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Frecuencia Cardiaca Posterior Por Minuto")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+              ]),
+              m("div", { class: "mb-6" }, [
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Frecuencia Respiratoria Posterior Por Minuto")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+                m("div", { class: "mb-6" }, [
+                  m(
+                    "label",
+                    { class: "form-label", for: "inputPeso" },
+                    m("b", "Frecuencia Respiratoria Posterior Por Minuto")
+                  ),
+                  m("input", {
+                    class: "form-control",
+                    type: "text",
+                    id: "inputPeso",
+                  }),
+                ]),
+              ]),
+            ]),
+          ]),
+          m(
+            "label",
+            { class: "form-label", for: "inputPrescripcion" },
+            m("b", "Succión")
+          ),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Nasotraqueal "
             ),
-            m("div", {"class":"form-check"},
-              [
-                m("input", {"class":"form-check-input","type":"checkbox","value":"","id":"flexCheckDefault"}),
-                m("label", {"class":"form-check-label","for":"inputPrescripcion"}, 
-                  " Edema "
-                )
-              ]
-            )
-          ]
-        )
-      )
-    ]
-  ), 
-  m("label", {"class":"form-label","for":"inputPrescripcion"}, 
-    m("b", 
-      "Criterio"
-    )
-  ), 
-  m("div", {"class":"form-floating"}, 
-    m("textarea", {"class":"form-control","placeholder":"Criterio","id":"floatingTextarea2","style":{"height":"100px"}})
-  )
-],
-
-       
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Traqueal "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Orotraqueal "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Lavado Nasal "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Subglótica "
+            ),
+          ]),
+          m("br"),
+          m(
+            "label",
+            { class: "form-label", for: "inputPrescripcion" },
+            m("b", "Muestra")
+          ),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Esputo "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Isopado "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Secreción Traqueal "
+            ),
+          ]),
+          m("br"),
+          m(
+            "label",
+            { class: "form-label", for: "inputPrescripcion" },
+            m("b", "Observación Clinica")
+          ),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Consciencia "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Intubado "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Estridor "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Sibilancias "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Roncus "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Crepitantes "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Localización "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Cianosis "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Ruido Respiratorio "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Disminuido "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Abolido "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Sonido de la voz "
+            ),
+          ]),
+          m("div", { class: "form-check" }, [
+            m("input", {
+              class: "form-check-input",
+              type: "checkbox",
+              value: "",
+              id: "flexCheckDefault",
+            }),
+            m(
+              "label",
+              { class: "form-check-label", for: "inputPrescripcion" },
+              " Edema "
+            ),
+          ]),
+          m("br"),
+          m("div", { class: "row" }, [
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPrescripcion" },
+                  m("b", "Observación Clinica")
+                ),
+                m("br"),
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPrescripcion" },
+                  m("b", [
+                    m.trust("&nbsp;"),
+                    m.trust("&nbsp;"),
+                    m.trust("&nbsp;"),
+                    "Sintomas",
+                  ])
+                ),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Disnea "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Tos "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Expectoración "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Dolor Torácico "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Hemoptisis "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Fiebre "
+                  ),
+                ]),
+              ])
+            ),
+            m(
+              "div",
+              { class: "col" },
+              m("div", { class: "mb-6" }, [
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPrescripcion" },
+                  m("b", "Observación Clinica")
+                ),
+                m("br"),
+                m(
+                  "label",
+                  { class: "form-label", for: "inputPrescripcion" },
+                  m("b", [
+                    m.trust("&nbsp;"),
+                    m.trust("&nbsp;"),
+                    m.trust("&nbsp;"),
+                    "Signos",
+                  ])
+                ),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Consciencia "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Intubado "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Estridor "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Sibilancias "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Roncus "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Crepitantes "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Localización "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Cianosis "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Ruido Respiratorio "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Disminuido "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Abolido "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Sonido de la voz "
+                  ),
+                ]),
+                m("div", { class: "form-check" }, [
+                  m("input", {
+                    class: "form-check-input",
+                    type: "checkbox",
+                    value: "",
+                    id: "flexCheckDefault",
+                  }),
+                  m(
+                    "label",
+                    { class: "form-check-label", for: "inputPrescripcion" },
+                    " Edema "
+                  ),
+                ]),
+              ])
+            ),
+          ]),
+          m(
+            "label",
+            { class: "form-label", for: "inputPrescripcion" },
+            m("b", "Criterio")
+          ),
+          m(
+            "div",
+            { class: "form-floating" },
+            m("textarea", {
+              class: "form-control",
+              placeholder: "Criterio",
+              id: "floatingTextarea2",
+              style: { height: "100px" },
+            })
+          ),
+        ],
+        m(
+          "button",
+          { class: "btn btn-primary", type: "button", onclick: printFormData },
+          "Imprimir"
+        ),
       ]);
-    }else {
-      return m("div.pd-10.wd-100p",
-      m("div.placeholder-paragraph", [
-          m("div.line"),
-          m("div.line")
-      ])
-    )
-      
-
+    } else {
+      return m(
+        "div.pd-10.wd-100p",
+        m("div.placeholder-paragraph", [m("div.line"), m("div.line")])
+      );
     }
   },
 };

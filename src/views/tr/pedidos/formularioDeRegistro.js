@@ -621,7 +621,7 @@ const FormularioDeRegistro = {
       const inputEscalaDelDolor =
         document.getElementById("inputEscalaDolor").value;
       const inputPeso = document.getElementById("inputPeso").value;
-      const inputAtencion = document.getElementById("inputAtencion").value;
+      //const inputAtencion = document.getElementById("inputAtencion").value;
       const inputUsuario = document.getElementById("inputUsuario").value;
       const inputCodigo = document.getElementById("inputCod").value;
       const inputFecha = document.getElementById("inputFecha").value;
@@ -796,19 +796,14 @@ const FormularioDeRegistro = {
             </div>
             <div class="row">
                 <div class="col">
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label for="inputPeso" class="form-label"><b>Peso</b></label>
                         <input type="text" class="form-control" id="inputPeso" value="${inputPeso}" />
                     </div>
                 </div>
+                
                 <div class="col">
-                    <div class="mb-4">
-                        <label for="inputEscalaDolor" class="form-label"><b>Atención</b></label>
-                        <input type="text" class="form-control" id="inputAtencion" value="${inputAtencion}">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label for="inputUsuario" class="form-label"><b>Usuario</b></label>
                         <input type="text" class="form-control" id="inputUsuario" value="${inputUsuario}">
                     </div>
@@ -1724,7 +1719,7 @@ const FormularioDeRegistro = {
           ]),
         ]),
         m("div", { class: "form-row" }, [
-          m("div", { class: "form-group col-md-4" }, [
+          m("div", { class: "form-group col-md-6" }, [
             m("label", { for: "inputPeso" }, "Peso"),
             m("input", {
               class: "form-control",
@@ -1742,18 +1737,8 @@ const FormularioDeRegistro = {
             }),
           ]),
 
-          m("div", { class: "form-group col-md-4" }, [
-            m("label", { for: "inputAtencion" }, "Atención"),
-            m("input", {
-              class: "form-control",
-              type: "number",
-              id: "inputAtencion",
-              placeholder: "Atención",
-              readonly: "readonly",
-              value: Pedido.data.AT_MV,
-            }),
-          ]),
-          m("div", { class: "form-group col-md-4" }, [
+      
+          m("div", { class: "form-group col-md-6" }, [
             m("label", { for: "inputUsuario" }, "Usuario"),
             m("input", {
               class: "form-control",

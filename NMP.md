@@ -2,7 +2,7 @@
 ```
 npm install -D webpack webpack-cli (webpack)
 
-npm install -D babel-loader @babel/core @babel/preset-env (babel)
+npm install -D babel-loader @babel/core @babel/preset-env (babel) HM
 
 {
     test: /\.jsx?$/,
